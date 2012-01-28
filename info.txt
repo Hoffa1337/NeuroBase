@@ -1,0 +1,9 @@
+"AddonInfo"
+{
+	"name"		"NeuroTec Base Addon"
+	"version"	""
+	"up_date"	"n/a"
+	"author_name"	"Hoffa / Starchick"
+	"author_email"	"robin.hofstrom@gmail.com"
+	"author_url"	"n/a"
+}
