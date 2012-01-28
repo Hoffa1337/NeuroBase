@@ -1,0 +1,6 @@
+particles_manifest
+{
+	"file"		"particles/vman_explosion.pcf"
+	"file"		"particles/plasma_explosion.pcf"
+
+}
