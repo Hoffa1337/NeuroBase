@@ -189,7 +189,7 @@ hook.Add("PlayerLeaveVehicle","NeuroPlanes_OnLeftVehicle", function( player, veh
 		
 		player:SetNetworkedBool( "NeuroPlanes__DrawAC130Overlay", false )
 		player:Spawn()
-		player:SetPos( vehicle:GetPos() + vehicle:GetForward() * -100 + vehicle:GetRight() * 300 )
+		player:SetPos( vehicle:GetParent():LocalToWorld( Vector( 60, 0, 53 ) )  )
 		player:SetFOV( player.OriginalFOV, 0 )
 		player:DrawWorldModel( true )
 		player:SetColor( 255,255,255,255 )
