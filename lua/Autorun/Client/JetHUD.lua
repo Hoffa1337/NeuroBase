@@ -1143,8 +1143,36 @@ function JetFighter.HelicopterGuncamScreenspace()
 			DrawHitpointCrosshair( gun )
 
 		else
-	
-			Draw3DWeaponCrosshair( gun )
+			
+			local lasttick = CurTime()
+
+			local pos = gun:GetPos() 
+			local tr, trace = {}, {}
+			tr.start = pos + gun:GetForward() * 700
+			tr.endpos = tr.start + gun:GetForward() * 25000
+			tr.filter = gun
+			trace = util.TraceLine( tr )
+			
+			if( lasttick + 0.25 <= CurTime() ) then
+				
+				dist = math.floor( gun:GetPos():Distance( trace.HitPos ) )
+				lasttick = CurTime()
+				
+			end
+
+			if( trace.Hit ) then
+				
+				local spos = trace.HitPos:ToScreen()
+				local sizex,sizey = 8, 8
+				surface.SetDrawColor( 255, 255, 255, 220 )
+				surface.DrawCircle( spos.x, spos.y, 8, Color( 255, 255, 255, 220) )
+				surface.DrawLine( spos.x - sizex, spos.y, spos.x - sizex/2, spos.y )
+				surface.DrawLine( spos.x + sizex, spos.y, spos.x + sizex/2, spos.y )
+				surface.DrawLine( spos.x, spos.y - sizey/2, spos.x, spos.y - sizey )
+				surface.DrawLine( spos.x, spos.y + sizey/2, spos.x, spos.y + sizey )
+				
+			end
+			--Draw3DWeaponCrosshair( gun )
 			
 		end
 	

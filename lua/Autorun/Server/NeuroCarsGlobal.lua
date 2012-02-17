@@ -307,6 +307,7 @@ end )
 
 local Meta = FindMetaTable("Entity")
 
+	
 function Meta:RotorTrash()
 	--if ( math.random( 1,5 ) == 5 ) then
 		
