@@ -210,7 +210,17 @@ hook.Add("PlayerLeaveVehicle","NeuroPlanes_OnLeftVehicle", function( player, veh
 		player:SetNetworkedBool("InFlight",false)
 		player:SetNetworkedEntity( "Plane", NULL ) 
 		vehicle:GetParent():SetNetworkedEntity( "CoPilot", NULL )
-		player:SetPos( vehicle:GetPos() + vehicle:GetRight() * 170 ) // might be safe here
+		
+		local vp = vehicle:GetParent()
+		local pos = vehicle:LocalToWorld( Vector( 170, 200, 50 ) )
+		
+		if( ValidEntity( vp ) && vp.Destroyed ) then
+			
+			pos = vehicle:GetPos() + Vector( 0,0,90 )
+			
+		end
+		
+		player:SetPos( vehicle:SetPos( pos ) ) // might be safe here
 		
 	end
 	
@@ -346,7 +356,12 @@ function Meta:RotorTrash()
 			board:SetPos( self:GetPos() + Vector( math.sin( CurTime() ) * 15, math.cos( CurTime() ) * 15, 0 ) )
 			board:SetAngles( self:GetAngles() + Angle( 0, 360/i * 36, 0 ) )
 			board:SetVelocity( self:GetVelocity() )
-			board:GetPhysicsObject():AddAngleVelocity( Angle( 0, 100, 0 ) )
+			if( board:GetPhysicsObject() != nil ) then
+			
+				board:GetPhysicsObject():AddAngleVelocity( Angle( 0, 100, 0 ) )
+			
+			end
+			
 			board:SetOwner( self )
 			board:Spawn()
 			
@@ -440,11 +455,24 @@ function Meta:Jet_LockOnMethod()
 	local TargetTeam = e:GetNetworkedInt( "NeuroTeam", -1 )
 	local logic3
 	if TargetTeam >= 0 then
-	logic3 = ( TargetTeam != NeuroTeam )//Don't lock allies
+	
+		logic3 = ( TargetTeam != NeuroTeam )//Don't lock allies
+		
 	else
-	logic3 = ( TargetTeam != 0 )
+	
+		logic3 = ( TargetTeam != 0 )
+		
 	end
+	
 	if ( logic && logic2 && logic3 && !ValidEntity( self.Target ) && e:GetOwner() != self && e:GetOwner() != self.Pilot && e:GetClass() != self:GetClass() ) then
+		
+		if( ValidEntity( e.TailRotor ) ) then
+			
+			self:SetTarget( e.TailRotor )
+				
+			return
+			
+		end
 		
 		self:SetTarget( e )
 		
