@@ -340,13 +340,16 @@ function Meta:RotorTrash()
 		
 		end
 		 
-		local p = { "models/props_debris/wood_board02a.mdl", 
-					"models/props_debris/wood_board04a.mdl",
-					"models/props_debris/wood_board04a.mdl",
+		local p = { 
 					"models/props_wasteland/wood_fence02a_board04a.mdl",
 					"models/props_wasteland/wood_fence02a_board04a.mdl",
-					"models/props_wasteland/wood_fence02a_board08a.mdl",
-					"models/props_wasteland/wood_fence02a_board08a.mdl" }
+					"models/props_wasteland/wood_fence02a_board04a.mdl",
+					"models/props_wasteland/wood_fence02a_board04a.mdl",
+					"models/props_wasteland/wood_fence02a_board04a.mdl",
+					"models/props_wasteland/wood_fence02a_board04a.mdl",
+					"models/props_wasteland/wood_fence02a_board04a.mdl",
+					"models/props_wasteland/wood_fence02a_board04a.mdl"
+					}
 					
 		for i=1,#p do
 			
@@ -356,7 +359,8 @@ function Meta:RotorTrash()
 			board:SetPos( self:GetPos() + Vector( math.sin( CurTime() ) * 15, math.cos( CurTime() ) * 15, 0 ) )
 			board:SetAngles( self:GetAngles() + Angle( 0, 360/i * 36, 0 ) )
 			board:SetVelocity( self:GetVelocity() )
-			if( board:GetPhysicsObject() != nil ) then
+			
+			if( board:GetPhysicsObject()  ) then
 			
 				board:GetPhysicsObject():AddAngleVelocity( Angle( 0, 100, 0 ) )
 			
@@ -441,7 +445,7 @@ function Meta:Jet_LockOnMethod()
 	// Lock On method
 	local trace,tr = {},{}
 	tr.start = self:GetPos() + self:GetForward() * 1000
-	tr.endpos = tr.start + self:GetForward() * 20000
+	tr.endpos = tr.start + self:GetForward() * 9000
 	tr.filter = { self.Pilot, self, self.Weapon }
 	tr.mask = MASK_SOLID
 	trace = util.TraceEntity( tr, self )
@@ -485,7 +489,7 @@ function Meta:Turret_LockOnMethod()
 	// Lock On method
 	local trace,tr = {},{}
 	tr.start = self.Weapon:GetPos() + self.Weapon:GetForward() * 1000
-	tr.endpos = tr.start + self.Weapon:GetForward() * 20000
+	tr.endpos = tr.start + self.Weapon:GetForward() * 9000
 	tr.filter = { self.Pilot, self, self.Weapon }
 	tr.mask = MASK_SOLID
 	trace = util.TraceEntity( tr, self.Weapon )
@@ -2319,7 +2323,9 @@ function Meta:DeathFX()
 	end
 	
 	self:Remove()
-
+	
+	return
+	
 end
 
 /*********************************************************************/
