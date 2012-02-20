@@ -326,7 +326,7 @@ function Meta:RotorTrash()
 			
 			local fx = EffectData()
 			fx:SetOrigin( self:GetPos() + self:GetRight() * ( 512 - ( 100 * i  ) ) )
-			fx:SetScale( 1 )
+			fx:SetScale( 2 )
 			util.Effect( "part_dis", fx )
 			
 		end
@@ -335,7 +335,7 @@ function Meta:RotorTrash()
 		
 			local fx = EffectData()
 			fx:SetOrigin( self:GetPos() + self:GetForward() * ( 512 - ( 100 * j  ) ) )
-			fx:SetScale( 1 )
+			fx:SetScale( 2 )
 			util.Effect( "part_dis", fx )
 		
 		end
@@ -350,7 +350,12 @@ function Meta:RotorTrash()
 					"models/props_wasteland/wood_fence02a_board04a.mdl",
 					"models/props_wasteland/wood_fence02a_board04a.mdl"
 					}
-					
+							
+		-- self.Owner.Destroyed = true
+		-- self.Owner.Burning = true
+		
+		self.Destroyed = true
+		
 		for i=1,#p do
 			
 			local board = ents.Create("prop_physics")
@@ -358,19 +363,22 @@ function Meta:RotorTrash()
 			board:SetMaterial( self:GetMaterial() )
 			board:SetPos( self:GetPos() + Vector( math.sin( CurTime() ) * 15, math.cos( CurTime() ) * 15, 0 ) )
 			board:SetAngles( self:GetAngles() + Angle( 0, 360/i * 36, 0 ) )
+			board:SetOwner( self )
+			board:SetSolid( SOLID_VPHYSICS )
+			board:Spawn()
 			board:SetVelocity( self:GetVelocity() )
 			
-			if( board:GetPhysicsObject()  ) then
+			local bphys = board:GetPhysicsObject()
+			if( bphys != nil ) then
 			
 				board:GetPhysicsObject():AddAngleVelocity( Angle( 0, 100, 0 ) )
 			
 			end
 			
-			board:SetOwner( self )
-			board:Spawn()
 			
 		
 		end
+
 		
 		self:Remove()
 	
@@ -2020,7 +2028,7 @@ function Meta:SpawnFlare()
 		
 	else
 		
-		pos = self:GetPos() + self:GetUp() * -8 + self:GetForward() * 256
+		pos = self:GetPos() + self:GetUp() * -8 + self:GetForward() * -256
 		self:EmitSound( "weapons/flaregun/fire.wav",411, 100 )
 		
 	end
@@ -2033,46 +2041,9 @@ function Meta:SpawnFlare()
 	f:Fire("kill","",5)
 	f:GetPhysicsObject():SetMass( 120 )
 	f:SetVelocity( self:GetVelocity() )
-	f:GetPhysicsObject():SetVelocity( self:GetVelocity() ) //ApplyForceCenter( self:GetForward() * -5000000 )
+	f:GetPhysicsObject():SetVelocity( self:GetUp() * 50000 ) //ApplyForceCenter( self:GetForward() * -5000000 )
 	f.Owner = self
-	/*
-	timer.Simple( math.Rand(0.5,2.5), 
-		function(a,b,c)
-		
-			if ( ValidEntity( f ) ) then
-			
-				for k,v in pairs( ents.GetAll() ) do
-				
-					local c = v:GetClass()
-					
-					local logic = ( string.find( c, "rocket" ) != nil ||
-									string.find( c, "missile" ) != nil ||
-									string.find( c, "rpg" ) != nil ||
-									string.find( c, "homing" ) != nil ||
-									string.find( c, "heatseek" ) != nil )
-					
-					local logic2 = ( v:GetOwner() != self && v:GetVelocity():Length() > 500 )
-					
-					if ( logic && logic2 && v:GetPos():Distance( self:GetPos() ) < 3000 ) then
-						
-						if ( !ValidEntity( v.Target ) ) then
-							
-							v:SetAngles( v:GetAngles() + Angle( math.random( -5, 5), math.random( -5, 5), math.random( -5, 5) ) )
-							
-						else
-						
-							v.Target = f
-							
-						end
-						
-					end
-					
-				end
-				
-			end
-			
-		end	)
-	*/
+	
 end
 
 function Meta:NPCTargetCreate()
