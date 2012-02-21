@@ -319,65 +319,65 @@ local Meta = FindMetaTable("Entity")
 
 	
 function Meta:RotorTrash()
-	--if ( math.random( 1,5 ) == 5 ) then
+	-- if ( math.random( 1,5 ) == 5 ) then
 		
 		
-		for i=1,3 do
+		-- for i=1,3 do
 			
-			local fx = EffectData()
-			fx:SetOrigin( self:GetPos() + self:GetRight() * ( 512 - ( 100 * i  ) ) )
-			fx:SetScale( 2 )
-			util.Effect( "part_dis", fx )
+			-- local fx = EffectData()
+			-- fx:SetOrigin( self:GetPos() + self:GetRight() * ( 512 - ( 100 * i  ) ) )
+			-- fx:SetScale( 2 )
+			-- util.Effect( "part_dis", fx )
 			
-		end
+		-- end
 		
-		for j=1,3 do
+		-- for j=1,3 do
 		
-			local fx = EffectData()
-			fx:SetOrigin( self:GetPos() + self:GetForward() * ( 512 - ( 100 * j  ) ) )
-			fx:SetScale( 2 )
-			util.Effect( "part_dis", fx )
+			-- local fx = EffectData()
+			-- fx:SetOrigin( self:GetPos() + self:GetForward() * ( 512 - ( 100 * j  ) ) )
+			-- fx:SetScale( 2 )
+			-- util.Effect( "part_dis", fx )
 		
-		end
+		-- end
 		 
-		local p = { 
-					"models/props_wasteland/wood_fence02a_board04a.mdl",
-					"models/props_wasteland/wood_fence02a_board04a.mdl",
-					"models/props_wasteland/wood_fence02a_board04a.mdl",
-					"models/props_wasteland/wood_fence02a_board04a.mdl",
-					"models/props_wasteland/wood_fence02a_board04a.mdl",
-					"models/props_wasteland/wood_fence02a_board04a.mdl",
-					"models/props_wasteland/wood_fence02a_board04a.mdl",
-					"models/props_wasteland/wood_fence02a_board04a.mdl"
-					}
+		-- local p = { 
+					-- "models/props_wasteland/wood_fence02a_board04a.mdl",
+					-- "models/props_wasteland/wood_fence02a_board04a.mdl",
+					-- "models/props_wasteland/wood_fence02a_board04a.mdl",
+					-- "models/props_wasteland/wood_fence02a_board04a.mdl",
+					-- "models/props_wasteland/wood_fence02a_board04a.mdl",
+					-- "models/props_wasteland/wood_fence02a_board04a.mdl",
+					-- "models/props_wasteland/wood_fence02a_board04a.mdl",
+					-- "models/props_wasteland/wood_fence02a_board04a.mdl"
+					-- }
 							
 		-- self.Owner.Destroyed = true
 		-- self.Owner.Burning = true
 		
-		self.Destroyed = true
+		-- self.Destroyed = true
 		
-		for i=1,#p do
+		-- for i=1,#p do
 			
-			local board = ents.Create("prop_physics")
-			board:SetModel( p[i] )
-			board:SetMaterial( self:GetMaterial() )
-			board:SetPos( self:GetPos() + Vector( math.sin( CurTime() ) * 15, math.cos( CurTime() ) * 15, 0 ) )
-			board:SetAngles( self:GetAngles() + Angle( 0, 360/i * 36, 0 ) )
-			board:SetOwner( self )
-			board:SetSolid( SOLID_VPHYSICS )
-			board:Spawn()
-			board:SetVelocity( self:GetVelocity() )
+			-- local board = ents.Create("prop_physics")
+			-- board:SetModel( p[i] )
+			-- board:SetMaterial( self:GetMaterial() )
+			-- board:SetPos( self:GetPos() + Vector( math.sin( CurTime() ) * 15, math.cos( CurTime() ) * 15, 0 ) )
+			-- board:SetAngles( self:GetAngles() + Angle( 0, 360/i * 36, 0 ) )
+			-- board:SetOwner( self )
+			-- board:SetSolid( SOLID_VPHYSICS )
+			-- board:Spawn()
+			-- board:SetVelocity( self:GetVelocity() )
 			
-			local bphys = board:GetPhysicsObject()
-			if( bphys != nil ) then
+			-- local bphys = board:GetPhysicsObject()
+			-- if( bphys != nil ) then
 			
-				board:GetPhysicsObject():AddAngleVelocity( Angle( 0, 100, 0 ) )
+				-- board:GetPhysicsObject():AddAngleVelocity( Angle( 0, 100, 0 ) )
 			
-			end
+			-- end
 			
 			
 		
-		end
+		-- end
 
 		
 		self:Remove()
