@@ -137,7 +137,7 @@ hook.Add("PlayerEnteredVehicle","NeuroPlanes_OnEnterVehicle", function( player, 
 	
 	if( vehicle.IsHelicopterCoPilotSeat ) then
 		
-		player:SetNetworkedBool("InFlight",true)
+		player:SetNetworkedBool( "InFlight",true )
 		player:SetNetworkedEntity( "Plane", vehicle:GetParent() ) 
 		vehicle:GetParent():SetNetworkedEntity( "CoPilot", player )
 	
@@ -212,7 +212,7 @@ hook.Add("PlayerLeaveVehicle","NeuroPlanes_OnLeftVehicle", function( player, veh
 		vehicle:GetParent():SetNetworkedEntity( "CoPilot", NULL )
 		
 		local vp = vehicle:GetParent()
-		local pos = vehicle:LocalToWorld( Vector( 170, 200, 50 ) )
+		local pos = vehicle:LocalToWorld( Vector( 170, 200, 0 ) )
 		
 		if( ValidEntity( vp ) && vp.Destroyed ) then
 			
