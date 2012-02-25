@@ -20,19 +20,16 @@ end
 	
 AddCSLuaFile("autorun/npcinit.lua") 
 AddCSLuaFile("autorun/client/JetHUD.lua")
+AddCSLuaFile("autorun/client/NeuroBase_Checker.lua")
 //AddDir("Materials/VGUI/entities")
 AddDir("Sound/AC-130")
 AddDir("Models/AC-130")
 AddDir("Materials/models/AC-130")
-AddDir("Materials/Models/blackapache")
-AddDir("Materials/Models/Attack_Helicopter")
 //AddDir("Materials/particles")
 AddDir("Materials/JetCH")
 resource.AddFile("materials/particles/fatsmoke.vtf")
 resource.AddFile("materials/effects/GAU-8_MuzzleSmoke.vtf")
 resource.AddFile("sound/ah64fire.wav")
-resource.AddFile("models/usmcapachelicopter.mdl")
-resource.AddFile("models/leakattackheli.mdl")
 resource.AddFile("models/h500_gatling.mdl")
 
 
@@ -60,8 +57,8 @@ for k, v in pairs( CrashDebris ) do
 	
 end
 
-CreateConVar("jet_funstuff", 0, FCVAR_CHEAT | FCVAR_NOTIFY )
-CreateConVar("jet_coloredtrails", 0, FCVAR_CHEAT | FCVAR_NOTIFY )
+CreateConVar("jet_funstuff", 0,  FCVAR_NOTIFY )
+CreateConVar("jet_coloredtrails", 0, FCVAR_NOTIFY )
 
 local t = CurTime()
 local function FixHealth() -- Hackfix
@@ -449,12 +446,19 @@ function Meta:SpawnPilotModel( pos, ang )
 end
 
 function Meta:Jet_LockOnMethod()
-
+	
+	local filter =  { self.Pilot, self, self.Weapon }
+	
+	if( ValidEntity( self.CoPilot ) ) then
+		
+		filter[#filter+1] = self.CoPilot
+	
+	end
 	// Lock On method
 	local trace,tr = {},{}
 	tr.start = self:GetPos() + self:GetForward() * 1000
 	tr.endpos = tr.start + self:GetForward() * 9000
-	tr.filter = { self.Pilot, self, self.Weapon }
+	tr.filter = filter
 	tr.mask = MASK_SOLID
 	trace = util.TraceEntity( tr, self )
 	
@@ -1165,11 +1169,10 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	
 	local pilot = self.Pilot
 	
-	if( ValidEntity( self.PassengerSeat ) && ValidEntity( self.PassengerSeat:GetDriver() ) && self.PassengerSeat.IsHelicopterCoPilotSeat ) then
-		--// IsHelicopterCoPilotSeat variable determines wether we should give the copilot full weapon access or just the main gun(s). //--
+	if( ValidEntity( self.PassengerSeat ) && ValidEntity( self.PassengerSeat:GetDriver() ) && self.PassengerSeat.IsHelicopterCoPilotSeat ) then -- Dayum
 		
 		pilot = self.PassengerSeat:GetDriver()
-	
+		
 	end
 	
 	if ( wep.isFirst == true ) then
