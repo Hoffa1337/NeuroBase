@@ -179,7 +179,20 @@ hook.Add("HUDPaint", "Laserguidance_Minicam", function()
 end )
  */
 
- 
+function HideHL2HUD( name )	-- Hide the default HL2 HUD which appears while using the entities.
+	local ply = LocalPlayer()	
+	if( ply:GetNetworkedBool("InFlight", false) ) then
+		for k, v in pairs({"CHudHealth", "CHudBattery", "CHudAmmo", "CHudSecondaryAmmo"}) do
+			if name == v then return false end
+		end
+	else
+		for k, v in pairs({"CHudHealth", "CHudBattery", "CHudAmmo", "CHudSecondaryAmmo"}) do
+			if name == v then return true end
+		end
+	end
+end	
+hook.Add("HUDShouldDraw", "NeuroTech_HideHL2HUD", HideHL2HUD )
+	
 local function inLOS( a, b )
 
 	if( !ValidEntity( a ) || !ValidEntity( b ) ) then
