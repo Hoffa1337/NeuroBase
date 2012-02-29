@@ -111,7 +111,7 @@ hook.Add("PlayerEnteredVehicle","NeuroPlanes_OnEnterVehicle", function( player, 
 		
 		player:SetNetworkedBool( "isGunner", false )
 		player:SetNetworkedEntity( "ChopperGunnerEnt", vehicle.MountedWeapon )
-		player:SetFOV( 55, 0.1 )
+		-- player:SetFOV( 55, 0.1 )
 		
 	end
 	
@@ -168,8 +168,14 @@ hook.Add("PlayerLeaveVehicle","NeuroPlanes_OnLeftVehicle", function( player, veh
 		player:SetNetworkedBool( "isGunner", false )
 		player:SetNetworkedEntity( "ChopperGunnerEnt", NULL )
 		player:SetPos( vehicle:GetPos() + vehicle:GetForward() * 128 )
-		player:SetFOV( 0, 0.1 )
+		-- player:SetFOV( 0, 0.1 )
 		
+	end
+	
+	if( vehicle.IsTankCopilotGunnerSeat ) then
+	
+		player:SetNetworkedEntity("Weapon", NULL )
+	
 	end
 	
 	if( vehicle.IsB17GunnerSeat ) then
@@ -209,11 +215,11 @@ hook.Add("PlayerLeaveVehicle","NeuroPlanes_OnLeftVehicle", function( player, veh
 		vehicle:GetParent():SetNetworkedEntity( "CoPilot", NULL )
 		
 		local vp = vehicle:GetParent()
-		local pos = vehicle:LocalToWorld( Vector( 170, 200, 0 ) )
+		local pos = vehicle:LocalToWorld( Vector( 200, 200, -30 ) )
 		
 		if( ValidEntity( vp ) && vp.Destroyed ) then
 			
-			pos = vehicle:GetPos() + Vector( 0,0,90 )
+			pos = vehicle:GetPos() + Vector( 0,0,110 )
 			
 		end
 		
@@ -233,7 +239,7 @@ hook.Add("PlayerLeaveVehicle","NeuroPlanes_OnLeftVehicle", function( player, veh
 		player:SetNetworkedEntity( "ChopperGunnerEnt", NULL )
 		player:SetNetworkedEntity( "NeuroPlanes_Helicopter", NULL )
 		player:SetNetworkedBool( "isGunner", false )
-		
+		player:SetColor( 255, 255, 255, 255 )
 		player:Spawn()
 		
 		local vp = vehicle:GetParent()
