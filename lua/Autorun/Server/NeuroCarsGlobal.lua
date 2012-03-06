@@ -6,16 +6,16 @@ local Testers = "Virus, Elenion, Flubbadoo, xXAcePilotXx, (WEED)Kamikaze"
 function AddDir(dir) // recursively adds everything in a directory to be downloaded by client
 	
 	
-	-- local list = file.FindDir("../"..dir.."/*")
-	-- for _, fdir in pairs(list) do
-		-- if fdir != ".svn" then // don't spam people with useless .svn folders
-			-- AddDir(fdir)
-		-- end
-	-- end
+	local list = file.FindDir("../"..dir.."/*")
+	for _, fdir in pairs(list) do
+		if fdir != ".svn" then // don't spam people with useless .svn folders
+			AddDir(fdir)
+		end
+	end
  
-	-- for k,v in pairs(file.Find("../"..dir.."/*")) do
-		-- resource.AddFile(dir.."/"..v)
-	-- end
+	for k,v in pairs(file.Find("../"..dir.."/*")) do
+		resource.AddFile(dir.."/"..v)
+	end
 end
 	
 AddCSLuaFile("autorun/npcinit.lua") 
@@ -26,7 +26,7 @@ AddDir("Sound/AC-130")
 AddDir("Models/AC-130")
 AddDir("Materials/models/AC-130")
 //AddDir("Materials/particles")
-AddDir("Materials/JetCH")
+-- AddDir("Materials/JetCH")
 resource.AddFile("materials/particles/fatsmoke.vtf")
 resource.AddFile("materials/effects/GAU-8_MuzzleSmoke.vtf")
 resource.AddFile("sound/ah64fire.wav")
@@ -163,6 +163,13 @@ end )
 
 hook.Add("PlayerLeaveVehicle","NeuroPlanes_OnLeftVehicle", function( player, vehicle ) 
 	
+	-- if( vehicle.IsNeuroGroundVehicle ) then
+		
+		-- player:Unspectate()
+	
+	
+	-- end
+	
 	if ( vehicle.isChopperGunnerSeat ) then
 	
 		player:SetNetworkedBool( "isGunner", false )
@@ -197,6 +204,7 @@ hook.Add("PlayerLeaveVehicle","NeuroPlanes_OnLeftVehicle", function( player, veh
 		player:DrawWorldModel( true )
 		player:SetColor( 255,255,255,255 )
 		player:SetHealth( 100 )
+		player:SetNetworkedBool( "NeuroPlanes__DrawAC130Overlay", false )
 		
 	end
 	
