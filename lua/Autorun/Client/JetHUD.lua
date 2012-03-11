@@ -180,14 +180,13 @@ end )
  */
 
 function HideHL2HUD( name )	-- Hide the default HL2 HUD which appears while using the entities.
-	local ply = LocalPlayer()	
-	if( ply:GetNetworkedBool("InFlight", false) ) then
-		for k, v in pairs({"CHudHealth", "CHudBattery", "CHudAmmo", "CHudSecondaryAmmo"}) do
+	local ply = LocalPlayer()
+	local tank = ply:GetNetworkedEntity( "Tank", NULL )
+	local plane = ply:GetNetworkedEntity( "Plane", NULL )
+
+	if ( ply:GetNetworkedBool("InFlight", false) ) then
+		for k, v in pairs({"CHudHealth", "CHudBattery", "CHudAmmo", "CHudSecondaryAmmo","CHudZoom","CHudSuitPower","CHudWeaponSelection"}) do
 			if name == v then return false end
-		end
-	else
-		for k, v in pairs({"CHudHealth", "CHudBattery", "CHudAmmo", "CHudSecondaryAmmo"}) do
-			if name == v then return true end
 		end
 	end
 end	
