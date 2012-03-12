@@ -730,8 +730,8 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		
 	end
 	
-	if ( self.Pilot:KeyDown( IN_ATTACK2 ) && self.LastAttackKeyDown + 0.5 < CurTime() ) then
-	
+	if ( #self.EquipmentNames > 0 && self.Pilot:KeyDown( IN_ATTACK2 ) && self.LastAttackKeyDown + 0.5 < CurTime() ) then
+		
 		local id = self.EquipmentNames[ self.FireMode ].Identity
 		local wep = self.RocketVisuals[ id ]
 		
@@ -764,7 +764,7 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 	end
 	
 	// Flares
-	if ( self.Pilot:KeyDown( IN_JUMP ) && self.FlareCount > 0 && self.LastFlare + self.FlareCooldown <= CurTime() && self.LastFlareKeyDown + 0.5 <= CurTime() ) then
+	if ( self.LastFlare && self.Pilot:KeyDown( IN_JUMP ) && self.FlareCount > 0 && self.LastFlare + self.FlareCooldown <= CurTime() && self.LastFlareKeyDown + 0.5 <= CurTime() ) then
 		
 		if ( !self.isHovering ) then
 

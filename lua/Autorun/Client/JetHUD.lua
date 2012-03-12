@@ -539,9 +539,9 @@ function JetFighter.HUD() --Real Head-Up Display by StarChick. ;)
 	local siny = math.sin(yaw)
 	
 	surface.DrawCircle( 16 + RadarSize/2, ScrH()-RadarSize/2-10, RadarSize/2, Color( lockwarning, 255-lockwarning, 0,255 ))
- 	draw.SimpleText( "N", "DefaultSmallDropShadow", 16 + RadarSize/2 + cosy*RadarSize*7/15, ScrH()-RadarSize/2-10 + siny*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-	draw.SimpleText( "S", "DefaultSmallDropShadow", 16 + RadarSize/2 - siny*RadarSize*7/15, ScrH()-RadarSize/2-10 + cosy*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-	draw.SimpleText( "E", "DefaultSmallDropShadow", 16 + RadarSize/2 - cosy*RadarSize*7/15, ScrH()-RadarSize/2-10 - siny*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+ 	draw.SimpleText( "S", "DefaultSmallDropShadow", 16 + RadarSize/2 + cosy*RadarSize*7/15, ScrH()-RadarSize/2-10 + siny*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+	draw.SimpleText( "E", "DefaultSmallDropShadow", 16 + RadarSize/2 - siny*RadarSize*7/15, ScrH()-RadarSize/2-10 + cosy*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+	draw.SimpleText( "N", "DefaultSmallDropShadow", 16 + RadarSize/2 - cosy*RadarSize*7/15, ScrH()-RadarSize/2-10 - siny*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 	draw.SimpleText( "W", "DefaultSmallDropShadow", 16 + RadarSize/2 + siny*RadarSize*7/15, ScrH()-RadarSize/2-10 - cosy*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 	
 	//Health indicator
@@ -608,10 +608,18 @@ function JetFighter.MarkEnemies()
 			if( inLOS( JetFighter.Plane, v ) ) then
 			
 				if ( TargetTeam == NTeam ) and ( TargetTeam > 0 ) then
+					
+					local extra = ""
+					if( ValidEntity( v:GetNetworkedEntity("Pilot",NULL) ) ) then
+						
+						extra = " - "..tostring(v:GetNetworkedEntity("Pilot",NULL):Name())
+						
+					end
+					
 					if ( v:GetModel() == JetFighter.Plane:GetModel() ) then
-						draw.SimpleText( v.PrintName, "ChatFont", x, y - 30, Color( 0, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						draw.SimpleText( v.PrintName..extra, "ChatFont", x, y - 30, Color( 0, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					else
-						draw.SimpleText( v.PrintName, "ChatFont", x, y - 30, Color( 0, 150, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+						draw.SimpleText( v.PrintName..extra, "ChatFont", x, y - 30, Color( 0, 150, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 					end
 				else
 					

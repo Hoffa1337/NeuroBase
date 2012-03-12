@@ -20,10 +20,17 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 			-- ang.y = -ang.y
 			
 		-- end
+		local pilotmodel = ply:GetNetworkedEntity("NeuroPlanes_Pilotmodel", NULL )
 		
 		if( GetConVarNumber("jet_cockpitview") > 0 ) then
 				
 			pos = plane:LocalToWorld( plane.CockpitPosition ) //Origin//
+						
+			if( ValidEntity( pilotmodel ) ) then
+				
+				pilotmodel:SetColor( 0,0,0,0 )
+				
+			end
 			
 		else
 			
@@ -36,7 +43,13 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 			trace = util.TraceLine( tr )
 			
 			pos = trace.HitPos
-		
+			
+			if( ValidEntity( pilotmodel ) ) then
+				
+				pilotmodel:SetColor( 255,255,255,255 )
+				
+			end
+			
 		end
 	
 		
@@ -56,7 +69,7 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 			
 		end
 		
-		if ( ply:KeyDown( IN_ATTACK ) && GetConVarNumber( "jet_bomberview" ) < 1 ) then
+		if ( plane.NoMgun == nil && ply:KeyDown( IN_ATTACK ) && GetConVarNumber( "jet_bomberview" ) < 1 ) then
 				
 				ang.p = ang.p + math.Rand(-.2,.2)
 				ang.y = ang.y + math.Rand(-.2,.2)
