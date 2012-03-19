@@ -1091,7 +1091,7 @@ hook.Add("HUDPaint","NeuroPlanes_Hellfiredesignator", HellfireMarker )
 function JetFighter.PhalanxCIWS_HUD()
 	
 	local plr = LocalPlayer()
-	local phlx = plr:GetScriptedVehicle()
+	local phlx = plr:GetNetworkedEntity( "Turret", NULL )
 	local drawoverlay = ValidEntity( phlx ) && plr:GetNetworkedBool("DrawPhalanxHUD", false )
 	
 	if( drawoverlay ) then

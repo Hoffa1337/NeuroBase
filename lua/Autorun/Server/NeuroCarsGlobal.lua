@@ -93,6 +93,26 @@ local function FixHealth() -- Hackfix
 		
 	end
 	
+	for k,v in pairs( player.GetAll() ) do
+		
+		if(  !ValidEntity( v:GetVehicle() ) && v:GetNetworkedBool("NeuroPlanes__DrawAC130Overlay", false) ) then
+		
+			v:SetNetworkedBool( "NeuroPlanes__DrawAC130Overlay", false )
+	
+		end
+		
+		if( !v:GetNetworkedBool("InFlight", false ) ) then
+				
+			if( v:GetNetworkedBool( "DrawPhalanxHUD", false ) ) then
+			
+				v:SetNetworkedBool( "DrawPhalanxHUD", false )
+			
+			end
+
+		end
+		
+
+	end
 	
 	// Misc funstuff
 	
@@ -471,7 +491,7 @@ function Meta:Jet_LockOnMethod()
 	// Lock On method
 	local trace,tr = {},{}
 	tr.start = self:GetPos() + self:GetForward() * 1000
-	tr.endpos = tr.start + self:GetForward() * 9000
+	tr.endpos = tr.start + self:GetForward() * 12500
 	tr.filter = filter
 	tr.mask = MASK_SOLID
 	trace = util.TraceEntity( tr, self )
@@ -818,60 +838,64 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		
 	end
 	
-	//Post Combustion (Boost) and Airbrake
-	local SpeedVar
-	local AirbrakeVar = 0
-	self.AfterburnerSound = CreateSound( self, "LockOn/PlaneAfterburner.mp3" )
-	if (self.VehicleType == VEHICLE_PLANE ) then //Only jets can use extra boost
-		if ( self.Pilot:KeyDown( IN_SPEED ) ) then
-		self.AfterburnerSound:Stop()
-		self.AfterburnerSound:Play()
-			SpeedVar = 20
-		else
-		self.AfterburnerSound:FadeOut(2)
-			SpeedVar = 0
-		end
-		if ( self.Pilot:KeyDown( IN_DUCK ) ) then
-			AirbrakeVar = AirbrakeVar - 10
-			if ( self:GetVelocity():Length() > self.MaxVelocity * 0.305 ) then
-			SpeedVar = -18
-			end
-		else
-			AirbrakeVar = AirbrakeVar + 100
-		end
-	AirbrakeVar = math.Clamp( AirbrakeVar, 0, 100 )
-	
-	self.Speed = math.Clamp( self.Speed + SpeedVar, self.MinVelocity, self.MaxVelocity + 50*SpeedVar )
-	
-	//Afterburner shockwave effect
-	if (self.ThrusterPos) and self.HasPostCombustion then
-		if ( self.Pilot:KeyDown( IN_SPEED )) or ( self:GetVelocity():Length() > self.MaxVelocity * 0.95 ) then
-			local burnershockwaveR = EffectData()
-			burnershockwaveR:SetOrigin( self:GetPos() + self:GetForward() * self.ThrusterPos[1].x + self:GetRight() * self.ThrusterPos[1].y + self:GetUp() * self.ThrusterPos[1].z )
-			burnershockwaveR:SetStart( self:GetPos() + self:GetForward() * self.ThrusterPos[1].x + self:GetRight() * self.ThrusterPos[1].y + self:GetUp() * self.ThrusterPos[1].z )
-			burnershockwaveR:SetScale( 2 )
-				util.Effect( "Afterburner", burnershockwaveR )
-			local burnershockwaveL = EffectData()
-			burnershockwaveL:SetOrigin( self:GetPos() + self:GetForward() * self.ThrusterPos[2].x + self:GetRight() * self.ThrusterPos[2].y + self:GetUp() * self.ThrusterPos[2].z )
-			burnershockwaveL:SetStart( self:GetPos() + self:GetForward() * self.ThrusterPos[2].x + self:GetRight() * self.ThrusterPos[2].y + self:GetUp() * self.ThrusterPos[2].z )
-			burnershockwaveL:SetScale( 2 )
-				util.Effect( "Afterburner", burnershockwaveL )
-			self.FlameTrailR:SetKeyValue( "rendercolor", "255 175 0" )
-			self.FlameTrailL:SetKeyValue( "rendercolor", "255 175 0" )
-
-		else
-
-			if( ValidEntity( self.FlameTrailR ) ) then
-			--self.FlameTrailR:Remove()
-			self.FlameTrailR:SetKeyValue( "rendercolor", "0 0 0" )
-			end
-			if( ValidEntity( self.FlameTrailL ) ) then
-			--self.FlameTrailL:Remove()
-			self.FlameTrailL:SetKeyValue( "rendercolor", "0 0 0" )
-			end
+	if( self.Speed > 1000 ) then
 		
+		//Post Combustion (Boost) and Airbrake
+		local SpeedVar
+		local AirbrakeVar = 0
+		self.AfterburnerSound = CreateSound( self, "LockOn/PlaneAfterburner.mp3" )
+		if (self.VehicleType == VEHICLE_PLANE ) then //Only jets can use extra boost
+			if ( self.Pilot:KeyDown( IN_SPEED ) ) then
+			self.AfterburnerSound:Stop()
+			self.AfterburnerSound:Play()
+				SpeedVar = 20
+			else
+			self.AfterburnerSound:FadeOut(2)
+				SpeedVar = 0
+			end
+			if ( self.Pilot:KeyDown( IN_DUCK ) ) then
+				AirbrakeVar = AirbrakeVar - 10
+				if ( self:GetVelocity():Length() > self.MaxVelocity * 0.305 ) then
+				SpeedVar = -18
+				end
+			else
+				AirbrakeVar = AirbrakeVar + 100
+			end
+		AirbrakeVar = math.Clamp( AirbrakeVar, 0, 100 )
+		
+		self.Speed = math.Clamp( self.Speed + SpeedVar, self.MinVelocity, self.MaxVelocity + 50*SpeedVar )
+		
+		//Afterburner shockwave effect
+		if (self.ThrusterPos) and self.HasPostCombustion then
+			if ( self.Pilot:KeyDown( IN_SPEED )) or ( self:GetVelocity():Length() > self.MaxVelocity * 0.95 ) then
+				local burnershockwaveR = EffectData()
+				burnershockwaveR:SetOrigin( self:GetPos() + self:GetForward() * self.ThrusterPos[1].x + self:GetRight() * self.ThrusterPos[1].y + self:GetUp() * self.ThrusterPos[1].z )
+				burnershockwaveR:SetStart( self:GetPos() + self:GetForward() * self.ThrusterPos[1].x + self:GetRight() * self.ThrusterPos[1].y + self:GetUp() * self.ThrusterPos[1].z )
+				burnershockwaveR:SetScale( 2 )
+					util.Effect( "Afterburner", burnershockwaveR )
+				local burnershockwaveL = EffectData()
+				burnershockwaveL:SetOrigin( self:GetPos() + self:GetForward() * self.ThrusterPos[2].x + self:GetRight() * self.ThrusterPos[2].y + self:GetUp() * self.ThrusterPos[2].z )
+				burnershockwaveL:SetStart( self:GetPos() + self:GetForward() * self.ThrusterPos[2].x + self:GetRight() * self.ThrusterPos[2].y + self:GetUp() * self.ThrusterPos[2].z )
+				burnershockwaveL:SetScale( 2 )
+					util.Effect( "Afterburner", burnershockwaveL )
+				self.FlameTrailR:SetKeyValue( "rendercolor", "255 175 0" )
+				self.FlameTrailL:SetKeyValue( "rendercolor", "255 175 0" )
+
+			else
+
+				if( ValidEntity( self.FlameTrailR ) ) then
+				--self.FlameTrailR:Remove()
+				self.FlameTrailR:SetKeyValue( "rendercolor", "0 0 0" )
+				end
+				if( ValidEntity( self.FlameTrailL ) ) then
+				--self.FlameTrailL:Remove()
+				self.FlameTrailL:SetKeyValue( "rendercolor", "0 0 0" )
+				end
+			
+			end
 		end
-	end
+		end
+		
 	end
 	
 end

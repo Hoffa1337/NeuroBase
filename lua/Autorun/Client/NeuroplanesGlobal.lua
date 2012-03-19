@@ -25,7 +25,8 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 		if( GetConVarNumber("jet_cockpitview") > 0 ) then
 				
 			pos = plane:LocalToWorld( plane.CockpitPosition ) //Origin//
-						
+			ang = LerpAngle( 0.2, Angles, pAng )
+			
 			if( ValidEntity( pilotmodel ) ) then
 				
 				pilotmodel:SetColor( 0,0,0,0 )
@@ -42,7 +43,7 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 			tr.mask = MASK_WORLD
 			trace = util.TraceLine( tr )
 			
-			pos = trace.HitPos
+			pos = LerpVector( 0.89, Origin, trace.HitPos )
 			
 			if( ValidEntity( pilotmodel ) ) then
 				
@@ -51,7 +52,6 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 			end
 			
 		end
-	
 		
 		if( GetConVarNumber( "jet_bomberview" ) > 0 ) then
 			
