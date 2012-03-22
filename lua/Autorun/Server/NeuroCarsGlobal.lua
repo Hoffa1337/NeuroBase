@@ -20,12 +20,12 @@ end
 	
 AddCSLuaFile("autorun/npcinit.lua") 
 AddCSLuaFile("autorun/client/JetHUD.lua")
-AddCSLuaFile("autorun/client/NeuroBase_Checker.lua")
-//AddDir("Materials/VGUI/entities")
-AddDir("Sound/AC-130")
+-- AddCSLuaFile("autorun/client/NeuroBase_Checker.lua")
+-- //AddDir("Materials/VGUI/entities")
+-- AddDir("Sound/AC-130")
 AddDir("Models/AC-130")
 AddDir("Materials/models/AC-130")
-//AddDir("Materials/particles")
+-- //AddDir("Materials/particles")
 -- AddDir("Materials/JetCH")
 resource.AddFile("materials/particles/fatsmoke.vtf")
 resource.AddFile("materials/effects/GAU-8_MuzzleSmoke.vtf")
@@ -594,7 +594,7 @@ function Meta:Jet_FireMultiBarrel()
 									effectdata:SetRadius( 2 )
 								util.Effect( "cball_explode", effectdata )
 								
-								util.BlastDamage( self.Pilot, self.Pilot, b.HitPos, 512, math.random( 15, 45 ) )
+								util.BlastDamage( self, self.Pilot, b.HitPos, 512, math.random( 15, 45 ) )
 								
 								return { damage = true, effects = DoDefaultEffect } 
 								
@@ -1520,7 +1520,7 @@ function Meta:NeuroPlanes_DrawLaser( wep )
 	fx:SetNormal( trace.HitNormal )
 	util.Effect( "HelicopterMegaBomb", fx )
 	
-	util.BlastDamage( self.Pilot, self.Pilot, hp, 256, 7 )
+	util.BlastDamage( self, self.Pilot, hp, 256, 7 )
 	
 
 end
@@ -1589,6 +1589,15 @@ function Meta:Jet_DefaultUseStuff( ply, caller )
 	ply:Spectate( OBS_MODE_CHASE  )
 	ply:DrawViewModel( false )
 	ply:DrawWorldModel( false )
+	
+	ply.Weapons = {}
+	
+	for k,v in pairs( ply:GetWeapons() ) do
+		
+		ply.Weapons[k] = v:GetClass()
+		
+	end
+	
 	ply:StripWeapons()
 	ply:SetScriptedVehicle( self )
 	
@@ -1602,6 +1611,44 @@ function Meta:Jet_DefaultUseStuff( ply, caller )
 	self.NPCTarget = NULL
 	self:NPCTargetCreate()
 
+	-- if( !self.Lanterns && string.find( "night", game.GetMap() ) != nil && self.TrailPos ) then
+		
+		-- self.Lanterns = {}
+		
+		-- local Lanterns = { 
+					-- { 
+						-- Mat = "sprites/greenglow1.vmt",
+						-- Pos = self.TrailPos[1]
+					-- };
+					-- { 
+						-- Mat = "sprites/redglow3.vmt",
+						-- Pos = self.TrailPos[2]
+					-- };
+				-- }
+					
+		-- for i=1,#Lanterns do
+		
+			-- self.Lanterns[i] = ents.Create( "env_sprite" )
+			-- self.Lanterns[i]:SetParent( self )	
+			-- self.Lanterns[i]:SetPos( self:LocalToWorld( Lanterns[i].Pos ) ) -----143.9 -38.4 -82
+			-- self.Lanterns[i]:SetAngles( self:GetAngles() )
+			-- self.Lanterns[i]:SetKeyValue( "spawnflags", 1 )
+			-- self.Lanterns[i]:SetKeyValue( "renderfx", 0 )
+			-- self.Lanterns[i]:SetKeyValue( "scale", 0.38 )
+			-- self.Lanterns[i]:SetKeyValue( "rendermode", 9 )
+			-- self.Lanterns[i]:SetKeyValue( "HDRColorScale", .75 )
+			-- self.Lanterns[i]:SetKeyValue( "GlowProxySize", 2 )
+			-- self.Lanterns[i]:SetKeyValue( "model", Lanterns[i].Mat )
+			-- self.Lanterns[i]:SetKeyValue( "framerate", "10.0" )
+			-- self.Lanterns[i]:SetKeyValue( "rendercolor", " 255 0 0" )
+			-- self.Lanterns[i]:SetKeyValue( "renderamt", 255 )
+			-- self.Lanterns[i]:Spawn()
+		
+		-- end
+	
+	-- end
+	
+	
 	if ( self.ThrusterPos ) then	
 		self.FlameTrailR = ents.Create( "env_spritetrail" )
 		self.FlameTrailR:SetParent( self.Entity )	
@@ -1658,10 +1705,21 @@ function Meta:EjectPilot()
 	self.Pilot:SetNetworkedEntity( "Plane", NULL ) 
 	self:SetNetworkedEntity("Pilot", NULL )
 	self.Pilot:SetNetworkedBool( "isGunner", false )
-	self.Pilot:SetPos( self:GetPos() + self:GetRight() * 100 )
+	self.Pilot:SetPos( self:GetPos() + self:GetUp() * 150 )
 	self.Pilot:SetAngles( Angle( 0, self:GetAngles().y,0 ) )
 	self.Owner = NULL
 	self.Pilot:SetScriptedVehicle( NULL )
+		
+	if( type(self.Pilot.Weapons) == "table" ) then
+		
+		for k,v in pairs( self.Pilot.Weapons ) do
+			
+			-- self.Pilot:PrintMessage( HUD_PRINTTALK, v:GetClass() )
+			self.Pilot:Give(tostring(v))
+			
+		end
+	
+	end
 	
 	self.LastUse = CurTime()
 	
