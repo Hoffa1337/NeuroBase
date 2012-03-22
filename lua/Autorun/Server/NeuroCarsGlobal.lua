@@ -873,13 +873,15 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 				burnershockwaveR:SetStart( self:GetPos() + self:GetForward() * self.ThrusterPos[1].x + self:GetRight() * self.ThrusterPos[1].y + self:GetUp() * self.ThrusterPos[1].z )
 				burnershockwaveR:SetScale( 2 )
 					util.Effect( "Afterburner", burnershockwaveR )
+				if (self.ThrusterPos[2]) then
 				local burnershockwaveL = EffectData()
 				burnershockwaveL:SetOrigin( self:GetPos() + self:GetForward() * self.ThrusterPos[2].x + self:GetRight() * self.ThrusterPos[2].y + self:GetUp() * self.ThrusterPos[2].z )
 				burnershockwaveL:SetStart( self:GetPos() + self:GetForward() * self.ThrusterPos[2].x + self:GetRight() * self.ThrusterPos[2].y + self:GetUp() * self.ThrusterPos[2].z )
 				burnershockwaveL:SetScale( 2 )
 					util.Effect( "Afterburner", burnershockwaveL )
-				self.FlameTrailR:SetKeyValue( "rendercolor", "255 175 0" )
 				self.FlameTrailL:SetKeyValue( "rendercolor", "255 175 0" )
+				end
+				self.FlameTrailR:SetKeyValue( "rendercolor", "255 175 0" )
 
 			else
 
@@ -1663,8 +1665,8 @@ function Meta:Jet_DefaultUseStuff( ply, caller )
 		self.FlameTrailR:SetKeyValue( "rendermode", 5 )
 		self.FlameTrailR:SetKeyValue( "HDRColorScale", .75 )
 		self.FlameTrailR:Spawn()
-		self.FlameTrailR:Spawn()
 
+		if (self.ThrusterPos[2]) then
 		self.FlameTrailL = ents.Create( "env_spritetrail" )
 		self.FlameTrailL:SetParent( self.Entity )	
 		self.FlameTrailL:SetPos( self:GetPos() + self:GetForward() * self.ThrusterPos[2].x + self:GetRight() * self.ThrusterPos[2].y + self:GetUp() * self.ThrusterPos[2].z  )
@@ -1678,7 +1680,7 @@ function Meta:Jet_DefaultUseStuff( ply, caller )
 		self.FlameTrailL:SetKeyValue( "rendermode", 5 )
 		self.FlameTrailL:SetKeyValue( "HDRColorScale", .75 )
 		self.FlameTrailL:Spawn()
-		self.FlameTrailL:Spawn()
+		end
 	end
 end
 hook.Add("PlayerSpawn", "NeuroPlanes_ViewhackFix",function( ply ) 
