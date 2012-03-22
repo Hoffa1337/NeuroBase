@@ -1,0 +1,20 @@
+Work in progress:
+Follow what the NeuroTeam plans to do:
+
+DO NOT EDIT THIS!
+
+**** Hoffa ****
+- Editing tanks features.
+
+to do: N/A
+
+**** StarChick ****
+- Making remote controllable drone.
+
+to do:
+add the last hawx planes.
+
+**** Sillirion ****
+- Fixing tanks models.
+
+to do: N/A
