@@ -9,7 +9,7 @@ SWEP.SlotPos = 4
 SWEP.DrawAmmo = false
 SWEP.DrawCrosshair = true
 
-SWEP.Spawnable = false;
+SWEP.Spawnable = true;
 SWEP.AdminSpawnable = true;
 
 SWEP.viewModel = "models/weapons/v_pistol.mdl";
