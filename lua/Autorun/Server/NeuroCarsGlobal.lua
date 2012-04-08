@@ -6,16 +6,16 @@ local Testers = "Virus, Elenion, Flubbadoo, xXAcePilotXx, (WEED)Kamikaze"
 function AddDir(dir) // recursively adds everything in a directory to be downloaded by client
 	
 	
-	local list = file.FindDir("../"..dir.."/*")
-	for _, fdir in pairs(list) do
-		if fdir != ".svn" then // don't spam people with useless .svn folders
-			AddDir(fdir)
-		end
-	end
+	-- local list = file.FindDir("../"..dir.."/*")
+	-- for _, fdir in pairs(list) do
+		-- if fdir != ".svn" then // don't spam people with useless .svn folders
+			-- AddDir(fdir)
+		-- end
+	-- end
  
-	for k,v in pairs(file.Find("../"..dir.."/*")) do
-		resource.AddFile(dir.."/"..v)
-	end
+	-- for k,v in pairs(file.Find("../"..dir.."/*")) do
+		-- resource.AddFile(dir.."/"..v)
+	-- end
 end
 	
 AddCSLuaFile("autorun/npcinit.lua") 
@@ -123,7 +123,7 @@ end
 hook.Add("Think","NeuroPlanes____CorrectHealthValues",FixHealth)
 
 
-hook.Add( "PhysgunPickup", "physgunPickup", function( ply, ent ) if ( ent.IsFlying ) then return false end end )
+hook.Add( "PhysgunPickup", "physgunPickup", function( ply, ent ) if ( ent.IsFlying || ent.IsDriving || ValidEntity( ent.Pilot ) ) then return false end end )
 
 hook.Add("PlayerEnteredVehicle","NeuroPlanes_OnEnterVehicle", function( player, vehicle, role ) 
 	
@@ -147,8 +147,8 @@ hook.Add("PlayerEnteredVehicle","NeuroPlanes_OnEnterVehicle", function( player, 
 	if( vehicle.IsB17GunnerSeat ) then
 		
 		player:DrawWorldModel( false )
-		player.OldColor = { player:GetColor() }
-		player:SetColor( 0,0,0,0 )
+		player.OldColor = player:GetColor()
+		player:SetColor( Color( 0,0,0,0 ) )
 	
 	end
 	
@@ -208,7 +208,7 @@ hook.Add("PlayerLeaveVehicle","NeuroPlanes_OnLeftVehicle", function( player, veh
 	if( vehicle.IsB17GunnerSeat ) then
 		
 		player:DrawWorldModel( true )
-		player:SetColor( player.OldColor.r,player.OldColor.b,player.OldColor.g,player.OldColor.a )
+		player:SetColor( player.OldColor )
 		player:SetPos( vehicle:GetPos() + vehicle:GetRight() * 200 )
 		player:SetFOV( player.OriginalFOV, 0.15 )
 		player:SetHealth( 100 )
@@ -222,7 +222,7 @@ hook.Add("PlayerLeaveVehicle","NeuroPlanes_OnLeftVehicle", function( player, veh
 		player:SetPos( vehicle:GetParent():LocalToWorld( Vector( 60, 0, 53 ) )  )
 		player:SetFOV( player.OriginalFOV, 0 )
 		player:DrawWorldModel( true )
-		player:SetColor( 255,255,255,255 )
+		player:SetColor( Color( 255,255,255,255 ) )
 		player:SetHealth( 100 )
 		player:SetNetworkedBool( "NeuroPlanes__DrawAC130Overlay", false )
 		
@@ -230,7 +230,7 @@ hook.Add("PlayerLeaveVehicle","NeuroPlanes_OnLeftVehicle", function( player, veh
 	
 	if( vehicle.IsCoPilotSeat ) then
 		
-		player:SetColor( 255, 255, 255, 255 )
+		player:SetColor( Color( 255, 255, 255, 255 ) )
 		vehicle:GetParent().CoPilot = NULL
 
 	end
@@ -267,7 +267,7 @@ hook.Add("PlayerLeaveVehicle","NeuroPlanes_OnLeftVehicle", function( player, veh
 		player:SetNetworkedEntity( "ChopperGunnerEnt", NULL )
 		player:SetNetworkedEntity( "NeuroPlanes_Helicopter", NULL )
 		player:SetNetworkedBool( "isGunner", false )
-		player:SetColor( 255, 255, 255, 255 )
+		player:SetColor( Color( 255, 255, 255, 255 ) )
 		player:Spawn()
 		
 		local vp = vehicle:GetParent()
@@ -292,48 +292,48 @@ hook.Add("PlayerLeaveVehicle","NeuroPlanes_OnLeftVehicle", function( player, veh
 end )
 
 
-hook.Add("OnNPCKilled", "NeuroPlanes_KillCredit_NPC", function( victim, killer, weapon )
+-- hook.Add("OnNPCKilled", "NeuroPlanes_KillCredit_NPC", function( victim, killer, weapon )
 	
-	if( victim:IsNPC() && victim.HealthVal ) then
+	-- if( victim:IsNPC() && victim.HealthVal ) then
 		
-		if ( killer.HealthVal && ValidEntity( killer.Pilot ) && killer.Pilot:IsPlayer() ) then
+		-- if ( killer.HealthVal && ValidEntity( killer.Pilot ) && killer.Pilot:IsPlayer() ) then
 			
-			killer.Pilot:AddFrags( 1 )
+			-- killer.Pilot:AddFrags( 1 )
 			
-		elseif( killer:IsPlayer() ) then
+		-- elseif( killer:IsPlayer() ) then
 			
-			killer:AddFrags( 1 )
+			-- killer:AddFrags( 1 )
 		
-		end
+		-- end
 	
-	end
+	-- end
 	
-end )
+-- end )
 
 
-hook.Add( "EntityTakeDamage", "NeuroPlanes_KillCredit_Plane", function( ent, inflictor, attacker, amount, dmginfo )
+-- hook.Add( "EntityTakeDamage", "NeuroPlanes_KillCredit_Plane", function( ent, inflictor, attacker, amount, dmginfo )
 	
-	if( ent.HealthVal && !ent:IsNPC() ) then
+	-- if( ent.HealthVal && !ent:IsNPC() ) then
 		
-		if( ent.HealthVal > 0 && amount > ent.HealthVal ) then
+		-- if( ent.HealthVal > 0 && amount > ent.HealthVal ) then
 			
-			if( attacker:IsPlayer() ) then
+			-- if( attacker:IsPlayer() ) then
 				
-				attacker:AddFrags( 1 )
+				-- attacker:AddFrags( 1 )
 				
-			elseif( ValidEntity( attacker.Pilot ) && attacker.Pilot:IsPlayer() ) then
+			-- elseif( ValidEntity( attacker.Pilot ) && attacker.Pilot:IsPlayer() ) then
 				
-				attacker.Pilot:AddFrags( 1 )
+				-- attacker.Pilot:AddFrags( 1 )
 			
-			end
+			-- end
 		
 		
-		end
+		-- end
 	
 	
-	end
+	-- end
 
-end )
+-- end )
 
 hook.Add( "OnEntityCreated", "NeuroPlanes_EntCreatedHook", function( ent ) 
 	
@@ -467,7 +467,7 @@ function Meta:SpawnPilotModel( pos, ang )
 	p:SetKeyValue( "DefaultAnim", "ACT_DRIVE_AIRBOAT" )
 	p:SetKeyValue( "disableshadows", 1 )
 	p:Spawn()
-	p:SetColor( 255,255,255,255 )
+	p:SetColor( Color( 255,255,255,255 ) )
 	
 	if( ValidEntity( p ) ) then
 	
@@ -984,7 +984,7 @@ function Meta:SpawnPassengerSeat( pos, ang )
 	self.PassengerSeat.HandleAnimation = function( v, p ) return p:SelectWeightedSequence( ACT_DRIVE_AIRBOAT ) end
 	self.PassengerSeat:SetAngles( self:GetAngles() + ang )
 	self.PassengerSeat:SetParent( self )
-	self.PassengerSeat:SetColor( 0,0,0,0 )
+	self.PassengerSeat:SetColor( Color( 0,0,0,0 ) )
 	self.PassengerSeat:Spawn()
 	self.PassengerSeat.IsChopperGunnerSeat = true
 	self.PassengerSeat.IsHelicopterCoPilotSeat = true
@@ -1832,7 +1832,7 @@ function Meta:SpawnTrails()
 		self.Trails[i]:SetPos( self:LocalToWorld( self.TrailPos[i] ) )
 		self.Trails[i]:SetAngles( self:GetAngles() )
 		self.Trails[i]:SetParent( self )	
-		self.Trails[i]:SetColor(0,0,0,0)
+		self.Trails[i]:SetColor( Color( 0,0,0,0) )
 		self.Trails[i]:Spawn()
 		
 		local col = Color( 255,255,255,90 )
@@ -1990,7 +1990,7 @@ function Meta:AddAdminEquipment()
 			self.RocketVisuals[i].Class = v.Class
 			self.RocketVisuals[i]:Spawn()
 			self.RocketVisuals[i].LastAttack = CurTime()
-			self.RocketVisuals[i]:SetColor( 0,0,0,0 )
+			self.RocketVisuals[i]:SetColor( Color( 0,0,0,0 ) )
 			
 			if ( v.Damage && v.Radius ) then
 				
@@ -2357,7 +2357,7 @@ function Meta:DeathFX()
 		cdeb:SetPos(self:GetPos()+Vector(math.random(-64,64),math.random(-64,64),math.random(128,256)))
 		cdeb:SetSolid(6)
 		cdeb:SetMaterial( self:GetMaterial() )
-		cdeb:SetColor( shade,shade,shade, 255 )
+		cdeb:SetColor( Color( shade,shade,shade, 255 ) )
 		cdeb:Spawn()
 		cdeb:Fire("ignite","",0)
 		cdeb:Fire("kill","",math.random(15,20))

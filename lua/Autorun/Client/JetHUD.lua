@@ -201,8 +201,11 @@ local function inLOS( a, b )
 	
 	end
 	
-	local trace = util.TraceLine( { start = a:GetPos() + a:GetForward() * 1024, endpos = b:GetPos() + Vector(0,0,32), filter = a, mask = MASK_BLOCKLOS + MASK_WATER } )
+	if( ( a:GetPos() - b:GetPos()):Length() > 10000 ) then return false end
+	
+	local trace = util.TraceLine( { start = a:GetPos() + a:GetForward() * 1024, endpos = b:GetPos() + Vector(0,0,32), filter = a, mask = MASK_BLOCKLOS + MASK_WATER + MASK_SOLID } )
 	return ( ( trace.Hit && trace.Entity == b ) || !trace.Hit )
+	
 end
 
 function JetFighter.CopilotCalcView( ply, Origin, Angles, Fov )
