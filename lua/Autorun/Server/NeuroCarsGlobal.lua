@@ -122,8 +122,38 @@ local function FixHealth() -- Hackfix
 end
 hook.Add("Think","NeuroPlanes____CorrectHealthValues",FixHealth)
 
+hook.Add("PlayerSpawn", "FixColor", function( ply )
+	
+	local r,g,b,a = ply:GetColor()
+	if( a == 0 ) then
+	
+		ply:SetColor( r,g,b,255 )
+		
+	end
+	
+end ) 
 
-hook.Add( "PhysgunPickup", "physgunPickup", function( ply, ent ) if ( ent.IsFlying || ent.IsDriving || ValidEntity( ent.Pilot ) ) then return false end end )
+if( table.HasValue( hook.GetTable(), "FixGhostCollisionModels" ) ) then
+	
+	hook.Remove( "PlayerSpawnedSENT", "FixGhostCollisionModels" )
+
+end
+	
+hook.Add( "PlayerSpawnedSENT", "FixGhostCollisionModels", function( ply, e )
+	
+	for k,v in pairs( ents.GetAll() ) do 
+		
+		if( v != e && v:GetParent() == e ) then
+			
+			v:SetSolid( SOLID_NONE )
+			
+		end
+		
+	end	
+
+end )
+
+hook.Add( "PhysgunPickup", "physgunPickup", function( ply, ent ) if ( ent.isTouching != nil || ent.IsFlying || ent.IsDriving || ValidEntity( ent.Pilot ) ) then return false end end )
 
 hook.Add("PlayerEnteredVehicle","NeuroPlanes_OnEnterVehicle", function( player, vehicle, role ) 
 	
@@ -208,7 +238,7 @@ hook.Add("PlayerLeaveVehicle","NeuroPlanes_OnLeftVehicle", function( player, veh
 	if( vehicle.IsB17GunnerSeat ) then
 		
 		player:DrawWorldModel( true )
-		player:SetColor( player.OldColor )
+		player:SetColor( player.OldColor or Color( 255, 255, 255, 255 ) )
 		player:SetPos( vehicle:GetPos() + vehicle:GetRight() * 200 )
 		player:SetFOV( player.OriginalFOV, 0.15 )
 		player:SetHealth( 100 )
