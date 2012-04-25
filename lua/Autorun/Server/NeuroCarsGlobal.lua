@@ -1605,6 +1605,7 @@ function Meta:CycleThroughWeaponsList()
 		
 		self.Pilot:PrintMessage( HUD_PRINTCENTER, ""..wep.Name )
 		self:SetNetworkedString("NeuroPlanes_ActiveWeapon", wep.Name)
+		self:SetNetworkedString("NeuroPlanes_ActiveWeaponType", wepData.Type)
 		
 	end
 	

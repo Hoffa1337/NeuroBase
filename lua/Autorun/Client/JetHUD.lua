@@ -397,13 +397,13 @@ function JetFighter.HUD() --Real Head-Up Display by StarChick. ;)
 		local x,y = pos.x, pos.y
 		local HorizonPoint = (JetFighter.Plane:GetPos() + JetFighter.Plane:GetUp( ) * offs +JetFighter.Plane:GetForward()*10000):ToScreen( )
 		local X,Y = HorizonPoint.x, HorizonPoint.y
-		local r = math.rad( 100*JetFighter.Plane:GetAngles().r-60)/180
+		-- local r = math.rad( 100*JetFighter.Plane:GetAngles().r-60)/180
+		local r = math.rad( JetFighter.Plane:GetAngles().r) + math.rad( JetFighter.Pilot:EyeAngles().r)
 		local cosr = math.cos(r)
 		local sinr = math.sin(r)
 		local p = math.rad(JetFighter.Plane:GetAngles().p)
 		local Pi = math.pi
 		
-		surface.DrawCircle( x, y, 32, Color( lockwarning, 255-lockwarning, 0, 200) )
 		surface.DrawLine( x, y, x-16*math.cos(-r+Pi/3), y+16*math.sin(-r+Pi/3) )
 		surface.DrawLine( x-16*math.cos(-r+Pi/3), y+16*math.sin(-r+Pi/3), x-16*cosr, y-16*sinr )
 		surface.DrawLine( x-16*cosr, y-16*sinr, x-32*cosr, y-32*sinr )
@@ -790,7 +790,8 @@ function JetFighter.DrawCrosshair( )
 					( t:GetNetworkedInt("Health", 0 ) != 0 ) && 
 					t:GetOwner() != JetFighter.Plane && 
 					t:GetOwner() != JetFighter.Pilot ) )
-		local r = math.rad( 100*JetFighter.Plane:GetAngles().r-60)/180
+		-- local r = math.rad( 100*JetFighter.Plane:GetAngles().r-60)/180
+		local r = math.rad( JetFighter.Plane:GetAngles().r) + math.rad( JetFighter.Pilot:EyeAngles().r)
 		local cosr = math.cos(r)
 		local sinr = math.sin(r)
 	local lockwarning
@@ -811,14 +812,14 @@ function JetFighter.DrawCrosshair( )
 		surface.SetMaterial(  ch_green )
 		surface.DrawTexturedRect( pos.x - size / 2, pos.y - size / 2, size, size )
 	else
-		if  (GetConVarNumber("jet_cockpitview") == 0 ) then
 		local X,Y = x,y
-		surface.DrawCircle( X, Y, 8, Color( lockwarning, 255-lockwarning, 0, 200) ) --horizon circle
+		surface.SetDrawColor( 0, 255, 0, 100 )
+		surface.DrawCircle( X, Y, 8, Color( 0, 255, 0, 100) ) --horizon circle
 		surface.DrawLine( X+8*sinr, Y-8*cosr, X+20*sinr, Y-20*cosr ) --up
 		surface.DrawLine( X-8*cosr, Y-8*sinr, X-20*cosr, Y-20*sinr ) --left
 		surface.DrawLine( X+8*cosr, Y+8*sinr, X+20*cosr, Y+20*sinr ) --right
-		end
 	end
+
 end
 
 function DrawHelicopterOuterCrosshair()
