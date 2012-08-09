@@ -12,8 +12,8 @@ SWEP.DrawCrosshair = true
 SWEP.Spawnable = true;
 SWEP.AdminSpawnable = true;
 
-SWEP.viewModel = "models/weapons/v_pistol.mdl";
-SWEP.worldModel = "models/weapons/w_pistol.mdl";
+SWEP.viewModel = "models/weapons/v_binoculars.mdl";
+SWEP.worldModel = "models/weapons/w_binoculars.mdl";
 
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1
