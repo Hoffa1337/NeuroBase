@@ -1,8 +1,9 @@
 "AddonInfo"
 {
 	"name"		"NeuroTec Base Addon"
-	"version"	""
-	"up_date"	"n/a"
+	"version"	"not working"
+	"info"		"Basic code to get NeuroTec addons to be loaded correctly"
+	"up_date"	"10-2012"
 	"author_name"	"Hoffa / Starchick"
 	"author_email"	"robin.hofstrom@gmail.com"
 	"author_url"	"n/a"
