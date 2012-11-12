@@ -141,9 +141,30 @@ CreateClientConVar( "jet_HUD", "1", true, false )
 CreateClientConVar( "jet_HQhud", "0", true, false )
 CreateClientConVar( "jet_arcadeview", "0", true, false )
 CreateClientConVar( "jet_arcademode", "0", true, false )
-surface.CreateFont ("Helvetica", 24, 0, true, false, "Neuroplanes_Warning_Big")
-surface.CreateFont ("Helvetica", 26, 0, true, false, "Neuroplanes_Warning_Big2")
-surface.CreateFont("Trebuchet22", 40, 700, true, false, "LockonAlert")
+surface.CreateFont ("Neuroplanes_Warning_Big",
+				{	font = "Helvetica",
+					size = 24,
+					weight 	= 0,
+					antialias = true,
+					additive =	false
+				}
+)					
+surface.CreateFont ("Neuroplanes_Warning_Big2",
+				{	font = "Helvetica",
+					size = 26,
+					weight 	= 0,
+					antialias = true,
+					additive =	false
+				}
+)
+surface.CreateFont("LockonAlert",
+				{	font = "Helvetica",
+					size = 40,
+					weight 	= 700,
+					antialias = true,
+					additive =	false
+				}
+)
 
 local JetFighter = {}
 JetFighter.DrawWarning = false
@@ -195,7 +216,7 @@ hook.Add("HUDShouldDraw", "NeuroTech_HideHL2HUD", HideHL2HUD )
 	
 local function inLOS( a, b )
 
-	if( !ValidEntity( a ) || !ValidEntity( b ) ) then
+	if( !IsValid( a ) || !IsValid( b ) ) then
 		
 		return false
 	
@@ -210,7 +231,8 @@ end
 
 function JetFighter.CopilotCalcView( ply, Origin, Angles, Fov )
 
-	if( ValidEntity( ply:GetScriptedVehicle() ) ) then 
+	local plane = NULL// plr:GetScriptedVehicle()
+	if( IsValid( plane ) ) then 
 
 		return  -- Dont fuck up our cameras plskthx
 		
@@ -218,10 +240,10 @@ function JetFighter.CopilotCalcView( ply, Origin, Angles, Fov )
 	
 	local copilotplane = ply:GetNetworkedEntity( "Plane", NULL ) 
 	
-	if( ValidEntity( copilotplane ) ) then
+	if( IsValid( copilotplane ) ) then
 		
 		local lg = copilotplane:GetNetworkedEntity("NeuroPlanes_LaserGuided", NULL )
-		if( ValidEntity( lg ) ) then
+		if( IsValid( lg ) ) then
 		
 			local pos = lg:GetPos() + lg:GetForward() * 100
 			local myAng = lg:GetAngles()
@@ -247,7 +269,7 @@ function JetFighter.CopilotCalcView( ply, Origin, Angles, Fov )
 			fov = fov
 		}
 	
-	if( isGunner && ValidEntity( plane ) ) then
+	if( isGunner && IsValid( plane ) ) then
 	
 		local pos
 		local fov = GetConVarNumber("fov_desired")
@@ -365,7 +387,7 @@ function JetFighter.HUD() --Real Head-Up Display by StarChick. ;)
 	if flares < 1 then flarestatus = 255 else flarestatus = 0 end
 
 	local locking
-	if ( ValidEntity( JetFighter.Target ) ) then locking = 255 else locking = 0 end
+	if ( IsValid( JetFighter.Target ) ) then locking = 255 else locking = 0 end
 	
 	local lockwarning
 	if JetFighter.DrawWarning then 
@@ -376,7 +398,7 @@ function JetFighter.HUD() --Real Head-Up Display by StarChick. ;)
 --	JetFighter.Pilot:StopSound( "LockOn/Launch.mp3" )
 	end
 	
-	if ( ValidEntity( JetFighter.Target ) && JetFighter.Target != JetFighter.Plane && v == JetFighter.Target ) then
+	if ( IsValid( JetFighter.Target ) && JetFighter.Target != JetFighter.Plane && v == JetFighter.Target ) then
 		draw.SimpleText( "Locked On", "ChatFont", x, y, Color( 255, 0, 0, 240 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 	end
 	
@@ -466,7 +488,7 @@ function JetFighter.HUD() --Real Head-Up Display by StarChick. ;)
 
 	//Targets
 	for k,v in pairs( ents.FindByClass( "sent*" ) ) do
-		if ( ValidEntity( v ) && v.PrintName && v != JetFighter.Plane && ( v.Type == "vehicle" || ( v.PrintName == "Missile" ) ) ) then
+		if ( IsValid( v ) && v.PrintName && v != JetFighter.Plane && ( v.Type == "vehicle" || ( v.PrintName == "Missile" ) ) ) then
 			
 			local pos = v:GetPos():ToScreen( )
 			local x,y = pos.x, pos.y
@@ -488,8 +510,8 @@ function JetFighter.HUD() --Real Head-Up Display by StarChick. ;)
 				surface.SetDrawColor( 0, 255, 0, 255)
 				surface.DrawOutlinedRect( x-16, y-16, 32, 32 )
 				end
---				if ( ValidEntity( JetFighter.Target ) && JetFighter.Target != JetFighter.Plane && v == JetFighter.Target ) then
-				if ( ValidEntity( JetFighter.Target ) ) then
+--				if ( IsValid( JetFighter.Target ) && JetFighter.Target != JetFighter.Plane && v == JetFighter.Target ) then
+				if ( IsValid( JetFighter.Target ) ) then
 					local targetpos = JetFighter.Target:GetPos():ToScreen( )
 					local x,y = targetpos.x, targetpos.y
 					draw.SimpleText("Target", "TargetID", 10, 10, Color( lockwarning, 255-lockwarning, 0, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )
@@ -543,10 +565,10 @@ function JetFighter.HUD() --Real Head-Up Display by StarChick. ;)
 	local siny = math.sin(yaw)
 	
 	surface.DrawCircle( 16 + RadarSize/2, ScrH()-RadarSize/2-10, RadarSize/2, Color( lockwarning, 255-lockwarning, 0,255 ))
- 	draw.SimpleText( "S", "DefaultSmallDropShadow", 16 + RadarSize/2 + cosy*RadarSize*7/15, ScrH()-RadarSize/2-10 + siny*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-	draw.SimpleText( "E", "DefaultSmallDropShadow", 16 + RadarSize/2 - siny*RadarSize*7/15, ScrH()-RadarSize/2-10 + cosy*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-	draw.SimpleText( "N", "DefaultSmallDropShadow", 16 + RadarSize/2 - cosy*RadarSize*7/15, ScrH()-RadarSize/2-10 - siny*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-	draw.SimpleText( "W", "DefaultSmallDropShadow", 16 + RadarSize/2 + siny*RadarSize*7/15, ScrH()-RadarSize/2-10 - cosy*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+ 	draw.SimpleText( "S", "BudgetLabel", 16 + RadarSize/2 + cosy*RadarSize*7/15, ScrH()-RadarSize/2-10 + siny*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+	draw.SimpleText( "E", "BudgetLabel", 16 + RadarSize/2 - siny*RadarSize*7/15, ScrH()-RadarSize/2-10 + cosy*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+	draw.SimpleText( "N", "BudgetLabel", 16 + RadarSize/2 - cosy*RadarSize*7/15, ScrH()-RadarSize/2-10 - siny*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+	draw.SimpleText( "W", "BudgetLabel", 16 + RadarSize/2 + siny*RadarSize*7/15, ScrH()-RadarSize/2-10 - cosy*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 	
 	//Health indicator
 	draw.SimpleText( "Armor: "..math.floor(100*h).."%", "TargetID", ScrW()*5/6-48, ScrH()*4/5-40, Color(255*(1-h),255*h,0,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )		
@@ -558,7 +580,7 @@ end
 
 function JetFighter.HP() --Display ennemies remaining health, would help to seek the weakest one! ;D
 	for k,v in pairs( ents.FindByClass( "sent*" ) ) do
-		if ( ValidEntity( v ) && v.PrintName && v != JetFighter.Plane && ( v.Type == "vehicle" || ( v.PrintName == "Missile" ) ) ) then
+		if ( IsValid( v ) && v.PrintName && v != JetFighter.Plane && ( v.Type == "vehicle" || ( v.PrintName == "Missile" ) ) ) then
 			
 			local pos = v:GetPos():ToScreen( )
 			local x,y = pos.x, pos.y
@@ -603,7 +625,7 @@ function JetFighter.MarkEnemies()
 	
 	for k,v in pairs( ents.FindByClass( "sent*" ) ) do
 
-		if ( ValidEntity( v ) && v.PrintName && v != JetFighter.Plane && ( v.Type == "vehicle" || ( v.PrintName == "Missile" ) ) ) then
+		if ( IsValid( v ) && v.PrintName && v != JetFighter.Plane && ( v.Type == "vehicle" || ( v.PrintName == "Missile" ) ) ) then
 			
 			local pos = v:GetPos():ToScreen( )
 			local x,y = pos.x, pos.y
@@ -614,7 +636,7 @@ function JetFighter.MarkEnemies()
 				if ( TargetTeam == NTeam ) and ( TargetTeam > 0 ) then
 					
 					local extra = ""
-					if( ValidEntity( v:GetNetworkedEntity("Pilot",NULL) ) ) then
+					if( IsValid( v:GetNetworkedEntity("Pilot",NULL) ) ) then
 						
 						extra = " - "..tostring(v:GetNetworkedEntity("Pilot",NULL):Name())
 						
@@ -629,7 +651,7 @@ function JetFighter.MarkEnemies()
 					
 					local target = v:GetNetworkedEntity( "Target", NULL )
 
-					if ( target && ValidEntity( target ) && ( target == JetFighter.Plane || target == JetFighter.Pilot ) ) then
+					if ( target && IsValid( target ) && ( target == JetFighter.Plane || target == JetFighter.Pilot ) ) then
 						
 						draw.SimpleText( "Warning", "ChatFont", x, y - 15, Color( 204, 51, 0, 240 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 						count = count + 1
@@ -648,7 +670,7 @@ function JetFighter.MarkEnemies()
 				
 				end
 			
-				if ( ValidEntity( JetFighter.Target ) && JetFighter.Target != JetFighter.Plane && v == JetFighter.Target ) then
+				if ( IsValid( JetFighter.Target ) && JetFighter.Target != JetFighter.Plane && v == JetFighter.Target ) then
 					
 					draw.SimpleText( "Locked On", "ChatFont", x, y, Color( 255, 0, 0, 240 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 					
@@ -695,7 +717,7 @@ function JetFighter.MarkEnemies()
 				
 			end
 
-			if ( ValidEntity( JetFighter.Target ) && JetFighter.Target != JetFighter.Plane && v == JetFighter.Target ) then
+			if ( IsValid( JetFighter.Target ) && JetFighter.Target != JetFighter.Plane && v == JetFighter.Target ) then
 			
 				draw.SimpleText( "Locked On", "ChatFont", x, y, Color( 255, 0, 0, 240 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 					
@@ -704,7 +726,7 @@ function JetFighter.MarkEnemies()
 			
 			local target = v:GetNetworkedEntity( "Target", NULL )
 					
-			if ( ValidEntity( target ) && target == JetFighter.Plane && target:GetNetworkedEntity("Guardian_Object", NULL ) != LocalPlayer() ) then
+			if ( IsValid( target ) && target == JetFighter.Plane && target:GetNetworkedEntity("Guardian_Object", NULL ) != LocalPlayer() ) then
 				
 				draw.SimpleText( "Warning", "ChatFont", x, y - 15, Color( 204, 51, 0, 240 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 				count = count + 1
@@ -721,7 +743,7 @@ function JetFighter.MarkEnemies()
 	-- end
 -- */
 	
-	if( !JetFighter.Plane || !JetFighter.Pilot || !ValidEntity( JetFighter.Plane ) || !ValidEntity( JetFighter.Pilot ) ) then return end
+	if( !JetFighter.Plane || !JetFighter.Pilot || !IsValid( JetFighter.Plane ) || !IsValid( JetFighter.Pilot ) ) then return end
 	
 	for k,v in pairs( player.GetAll() ) do
 		
@@ -733,7 +755,7 @@ function JetFighter.MarkEnemies()
 				local x,y = pos.x, pos.y
 				draw.SimpleText( v:GetName(), "ChatFont", x + 15, y, Color( 45, 255, 45, 240 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 				
-				if ( ValidEntity( JetFighter.Target ) && JetFighter.Target != JetFighter.Plane && v == JetFighter.Target ) then
+				if ( IsValid( JetFighter.Target ) && JetFighter.Target != JetFighter.Plane && v == JetFighter.Target ) then
 				
 					draw.SimpleText( "Locked On", "ChatFont", x, y, Color( 255, 0, 0, 240 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 						
@@ -783,7 +805,7 @@ function JetFighter.DrawCrosshair( )
 	
 	local t = trace.Entity
 	
-	local logic = ( !trace.HitWorld && !trace.HitSky && ValidEntity( t ) && 
+	local logic = ( !trace.HitWorld && !trace.HitSky && IsValid( t ) && 
 					( t:IsNPC() 					 ||
 					t:IsPlayer() 					 || 
 					t:IsVehicle() 					 || 
@@ -857,7 +879,7 @@ local function DrawThermal()
 	
 	for k,v in pairs( ents.GetAll() ) do 
 		
-		if ( v:IsPlayer() && v:Alive() && !ValidEntity( v:GetScriptedVehicle() ) && !v.ColdBlooded ) then
+		if ( v:IsPlayer() && v:Alive() && !IsValid( v:GetScriptedVehicle() ) && !v.ColdBlooded ) then
 			
 			render.SuppressEngineLighting( true )
 			render.SetColorModulation( 1, 1, 1 )
@@ -943,7 +965,7 @@ local function Draw3DWeaponCrosshair( gun )
 		tr.mask = MASK_SOLID
 	trace = util.TraceLine( tr )
 	
-	if ( !trace.HitSky && trace.Entity && ValidEntity( trace.Entity ) && trace.Entity:IsNPC() || trace.Entity:IsPlayer() || type(trace.Entity) == "CSENT_vehicle" ) then
+	if ( !trace.HitSky && trace.Entity && IsValid( trace.Entity ) && trace.Entity:IsNPC() || trace.Entity:IsPlayer() || type(trace.Entity) == "CSENT_vehicle" ) then
 	
 		surface.SetDrawColor( 255, 50, 50, 255 )
 	
@@ -1009,9 +1031,9 @@ local function HellfireMarker()
 	local plr = LocalPlayer()
 	local plane = plr:GetNetworkedEntity("Plane", NULL )
 	
-	local logic = ValidEntity( plane ) && plr:GetNetworkedBool("DrawDesignator", false ) 
+	local logic = IsValid( plane ) && plr:GetNetworkedBool("DrawDesignator", false ) 
 	
-	if( logic && ValidEntity( plr ) ) then
+	if( logic && IsValid( plr ) ) then
 		
 		local tr, trace = {},{}
 		tr.start = plane:GetPos() + plane:GetForward() * 600 + plane:GetUp() * 600
@@ -1097,7 +1119,7 @@ function JetFighter.PhalanxCIWS_HUD()
 	
 	local plr = LocalPlayer()
 	local phlx = plr:GetNetworkedEntity( "Turret", NULL )
-	local drawoverlay = ValidEntity( phlx ) && plr:GetNetworkedBool("DrawPhalanxHUD", false )
+	local drawoverlay = IsValid( phlx ) && plr:GetNetworkedBool("DrawPhalanxHUD", false )
 	
 	if( drawoverlay ) then
 		
@@ -1128,19 +1150,19 @@ hook.Add("RenderScreenspaceEffects", "Neuroplanes__PhalanxCIWS", JetFighter.Phal
 function JetFighter.LaserguidanceScreenspace()
 	
 	local plr = LocalPlayer()
-	local plane = plr:GetScriptedVehicle()
-	local drawoverlay = ( ( ValidEntity( plane ) && plane:GetNetworkedBool( "DrawTracker", false ) ) )
+	local plane = NULL// plr:GetScriptedVehicle()
+	local drawoverlay = ( ( IsValid( plane ) && plane:GetNetworkedBool( "DrawTracker", false ) ) )
 	
 	local copilot = plane:GetNetworkedEntity("CoPilot", NULL )
 
-	if( ValidEntity( copilot ) && plane:GetNetworkedBool("DrawTracker", false ) && LocalPlayer() == copilot ) then
+	if( IsValid( copilot ) && plane:GetNetworkedBool("DrawTracker", false ) && LocalPlayer() == copilot ) then
 		
 		DrawThermal()
 		DrawLaserguidanceCrosshair( 250, 250 )
 	
 	end
 	
-	if( !ValidEntity( copilot ) && drawoverlay ) then
+	if( !IsValid( copilot ) && drawoverlay ) then
 	
 		DrawThermal()
 		DrawLaserguidanceCrosshair( 250, 250 )
@@ -1153,11 +1175,11 @@ hook.Add("RenderScreenspaceEffects", "Neuroplanes__LaserguidanceScreenspace", Je
 function JetFighter.HelicopterGuncamScreenspace()
 	
 	local plr = LocalPlayer()
-	local vhe = plr:GetScriptedVehicle()
-	local isPilot = ValidEntity( vhe )
+--	local vhe = plr:GetScriptedVehicle() ---------------------------------------------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	local isPilot = IsValid( vhe )
 	local isChopperGunner = plr:GetNetworkedBool( "isGunner", false )
 	local gun = plr:GetNetworkedEntity( "ChopperGunnerEnt", NULL )
-	local haveGun = ValidEntity( gun )
+	local haveGun = IsValid( gun )
 	
 	if( haveGun ) then
 
@@ -1210,7 +1232,7 @@ local debugWhite = Material("models/debug/debugwhite")
 
 function JetFighter.Ac130stuff()
 local pl = LocalPlayer()
-local case_b = ( pl:GetNetworkedBool("NeuroPlanes__DrawAC130Overlay", false ) == true && ValidEntity( pl:GetVehicle() ) )
+local case_b = ( pl:GetNetworkedBool("NeuroPlanes__DrawAC130Overlay", false ) == true && IsValid( pl:GetVehicle() ) )
 	if( case_b ) then
 			
 		local sizex,sizey = 200, 150
@@ -1237,7 +1259,7 @@ local case_b = ( pl:GetNetworkedBool("NeuroPlanes__DrawAC130Overlay", false ) ==
 		local gun = pl:GetNetworkedEntity("NeuroPlanesMountedGun", NULL )
 		
 		-- Gun reticle
-		if( ValidEntity( gun ) ) then
+		if( IsValid( gun ) ) then
 			
 			local pos = gun:GetPos() 
 			local tr, trace = {}, {}
@@ -1265,7 +1287,7 @@ local case_b = ( pl:GetNetworkedBool("NeuroPlanes__DrawAC130Overlay", false ) ==
 		
 		for k,v in pairs( ents.GetAll() ) do 
 			
-			if ( v:IsPlayer() && v:Alive() && !ValidEntity( v:GetScriptedVehicle() ) && !v.ColdBlooded && v != LocalPlayer() ) then
+			if ( v:IsPlayer() && v:Alive() && !IsValid( v:GetScriptedVehicle() ) && !v.ColdBlooded && v != LocalPlayer() ) then
 				
 				render.SuppressEngineLighting(true)
 				render.SetColorModulation( 1, 1, 1 )
@@ -1333,7 +1355,7 @@ function JetFighter.RenderScreenspaceEffects()
 	JetFighter.Pilot = LocalPlayer()
 	JetFighter.Plane = JetFighter.Pilot:GetNetworkedEntity( "Plane", NULL )
 
-	if ( !JetFighter.Plane || !ValidEntity( JetFighter.Plane ) ) then
+	if ( !JetFighter.Plane || !IsValid( JetFighter.Plane ) ) then
 		
 		return
 		
@@ -1350,7 +1372,7 @@ function JetFighter.RenderScreenspaceEffects()
 	local plane = p:GetNetworkedEntity("ChopperGunnerEnt", NULL )
 	local case_a = ( JetFighter.Plane:GetNetworkedBool( "ChopperGunner", false ) == true && JetFighter.Pilot:GetNetworkedBool("isGunner", false ) == true )
 	
-	local case_c = ( isGunner == true && ValidEntity( plane ) )--( p:GetNetworkedEntity( "ChopperGunnerEnt", nil ) != p && p:GetNetworkedBool("isGunner", false ) == true )
+	local case_c = ( isGunner == true && IsValid( plane ) )--( p:GetNetworkedEntity( "ChopperGunnerEnt", nil ) != p && p:GetNetworkedBool("isGunner", false ) == true )
 	
 	if( case_a || case_b || case_c ) then
 			
@@ -1378,7 +1400,7 @@ function JetFighter.RenderScreenspaceEffects()
 		local gun = JetFighter.Pilot:GetNetworkedEntity("NeuroPlanesMountedGun", NULL )
 		
 		-- Gun reticle
-		if( ValidEntity( gun ) ) then
+		if( IsValid( gun ) ) then
 			
 			local pos = gun:GetPos() 
 			local tr, trace = {}, {}
@@ -1406,7 +1428,7 @@ function JetFighter.RenderScreenspaceEffects()
 		
 		for k,v in pairs( ents.GetAll() ) do 
 			
-			if ( v:IsPlayer() && v:Alive() && !ValidEntity( v:GetScriptedVehicle() ) && !v.ColdBlooded ) then
+			if ( v:IsPlayer() && v:Alive() && !IsValid( v:GetScriptedVehicle() ) && !v.ColdBlooded ) then
 				
 				render.SuppressEngineLighting(true)
 				render.SetColorModulation( 1, 1, 1 )
@@ -1540,7 +1562,7 @@ function DrawPlaneHUD()
 	local ply = LocalPlayer()
 	local roofturret = ply:GetNetworkedEntity( "Neuroplanes_B17_roofturret", NULL )
 	
-	if( ValidEntity( roofturret ) ) then
+	if( IsValid( roofturret ) ) then
 		
 		local pos = ( roofturret:GetPos() + roofturret:GetForward() * 2500 ):ToScreen()
 		local x,y = pos.x, pos.y
@@ -1550,7 +1572,7 @@ function DrawPlaneHUD()
 		surface.DrawTexturedRect( pos.x - size / 2, pos.y - size / 2, size, size )
 
 	end
-	if ( ValidEntity( JetFighter.Turret ) ) then
+	if ( IsValid( JetFighter.Turret ) ) then
 		if ( JetFighter.Target == JetFighter.Turret ) then
 		
 			JetFighter.Target = NULL
@@ -1568,7 +1590,7 @@ function DrawPlaneHUD()
 
 		end
 	end
-	if ( ValidEntity( JetFighter.Plane ) ) then
+	if ( IsValid( JetFighter.Plane ) ) then
 		
 		if ( JetFighter.Pilot.LastBeep == nil ) then
 		

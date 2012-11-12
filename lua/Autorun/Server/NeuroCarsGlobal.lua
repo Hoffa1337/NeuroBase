@@ -95,7 +95,7 @@ local function FixHealth() -- Hackfix
 	
 	for k,v in pairs( player.GetAll() ) do
 		
-		if(  !ValidEntity( v:GetVehicle() ) && v:GetNetworkedBool("NeuroPlanes__DrawAC130Overlay", false) ) then
+		if(  !IsValid( v:GetVehicle() ) && v:GetNetworkedBool("NeuroPlanes__DrawAC130Overlay", false) ) then
 		
 			v:SetNetworkedBool( "NeuroPlanes__DrawAC130Overlay", false )
 	
@@ -153,7 +153,7 @@ hook.Add( "PlayerSpawnedSENT", "FixGhostCollisionModels", function( ply, e )
 
 end )
 
-hook.Add( "PhysgunPickup", "physgunPickup", function( ply, ent ) if ( ent.isTouching != nil || ent.IsFlying || ent.IsDriving || ValidEntity( ent.Pilot ) ) then return false end end )
+hook.Add( "PhysgunPickup", "physgunPickup", function( ply, ent ) if ( ent.isTouching != nil || ent.IsFlying || ent.IsDriving || IsValid( ent.Pilot ) ) then return false end end )
 
 hook.Add("PlayerEnteredVehicle","NeuroPlanes_OnEnterVehicle", function( player, vehicle, role ) 
 	
@@ -275,7 +275,7 @@ hook.Add("PlayerLeaveVehicle","NeuroPlanes_OnLeftVehicle", function( player, veh
 		local vp = vehicle:GetParent()
 		local pos = vehicle:LocalToWorld( Vector( 200, 200, -30 ) )
 		
-		if( ValidEntity( vp ) && vp.Destroyed ) then
+		if( IsValid( vp ) && vp.Destroyed ) then
 			
 			pos = vehicle:GetPos() + Vector( 0,0,110 )
 			
@@ -303,9 +303,9 @@ hook.Add("PlayerLeaveVehicle","NeuroPlanes_OnLeftVehicle", function( player, veh
 		local vp = vehicle:GetParent()
 		local pilot = vp.Pilot // LOL
 		
-		if( ValidEntity( vp ) && ValidEntity( pilot ) ) then
+		if( IsValid( vp ) && IsValid( pilot ) ) then
 			
-			if( ValidEntity( vp.ChopperGun ) ) then
+			if( IsValid( vp.ChopperGun ) ) then
 			
 				pilot:SetNetworkedEntity("ChopperGunnerEnt", vp.ChopperGun )
 				
@@ -326,7 +326,7 @@ end )
 	
 	-- if( victim:IsNPC() && victim.HealthVal ) then
 		
-		-- if ( killer.HealthVal && ValidEntity( killer.Pilot ) && killer.Pilot:IsPlayer() ) then
+		-- if ( killer.HealthVal && IsValid( killer.Pilot ) && killer.Pilot:IsPlayer() ) then
 			
 			-- killer.Pilot:AddFrags( 1 )
 			
@@ -351,7 +351,7 @@ end )
 				
 				-- attacker:AddFrags( 1 )
 				
-			-- elseif( ValidEntity( attacker.Pilot ) && attacker.Pilot:IsPlayer() ) then
+			-- elseif( IsValid( attacker.Pilot ) && attacker.Pilot:IsPlayer() ) then
 				
 				-- attacker.Pilot:AddFrags( 1 )
 			
@@ -460,7 +460,7 @@ function Meta:PlayWorldSound(snd)
 	
 		if ( trace.HitNonWorld ) then
 		
-			local norm = ( self:GetPos() - v:GetPos() ):Normalize()
+			local norm = ( self:GetPos() - v:GetPos() ):GetNormalized()
 			local d = self:GetPos():Distance( v:GetPos() )
 			
 			if ( DEBUG ) then
@@ -471,7 +471,8 @@ function Meta:PlayWorldSound(snd)
 			
 			if( d > 4500 ) then
 				
-				WorldSound( snd, v:GetPos() + norm * ( d / 10 ), 211, 100   ) -- Crappy Sauce Engine can't handle a couple of hundred meters of sound. Hackfix for doppler effect.
+//Gmod12		-- WorldSound( snd, v:GetPos() + norm * ( d / 10 ), 211, 100   )
+				sound.Play( snd, v:GetPos() + norm * ( d / 10 ), 211, 100   ) -- Crappy Sauce Engine can't handle a couple of hundred meters of sound. Hackfix for doppler effect.
 			
 			else
 			
@@ -499,7 +500,7 @@ function Meta:SpawnPilotModel( pos, ang )
 	p:Spawn()
 	p:SetColor( Color( 255,255,255,255 ) )
 	
-	if( ValidEntity( p ) ) then
+	if( IsValid( p ) ) then
 	
 		return p
 	
@@ -513,7 +514,7 @@ function Meta:Jet_LockOnMethod()
 	
 	local filter =  { self.Pilot, self, self.Weapon }
 	
-	if( ValidEntity( self.CoPilot ) ) then
+	if( IsValid( self.CoPilot ) ) then
 		
 		filter[#filter+1] = self.CoPilot
 	
@@ -528,7 +529,7 @@ function Meta:Jet_LockOnMethod()
 	
 	local e = trace.Entity
 	
-	local logic = ( ValidEntity( e ) && ( e:IsNPC() || e:IsPlayer() || e:IsVehicle() || e.HealthVal != nil || string.find( e:GetClass(), "prop_vehicle" ) ) )
+	local logic = ( IsValid( e ) && ( e:IsNPC() || e:IsPlayer() || e:IsVehicle() || e.HealthVal != nil || string.find( e:GetClass(), "prop_vehicle" ) ) )
 	local logic2 = ( e != self.Pilot )
 	
 	local NeuroTeam = self:GetNetworkedInt( "NeuroTeam", 0 )
@@ -544,9 +545,9 @@ function Meta:Jet_LockOnMethod()
 		
 	end
 	
-	if ( logic && logic2 && logic3 && !ValidEntity( self.Target ) && e:GetOwner() != self && e:GetOwner() != self.Pilot && e:GetClass() != self:GetClass() ) then
+	if ( logic && logic2 && logic3 && !IsValid( self.Target ) && e:GetOwner() != self && e:GetOwner() != self.Pilot && e:GetClass() != self:GetClass() ) then
 		
-		if( ValidEntity( e.TailRotor ) ) then
+		if( IsValid( e.TailRotor ) ) then
 			
 			self:SetTarget( e.TailRotor )
 				
@@ -572,10 +573,10 @@ function Meta:Turret_LockOnMethod()
 	
 	local e = trace.Entity
 	
-	local logic = ( ValidEntity( e ) && ( e:IsNPC() || e:IsPlayer() || e:IsVehicle() || e.HealthVal != nil || string.find( e:GetClass(), "prop_vehicle" ) ) )
+	local logic = ( IsValid( e ) && ( e:IsNPC() || e:IsPlayer() || e:IsVehicle() || e.HealthVal != nil || string.find( e:GetClass(), "prop_vehicle" ) ) )
 	local logic2 = ( e != self.Pilot )
 	
-	if ( logic && logic2 && !ValidEntity( self.Target ) && e:GetOwner() != self && e:GetOwner() != self.Pilot && e:GetClass() != self:GetClass() ) then
+	if ( logic && logic2 && !IsValid( self.Target ) && e:GetOwner() != self && e:GetOwner() != self.Pilot && e:GetClass() != self:GetClass() ) then
 		
 		self:SetTarget( e )
 		
@@ -738,12 +739,12 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		
 	end
 	
-	if( ValidEntity( self.PassengerSeat ) ) then
+	if( IsValid( self.PassengerSeat ) ) then
 		
 		local d = self.PassengerSeat:GetDriver()
 		
 		
-		if( ValidEntity( d ) && d:KeyDown( IN_SPEED ) && d:KeyDown( IN_USE ) ) then
+		if( IsValid( d ) && d:KeyDown( IN_SPEED ) && d:KeyDown( IN_USE ) ) then
 			
 			self:NeuroPlanes_EjectPlayer( d )
 			
@@ -762,7 +763,7 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 	end
 	
 	// Clear Target 
-	if ( self.Pilot:KeyDown( IN_WALK ) && ValidEntity( self.Target ) ) then
+	if ( self.Pilot:KeyDown( IN_WALK ) && IsValid( self.Target ) ) then
 		
 		self:ClearTarget( )
 		self.Pilot:PrintMessage( HUD_PRINTCENTER, "Target Released" )
@@ -833,7 +834,7 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 								
 								function( ) 
 									
-									if( ValidEntity( self ) ) then	
+									if( IsValid( self ) ) then	
 										
 										self:SetNetworkedInt( "FlareCount", self.FlareCount )
 									
@@ -854,7 +855,7 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		
 	end	
 	
-	if( !ValidEntity( self.Pilot ) ) then
+	if( !IsValid( self.Pilot ) ) then
 		
 		return
 		
@@ -915,11 +916,11 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 
 			else
 
-				if( ValidEntity( self.FlameTrailR ) ) then
+				if( IsValid( self.FlameTrailR ) ) then
 				--self.FlameTrailR:Remove()
 				self.FlameTrailR:SetKeyValue( "rendercolor", "0 0 0" )
 				end
-				if( ValidEntity( self.FlameTrailL ) ) then
+				if( IsValid( self.FlameTrailL ) ) then
 				--self.FlameTrailL:Remove()
 				self.FlameTrailL:SetKeyValue( "rendercolor", "0 0 0" )
 				end
@@ -956,7 +957,7 @@ function Meta:NeuroPlanes_EjectPlayer( ply )
 	
 	for i=1,25 do
 		
-		timer.Simple( i / 10, function() if( !ValidEntity( ejectionseat ) ) then return end
+		timer.Simple( i / 10, function() if( !IsValid( ejectionseat ) ) then return end
 											local f1 = EffectData()
 												f1:SetOrigin( ejectionseat:GetPos() )
 											util.Effect("immolate",f1) end )
@@ -967,7 +968,7 @@ function Meta:NeuroPlanes_EjectPlayer( ply )
 			
 			function() 
 			
-			if( ValidEntity( ejectionseat ) ) then	
+			if( IsValid( ejectionseat ) ) then	
 				
 				local chute = ents.Create( "prop_physics" )
 				chute:SetModel( "models/hawx/misc/parachute.mdl" )
@@ -1060,7 +1061,7 @@ function Meta:NeuroPlanes_EjectionSeat()
 			
 			function() 
 			
-			if( ValidEntity( ejectionseat ) ) then	
+			if( IsValid( ejectionseat ) ) then	
 				
 				local chute = ents.Create( "prop_physics" )
 				chute:SetModel( "models/hawx/misc/parachute.mdl" )
@@ -1131,7 +1132,7 @@ function Meta:NeuroPlanes_CycleThroughHeliKeyBinds()
 	end
 	
 	// Clear Target 
-	if ( self.Pilot:KeyDown( IN_SPEED ) && ValidEntity( self.Target ) ) then
+	if ( self.Pilot:KeyDown( IN_SPEED ) && IsValid( self.Target ) ) then
 		
 		self:ClearTarget( )
 		self.Pilot:PrintMessage( HUD_PRINTCENTER, "Target Released" )
@@ -1239,7 +1240,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	
 	local pilot = self.Pilot
 	
-	if( ValidEntity( self.PassengerSeat ) && ValidEntity( self.PassengerSeat:GetDriver() ) && self.PassengerSeat.IsHelicopterCoPilotSeat ) then -- Dayum
+	if( IsValid( self.PassengerSeat ) && IsValid( self.PassengerSeat:GetDriver() ) && self.PassengerSeat.IsHelicopterCoPilotSeat ) then -- Dayum
 		
 		pilot = self.PassengerSeat:GetDriver()
 		
@@ -1260,7 +1261,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		
 	end
 	
-	if ( wep.Type == "Laser" && ValidEntity( self.LaserGuided ) ) then
+	if ( wep.Type == "Laser" && IsValid( self.LaserGuided ) ) then
 		
 		pilot:PrintMessage( HUD_PRINTCENTER, "You're already controlling a Laser Guided rocket." )
 		
@@ -1288,7 +1289,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 				timer.Simple( i / 4.8, 
 				function(a,b,c)
 				
-					if( type(self.RocketVisuals) == "table" && ValidEntity( self.RocketVisuals[id + 1 ] ) ) then
+					if( type(self.RocketVisuals) == "table" && IsValid( self.RocketVisuals[id + 1 ] ) ) then
 						
 						self:RocketBarrage( self.RocketVisuals[id + 1 ] ) 
 				
@@ -1503,7 +1504,7 @@ end
 
 function Meta:NeuroPlanes_DrawLaser( wep )
 	
-	if( !ValidEntity( self.Pilot ) ) then
+	if( !IsValid( self.Pilot ) ) then
 		
 		return
 		
@@ -1568,7 +1569,7 @@ function Meta:CycleThroughWeaponsList()
 	 
 	local pilot = self.Pilot
 	
-	if( ValidEntity( self.PassengerSeat ) && ValidEntity( self.PassengerSeat:GetDriver() ) ) then
+	if( IsValid( self.PassengerSeat ) && IsValid( self.PassengerSeat:GetDriver() ) ) then
 		
 		pilot = self.PassengerSeat:GetDriver()
 	
@@ -1589,7 +1590,7 @@ function Meta:CycleThroughWeaponsList()
 	
 	local pilot = NULL
 	
-	if( ValidEntity( self.PassengerSeat ) && ValidEntity( self.PassengerSeat:GetDriver() ) && self.PassengerSeat.IsHelicopterCoPilotSeat ) then
+	if( IsValid( self.PassengerSeat ) && IsValid( self.PassengerSeat:GetDriver() ) && self.PassengerSeat.IsHelicopterCoPilotSeat ) then
 		--// IsHelicopterCoPilotSeat variable determines wether we should give the copilot full weapon access or just the main gun(s). //--
 		pilot = self.PassengerSeat:GetDriver()
 	
@@ -1597,7 +1598,7 @@ function Meta:CycleThroughWeaponsList()
 	
 	if ( wep.Name != nil ) then
 	
-		if( ValidEntity( pilot ) ) then
+		if( IsValid( pilot ) ) then
 		
 			pilot:PrintMessage( HUD_PRINTCENTER, ""..wep.Name )
 		
@@ -1632,7 +1633,7 @@ function Meta:Jet_DefaultUseStuff( ply, caller )
 	end
 	
 	ply:StripWeapons()
-	ply:SetScriptedVehicle( self )
+	-- ply:SetScriptedVehicle( self ) <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	
 	ply:SetNetworkedBool("InFlight",true)
 	ply:SetNetworkedEntity( "Plane", self ) 
@@ -1723,7 +1724,7 @@ end )
 
 function Meta:EjectPilot()
 	
-	if ( !ValidEntity( self.Pilot ) ) then 
+	if ( !IsValid( self.Pilot ) ) then 
 	
 		return
 		
@@ -1741,7 +1742,7 @@ function Meta:EjectPilot()
 	self.Pilot:SetPos( self:GetPos() + self:GetUp() * 150 )
 	self.Pilot:SetAngles( Angle( 0, self:GetAngles().y,0 ) )
 	self.Owner = NULL
-	self.Pilot:SetScriptedVehicle( NULL )
+	-- self.Pilot:SetScriptedVehicle( NULL ) ---------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 		
 	if( type(self.Pilot.Weapons) == "table" ) then
 		
@@ -1765,7 +1766,7 @@ function Meta:EjectPilot()
 	
 	self.Pilot = NULL
 
-	if( ValidEntity( self.LaserGuided ) ) then
+	if( IsValid( self.LaserGuided ) ) then
 		
 		self.LaserGuided.Pointer = NULL
 	
@@ -1778,13 +1779,13 @@ function Meta:EjectPilot()
 	
 	end
 		
-	if( ValidEntity( self.PilotModel ) ) then
+	if( IsValid( self.PilotModel ) ) then
 		
 		self.PilotModel:Remove()
 	
 	end
 	
-	if( self.Trails && ValidEntity( self.Trails[1] ) ) then
+	if( self.Trails && IsValid( self.Trails[1] ) ) then
 	
 		for i=1,2 do
 			
@@ -1795,7 +1796,7 @@ function Meta:EjectPilot()
 	
 	end
 	
-	if ( ValidEntity( self.NPCTarget ) ) then
+	if ( IsValid( self.NPCTarget ) ) then
 		
 		self.NPCTarget:Remove()
 
@@ -1806,7 +1807,7 @@ end
 function Meta:WingTrails( val, treshold )
 	
 	
-	if ( ( val < -treshold || val > treshold ) && !ValidEntity( self.Trails[1] ) && !ValidEntity( self.Trails[2] ) ) then // Banking left
+	if ( ( val < -treshold || val > treshold ) && !IsValid( self.Trails[1] ) && !IsValid( self.Trails[2] ) ) then // Banking left
 		
 		if ( self.Speed > self.MaxVelocity * 0.6 ) then
 		
@@ -1818,7 +1819,7 @@ function Meta:WingTrails( val, treshold )
 	
 	if ( val > -treshold && val < treshold ) then
 		
-		if( ValidEntity( self.Trails[1] ) ) then
+		if( IsValid( self.Trails[1] ) ) then
 		
 			self.Trails[1]:Fire("kill","",4)
 			self.Trails[1]:SetParent()
@@ -1827,7 +1828,7 @@ function Meta:WingTrails( val, treshold )
 		
 		end
 		
-		if( ValidEntity( self.Trails[2] ) ) then
+		if( IsValid( self.Trails[2] ) ) then
 		
 			self.Trails[2]:Fire("kill","",4)
 			self.Trails[2]:SetParent()
@@ -1844,7 +1845,7 @@ function Meta:NeuroPlanes_BlowWelds( pos, radius )
 	
 	for k,v in pairs( ents.FindInSphere( self:GetPos(), radius ) ) do 
 		
-		if( ValidEntity( v ) && string.find( v:GetClass(), "phys_" ) != nil ) then
+		if( IsValid( v ) && string.find( v:GetClass(), "phys_" ) != nil ) then
 			
 			v:Remove()
 			
@@ -1883,7 +1884,7 @@ end
 
 function Meta:RocketBarrage( wep )
 	
-	if( !ValidEntity( wep ) ) then
+	if( !IsValid( wep ) ) then
 		
 		print("No weapon supplied in  Meta:RocketBarrage( wep )")
 		
@@ -1933,14 +1934,14 @@ function Meta:SetTarget( e )
 	self.Target = e
 	self:SetNetworkedEntity( "Target", e )
 
-	if ( ValidEntity( self.Pilot ) && self.Pilot:IsPlayer() ) then
+	if ( IsValid( self.Pilot ) && self.Pilot:IsPlayer() ) then
 		
 		self.Pilot:PrintMessage( HUD_PRINTCENTER, "Target Lock Acquired - Press SHIFT to release" )
 		
 		if( e.PrintName ) then
 			
 			local xtra = ""
-			if( ValidEntity( e.Pilot ) && e.Pilot:IsPlayer() ) then
+			if( IsValid( e.Pilot ) && e.Pilot:IsPlayer() ) then
 				
 				xtra = " - "..e.Pilot:Name()
 				
@@ -2071,7 +2072,7 @@ function Meta:UpdateRadar()
 			
 			for k,v in pairs( ents.GetAll() ) do
 				
-				if ( ( ValidEntity( v ) && ValidEntity( v.Target ) && v.Target == self ) || ( v.Target == self.Pilot && string.find(string.lower(v:GetClass()),"neuro") == nil ) ) then
+				if ( ( IsValid( v ) && IsValid( v.Target ) && v.Target == self ) || ( v.Target == self.Pilot && string.find(string.lower(v:GetClass()),"neuro") == nil ) ) then
 				
 					v:SetNetworkedEntity("Target", v.Target )
 				
@@ -2100,7 +2101,7 @@ function Meta:NeuroPlanes_LaserTrackerUpdate()
 		if ( self.LastLaserUpdate + 0.15 <= CurTime() ) then
 				
 			self.LastLaserUpdate = CurTime()
-			if ( ValidEntity( self.LaserGuided ) ) then
+			if ( IsValid( self.LaserGuided ) ) then
 				
 				if( !self:GetNetworkedBool("DrawTracker", false ) ) then
 				
@@ -2153,7 +2154,7 @@ function Meta:SpawnFlare()
 	
 	end
 	
-	if( ValidEntity( pod ) ) then
+	if( IsValid( pod ) ) then
 	
 		pos = pod:GetPos()
 		pod:EmitSound( "weapons/flaregun/fire.wav",411, 100 )
@@ -2180,7 +2181,7 @@ end
 
 function Meta:NPCTargetCreate()
 
-	if !ValidEntity( self.NPCTarget ) then
+	if !IsValid( self.NPCTarget ) then
 	
 		self.NPCTarget = ents.Create("npc_bullseye")   
 		self.NPCTarget:SetPos(self:GetPos() + self:GetUp() * 50 )
@@ -2256,7 +2257,7 @@ function Meta:DealDamage( Type, Damage, Pos, Radius, DoEffect, Effect )
 	
 	for k, v in ipairs( ents.GetAll( ) ) do  
 		
-		if ( v && ValidEntity( v ) && v:Health( ) > 0 && ( v:IsNPC() || v:IsPlayer() ) ) then  
+		if ( v && IsValid( v ) && v:Health( ) > 0 && ( v:IsNPC() || v:IsPlayer() ) ) then  
 			
 			local p = v:GetPos( ) 
 			
@@ -2272,7 +2273,7 @@ function Meta:DealDamage( Type, Damage, Pos, Radius, DoEffect, Effect )
 				if ( tr.Hit && tr.Entity ) then
 				
 					info:SetDamage( Damage * ( 1 - p:Distance( Pos ) / Radius ) )  
-					info:SetDamageForce( ( p - Pos ):Normalize( ) * 10 )  
+					info:SetDamageForce( ( p - Pos ):GetNormalized( ) * 10 )  
 					v:TakeDamageInfo( info )  
 					
 				end
@@ -2325,7 +2326,7 @@ function Meta:ScanForEnemies()
 			
 		end
 		
-		if ( !ValidEntity( self.Target ) ) then //better safe than sorry
+		if ( !IsValid( self.Target ) ) then //better safe than sorry
 		
 			self.Target = self.CycleTarget
 			
@@ -2418,7 +2419,7 @@ function Meta:DeathFX()
 	
 	util.BlastDamage( self, self, self:GetPos(), 1628, 100 )
 	
-	if ( ValidEntity( self.NPCTarget ) ) then
+	if ( IsValid( self.NPCTarget ) ) then
 		
 		self.NPCTarget:Remove()
 		self.NPCTarget = NULL
@@ -2473,7 +2474,7 @@ end
 /*********************************************************************/
 function Meta:AttackEnemy( frm )
 
-	if( !ValidEntity( self ) ) then
+	if( !IsValid( self ) ) then
 		
 		return
 	
@@ -2481,7 +2482,7 @@ function Meta:AttackEnemy( frm )
 	
 	if ( frm == 1 ) then
 	
-		if ( ValidEntity( self.wep ) ) then //Not all planes have a fuselage mounted weapon.
+		if ( IsValid( self.wep ) ) then //Not all planes have a fuselage mounted weapon.
 		
 			self.wep.ShouldAttack = true
 			
@@ -2489,7 +2490,7 @@ function Meta:AttackEnemy( frm )
 		
 	elseif ( frm == 2 ) then
 	
-		if( ValidEntity( self.wep ) ) then
+		if( IsValid( self.wep ) ) then
 		
 		
 			self.wep.ShouldAttack = false
@@ -2615,7 +2616,7 @@ end
 /*********************************************************************/
 function Meta:Barrage( pos, ent )
 
-	if ( !ValidEntity( ent ) ) then 
+	if ( !IsValid( ent ) ) then 
 		
 		return 
 		
@@ -2667,13 +2668,13 @@ function Meta:ExplosionImproved()
 	
 	local owner = self:GetOwner()
 	
-	if ( !ValidEntity( owner ) ) then
+	if ( !IsValid( owner ) ) then
 		
 		owner = self
 	
 	end
 	
-	if ( !ValidEntity( self ) ) then
+	if ( !IsValid( self ) ) then
 	
 		return
 		
@@ -2762,7 +2763,7 @@ local function qtrace(ply,cmd,args)
 	tr.filter=ply
 	local tra = util.TraceLine(tr)
 
-	if( tra.HitNonWorld && ValidEntity( tra.Entity ) ) then
+	if( tra.HitNonWorld && IsValid( tra.Entity ) ) then
 		local r,g,b,a = tra.Entity:GetColor()
 		
 		print("\n-------- Entity Data --------")
@@ -2971,7 +2972,7 @@ end
 
 function Meta:VTOLAim(Target)
 
-	if ( !ValidEntity( Target ) ) then 
+	if ( !IsValid( Target ) ) then 
 		
 		return 
 	
@@ -2991,7 +2992,7 @@ end
 
 function Meta:GunAim(Target)
 
-	if ( !ValidEntity( Target ) ) then 
+	if ( !IsValid( Target ) ) then 
 		
 		return 
 	
@@ -3039,7 +3040,7 @@ function implode( pos, offset, radius, amplitude )
 		
 		for k,v in pairs( ents ) do
 		
-			if ( ValidEntity( v ) && v:GetClass() == "prop_physics" || v:IsVehicle() ) then
+			if ( IsValid( v ) && v:GetClass() == "prop_physics" || v:IsVehicle() ) then
 				
 				local vPos = v:GetPos()
 				
@@ -3051,7 +3052,7 @@ function implode( pos, offset, radius, amplitude )
 				
 				local p = v:GetPhysicsObject()
 				local forceimp = amplitude / ( ( ( pos - vPos ):Length() - ( offset ) ) ^ 2 )
-				local normalized = ( pos - vPos ):Normalize()
+				local normalized = ( pos - vPos ):GetNormalized()
 				local Towards = normalized * forceimp
 				
 				if ( !p || p == NULL || p == nil ) then return end
@@ -3074,7 +3075,7 @@ function Suck( pos, offset, radius, amplitude )
 		
 		for k,v in pairs( ents ) do
 		
-			if ( ValidEntity( v ) && v:GetClass() == "prop_physics" || v:GetClass() == "npc_cscanner" || v:GetClass() == "npc_rollermine" || v:GetClass() == "gib" ) then
+			if ( IsValid( v ) && v:GetClass() == "prop_physics" || v:GetClass() == "npc_cscanner" || v:GetClass() == "npc_rollermine" || v:GetClass() == "gib" ) then
 			
 				local vPos = v:GetPos()
 				
@@ -3092,7 +3093,7 @@ function Suck( pos, offset, radius, amplitude )
 				
 				local p = v:GetPhysicsObject()
 				local forceimp = amplitude / ( ( ( pos - vPos ):Length() - ( offset ) ) ^ 2 )
-				local normalized = ( pos - vPos ):Normalize()
+				local normalized = ( pos - vPos ):GetNormalized()
 				local Towards = normalized * forceimp
 				
 				p:ApplyForceCenter( Towards )
@@ -3179,7 +3180,7 @@ end
 
 function Charge(Obj,Obj2)
 
-	if ( ValidEntity( Obj ) && ValidEntity( Obj2 ) ) then
+	if ( IsValid( Obj ) && IsValid( Obj2 ) ) then
 	
 		local effectdata = EffectData()
 		effectdata:SetOrigin( Obj:GetPos() )
