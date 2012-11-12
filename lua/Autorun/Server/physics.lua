@@ -1,15 +1,26 @@
 
 //----- ConVars
-local MaxVelocity = CreateConVar( "phys_maxvelocity", "10000", FCVAR_NOTIFY | FCVAR_ARCHIVE | FCVAR_GAMEDLL );
-local MaxAngularVelocity = CreateConVar( "phys_maxangularvelocity", "3600", FCVAR_NOTIFY | FCVAR_ARCHIVE | FCVAR_GAMEDLL );
-local GravityX = CreateConVar( "phys_gravity_x", "0", FCVAR_NOTIFY | FCVAR_GAMEDLL );
-local GravityY = CreateConVar( "phys_gravity_y", "0", FCVAR_NOTIFY | FCVAR_GAMEDLL );
-local GravityZ = CreateConVar( "phys_gravity_z", "-600", FCVAR_NOTIFY | FCVAR_GAMEDLL );
-local CollisionsPerObjectPerTimestep = CreateConVar( "phys_collisions_object_timestep", "10", FCVAR_NOTIFY | FCVAR_GAMEDLL );
-local CollisionsPerTimestep = CreateConVar( "phys_collisions_timestep", "250", FCVAR_NOTIFY | FCVAR_GAMEDLL );
-local MinFrictionMass = CreateConVar( "phys_minfrictionmass", "10", FCVAR_NOTIFY | FCVAR_GAMEDLL );
-local MaxFrictionMass = CreateConVar( "phys_maxfrictionmass", "2500", FCVAR_NOTIFY | FCVAR_GAMEDLL );
-local AirDensity = CreateConVar( "phys_airdensity", "2", FCVAR_NOTIFY | FCVAR_GAMEDLL );
+local MaxVelocity = CreateConVar( "phys_maxvelocity", "10000", {FCVAR_NOTIFY , FCVAR_ARCHIVE , FCVAR_GAMEDLL} );
+local MaxAngularVelocity = CreateConVar( "phys_maxangularvelocity", "3600", {FCVAR_NOTIFY , FCVAR_ARCHIVE , FCVAR_GAMEDLL} );
+local GravityX = CreateConVar( "phys_gravity_x", "0", {FCVAR_NOTIFY , FCVAR_GAMEDLL} );
+local GravityY = CreateConVar( "phys_gravity_y", "0", {FCVAR_NOTIFY , FCVAR_GAMEDLL} );
+local GravityZ = CreateConVar( "phys_gravity_z", "-600", {FCVAR_NOTIFY , FCVAR_GAMEDLL} );
+local CollisionsPerObjectPerTimestep = CreateConVar( "phys_collisions_object_timestep", "10", {FCVAR_NOTIFY , FCVAR_GAMEDLL} );
+local CollisionsPerTimestep = CreateConVar( "phys_collisions_timestep", "250", {FCVAR_NOTIFY , FCVAR_GAMEDLL} );
+local MinFrictionMass = CreateConVar( "phys_minfrictionmass", "10", {FCVAR_NOTIFY , FCVAR_GAMEDLL} );
+local MaxFrictionMass = CreateConVar( "phys_maxfrictionmass", "2500", {FCVAR_NOTIFY , FCVAR_GAMEDLL} );
+local AirDensity = CreateConVar( "phys_airdensity", "2", {FCVAR_NOTIFY , FCVAR_GAMEDLL} );
+//original lines
+-- local MaxVelocity = CreateConVar( "phys_maxvelocity", "10000", {FCVAR_NOTIFY , FCVAR_ARCHIVE , FCVAR_GAMEDLL} );
+-- local MaxAngularVelocity = CreateConVar( "phys_maxangularvelocity", "3600", FCVAR_NOTIFY | FCVAR_ARCHIVE | FCVAR_GAMEDLL );
+-- local GravityX = CreateConVar( "phys_gravity_x", "0", FCVAR_NOTIFY | FCVAR_GAMEDLL );
+-- local GravityY = CreateConVar( "phys_gravity_y", "0", FCVAR_NOTIFY | FCVAR_GAMEDLL );
+-- local GravityZ = CreateConVar( "phys_gravity_z", "-600", FCVAR_NOTIFY | FCVAR_GAMEDLL );
+-- local CollisionsPerObjectPerTimestep = CreateConVar( "phys_collisions_object_timestep", "10", FCVAR_NOTIFY | FCVAR_GAMEDLL );
+-- local CollisionsPerTimestep = CreateConVar( "phys_collisions_timestep", "250", FCVAR_NOTIFY | FCVAR_GAMEDLL );
+-- local MinFrictionMass = CreateConVar( "phys_minfrictionmass", "10", FCVAR_NOTIFY | FCVAR_GAMEDLL );
+-- local MaxFrictionMass = CreateConVar( "phys_maxfrictionmass", "2500", FCVAR_NOTIFY | FCVAR_GAMEDLL );
+-- local AirDensity = CreateConVar( "phys_airdensity", "2", FCVAR_NOTIFY | FCVAR_GAMEDLL );
 
 /*------------------------------------
 	UpdatePerformanceSettings	

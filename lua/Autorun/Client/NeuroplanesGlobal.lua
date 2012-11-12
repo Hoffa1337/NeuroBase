@@ -18,7 +18,7 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 		angles = Angles
 		}
 
-	if( ValidEntity( plane ) && ply:GetNetworkedBool( "InFlight", false )  ) then
+	if( IsValid( plane ) && ply:GetNetworkedBool( "InFlight", false )  ) then
 
 		local pos	
 		local isGuidingRocket = plane:GetNetworkedBool( "DrawTracker", false )
@@ -37,7 +37,7 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 			pos = plane:LocalToWorld( plane.CockpitPosition ) //Origin//
 			ang = LerpAngle( 0.2, Angles, pAng )
 			
-			if( ValidEntity( pilotmodel ) ) then
+			if( IsValid( pilotmodel ) ) then
 				
 				pilotmodel:SetColor( 0,0,0,0 )
 				
@@ -55,7 +55,7 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 			
 			pos = LerpVector( 0.89, Origin, trace.HitPos )
 			
-			if( ValidEntity( pilotmodel ) ) then
+			if( IsValid( pilotmodel ) ) then
 				
 				pilotmodel:SetColor( 255,255,255,255 )
 				
@@ -104,7 +104,7 @@ function DrawWeaponHUD()
 		JetFighter.Plane:GetNetworkedEntity("NeuroPlanes_LaserGuided", r )
 		local hp = math.floor( JetFighter.Plane:GetNetworkedInt( "Health", 0 ) )
 		local SystemsError = ( hp < 10 )
-	if ( ValidEntity( JetFighter.Plane ) ) then
+	if ( IsValid( JetFighter.Plane ) ) then
 		-- Hackfix to clear target lock-on
 		if ( JetFighter.Target == JetFighter.Plane ) then		
 			JetFighter.Target = NULL		
@@ -137,7 +137,7 @@ function JetFighter.CustomWeaponHUD()
 	local Sh = ScrH()/4
 	local tpos
 	local tx,ty = 0,0
-	if ValidEntity( JetFighter.Target ) then
+	if IsValid( JetFighter.Target ) then
 		tpos = ( JetFighter.Target:GetPos()):ToScreen()
 		tx,ty = tpos.x, tpos.y
 	end
@@ -147,7 +147,7 @@ function JetFighter.CustomWeaponHUD()
 	//Homing Missile
 	if ( wepType == "Homing" ) then
 	surface.DrawCircle( x, y, Sh, Color( 0, 255, 0, 255) )
-		if ValidEntity(JetFighter.Target) then
+		if IsValid(JetFighter.Target) then
 			if (math.abs(tx-x)<Sh-16) && (math.abs(ty-y)<Sh-16) then
 			surface.DrawCircle( tx, ty, 16, Color( 0, 255, 0, 200) )			
 			end
@@ -175,7 +175,7 @@ function JetFighter.CustomWeaponHUD()
 		for i=1,4 do
 		surface.DrawRect( x-16 , y+i/5*Sh , 32, 1 )
 		end
-		if ValidEntity( JetFighter.LaserGuided ) then
+		if IsValid( JetFighter.LaserGuided ) then
 		surface.SetDrawColor( 255, 255, 255, 255)
 		surface.DrawOutlinedRect( ScrW()/2-Sh/4, ScrH()/2-Sh/4, Sh/2, Sh/2 ) 
 		//"You're already controlling a Laser Guided rocket."
@@ -220,7 +220,7 @@ function JetFighter.CustomWeaponHUD()
 		for i=1,4 do
 		surface.DrawRect( x , y+i*i*8 , 32, 2 )
 		end	
-		if ValidEntity(JetFighter.Target) then
+		if IsValid(JetFighter.Target) then
 			surface.DrawCircle( tx, ty, 16, Color( 0, 100, 255, 200) )			
 		end
 	end
