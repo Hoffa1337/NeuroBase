@@ -53,7 +53,7 @@ function ENT:Initialize()
 	self.MuzzlePoint:SetParent( self )
 	self.MuzzlePoint:SetModel("models/Airboatgun.mdl")
 	self.MuzzlePoint:Spawn()
-	self.MuzzlePoint:SetColor( 0,0,0,0 )
+	self.MuzzlePoint:SetNoDraw( true )
 	
 	self.PhysObj = self:GetPhysicsObject()
 	
