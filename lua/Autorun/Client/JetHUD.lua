@@ -231,7 +231,7 @@ end
 
 function JetFighter.CopilotCalcView( ply, Origin, Angles, Fov )
 
-	local plane = NULL// plr:GetScriptedVehicle()
+	local plane = NULL// plr:GetDrivingEntity()
 	if( IsValid( plane ) ) then 
 
 		return  -- Dont fuck up our cameras plskthx
@@ -769,7 +769,7 @@ function JetFighter.MarkEnemies()
 	
 	if( count > 0 ) then
 		
-		if( JetFighter.Pilot:GetScriptedVehicle() == JetFighter.Plane ) then
+		if( JetFighter.Pilot:GetDrivingEntity() == JetFighter.Plane ) then
 			
 			JetFighter.DrawWarning = true
 		
@@ -875,11 +875,11 @@ local function DrawThermal()
 	
 	cam.Start3D( EyePos(), EyeAngles() )
 
-	SetMaterialOverride( mat )
+	render.MaterialOverride( mat )
 	
 	for k,v in pairs( ents.GetAll() ) do 
 		
-		if ( v:IsPlayer() && v:Alive() && !IsValid( v:GetScriptedVehicle() ) && !v.ColdBlooded ) then
+		if ( v:IsPlayer() && v:Alive() && !IsValid( v:GetDrivingEntity() ) && !v.ColdBlooded ) then
 			
 			render.SuppressEngineLighting( true )
 			render.SetColorModulation( 1, 1, 1 )
@@ -911,7 +911,7 @@ local function DrawThermal()
 		
 	end
 	
-	SetMaterialOverride( nil )
+	render.MaterialOverride( nil )
 	cam.End3D()
 			
 	local col = {}
@@ -1134,13 +1134,13 @@ function JetFighter.PhalanxCIWS_HUD()
 		
 		if( phlx.ZoomVar ) then
 		
-			draw.SimpleText(tostring(math.floor(a.p)).." "..tostring(math.floor(a.y)).." "..tostring(math.floor(a.r)).."  "..phlx.ZoomVar, "HUDNumber5", ScrW() / 16, ScrH() / 15, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )
+			draw.SimpleText(tostring(math.floor(a.p)).." "..tostring(math.floor(a.y)).." "..tostring(math.floor(a.r)).."  "..phlx.ZoomVar, "HudHintTextLarge", ScrW() / 16, ScrH() / 15, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )
 		
 		end
 		
-		draw.SimpleText( phlx.PrintName, "HUDNumber5", ScrW() / 1.4, ScrH() / 15, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )
-		draw.SimpleText( "Integrity: "..health.."%", "Trebuchet24", ScrW() / 15, ScrH() / 1.15, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )
-		//draw.SimpleText( , "HUDNumber5", ScrW() / 1.15, ScrH() / 1.15, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )
+		draw.SimpleText( phlx.PrintName, "HudHintTextLarge", ScrW() / 1.4, ScrH() / 15, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )
+		draw.SimpleText( "Integrity: "..math.Round(health).."%", "Trebuchet24", ScrW() / 15, ScrH() / 1.15, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )
+		//draw.SimpleText( , "HudHintTextLarge", ScrW() / 1.15, ScrH() / 1.15, Color( 255, 255, 255, 255 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )
 
 	end
 	
@@ -1150,7 +1150,7 @@ hook.Add("RenderScreenspaceEffects", "Neuroplanes__PhalanxCIWS", JetFighter.Phal
 function JetFighter.LaserguidanceScreenspace()
 	
 	local plr = LocalPlayer()
-	local plane = NULL// plr:GetScriptedVehicle()
+	local plane = NULL// plr:GetDrivingEntity()
 	local drawoverlay = ( ( IsValid( plane ) && plane:GetNetworkedBool( "DrawTracker", false ) ) )
 	
 	local copilot = plane:GetNetworkedEntity("CoPilot", NULL )
@@ -1175,7 +1175,7 @@ hook.Add("RenderScreenspaceEffects", "Neuroplanes__LaserguidanceScreenspace", Je
 function JetFighter.HelicopterGuncamScreenspace()
 	
 	local plr = LocalPlayer()
---	local vhe = plr:GetScriptedVehicle() ---------------------------------------------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	local vhe = plr:GetDrivingEntity() ---------------------------------------------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	local isPilot = IsValid( vhe )
 	local isChopperGunner = plr:GetNetworkedBool( "isGunner", false )
 	local gun = plr:GetNetworkedEntity( "ChopperGunnerEnt", NULL )
@@ -1283,11 +1283,11 @@ local case_b = ( pl:GetNetworkedBool("NeuroPlanes__DrawAC130Overlay", false ) ==
 	
 		cam.Start3D( EyePos(), EyeAngles() )
 
-		SetMaterialOverride( debugWhite )
+		render.MaterialOverride( debugWhite )
 		
 		for k,v in pairs( ents.GetAll() ) do 
 			
-			if ( v:IsPlayer() && v:Alive() && !IsValid( v:GetScriptedVehicle() ) && !v.ColdBlooded && v != LocalPlayer() ) then
+			if ( v:IsPlayer() && v:Alive() && !IsValid( v:GetDrivingEntity() ) && !v.ColdBlooded && v != LocalPlayer() ) then
 				
 				render.SuppressEngineLighting(true)
 				render.SetColorModulation( 1, 1, 1 )
@@ -1329,7 +1329,7 @@ local case_b = ( pl:GetNetworkedBool("NeuroPlanes__DrawAC130Overlay", false ) ==
 			
 		end
 		
-		SetMaterialOverride( nil )
+		render.MaterialOverride( nil )
 		cam.End3D()
 				
 		local col = {}
@@ -1424,11 +1424,11 @@ function JetFighter.RenderScreenspaceEffects()
 	
 		cam.Start3D( EyePos(), EyeAngles() )
 
-		SetMaterialOverride( debugWhite )
+		render.MaterialOverride( debugWhite )
 		
 		for k,v in pairs( ents.GetAll() ) do 
 			
-			if ( v:IsPlayer() && v:Alive() && !IsValid( v:GetScriptedVehicle() ) && !v.ColdBlooded ) then
+			if ( v:IsPlayer() && v:Alive() && !IsValid( v:GetDrivingEntity() ) && !v.ColdBlooded ) then
 				
 				render.SuppressEngineLighting(true)
 				render.SetColorModulation( 1, 1, 1 )
@@ -1468,7 +1468,7 @@ function JetFighter.RenderScreenspaceEffects()
 			
 		end
 		
-		SetMaterialOverride( nil )
+		render.MaterialOverride( nil )
 		cam.End3D()
 				
 		local col = {}

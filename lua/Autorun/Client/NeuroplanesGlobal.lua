@@ -130,7 +130,7 @@ function JetFighter.CustomWeaponHUD()
 	local bpos =  ( JetFighter.Plane:GetPos( ) + JetFighter.Plane:GetForward( ) * (500+JetFighter.Plane:GetVelocity():Length()/20) + JetFighter.Plane:GetUp( ) * offs ):ToScreen()
 	local x,y = pos.x, pos.y
 	local bx,by = bpos.x, bpos.y
-	local r = math.Deg2Rad(JetFighter.Plane:GetAngles().r)
+	local r = math.rad(JetFighter.Plane:GetAngles().r)
 	local cosr = math.cos(r)
 	local sinr = math.sin(r)
 	local Pi = math.pi

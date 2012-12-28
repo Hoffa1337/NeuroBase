@@ -432,7 +432,7 @@ function Meta:RotorTrash()
 			local bphys = board:GetPhysicsObject()
 			if( bphys != nil ) then
 			
-				board:GetPhysicsObject():AddAngleVelocity( Angle( 0, 100, 0 ) )
+				board:GetPhysicsObject():AddAngleVelocity( Vector( 0, 100, 0 ) )
 			
 			end
 			
@@ -2394,7 +2394,7 @@ function Meta:DeathFX()
 		cdeb:Fire("ignite","",0)
 		cdeb:Fire("kill","",math.random(15,20))
 		cdeb:GetPhysicsObject():SetVelocity( self:GetVelocity() )
-		cdeb:GetPhysicsObject():AddAngleVelocity( Angle( math.Rand( -1,1), math.Rand( -1,1), math.Rand( -1,1) ) )
+		cdeb:GetPhysicsObject():AddAngleVelocity( Vector( math.Rand( -1,1), math.Rand( -1,1), math.Rand( -1,1) ) )
 	
 	end
 	
