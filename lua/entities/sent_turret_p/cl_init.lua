@@ -18,7 +18,7 @@ function ENT:CalcView( ply, Origin, Angles, Fov )
 		angles = Angles
 		}
 
-	if( turret && ValidEntity( turret ) && ply:GetNetworkedBool( "InFlight", false )  ) then
+	if( turret && IsValid( turret ) && ply:GetNetworkedBool( "InFlight", false )  ) then
 
 		local pos
 		

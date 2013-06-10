@@ -23,7 +23,7 @@ function ENT:CalcView( ply, Origin, Angles, Fov )
 		angles = Angles
 		}
 
-	if( ValidEntity( plane ) && ply:GetNetworkedBool( "InFlight", false )  ) then
+	if( IsValid( plane ) && ply:GetNetworkedBool( "InFlight", false )  ) then
 
 		local pos = plane:GetPos() + plane:GetUp() * plane.CamUp + ply:GetAimVector() * -plane.CamDist
 		local fov = GetConVarNumber("fov_desired")

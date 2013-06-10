@@ -131,7 +131,7 @@ function SWEP:PrimaryAttack()
 	trace = util.TraceLine( tr )
 	
 	
-	if( trace.Hit && ValidEntity( trace.Entity ) && trace.Entity.HealthVal != nil ) then
+	if( trace.Hit && IsValid( trace.Entity ) && trace.Entity.HealthVal != nil ) then
 	
 		local fx = EffectData()
 		fx:SetOrigin( trace.HitPos )
@@ -144,7 +144,7 @@ function SWEP:PrimaryAttack()
 	
 	if ( SERVER ) then
 		
-		if( trace.Hit && ValidEntity( trace.Entity ) && trace.Entity.HealthVal != nil ) then
+		if( trace.Hit && IsValid( trace.Entity ) && trace.Entity.HealthVal != nil ) then
 			
 			local a,b,c = trace.Entity, trace.Entity.HealthVal, trace.Entity.InitialHealth
 
@@ -201,11 +201,11 @@ function SWEP:PrimaryAttack()
 		
 	end
 	
-	if ( (SinglePlayer() && SERVER) || CLIENT ) then
+	-- if ( (SinglePlayer() && SERVER) || CLIENT ) then
 	
 		self.Weapon:SetNetworkedFloat( "LastShootTime", CurTime() )
 		
-	end
+	-- end
 	
 end
 

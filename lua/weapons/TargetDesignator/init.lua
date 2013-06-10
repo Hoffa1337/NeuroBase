@@ -22,7 +22,7 @@ function SWEP:Reload()
 end
 
 function SWEP:Equip( newCommander )
-	if ValidEntity(self.RedDot) then
+	if IsValid(self.RedDot) then
 	self.RedDot:Remove()
 	newCommander:PrintMessage( HUD_PRINTTALK, "Reset target coordinates..." )
 	end
@@ -37,7 +37,7 @@ function SWEP:PrimaryAttack()
 	trace = self.Owner:GetEyeTrace()
 	if(self.Pointing)then
 	
-	if ValidEntity(self.RedDot) then
+	if IsValid(self.RedDot) then
 	self.RedDot:Remove()
 	end
 	self.RedDot = ents.Create( "env_sprite" )
@@ -58,7 +58,7 @@ function SWEP:PrimaryAttack()
 	self.Owner:SetNetworkedEntity( "Target",self.RedDot )
 	self.Owner:PrintMessage( HUD_PRINTTALK, "Target acquired" )
 	else
-	if ValidEntity(self.RedDot) then
+	if IsValid(self.RedDot) then
 	self.RedDot:Remove()
 	end
 
@@ -67,7 +67,7 @@ end
 
 function SWEP:SecondaryAttack()
 	self.CanCallStrike = !self.CanCallStrike
-	if ValidEntity(self.RedDot) then
+	if IsValid(self.RedDot) then
 		if self.CanCallStrike then
 		self.Owner:SetNetworkedBool( "DestroyTarget", true )
 		self.Owner:PrintMessage( HUD_PRINTTALK, "[WIP] Calling a strike..." )
