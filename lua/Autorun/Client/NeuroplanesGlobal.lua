@@ -1,3 +1,9 @@
+local Meta = FindMetaTable("Entity")
+
+function Meta:SetShouldDrawInViewMode( a ) 
+return
+end
+
 -- Global client stuff
 local ScrW = ScrW
 local ScrH = ScrH
