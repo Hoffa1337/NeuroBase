@@ -134,7 +134,7 @@ function ENT:OnTakeDamage(dmginfo)
 	
 	local dt = dmginfo:GetDamageType()
 	
-	if( dt & DMG_BLAST_SURFACE == DMG_BLAST_SURFACE || dt & DMG_BLAST == DMG_BLAST || dt & DMG_BURN == DMG_BURN   ) then 
+	if( ( bit.bor( dt, DMG_BLAST_SURFACE ) == DMG_BLAST_SURFACE ) || ( bit.bor(dt, DMG_BLAST )  == DMG_BLAST ) || ( bit.bor( dt, DMG_BURN ) == DMG_BURN  ) ) then 
 		// Nothing, these can hurt us
 	else
 	
