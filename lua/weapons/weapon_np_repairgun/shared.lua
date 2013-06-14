@@ -173,8 +173,27 @@ function SWEP:PrimaryAttack()
 				
 				local txt = self.Phrases[self.TimeIdx]
 				
-				self.Burning = false
+				a.Burning = false
 				a.HealthVal = math.Approach( b, c, 3 )
+				a.OilLevel = 100
+				a:SetNWFloat( "EngineOilLevel", 100 )
+				a.GearBoxHealth = 500
+				a.OilLeaking = false
+				a.EngineHeat = 0
+				a.OilPumpBroken = false
+				
+				for k,v in pairs( ents.FindInSphere( trace.HitPos, 128 )  ) do
+					
+					-- print( v:GetClass() )
+						
+						
+					if( v:GetClass() == "env_fire_trail" ) then
+						
+						v:Remove()
+						-- v:StopSounds()
+					end
+				
+				end
 				
 				if(  a:GetClass() == "tank_track_entity" ) then
 					

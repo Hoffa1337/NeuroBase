@@ -7,8 +7,18 @@ function Splode()
 	
 		if( v:IsValid() ) then
 			
+			
 			local Pos = v:LocalToWorld( v:OBBCenter( ) )
-			ParticleEffect("dusty_explosion_rockets", Pos, Angle(0,0,0), nil )
+			if( v.DoCustomExplosion ) then
+				
+				ParticleEffect(v.CustomParticleEffect, Pos, Angle(0,0,0), nil )
+			
+			else
+			
+				ParticleEffect("dusty_explosion_rockets", Pos, Angle(0,0,0), nil )
+				
+			end
+			
 			v:Remove()
 		
 		end
