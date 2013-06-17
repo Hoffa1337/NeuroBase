@@ -31,7 +31,7 @@ function ENT:Initialize()
 	local smoketrail = ents.Create("env_rockettrail")
 	smoketrail:SetPos( self:GetPos() + self:GetForward() * -5 )
 	smoketrail:SetParent( self )
-	smoketrail:SetLocalAngles( Vector( 0, 0, 0 ) )
+	smoketrail:SetLocalAngles( Angle( 0, 0, 0 ) )
 	smoketrail:Spawn()
 	
 	util.SpriteTrail(self, 0, Color(255,255,255,math.random(200,240)), false, 8, math.random(1,2), 2, math.random(1,3), "trails/smoke.vmt");  
