@@ -84,7 +84,7 @@ function ENT:PhysicsUpdate()
 			self.Sauce = self.Sauce - 1
 			self.Lastvelocity = self:GetVelocity():Length()
 			
-			local a = self.PhysObj:GetAngle()
+			local a = self.PhysObj:GetAngles()
 			// Alcohol Induced Rockets aka Drunk Fire
 			self.PhysObj:SetAngles( Angle( a.p + math.sin( CurTime() - self.seed ) * .05, 
 										  a.y + math.cos( CurTime() - self.seed ) * .05,

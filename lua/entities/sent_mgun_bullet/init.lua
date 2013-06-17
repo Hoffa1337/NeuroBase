@@ -93,7 +93,7 @@ end
 function ENT:PhysicsUpdate()
 	
 	
-	self:GetPhysicsObject():AddAngleVelocity( Angle( 999999, 0, 0 ) )
+	self:GetPhysicsObject():AddAngleVelocity( Vector( 999999, 0, 0 ) )
 
 	if( self:WaterLevel() > 0 ) then
 		
