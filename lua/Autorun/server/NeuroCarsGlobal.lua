@@ -488,7 +488,8 @@ function Meta:PlayWorldSound(snd)
 end
 
 function Meta:SpawnPilotModel( pos, ang )
-
+	
+	
 	local p = ents.Create("prop_dynamic")
 	p:SetModel( self.Pilot:GetModel() )
 	p:SetPos( self:LocalToWorld( pos ) )
@@ -501,7 +502,7 @@ function Meta:SpawnPilotModel( pos, ang )
 	p:SetColor( Color( 255,255,255,255 ) )
 	
 	if( IsValid( p ) ) then
-	
+		-- print ( "Valid Pilot Model" )
 		return p
 	
 	end
@@ -3228,5 +3229,4 @@ print( Testers )
 print( "" )
 print( "" )
 print( "" )
-
 
