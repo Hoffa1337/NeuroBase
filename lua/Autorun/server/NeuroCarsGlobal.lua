@@ -127,7 +127,7 @@ hook.Add("PlayerSpawn", "FixColor", function( ply )
 	local r,g,b,a = ply:GetColor()
 	if( a == 0 ) then
 	
-		ply:SetColor( r,g,b,255 )
+		ply:SetColor( Color( r,g,b,255 ) )
 		
 	end
 	
@@ -493,7 +493,7 @@ function Meta:SpawnPilotModel( pos, ang )
 	local p = ents.Create("prop_dynamic")
 	p:SetModel( self.Pilot:GetModel() )
 	p:SetPos( self:LocalToWorld( pos ) )
-	p:SetAngles( self:GetAngles() + ang )	
+	p:SetAngles( self:GetAngles() )	
 	p:SetSolid( SOLID_NONE )
 	p:SetParent( self )
 	p:SetKeyValue( "DefaultAnim", "ACT_DRIVE_AIRBOAT" )
