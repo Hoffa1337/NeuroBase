@@ -17,9 +17,7 @@ function ENT:Initialize()
 	self.flip = false
 	
 	self.Owner = self:GetOwner().Owner or self // lolol
-	
-	self.PhysObj = self:GetPhysicsObject()
-	
+
 	if ( self.PhysObj:IsValid() ) then
 	
 		self.PhysObj:Wake()
@@ -36,8 +34,10 @@ function ENT:Initialize()
 	
 	util.SpriteTrail(self, 0, Color(255,255,255,math.random(200,240)), false, 8, math.random(1,2), 2, math.random(1,3), "trails/smoke.vmt");  
 	
-	self.MissileSound = CreateSound( self, "Missile.Accelerate")
+	-- self.MissileSound = CreateSound( self, "Missile.Accelerate")
 	self.MissileSound = CreateSound( self, "weapons/rpg/rocket1.wav")
+		
+	self.PhysObj = self:GetPhysicsObject()
 	
 end
 
@@ -61,7 +61,8 @@ function ENT:PhysicsCollide( data, physobj )
 end
 
 function ENT:PhysicsUpdate()
-
+	self.PhysObj = self:GetPhysicsObject()
+	
 	local tr, trace = {},{}
 	tr.start = self:GetPos()
 	tr.endpos = tr.start + self:GetForward() * 250
@@ -86,7 +87,7 @@ function ENT:PhysicsUpdate()
 			self.Sauce = self.Sauce - 1
 		
 		else
-		
+			
 			self.PhysObj:EnableGravity(true)
 			self.PhysObj:EnableDrag(true)
 			self.PhysObj:SetMass( 100 )
@@ -118,13 +119,13 @@ function ENT:Think()
 	
 	end
 	
-	self.MissileSound:PlayEx( 1.0, 100 )
+	-- self.MissileSound:PlayEx( 1.0, 100 )
 	
 end 
 
 function ENT:OnRemove()
 
-	self.MissileSound:Stop()
+	-- self.MissileSound:Stop()
 	
 	local explo1 = EffectData()
 	explo1:SetOrigin(self:GetPos())
