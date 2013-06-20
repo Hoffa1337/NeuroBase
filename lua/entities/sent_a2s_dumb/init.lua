@@ -19,7 +19,7 @@ function ENT:Initialize()
 	
 	self.Owner = self:GetOwner().Owner or self // lolol
 	
-	self.PhysObj = self:GetPhysicsObject()
+
 	
 	if ( self.PhysObj:IsValid() ) then
 	
@@ -65,7 +65,7 @@ function ENT:PhysicsCollide( data, physobj )
 end
 
 function ENT:PhysicsUpdate()
-
+	self.PhysObj = self:GetPhysicsObject()
 	local tr, trace = {},{}
 	tr.start = self:GetPos()
 	tr.endpos = tr.start + self:GetForward() * 250
