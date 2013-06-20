@@ -1,0 +1,6 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models/military2/ship/rs_Material 266"
+	"$alphatest" 1
+
+}

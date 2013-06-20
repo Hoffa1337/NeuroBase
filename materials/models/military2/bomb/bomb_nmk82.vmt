@@ -1,0 +1,12 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models/military2/bomb/bomb_nmk82"
+        "$bumpmap" "models/military2/bomb/bomb_nmk82_nomal"
+	"$phong" "1"
+	"$phongexponent" "40"
+	"$phongboost" "2"
+	"$phongfresnelranges" "[.05 .5 1]"
+	"$halflambert" "1"
+	"$model" 1
+
+}
