@@ -4,5 +4,6 @@ particles_manifest
 	"file"		"particles/neuro_tank_he.pcf"
 	"file"		"particles/neuro_tank_ap.pcf"
 	"file"		"particles/neuro_tank_he.pcf"
+	"file"		"particles/neuro_ricochet.pcf"
 
 }
