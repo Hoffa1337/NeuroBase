@@ -1,6 +1,7 @@
 particles_manifest
 {
 	"file"		"particles/vman_explosion.pcf"
-	"file"		"particles/plasma_explosion.pcf"
+	"file"		"particles/neuro_tank_ap.pcf"
+	"file"		"particles/neuro_tank_he.pcf"
 
 }
