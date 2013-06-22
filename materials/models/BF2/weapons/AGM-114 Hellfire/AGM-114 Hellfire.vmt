@@ -1,0 +1,10 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models/bf2/weapons/AGM-114 Hellfire/AGM-114 Hellfire"
+	"$bumpmap" "models/bf2/weapons/AGM-114 Hellfire/AGM-114 Hellfire_bump"
+
+	"$phong" "1"
+	"$phongboost" "1"	
+	"$phongfresnelranges"	"[1 1 1]"
+	"$phongalbedotint" "1"
+}
