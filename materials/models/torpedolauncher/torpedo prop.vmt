@@ -1,0 +1,7 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/torpedolauncher/torpedo prop"
+	"$surfaceprop" "metal_medium"
+	"$translucent" 1
+        "$model"      1
+}
