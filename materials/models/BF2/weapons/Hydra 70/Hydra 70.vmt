@@ -1,0 +1,10 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models/bf2/weapons/Hydra 70/Hydra 70"
+	"$bumpmap" "models/bf2/weapons/Hydra 70/Hydra 70_bump"
+
+	"$phong" "1"
+	"$phongboost" "1"	
+	"$phongfresnelranges"	"[1 1 1]"
+	"$phongalbedotint" "1"
+}

@@ -1,0 +1,9 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/BF2/props/bf2_parachute/parachute_c"
+	"$phong" "0"
+
+	"$halflambert" "1"
+
+	"$nocull" 1
+}
