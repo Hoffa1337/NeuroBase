@@ -7,4 +7,5 @@ particles_manifest
 	"file"		"particles/neuro_ricochet.pcf"
 	"file"		"particles/neuro_tank_flash.pcf"
 	"file"		"particles/neuro_cookoff.pcf"
+	"file"		"particles/neuro_gore.pcf"
 }
