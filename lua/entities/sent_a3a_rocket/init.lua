@@ -20,7 +20,7 @@ function ENT:Initialize()
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )	
 	self:SetSolid( SOLID_VPHYSICS )
-	self.Owner = self:GetOwner().Owner or self
+	-- self.Owner = self:GetOwner().Owner or self
 	
 	
 	self.PhysObj = self:GetPhysicsObject()
@@ -124,8 +124,8 @@ function ENT:PhysicsUpdate()
 		self:SetAngles( a )
 	
 	end
-
-	self.PhysObj:SetVelocity( self:GetForward() * self.Speed )
+	self:GetPhysicsObject():ApplyForceCenter( self:GetForward() * ( 10 * self.Speed ) )
+	-- self:SetVelocity( self:GetForward() * self.Speed * 100 )
 	
 end
 
@@ -133,11 +133,11 @@ function ENT:Think()
 	
 	if ( !IsValid( self.Target ) ) then
 	
-		local a = self.PhysObj:GetAngles()
-		// Alcohol Induced Rockets aka Drunk Fire
-		self.PhysObj:SetAngles( Angle( a.p + math.sin( CurTime() - self.seed ) * .09, 
-									  a.y + math.cos( CurTime() - self.seed ) * .09,
-									  a.r + 2.58123 ) )
+		-- local a = self:GetAngles()
+		-- // Alcohol Induced Rockets aka Drunk Fire
+		-- self.PhysObj:SetAngles( Angle( a.p + math.sin( CurTime() - self.seed ) * .09, 
+									  -- a.y + math.cos( CurTime() - self.seed ) * .09,
+									  -- a.r + 2.58123 ) )
 		
 		return false
 		
