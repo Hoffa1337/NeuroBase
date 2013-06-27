@@ -18,4 +18,4 @@ function meta:SetScriptedVehicle( veh )
 
 end
 
-print ("floppy boobs")
+-- print ("floppy boobs")
