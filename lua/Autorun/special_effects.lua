@@ -9,5 +9,7 @@ game.AddParticles("particles/neuro_ricochet.pcf") -- tank_ric
 game.AddParticles("particles/neuro_tankfire.pcf") -- tank_fire
 game.AddParticles("particles/neuro_tank_flash.pcf") -- tank_muzzleflash
 game.AddParticles("particles/neuro_cookoff.pcf") -- tank_cookoff 
-
+game.AddParticles("particles/neuro_trails.pcf") --  rockettrail
+game.AddParticles("particles/neuro_v1.pcf") --  v1_impact
+-- rocketrail/s
 print( "NeuroTec Special Effects loaded" )

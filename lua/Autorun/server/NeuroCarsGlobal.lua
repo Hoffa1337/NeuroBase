@@ -1,4 +1,4 @@
-local NeuroPlanesVersion = "BATMAN EDITION" --Revision()
+local NeuroPlanesVersion = Revision()
 local Authors = "Hoffa, StarChick971, Sillirion"
 local Contributors = "Fireking552, Flyboi, Inaki, Sakarias88"
 local Testers = "Virus, Elenion, Flubbadoo, xXAcePilotXx, (WEED)Kamikaze"
