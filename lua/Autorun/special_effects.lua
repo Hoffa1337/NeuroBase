@@ -11,5 +11,6 @@ game.AddParticles("particles/neuro_tank_flash.pcf") -- tank_muzzleflash
 game.AddParticles("particles/neuro_cookoff.pcf") -- tank_cookoff 
 game.AddParticles("particles/neuro_trails.pcf") --  rockettrail
 game.AddParticles("particles/neuro_v1.pcf") --  v1_impact
+game.AddParticles("particles/neuro_ied.pcf") --  VBIED_explosion
 -- rocketrail/s
 print( "NeuroTec Special Effects loaded" )
