@@ -11,4 +11,5 @@ particles_manifest
 	"file"		"particles/neuro_trails.pcf"
 	"file"		"particles/neuro_v1.pcf"
 	"file"		"particles/neuro_ied.pcf"
+	"file"		"particles/neuro_rocket.pcf"
 }
