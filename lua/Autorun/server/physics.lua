@@ -1,4 +1,4 @@
-
+--[[
 //----- ConVars
 local MaxVelocity = CreateConVar( "phys_maxvelocity", "10000", {FCVAR_NOTIFY , FCVAR_ARCHIVE , FCVAR_GAMEDLL} );
 local MaxAngularVelocity = CreateConVar( "phys_maxangularvelocity", "3600", {FCVAR_NOTIFY , FCVAR_ARCHIVE , FCVAR_GAMEDLL} );
@@ -117,3 +117,4 @@ local function InitPostEntity( )
 
 end
 hook.Add( "InitPostEntity", "LoadPhysicsModule", InitPostEntity );
+]]--

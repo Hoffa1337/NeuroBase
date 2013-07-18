@@ -18,7 +18,7 @@ function AddDir(dir) // recursively adds everything in a directory to be downloa
 	-- end
 end
 	
-AddCSLuaFile("autorun/npcinit.lua") 
+-- AddCSLuaFile("autorun/npcinit.lua") 
 AddCSLuaFile("autorun/client/JetHUD.lua")
 -- AddCSLuaFile("autorun/client/NeuroBase_Checker.lua")
 -- //AddDir("Materials/VGUI/entities")
