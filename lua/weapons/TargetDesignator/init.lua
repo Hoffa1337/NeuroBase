@@ -11,13 +11,29 @@ SWEP.AutoSwitchFrom = false
 -- SWEP.Receiver = nil
 SWEP.Pointing = false
 SWEP.CanCallStrike = false
+SWEP.Tracking = false
 
 function SWEP:Initialize()
 	self.Pointing = false
 	self.CanCallStrike = false
+	self.Tracking = false
 end
 
 function SWEP:Reload()
+	self.Tracking = !self.Tracking
+	if IsValid(self.RedDot) then
+		if self.Tracking then
+			self.Owner:SetNetworkedBool( "TrackTarget", true )
+			self.Owner:PrintMessage( HUD_PRINTTALK, "Searching the new position..." )
+			self.Owner:EmitSound( "ambient/machines/thumper_startup1.wav")
+
+		else
+			self.Owner:SetNetworkedBool( "TrackTarget", false )
+			self.Owner:PrintMessage( HUD_PRINTTALK, "Stop tracking." )
+			self.Owner:EmitSound( "ambient/machines/thumper_shutdown1.wav")
+		
+		end
+	end
 	
 end
 
@@ -28,7 +44,11 @@ function SWEP:Equip( newCommander )
 	end
 end
 function SWEP:Holster( wep )
-
+	if IsValid(self.RedDot) then
+		self.Owner:PrintMessage( HUD_PRINTTALK, "Last coordinates saved..." )	
+		self.Owner:PrintMessage( HUD_PRINTTALK, "Blind fire mode activated." )	
+	end
+		
 	return true
 end
 function SWEP:PrimaryAttack()
@@ -37,30 +57,30 @@ function SWEP:PrimaryAttack()
 	trace = self.Owner:GetEyeTrace()
 	if(self.Pointing)then
 	
-	if IsValid(self.RedDot) then
-	self.RedDot:Remove()
-	end
-	self.RedDot = ents.Create( "env_sprite" )
-	-- self.RedDot:SetParent( self )	
-	self.RedDot:SetPos( trace.HitPos  )
-	-- self.RedDot:SetAngles( self:GetAngles() )
-	self.RedDot:SetKeyValue( "spawnflags", 1 )
-	self.RedDot:SetKeyValue( "renderfx", 0 )
-	self.RedDot:SetKeyValue( "scale", 0.2 )
-	self.RedDot:SetKeyValue( "rendermode", 9 )
-	self.RedDot:SetKeyValue( "HDRColorScale", .75 )
-	self.RedDot:SetKeyValue( "GlowProxySize", 2 )
-	self.RedDot:SetKeyValue( "model", "sprites/redglow3.vmt" )
-	self.RedDot:SetKeyValue( "framerate", "10.0" )
-	self.RedDot:SetKeyValue( "rendercolor", " 255 0 0" )
-	self.RedDot:SetKeyValue( "renderamt", 255 )
-	self.RedDot:Spawn()
-	self.Owner:SetNetworkedEntity( "Target",self.RedDot )
-	self.Owner:PrintMessage( HUD_PRINTTALK, "Target acquired" )
+		if IsValid(self.RedDot) then
+		self.RedDot:Remove()
+		end
+		self.RedDot = ents.Create( "env_sprite" )
+		-- self.RedDot:SetParent( self )	
+		self.RedDot:SetPos( trace.HitPos  )
+		-- self.RedDot:SetAngles( self:GetAngles() )
+		self.RedDot:SetKeyValue( "spawnflags", 1 )
+		self.RedDot:SetKeyValue( "renderfx", 0 )
+		self.RedDot:SetKeyValue( "scale", 0.2 )
+		self.RedDot:SetKeyValue( "rendermode", 9 )
+		self.RedDot:SetKeyValue( "HDRColorScale", .75 )
+		self.RedDot:SetKeyValue( "GlowProxySize", 2 )
+		self.RedDot:SetKeyValue( "model", "sprites/redglow3.vmt" )
+		self.RedDot:SetKeyValue( "framerate", "10.0" )
+		self.RedDot:SetKeyValue( "rendercolor", " 255 0 0" )
+		self.RedDot:SetKeyValue( "renderamt", 255 )
+		self.RedDot:Spawn()
+		self.Owner:SetNetworkedEntity( "Target",self.RedDot )
+		self.Owner:PrintMessage( HUD_PRINTTALK, "Target acquired" )
 	else
-	if IsValid(self.RedDot) then
-	self.RedDot:Remove()
-	end
+		if IsValid(self.RedDot) then
+		self.RedDot:Remove()
+		end
 
 	end
 end
