@@ -18,6 +18,7 @@ if ( CLIENT ) then
 
 	SWEP.PrintName			= "Repair Gun"			
 	SWEP.Author				= "Hoffa"
+	SWEP.Category			= "NeuroTec Weapons"
 	SWEP.Slot				= 3
 	SWEP.SlotPos			= 1
 	SWEP.IconLetter			= "b"
