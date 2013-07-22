@@ -17,24 +17,35 @@ function SWEP:Initialize()
 	self.Pointing = false
 	self.CanCallStrike = false
 	self.Tracking = false
+	
+	self.LastAction = CurTime()
 end
 
 function SWEP:Reload()
+	if ( self.LastAction + 1 <= CurTime() ) then
+	
 	self.Tracking = !self.Tracking
-	if IsValid(self.RedDot) then
-		if self.Tracking then
-			self.Owner:SetNetworkedBool( "TrackTarget", true )
-			self.Owner:PrintMessage( HUD_PRINTTALK, "Searching the new position..." )
-			self.Owner:EmitSound( "ambient/machines/thumper_startup1.wav")
+		if IsValid(self.RedDot) then
+			if self.Tracking then
+				self.Owner:SetNetworkedBool( "TrackTarget", true )
+				self.Owner:PrintMessage( HUD_PRINTTALK, "Searching the new position..." )
+				self.Owner:EmitSound( "ambient/machines/thumper_startup1.wav")
 
+			else
+				self.Owner:SetNetworkedBool( "TrackTarget", false )
+				self.Owner:PrintMessage( HUD_PRINTTALK, "Stop tracking." )
+				self.Owner:EmitSound( "ambient/machines/thumper_shutdown1.wav")
+			
+			end
 		else
-			self.Owner:SetNetworkedBool( "TrackTarget", false )
-			self.Owner:PrintMessage( HUD_PRINTTALK, "Stop tracking." )
-			self.Owner:EmitSound( "ambient/machines/thumper_shutdown1.wav")
+				self.Owner:SetNetworkedBool( "TrackTarget", false )
+				self.Owner:PrintMessage( HUD_PRINTTALK, "Tracking system stopped." )			
+				self.Owner:PrintMessage( HUD_PRINTTALK, "Waiting for the signal..." )			
 		
 		end
+		
+		self.LastAction = CurTime()
 	end
-	
 end
 
 function SWEP:Equip( newCommander )
