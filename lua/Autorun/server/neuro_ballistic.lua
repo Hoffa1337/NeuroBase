@@ -24,6 +24,33 @@ theta: angle of the barrel.
 */
 
 
+function Meta:BallisticCalculationV(TargetPos)
+
+	local pos = self:GetPos()
+	local R = (TargetPos - pos):Length2D()
+	local h = TargetPos.z - pos.z
+
+	if self.MinRange==nil then self.MinRange = DefaultMinRange end
+	if self.MaxRange==nil then self.MaxRange = DefaultMaxRange end
+		
+	if R < self.MinRange then R = self.MinRange end
+	if R > self.MaxRange then R = self.MaxRange end
+
+	local v0
+	if self.LaunchVelocity!=Null or nil then
+	v0 = self.LaunchVelocity else v0 = DefaultLaunchVelocity end
+	
+	local theta = math.deg(self:CalculateLaunchAngle(R,v0))
+	print("R="..R..", v0="..v0..", theta="..theta.."\n")
+	
+	
+	self:SetNetworkedFloat( "LaunchVelocity", v0 )
+	self:SetNetworkedFloat( "LaunchAngle", theta )
+
+	return theta
+
+end
+
 function Meta:BallisticCalculation(Target)
 	
 	-- local Target = self:GetNetworkedEntity("Target",NULL)
