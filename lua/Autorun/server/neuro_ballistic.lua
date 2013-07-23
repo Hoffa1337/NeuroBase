@@ -25,33 +25,6 @@ theta: angle of the barrel.
 */
 
 
-function Meta:BallisticCalculationV(TargetPos)
-
-	local pos = self:GetPos()
-	local R = (TargetPos - pos):Length2D()
-	local h = TargetPos.z - pos.z
-
-	if self.MinRange==nil then self.MinRange = DefaultMinRange end
-	if self.MaxRange==nil then self.MaxRange = DefaultMaxRange end
-		
-	if R < self.MinRange then R = self.MinRange end
-	if R > self.MaxRange then R = self.MaxRange end
-
-	local v0
-	if self.LaunchVelocity!=Null or nil then
-	v0 = self.LaunchVelocity else v0 = DefaultLaunchVelocity end
-	
-	local theta = math.deg(self:CalculateLaunchAngle(R,v0))
-	print("R="..R..", v0="..v0..", theta="..theta.."\n")
-	
-	
-	self:SetNetworkedFloat( "LaunchVelocity", v0 )
-	self:SetNetworkedFloat( "LaunchAngle", theta )
-
-	return theta
-
-end
-
 function Meta:BallisticCalculation(Target)
 	
 	-- local Target = self:GetNetworkedEntity("Target",NULL)
@@ -142,5 +115,43 @@ function Meta:CalculateHeightOffset(R,theta,v0,h)
 	-- local offset = v0*v0*cos/g * math.sqrt( v0*v0*sin*sin + 2*g*h) //Attempt to get the correction.
 	local offset = math.random(-10,10)*R/100 //You will reach your target if you are lucky! 80%
 	return 	offset 
+
+end
+
+/**Vector method**/
+function Meta:BallisticCalculationV(TargetPos)
+	
+		local pos = self:GetPos()
+		local R = (TargetPos - pos):Length2D()
+		local h = TargetPos.z - pos.z
+		
+		-- if self.MaxRange!=NULL then R = self.MaxRange else R = DefaultMaxRange end
+		
+		if self.MinRange==nil then self.MinRange = DefaultMinRange end
+		if self.MaxRange==nil then self.MaxRange = DefaultMaxRange end
+			
+		if R < self.MinRange then R = self.MinRange end
+		if R > self.MaxRange then R = self.MaxRange end
+		
+		if self.Accuracy==nil then self.Accuracy=DefaultAccuracy end
+		 self.Accuracy = math.Clamp( self.Accuracy, 0, 100 )
+	
+		// local v0 = self:CalculateLaunchVelocity(R,h)
+		local v0
+		if self.LaunchVelocity!=Null or nil then
+		-- local v0 = self:GetNetworkedFloat( self.LaunchVelocity , DefaultLaunchVelocity)
+		v0 = self.LaunchVelocity else v0 = DefaultLaunchVelocity end
+		
+		local theta = -self:CalculateLaunchAngle(R,v0)
+		-- local offset = self:CalculateHeightOffset(R,v0,h)
+
+		-- local LaunchAngle = -self:CalculateLaunchAngle(self:CalculateTrajectoryRange(v0,theta,h),v0,h )	
+		local LaunchAngle = theta
+				
+-- print("R="..R..", height= "..h..", v0="..v0..", theta="..theta.."\n")		
+	self:SetNetworkedFloat( "LaunchVelocity", v0 )
+	self:SetNetworkedFloat( "LaunchAngle", theta )
+	
+	return LaunchAngle
 
 end
