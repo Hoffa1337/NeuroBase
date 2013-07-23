@@ -98,18 +98,22 @@ end
 
 function SWEP:SecondaryAttack()
 	self.CanCallStrike = !self.CanCallStrike
-	if IsValid(self.RedDot) then
-		if self.CanCallStrike then
-		self.Owner:SetNetworkedBool( "DestroyTarget", true )
-		self.Owner:PrintMessage( HUD_PRINTTALK, "[WIP] Calling a strike..." )
-		self.Owner:EmitSound("LockOn/Voices/EngagingBandit.mp3")
+	if ( self.LastAction + 1 <= CurTime() ) then
+		if IsValid(self.RedDot) then
+			if self.CanCallStrike then
+			self.Owner:SetNetworkedBool( "DestroyTarget", true )
+			self.Owner:PrintMessage( HUD_PRINTTALK, "[WIP] Calling a strike..." )
+			self.Owner:EmitSound("LockOn/Voices/EngagingBandit.mp3")
+			else
+			self.Owner:PrintMessage( HUD_PRINTTALK, "Stop the strike!" )	
+			self.Owner:SetNetworkedBool( "DestroyTarget", false )
+			end
 		else
-		self.Owner:PrintMessage( HUD_PRINTTALK, "Stop the strike!" )	
-		self.Owner:SetNetworkedBool( "DestroyTarget", false )
+			self.Owner:SetNetworkedBool( "DestroyTarget", false )
+			self.CanCallStrike = false
 		end
-	else
-		self.Owner:SetNetworkedBool( "DestroyTarget", false )
-		self.CanCallStrike = false
+		
+		self.LastAction = CurTime()
 	end
 end
 

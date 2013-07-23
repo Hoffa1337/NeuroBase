@@ -7,10 +7,10 @@
 //Some variables we need
 
 local Meta = FindMetaTable("Entity")
--- local g = 600 //Source engine gravity force.
-local g = -physenv.GetGravity( ).z //Source engine gravity force.
-local DefaultMinRange = 2.000  //Min range by default.
-local DefaultMaxRange = 150000  //Max range by default.
+local g = 600 //Default ource engine gravity force.
+-- local g = -physenv.GetGravity( ).z //To get the server's gravity force.
+local DefaultMinRange = 2000  //Min range by default.
+local DefaultMaxRange = 15000  //Max range by default.
 local DefaultLaunchVelocity = 3000  //The default speed we use for artillery.
 local DefaultAccuracy = 85 //It is the default accuracy of the cannon in percent regarding the range.
 /* Description of what we are doing
@@ -37,7 +37,7 @@ function Meta:BallisticCalculation(Target)
 		local pos = self:GetPos()
 		local TargetPos = Target:GetPos()
 		local R = (TargetPos - pos):Length2D()
-		local h = TargetPos.z - pos.z
+		local h = (TargetPos.z - pos.z)
 		
 		-- if self.MaxRange!=NULL then R = self.MaxRange else R = DefaultMaxRange end
 		
@@ -52,15 +52,15 @@ function Meta:BallisticCalculation(Target)
 	
 		// local v0 = self:CalculateLaunchVelocity(R,h)
 		local v0
-		if self.LaunchVelocity!=Null or nil then
+		if self.LaunchVelocity!=nil then
 		-- local v0 = self:GetNetworkedFloat( self.LaunchVelocity , DefaultLaunchVelocity)
 		v0 = self.LaunchVelocity else v0 = DefaultLaunchVelocity end
 		
-		local theta = -self:CalculateLaunchAngle(R,v0)
+		local theta = -self:CalculateLaunchAngle(R,v0,h)
 		-- local offset = self:CalculateHeightOffset(R,v0,h)
 
-		local LaunchAngle = -self:CalculateLaunchAngle(self:CalculateTrajectoryRange(v0,theta,h),v0,h )	
-		-- local LaunchAngle = theta
+		-- local LaunchAngle = -self:CalculateLaunchAngle(self:CalculateTrajectoryRange(v0,theta,h),v0,h )	
+		local LaunchAngle = theta
 				
 print("R="..R..", height= "..h..", v0="..v0..", theta="..theta.."\n")		
 	self:SetNetworkedFloat( "LaunchVelocity", v0 )
@@ -77,18 +77,26 @@ local theta = 45 //A 45° angle gives you the maximal range.
 return math.sqrt( R * g / math.sin( math.rad(theta) ) )
 end
 
-function Meta:CalculateLaunchAngle(R,v0)
+function Meta:CalculateLaunchAngle(R,v0,h)
 
-	local theta = 0.5 * math.asin( g * R / (v0*v0) )
-	local ang
-
-	if (90-math.deg(theta))>=45 and (2*theta<=90) then
-		ang = ( 90 - math.deg(theta) )
-	else
-		ang = self:GetAngles().p
-	end
+	local theta
+	local sgn
+	if h<0 then sgn =1 else sgn =-1 end
 	
-	return math.Round(ang,2)
+	local tan = (v0*v0 +sgn*math.sqrt( v0*v0*v0*v0-g*(g*R*R+2*h*v0*v0) ) )/(g*R)
+
+	theta = math.atan( tan ))
+
+	-- local theta = 0.5 * math.asin( g * R / (v0*v0) )
+	-- local ang
+	-- if (90-math.deg(theta))>=45 and (2*theta<=90) then
+		-- ang = ( 90 - math.deg(theta) )
+	-- else
+		-- ang = self:GetAngles().p
+	-- end
+		-- ang = math.deg(theta) 
+	-- return math.Round(ang,2)
+	return math.Round(math.deg(theta),2)
 
 end
 
@@ -142,7 +150,7 @@ function Meta:BallisticCalculationV(TargetPos)
 		-- local v0 = self:GetNetworkedFloat( self.LaunchVelocity , DefaultLaunchVelocity)
 		v0 = self.LaunchVelocity else v0 = DefaultLaunchVelocity end
 		
-		local theta = -self:CalculateLaunchAngle(R,v0)
+		local theta = -self:CalculateLaunchAngle(R,v0,h)
 		-- local offset = self:CalculateHeightOffset(R,v0,h)
 
 		-- local LaunchAngle = -self:CalculateLaunchAngle(self:CalculateTrajectoryRange(v0,theta,h),v0,h )	
