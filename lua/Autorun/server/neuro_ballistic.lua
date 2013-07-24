@@ -4,15 +4,15 @@
 /* 																	 */
 /*********************************************************************/
 
-//Some variables we need
+--Some variables we need
 
 local Meta = FindMetaTable("Entity")
-local g = 600 //Default ource engine gravity force.
--- local g = -physenv.GetGravity( ).z //To get the server's gravity force.
-local DefaultMinRange = 2000  //Min range by default.
-local DefaultMaxRange = 15000  //Max range by default.
-local DefaultLaunchVelocity = 3000  //The default speed we use for artillery.
-local DefaultAccuracy = 85 //It is the default accuracy of the cannon in percent regarding the range.
+local g = 600 --Default ource engine gravity force.
+-- local g = -physenv.GetGravity( ).z --To get the server's gravity force.
+local DefaultMinRange = 2000  --Min range by default.
+local DefaultMaxRange = 15000  --Max range by default.
+local DefaultLaunchVelocity = 3000  --The default speed we use for artillery.
+local DefaultAccuracy = 85 --It is the default accuracy of the cannon in percent regarding the range.
 /* Description of what we are doing
 
 Target: this the entity you aim (use target designator or something else)
@@ -50,9 +50,11 @@ function Meta:BallisticCalculation(Target)
 		if self.Accuracy==nil then self.Accuracy=DefaultAccuracy end
 		 self.Accuracy = math.Clamp( self.Accuracy, 0, 100 )
 	
-		// local v0 = self:CalculateLaunchVelocity(R,h)
+		-- local v0 = self:CalculateLaunchVelocity(R,h)
 		local v0
+
 		if self.LaunchVelocity!=nil then
+
 		-- local v0 = self:GetNetworkedFloat( self.LaunchVelocity , DefaultLaunchVelocity)
 		v0 = self.LaunchVelocity else v0 = DefaultLaunchVelocity end
 		
@@ -71,8 +73,8 @@ print("R="..R..", height= "..h..", v0="..v0..", theta="..theta.."\n")
 end
 
 function Meta:CalculateLaunchVelocity(R,h)
-//Determine the initial velocity for the maximal range.
-local theta = 45 //A 45° angle gives you the maximal range.
+----Determine the initial velocity for the maximal range.
+local theta = 45 --A 45° angle gives you the maximal range.
 
 return math.sqrt( R * g / math.sin( math.rad(theta) ) )
 end
@@ -85,7 +87,7 @@ function Meta:CalculateLaunchAngle(R,v0,h)
 	
 	local tan = (v0*v0 +sgn*math.sqrt( v0*v0*v0*v0-g*(g*R*R+2*h*v0*v0) ) )/(g*R)
 
-	theta = math.atan( tan ))
+	theta = math.atan( tan )
 
 	-- local theta = 0.5 * math.asin( g * R / (v0*v0) )
 	-- local ang
@@ -120,8 +122,8 @@ function Meta:CalculateHeightOffset(R,theta,v0,h)
 	local cos = math.cos(math.rad(theta))
 	local sin = math.sin(math.rad(theta))
 		
-	-- local offset = v0*v0*cos/g * math.sqrt( v0*v0*sin*sin + 2*g*h) //Attempt to get the correction.
-	local offset = math.random(-10,10)*R/100 //You will reach your target if you are lucky! 80%
+	-- local offset = v0*v0*cos/g * math.sqrt( v0*v0*sin*sin + 2*g*h) --Attempt to get the correction.
+	local offset = math.random(-10,10)*R/100 --You will reach your target if you are lucky! 80%
 	return 	offset 
 
 end
@@ -144,7 +146,7 @@ function Meta:BallisticCalculationV(TargetPos)
 		if self.Accuracy==nil then self.Accuracy=DefaultAccuracy end
 		 self.Accuracy = math.Clamp( self.Accuracy, 0, 100 )
 	
-		// local v0 = self:CalculateLaunchVelocity(R,h)
+		-- local v0 = self:CalculateLaunchVelocity(R,h)
 		local v0
 		if self.LaunchVelocity!=Null or nil then
 		-- local v0 = self:GetNetworkedFloat( self.LaunchVelocity , DefaultLaunchVelocity)
