@@ -148,7 +148,7 @@ function Meta:BallisticCalculationV(TargetPos)
 	
 		-- local v0 = self:CalculateLaunchVelocity(R,h)
 		local v0
-		if self.LaunchVelocity!=Null or nil then
+		if self.LaunchVelocity!=NULL or nil then
 		-- local v0 = self:GetNetworkedFloat( self.LaunchVelocity , DefaultLaunchVelocity)
 		v0 = self.LaunchVelocity else v0 = DefaultLaunchVelocity end
 		
