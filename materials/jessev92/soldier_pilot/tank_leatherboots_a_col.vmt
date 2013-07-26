@@ -1,0 +1,5 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "jessev92/soldier_pilot/tank_leatherboots_a_col"
+	"$bumpmap" "jessev92/soldier_pilot/tank_leatherboots_a_nml"
+}
