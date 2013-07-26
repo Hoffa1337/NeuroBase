@@ -4,23 +4,6 @@ resource.AddFile("materials/VGUI/entities/laserPointer.vmt")
 resource.AddFile("materials/VGUI/entities/laserPointer.vtf")
 include('shared.lua')
 
-SWEP.Weight = 8
-SWEP.AutoSwitchTo = false
-SWEP.AutoSwitchFrom = false
-
--- SWEP.Receiver = nil
-SWEP.Pointing = false
-SWEP.CanCallStrike = false
-SWEP.Tracking = false
-
-function SWEP:Initialize()
-	self.Pointing = false
-	self.CanCallStrike = false
-	self.Tracking = false
-	
-	self.LastAction = CurTime()
-end
-
 function SWEP:Reload()
 	if ( self.LastAction + 1 <= CurTime() ) then
 	
@@ -81,24 +64,24 @@ function SWEP:PrimaryAttack()
 		self.RedDot:SetKeyValue( "rendermode", 9 )
 		self.RedDot:SetKeyValue( "HDRColorScale", .75 )
 		self.RedDot:SetKeyValue( "GlowProxySize", 2 )
-		self.RedDot:SetKeyValue( "model", "sprites/redglow3.vmt" )
+		self.RedDot:SetKeyValue( "model", "sprites/glow1.vmt" )
 		self.RedDot:SetKeyValue( "framerate", "10.0" )
-		self.RedDot:SetKeyValue( "rendercolor", " 255 0 0" )
+		self.RedDot:SetKeyValue( "rendercolor", "255 0 0 " )
 		self.RedDot:SetKeyValue( "renderamt", 255 )
 		self.RedDot:Spawn()
 		self.Owner:SetNetworkedEntity( "Target",self.RedDot )
-		self.Owner:PrintMessage( HUD_PRINTTALK, "Target acquired" )
+		self.Owner:PrintMessage( HUD_PRINTTALK, "Target acquired." )
 	else
 		if IsValid(self.RedDot) then
 		self.RedDot:Remove()
+		self.Owner:PrintMessage( HUD_PRINTTALK, "Target aborted." )
 		end
-
+	self.Weapon:SetNextPrimaryFire(CurTime() + 0.1)
 	end
 end
 
 function SWEP:SecondaryAttack()
 	self.CanCallStrike = !self.CanCallStrike
-	if ( self.LastAction + 1 <= CurTime() ) then
 		if IsValid(self.RedDot) then
 			if self.CanCallStrike then
 			self.Owner:SetNetworkedBool( "DestroyTarget", true )
@@ -114,7 +97,8 @@ function SWEP:SecondaryAttack()
 		end
 		
 		self.LastAction = CurTime()
-	end
+	self.Weapon:SetNextSecondaryFire(CurTime() + 0.5)
+
 end
 
 function SWEP:Think()
@@ -123,5 +107,12 @@ function SWEP:Think()
 		local point = trace.HitPos
 		if (COLOSSAL_SANDBOX) then point = point * 6.25 end
 		self.RedDot:SetPos( point )
+	self.Owner:DrawViewModel(false)
+		self.Owner:SetFOV( 55, 0 )
+
+	else
+	self.Owner:DrawViewModel(true)
+		self.Owner:SetFOV( 75, 0 )
 	end
+	
 end

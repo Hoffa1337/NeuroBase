@@ -1,0 +1,6 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "jessev92/soldier_pilot/Pilot_Kits_Seal_C"
+	"$bumpmap" "jessev92/soldier_pilot/Pilot_Kits_Seal_B"
+	"$nocull" 1
+}
