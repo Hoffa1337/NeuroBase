@@ -53,5 +53,7 @@ function SWEP:Initialize()
 	self.Tracking = false
 	
 	self.LastAction = CurTime()
+	self.Zoom = 90
+	
 end
 
