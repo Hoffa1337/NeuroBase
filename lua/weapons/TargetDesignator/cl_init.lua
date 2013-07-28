@@ -2,6 +2,8 @@ include('shared.lua')
 
 local LASER = Material('cable/redlaser')
 local Scope = Material("TankBin")
+local InMeters = 0.3048/16 //This is constant to convert map grid unit to meters.
+local InFeet = 1/16 //Constant to get distances from map unit in feet.
 
 function SWEP:Initialize()
     local ply = LocalPlayer()
@@ -29,22 +31,98 @@ function SWEP:DrawHUD()
 	local	w = ScrW()
 	local	h = ScrH()
 	local center = Vector( w/2, h/2, 0 )
-	local zoom = 75
-	local scale = Vector( 108-zoom, 108-zoom, 0 )
-	local segmentdist = 360 / ( 2 * math.pi * math.max( scale.x, scale.y ) / 2 )
+	local zoom = self.Owner:GetFOV()
+	-- local scale = Vector( 108-zoom, 108-zoom, 0 )
+	-- local scale = Vector( 100-zoom, 100-zoom, 0 )
+	local scale = Vector( w/12*(1-zoom/90), w/12*(1-zoom/90), 0 )
+	local hitpos = self.Owner:GetEyeTrace().HitPos
+	local startpos = self.Owner:GetEyeTrace().StartPos
+	local length = math.Round( ( hitpos - startpos):Length()*InMeters )
 
-	-- if self.Pointing then
 	if self.Weapon:GetNWBool("Active", false) then
 	
 		surface.SetDrawColor( 255, 255, 255, 255 )
 		surface.SetMaterial( Scope )
 		surface.DrawTexturedRect( 0, -ScrW() / 4.5, ScrW(), ScrW() )
+		local grey = Color(100, 100, 100, 255)
+		local green = Color(0, 100, 0, 255)
+		local yellow = Color(255, 225, 0, 255)
+		self:DrawHUDEllipse(center,Vector(w/12,w/12,0), grey )
+		self:DrawHUDEllipse(center,scale*3,green )
+		-- self:DrawHUDEllipse(center,Vector(w/4,w/4,0),Color(0,255,0,255) )
+		
+		self:DrawHUDLine( Vector(w/2,h/2-w/4,0), Vector(w/2,h/2+w/4,0), grey )
+		self:DrawHUDLine( Vector(w/4,h/2,0), Vector(3*w/4,h/2,0), grey )	
+		for i=2,3 do
+			self:DrawHUDLine( Vector(w/2-i*w/12,h/2-16,0), Vector(w/2-i*w/12,h/2+16,0), grey )
+			self:DrawHUDLine( Vector(w/2+i*w/12,h/2-16,0), Vector(w/2+i*w/12,h/2+16,0), grey )
+		end
+		for j=2,3 do
+			self:DrawHUDLine( Vector(w/2-16,h/2-j*w/12,0), Vector(w/2+16,h/2-j*w/12,0), grey )
+			self:DrawHUDLine( Vector(w/2-16,h/2+j*w/12,0), Vector(w/2+16,h/2+j*w/12,0), grey )	
+		end
+		for k=1,2 do
+		draw.SimpleText("10", "ScoreboardText", w/2+16, h/2+(3-2*k)*w/12, grey, TEXT_ALIGN_CENTER, TEXT_ALIGN_LEFT)
+		draw.SimpleText("20", "ScoreboardText", w/2+16, h/2+(3-2*k)*2*w/12, grey, TEXT_ALIGN_CENTER, TEXT_ALIGN_LEFT)
+		draw.SimpleText("30", "ScoreboardText", w/2+16, h/2+(3-2*k)*3*w/12, grey, TEXT_ALIGN_CENTER, TEXT_ALIGN_LEFT)
+		
+		draw.SimpleText("10", "ScoreboardText", w/2+(3-2*k)*w/12, h/2+16, grey, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText("20", "ScoreboardText", w/2+(3-2*k)*2*w/12, h/2+16, grey, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText("30", "ScoreboardText", w/2+(3-2*k)*3*w/12, h/2+16, grey, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		end
+		draw.SimpleText(length.." m", "ScoreboardText", w/2-w/48, h/2+w/48, green, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 
-		surface.SetDrawColor( 255, 255, 255, 255 )
-		for i = 0, 360 - segmentdist, segmentdist do
-		surface.DrawLine( center.x + math.cos( math.rad( i ) ) * scale.x, center.y - math.sin( math.rad( i ) ) * scale.y, center.x + math.cos( math.rad( i + segmentdist ) ) * scale.x, center.y - math.sin( math.rad( i + segmentdist ) ) * scale.y )
+		draw.SimpleText("Status", "ScoreboardText", h/16, h/16, grey, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		draw.SimpleText("Order", "ScoreboardText", w-h/16, h/16, grey, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		
+		if	self.Owner:GetNetworkedBool( "DestroyTarget", false ) then
+		draw.SimpleText("Fire", "ScoreboardText", w-h/16, h/8, green, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		else
+		draw.SimpleText("Hold Fire", "ScoreboardText", w-h/16, h/8, yellow, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		end
+		
+		if	self.Owner:GetNetworkedBool( "TrackTarget", false ) then
+		draw.SimpleText("Tracking", "ScoreboardText", h/16, h/8, green, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		else
+		draw.SimpleText("Standby", "ScoreboardText", h/16, h/8, yellow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+		end
+		
+		
+		if	self.Owner:GetNetworkedEntity( "AI_Cannon", NULL ) !=NULL then
+		draw.SimpleText("Ready", "ScoreboardText", w-h/16, h-h/8, green, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+		else
+		draw.SimpleText("Waiting for controls", "ScoreboardText", w-h/16, h-h/8, yellow, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)		
 		end
 	end
 
 end
 end
+
+function SWEP:HUDShouldDraw( name )
+
+	if	self:GetNWBool("Active", true) then
+		for k, v in pairs({"CHudHealth", "CHudBattery", "CHudAmmo", "CHudSecondaryAmmo","CHudZoom","CHudSuitPower","CHudWeaponSelection"}) do
+			if name == v then return false end
+		end
+		else
+			if name == "CHudZoom" then return false end
+		
+	end
+		
+    -- if ( name == "CHudHealth" or name == "CHudBattery" ) then
+        -- return false
+    -- end
+    return true
+end
+
+/*
+
+function SWEP:HideHL2HUD( name )
+
+	if(self.Pointing)then
+		for k, v in pairs({"CHudHealth", "CHudBattery", "CHudAmmo", "CHudSecondaryAmmo","CHudZoom","CHudSuitPower","CHudWeaponSelection"}) do
+			if name == v then return false end
+		end
+	end
+end	
+hook.Add("HUDShouldDraw", "NeuroTech_HideHL2HUD", HideHL2HUD )

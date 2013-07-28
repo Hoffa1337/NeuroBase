@@ -11,19 +11,19 @@ function SWEP:Reload()
 		if IsValid(self.RedDot) then
 			if self.Tracking then
 				self.Owner:SetNetworkedBool( "TrackTarget", true )
-				self.Owner:PrintMessage( HUD_PRINTTALK, "Searching the new position..." )
+				self.Owner:PrintMessage( HUD_PRINTCENTER, "Searching the new position..." )
 				self.Owner:EmitSound( "ambient/machines/thumper_startup1.wav")
 
 			else
 				self.Owner:SetNetworkedBool( "TrackTarget", false )
-				self.Owner:PrintMessage( HUD_PRINTTALK, "Stop tracking." )
+				self.Owner:PrintMessage( HUD_PRINTCENTER, "Stop tracking." )
 				self.Owner:EmitSound( "ambient/machines/thumper_shutdown1.wav")
 			
 			end
 		else
 				self.Owner:SetNetworkedBool( "TrackTarget", false )
 				self.Owner:PrintMessage( HUD_PRINTTALK, "Tracking system stopped." )			
-				self.Owner:PrintMessage( HUD_PRINTTALK, "Waiting for the signal..." )			
+				self.Owner:PrintMessage( HUD_PRINTCENTER, "Waiting for coordinates..." )			
 		
 		end
 		
@@ -70,11 +70,14 @@ function SWEP:PrimaryAttack()
 		self.RedDot:SetKeyValue( "renderamt", 255 )
 		self.RedDot:Spawn()
 		self.Owner:SetNetworkedEntity( "Target",self.RedDot )
-		self.Owner:PrintMessage( HUD_PRINTTALK, "Target acquired." )
+		self.Owner:PrintMessage( HUD_PRINTCENTER, "Target acquired." )
+		self.Owner:EmitSound( "binoculars/binoculars_zoomout.wav" )
 	else
 		if IsValid(self.RedDot) then
 		self.RedDot:Remove()
-		self.Owner:PrintMessage( HUD_PRINTTALK, "Target aborted." )
+		self.Zoom = 90		
+		self.Owner:PrintMessage( HUD_PRINTCENTER, "Target aborted." )
+		self.Owner:EmitSound( "binoculars/binoculars_zoomin.wav" )
 		end
 	self.Weapon:SetNextPrimaryFire(CurTime() + 0.1)
 	end
@@ -85,7 +88,7 @@ function SWEP:SecondaryAttack()
 		if IsValid(self.RedDot) then
 			if self.CanCallStrike then
 			self.Owner:SetNetworkedBool( "DestroyTarget", true )
-			self.Owner:PrintMessage( HUD_PRINTTALK, "[WIP] Calling a strike..." )
+			self.Owner:PrintMessage( HUD_PRINTTALK, "Calling a strike..." )
 			self.Owner:EmitSound("LockOn/Voices/EngagingBandit.mp3")
 			else
 			self.Owner:PrintMessage( HUD_PRINTTALK, "Stop the strike!" )	
@@ -103,16 +106,37 @@ end
 
 function SWEP:Think()
 	if(self.Pointing)then
+		self.Owner:DrawViewModel(false)
 		local trace = self.Owner:GetEyeTrace()
 		local point = trace.HitPos
+		
 		if (COLOSSAL_SANDBOX) then point = point * 6.25 end
+		
 		self.RedDot:SetPos( point )
-	self.Owner:DrawViewModel(false)
-		self.Owner:SetFOV( 55, 0 )
 
+		if self.Owner:KeyDown( IN_ZOOM ) then
+			if ( self.LastAction + 0.5 <= CurTime() ) then	
+				self.LastAction = CurTime()			
+				self.Owner:EmitSound( "binoculars/binoculars_zoommax.wav" )
+				
+				if self.Zoom > 0 then
+				self.Zoom = self.Zoom - 30		
+				else
+					self.Zoom = 90		
+					-- self.Pointing = false
+					-- self.Weapon:SetNWBool("Active", self.Pointing)
+				end
+			print(self.Zoom)
+			
+			end
+		end
+				
 	else
-	self.Owner:DrawViewModel(true)
-		self.Owner:SetFOV( 75, 0 )
+		self.Owner:DrawViewModel(true)
+		self.Zoom = 90
 	end
+	self.Owner:SetFOV( self.Zoom, 0.25 )
 	
+	
+
 end
