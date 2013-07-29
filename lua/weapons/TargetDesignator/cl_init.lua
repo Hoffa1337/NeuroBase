@@ -88,7 +88,7 @@ function SWEP:DrawHUD()
 		end
 		
 		
-		if	self.Owner:GetNetworkedEntity( "AI_Cannon", NULL ) !=NULL then
+		if	self.Owner:GetNetworkedEntity( "AI_cannon", NULL ) !=NULL then
 		draw.SimpleText("Ready", "ScoreboardText", w-h/16, h-h/8, green, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 		else
 		draw.SimpleText("Waiting for controls", "ScoreboardText", w-h/16, h-h/8, yellow, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)		
@@ -101,7 +101,7 @@ end
 function SWEP:HUDShouldDraw( name )
 
 	if	self:GetNWBool("Active", true) then
-		for k, v in pairs({"CHudHealth", "CHudBattery", "CHudAmmo", "CHudSecondaryAmmo","CHudZoom","CHudSuitPower","CHudWeaponSelection"}) do
+		for k, v in pairs({"CHudHealth", "CHudBattery", "CHudAmmo", "CHudSecondaryAmmo","CHudZoom","CHudSuitPower"}) do
 			if name == v then return false end
 		end
 		else

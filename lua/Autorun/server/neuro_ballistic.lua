@@ -16,6 +16,7 @@ local DefaultAccuracy = 0.85 --It is the default accuracy of the cannon in meter
 local InMeters = 0.3048/16 //This is constant to convert map grid unit to meters.
 local InFeet = 1/16 //Constant to get distances from map unit in feet.
 
+
 /* Description of what we are doing
 
 Target: this the entity you aim (use target designator or something else)
@@ -50,8 +51,10 @@ function Meta:BallisticCalculation(TargetPos) //Use a vector as argument.
 		if self.MinRange==nil then self.MinRange = DefaultMinRange end
 		if self.MaxRange==nil then self.MaxRange = DefaultMaxRange end
 			
-		if R*InMeters < self.MinRange then R = self.MinRange/InMeters end
-		if R*InMeters > self.MaxRange then R = self.MaxRange/InMeters end
+		-- if R*InMeters < self.MinRange then R = self.MinRange/InMeters end
+		-- if R*InMeters > self.MaxRange then R = self.MaxRange/InMeters end
+		if R < self.MinRange then R = self.MinRange end
+		if R > self.MaxRange then R = self.MaxRange end
 		
 		if self.Accuracy==nil then self.Accuracy=DefaultAccuracy end
 		 self.Accuracy = math.Clamp( self.Accuracy, 0, 100 )
@@ -59,9 +62,12 @@ function Meta:BallisticCalculation(TargetPos) //Use a vector as argument.
 		local v0
 		if self.LaunchVelocity!=nil then
 		--v0 = self:GetNetworkedFloat( self.LaunchVelocity , DefaultLaunchVelocity)
-		v0 = self.LaunchVelocity else v0 = DefaultLaunchVelocity
+		v0 = self.LaunchVelocity
+		elseif self.TankType!= nil then
+			v0 = DefaultLaunchVelocity * self.TankType * self.TankType
+		else v0 = DefaultLaunchVelocity
 		end
-		
+-- print(v0)		
 		local LaunchAngle = -self:CalculateLaunchAngle(R,v0,h)
 				
 	self:SetNetworkedFloat( "LaunchVelocity", v0 )
@@ -75,15 +81,16 @@ function Meta:CalculateLaunchAngle(R,v0,h)
 		
 	-- if self.IsArtillery == nil then self.IsArtillery = false end
 
-	local theta
-	local sgn
-	if h<0 then sgn =1 else sgn =1 end //Not sure if the 2nd solution of the equation works properly.
-	
-	local tan = (v0*v0 +sgn*math.sqrt( v0*v0*v0*v0-g*(g*R*R+2*h*v0*v0) ) )/(g*R)
+	local theta,sgn,tan,discriminant
+	-- if h<0 then sgn =1 else sgn =1 end //Not sure if the 2nd solution of the equation works properly.
+	if self.TankType == TANK_TYPE_ARTILLERY then sgn =1 else sgn =-1 end //Not sure if the 2nd solution of the equation works properly.
 
-	theta = math.atan( tan )
-
-	return math.Round(math.deg(theta),2)
+	discriminant = v0*v0*v0*v0-g*(g*R*R+2*h*v0*v0)
+	if discriminant < 0 then discriminant = 0 end
+	tan = (v0*v0 +sgn*math.sqrt( discriminant ) )/(g*R)
+	theta = math.deg( math.atan( tan ) )
+-- print("LaunchAngle: "..theta)
+	return math.Round(theta,2)
 
 end
 
@@ -94,7 +101,7 @@ function Meta:CalculateTrajectoryRange(v0,theta,h)
 	local sgn
 	if h>=0 then sgn =1 else sgn =-1 end
 	local NewR = v0*cos/g * (v0*sin + sgn*math.sqrt( v0*v0*sin*sin + 2*g*h) )
-		print(NewR)
+
 	return NewR
 	-- return v0*v0 * math.sin( math.rad(2*theta) ) / g
 
