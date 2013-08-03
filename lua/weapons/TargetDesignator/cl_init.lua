@@ -47,19 +47,19 @@ function SWEP:DrawHUD()
 		local grey = Color(100, 100, 100, 255)
 		local green = Color(0, 100, 0, 255)
 		local yellow = Color(255, 225, 0, 255)
-		self:DrawHUDEllipse(center,Vector(w/12,w/12,0), grey )
-		self:DrawHUDEllipse(center,scale*3,green )
-		-- self:DrawHUDEllipse(center,Vector(w/4,w/4,0),Color(0,255,0,255) )
+		DrawHUDEllipse(center,Vector(w/12,w/12,0), grey )
+		DrawHUDEllipse(center,scale*3,green )
+		-- DrawHUDEllipse(center,Vector(w/4,w/4,0),Color(0,255,0,255) )
 		
-		self:DrawHUDLine( Vector(w/2,h/2-w/4,0), Vector(w/2,h/2+w/4,0), grey )
-		self:DrawHUDLine( Vector(w/4,h/2,0), Vector(3*w/4,h/2,0), grey )	
+		DrawHUDLine( Vector(w/2,h/2-w/4,0), Vector(w/2,h/2+w/4,0), grey )
+		DrawHUDLine( Vector(w/4,h/2,0), Vector(3*w/4,h/2,0), grey )	
 		for i=2,3 do
-			self:DrawHUDLine( Vector(w/2-i*w/12,h/2-16,0), Vector(w/2-i*w/12,h/2+16,0), grey )
-			self:DrawHUDLine( Vector(w/2+i*w/12,h/2-16,0), Vector(w/2+i*w/12,h/2+16,0), grey )
+			DrawHUDLine( Vector(w/2-i*w/12,h/2-16,0), Vector(w/2-i*w/12,h/2+16,0), grey )
+			DrawHUDLine( Vector(w/2+i*w/12,h/2-16,0), Vector(w/2+i*w/12,h/2+16,0), grey )
 		end
 		for j=2,3 do
-			self:DrawHUDLine( Vector(w/2-16,h/2-j*w/12,0), Vector(w/2+16,h/2-j*w/12,0), grey )
-			self:DrawHUDLine( Vector(w/2-16,h/2+j*w/12,0), Vector(w/2+16,h/2+j*w/12,0), grey )	
+			DrawHUDLine( Vector(w/2-16,h/2-j*w/12,0), Vector(w/2+16,h/2-j*w/12,0), grey )
+			DrawHUDLine( Vector(w/2-16,h/2+j*w/12,0), Vector(w/2+16,h/2+j*w/12,0), grey )	
 		end
 		for k=1,2 do
 		draw.SimpleText("10", "ScoreboardText", w/2+16, h/2+(3-2*k)*w/12, grey, TEXT_ALIGN_CENTER, TEXT_ALIGN_LEFT)

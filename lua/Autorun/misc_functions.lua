@@ -1,7 +1,7 @@
 local Meta = FindMetaTable("Entity")
 
 
-function Meta:DrawHUDEllipse(center,scale,color) 
+function DrawHUDEllipse(center,scale,color) 
 //
 /****************************************************************************/
 /* Draw an ellipse whatever the size of the HUD							 	*/
@@ -19,7 +19,7 @@ function Meta:DrawHUDEllipse(center,scale,color)
 end
 
 
-function Meta:DrawHUDLine(startpos,endpos,color)
+function DrawHUDLine(startpos,endpos,color)
 	surface.SetDrawColor( color )
 	surface.DrawLine( startpos.x, startpos.y, endpos.x, endpos.y  )
 
