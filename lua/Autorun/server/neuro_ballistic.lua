@@ -67,11 +67,14 @@ function Meta:BallisticCalculation(TargetPos) //Use a vector as argument.
 			v0 = DefaultLaunchVelocity * self.TankType * self.TankType
 		else v0 = DefaultLaunchVelocity
 		end
--- print(v0)		
+print(v0)		
 		local LaunchAngle = -self:CalculateLaunchAngle(R,v0,h)
 				
-	self:SetNetworkedFloat( "LaunchVelocity", v0 )
-	self:SetNetworkedFloat( "LaunchAngle", LaunchAngle )
+	self.Owner:SetNetworkedFloat( "LaunchVelocity", v0 )
+	self.Owner:SetNetworkedFloat( "LaunchAngle", LaunchAngle )
+	local R =CalculateTrajectoryRange(v0,LaunchAngle,h)
+	self.Owner:SetNetworkedFloat( "Range", R )
+	
 -- print("R="..R..", Height= "..h..", v0="..v0..", Angle="..LaunchAngle.."\n")		
 
 	return LaunchAngle	
@@ -94,7 +97,7 @@ function Meta:CalculateLaunchAngle(R,v0,h)
 
 end
 
-function Meta:CalculateTrajectoryRange(v0,theta,h)
+function CalculateTrajectoryRange(v0,theta,h)
 	
 	local cos = math.cos(math.rad(theta))
 	local sin = math.sin(math.rad(theta))
