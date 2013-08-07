@@ -11,7 +11,8 @@ local g = 600 --Default ource engine gravity force.
 -- local g = -physenv.GetGravity( ).z --To get the server's gravity force.
 local DefaultMinRange = 2000  --Min range by default.
 local DefaultMaxRange = 15000  --Max range by default.
-local DefaultLaunchVelocity = 3000  --The default speed we use for artillery.
+local DefaultLaunchVelocity = AMMO_VELOCITY_ARTILLERY_SHELL  --The default speed we use for artillery.
+local AverageTravellingVelocity = 33500/3 --AMMO_VELOCITY_HE_SHELL  --The default speed we use for common tanks.
 local DefaultAccuracy = 0.85 --It is the default accuracy of the cannon in meters.
 local InMeters = 0.3048/16 //This is constant to convert map grid unit to meters.
 local InFeet = 1/16 //Constant to get distances from map unit in feet.
@@ -58,16 +59,16 @@ function Meta:BallisticCalculation(TargetPos) //Use a vector as argument.
 		
 		if self.Accuracy==nil then self.Accuracy=DefaultAccuracy end
 		 self.Accuracy = math.Clamp( self.Accuracy, 0, 100 )
-	
+
 		local v0
-		if self.LaunchVelocity!=nil then
-		--v0 = self:GetNetworkedFloat( self.LaunchVelocity , DefaultLaunchVelocity)
-		v0 = self.LaunchVelocity
-		elseif self.TankType!= nil then
-			v0 = DefaultLaunchVelocity * self.TankType * self.TankType
-		else v0 = DefaultLaunchVelocity
+		if self.TankType != 5 then 
+		-- local v0 = self:TankGetLaunchVelocity( self.AmmoTypes[ self.AmmoIndex ].Type )
+		v0 = AverageTravellingVelocity
+		else
+		v0 = DefaultLaunchVelocity
 		end
-print(v0)		
+	
+-- print("v0: "..v0)		
 		local LaunchAngle = -self:CalculateLaunchAngle(R,v0,h)
 				
 	self.Owner:SetNetworkedFloat( "LaunchVelocity", v0 )
