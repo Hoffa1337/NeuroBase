@@ -1,0 +1,6 @@
+VertexLitGeneric
+{
+	"$basetexture"	"models\bf2\ch_pilot"
+"$bumpmap"  "models\bf2\ch_pilot_n"
+
+}

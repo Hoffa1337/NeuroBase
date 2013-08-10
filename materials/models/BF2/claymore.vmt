@@ -1,0 +1,6 @@
+VertexLitGeneric
+{
+	"$basetexture"	"models\bf2\claymore"
+"$bumpmap"  "models\bf2\claymore_n"
+
+}

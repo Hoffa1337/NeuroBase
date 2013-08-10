@@ -62,8 +62,8 @@ function Meta:BallisticCalculation(TargetPos) //Use a vector as argument.
 
 		local v0
 		if self.TankType != 5 then 
-		-- local v0 = self:TankGetLaunchVelocity( self.AmmoTypes[ self.AmmoIndex ].Type )
-		v0 = AverageTravellingVelocity
+		v0 = TANK_AMMO_SPEEDS[self.AmmoTypes[ self.AmmoIndex ].Type]
+		-- v0 = AverageTravellingVelocity
 		else
 		v0 = DefaultLaunchVelocity
 		end
