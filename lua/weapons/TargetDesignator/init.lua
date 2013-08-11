@@ -73,12 +73,13 @@ function SWEP:PrimaryAttack()
 		self.Owner:PrintMessage( HUD_PRINTCENTER, "Target acquired." )
 		self.Owner:EmitSound( "binoculars/binoculars_zoomout.wav" )
 	else
-		if IsValid(self.RedDot) then
-		self.RedDot:Remove()
+		if !IsValid(self.RedDot) then
+		-- if IsValid(self.RedDot) then
+		-- self.RedDot:Remove() //Can't fire while not using the goggles
 		self.Zoom = 90		
 		self.Owner:PrintMessage( HUD_PRINTCENTER, "Target aborted." )
-		self.Owner:EmitSound( "binoculars/binoculars_zoomin.wav" )
 		end
+		self.Owner:EmitSound( "binoculars/binoculars_zoomin.wav" )
 	self.Weapon:SetNextPrimaryFire(CurTime() + 0.1)
 	end
 end
