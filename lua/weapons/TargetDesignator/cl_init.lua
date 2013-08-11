@@ -88,7 +88,7 @@ function SWEP:DrawHUD()
 		end
 		
 		
-		if	self.Owner:GetNetworkedEntity( "AI_cannon", NULL ) !=NULL then
+		if	(self.Owner:GetNetworkedEntity( "AI_cannon", NULL ) !=NULL) or (self.Owner:GetNetworkedEntity( "AI_pac3", NULL ) !=NULL) or (self.Owner:GetNetworkedEntity( "AI_flak18", NULL )  then
 		draw.SimpleText("Ready", "ScoreboardText", w-h/16, h-h/8, green, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 		else
 		draw.SimpleText("Waiting for controls", "ScoreboardText", w-h/16, h-h/8, yellow, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)		
