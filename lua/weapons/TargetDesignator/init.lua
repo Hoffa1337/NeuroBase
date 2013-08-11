@@ -106,7 +106,9 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:Think()
-	if(self.Pointing)then
+
+	if( self.Pointing )then
+	
 		self.Owner:DrawViewModel(false)
 		local trace = self.Owner:GetEyeTrace()
 		local point = trace.HitPos
@@ -114,29 +116,21 @@ function SWEP:Think()
 		if (COLOSSAL_SANDBOX) then point = point * 6.25 end
 		
 		self.RedDot:SetPos( point )
-
-		if self.Owner:KeyDown( IN_ZOOM ) then
-			if ( self.LastAction + 0.5 <= CurTime() ) then	
-				self.LastAction = CurTime()			
-				self.Owner:EmitSound( "binoculars/binoculars_zoommax.wav" )
-				
-				if self.Zoom > 0 then
-				self.Zoom = self.Zoom - 30		
-				else
-					self.Zoom = 90		
-					-- self.Pointing = false
-					-- self.Weapon:SetNWBool("Active", self.Pointing)
-				end
-			print(self.Zoom)
+	
+		self.Owner:SetFOV( 20, 0 )	
 			
-			end
-		end
-				
+		
+			
+			
 	else
+	
 		self.Owner:DrawViewModel(true)
-		self.Zoom = 90
+		-- self.Zoom = 90
+		self.Owner:SetFOV( 90, 0 )	
+			
 	end
-	self.Owner:SetFOV( self.Zoom, 0.25 )
+	-- print(self.Zoom)
+	
 	
 	
 

@@ -13,5 +13,7 @@ game.AddParticles("particles/neuro_trails.pcf") --  rockettrail
 game.AddParticles("particles/neuro_v1.pcf") --  v1_impact
 game.AddParticles("particles/neuro_ied.pcf") --  VBIED_explosion
 game.AddParticles("particles/neuro_rocket.pcf") --  rocket_impact_dirt  rocket_impact_wall
+game.AddParticles("particles/neuro_water_impact.pcf") --  water_impact_big  
+game.AddParticles("particles/neuro_nuke.pcf") --  nuke  
 -- rocketrail/s
 print( "NeuroTec Special Effects loaded" )

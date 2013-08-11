@@ -10,7 +10,7 @@ end
 
 if ( CLIENT ) then
 
-	SWEP.DrawAmmo			= true
+	SWEP.DrawAmmo			= false
 	SWEP.DrawCrosshair		= true
 	SWEP.ViewModelFOV		= 62
 	SWEP.ViewModelFlip		= false
@@ -71,6 +71,16 @@ function SWEP:Initialize()
 
 	self:SetWeaponHoldType( self.HoldType )
 	self.LastRelease = CurTime()
+	-- if( SERVER ) then
+		
+		-- self.Hydrant = ents.Create("prop_physics") 
+		-- self.Hydrant:SetModel( "models/props/cs_office/Fire_Extinguisher.mdl" )
+		-- self.Hydrant:SetAngles( self:GetAngles() + Angle( 0,0,0 ) )
+		-- self.Hydrant:Spawn()
+		-- self.Hydrant:SetParent( self )
+		
+	
+	-- end
 	
 	if( SERVER ) then
 	
