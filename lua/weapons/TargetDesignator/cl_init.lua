@@ -2,6 +2,8 @@ include('shared.lua')
 
 local LASER = Material('cable/redlaser')
 local Scope = Material("TankBin")
+local compass = surface.GetTextureID("hud/ntec_compass") 
+local compass_letters = surface.GetTextureID("hud/ntec_compass_letters") 
 local InMeters = 0.3048/16 //This is constant to convert map grid unit to meters.
 local InFeet = 1/16 //Constant to get distances from map unit in feet.
 
@@ -44,6 +46,14 @@ function SWEP:DrawHUD()
 		surface.SetDrawColor( 255, 255, 255, 255 )
 		surface.SetMaterial( Scope )
 		surface.DrawTexturedRect( 0, -ScrW() / 4.5, ScrW(), ScrW() )
+
+		surface.SetTexture(compass)
+		surface.SetDrawColor( 0 ,255 ,0 ,200 )
+		surface.DrawPartialTexturedRect( w/2-256 , 5, 512, 32, (-LocalPlayer():GetAngles().y/360) * 1024 + 143, 0, 512, 32,1024,32 );
+		surface.SetTexture(compass_letters)
+		surface.SetDrawColor( 0 ,255 ,0 ,200 )
+		surface.DrawPartialTexturedRect( w/2-256 , 35, 512, 32, (-LocalPlayer():GetAngles().y/360) * 1024 + 143, 0, 512, 32,1024,32 );
+
 		local grey = Color(100, 100, 100, 255)
 		local green = Color(0, 100, 0, 255)
 		local yellow = Color(255, 225, 0, 255)

@@ -1,0 +1,6 @@
+"UnlitGeneric"
+{
+	"$basetexture" "hud/ntec_compass"
+	"$vertexalpha" 1
+	"$vertexcolor" 1
+}
