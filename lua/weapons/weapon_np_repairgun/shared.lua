@@ -29,14 +29,14 @@ SWEP.Author			= "Hoffa"
 SWEP.Contact		= "Hoffa1337 @ Facepunch\nSluggomc @ Steam"
 SWEP.Purpose		= ""
 SWEP.Instructions	= "Aim at broken stuff"
-SWEP.HoldType = "pistol"
+SWEP.HoldType = "crowbar"
 
 SWEP.Spawnable			= true
 SWEP.AdminSpawnable		= true
 
 SWEP.Primary.Sound			= Sound( "sounds/lockon/missilelaunch.mp3" )
 SWEP.Primary.Recoil			= 1.5
-SWEP.Primary.Delay			= 0.0
+SWEP.Primary.Delay			= 0.5
 
 SWEP.Primary.ClipSize		= 1
 SWEP.Primary.DefaultClip	= 1
@@ -48,8 +48,8 @@ SWEP.Secondary.DefaultClip	= -1
 SWEP.Secondary.Automatic	= false
 SWEP.Secondary.Ammo			= "none"
 
-SWEP.ViewModel			= "models/weapons/v_Pistol.mdl"
-SWEP.WorldModel			= "models/weapons/W_pistol.mdl"
+SWEP.ViewModel			= "models/wrepons/v_crowbar.mdl"
+SWEP.WorldModel			= "models/wrepons/w_crowbar.mdl"
 
 SWEP.Weight				= 1
 SWEP.AutoSwitchTo		= true
@@ -130,7 +130,7 @@ function SWEP:PrimaryAttack()
 	
 	self.Weapon:SetNextSecondaryFire( CurTime() + self.Primary.Delay )
 	self.Weapon:SetNextPrimaryFire( CurTime() + self.Primary.Delay )
-	-- self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
+	self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
 	
 	if ( !self:CanPrimaryAttack() ) then return end
 	

@@ -47,12 +47,15 @@ function SWEP:DrawHUD()
 		surface.SetMaterial( Scope )
 		surface.DrawTexturedRect( 0, -ScrW() / 4.5, ScrW(), ScrW() )
 
+		local yaw =(-self.Owner:GetAngles().y/360)
 		surface.SetTexture(compass)
-		surface.SetDrawColor( 0 ,255 ,0 ,200 )
-		surface.DrawPartialTexturedRect( w/2-256 , 5, 512, 32, (-LocalPlayer():GetAngles().y/360) * 1024 + 143, 0, 512, 32,1024,32 );
+		surface.SetDrawColor( 0 ,255 ,0 ,255 )
+		-- surface.DrawTexturedRectUV( w/2-256 , 5, 512, 32, (-self.Owner:GetAngles().y/360) * 1024 + 143, 0, 64, 32,1024,32 );
+		surface.DrawTexturedRectUV( w/2-256, 5, 512, 32, yaw , 0, yaw+0.4, 1 )
+		-- surface.DrawTexturedRectUV( w/2-256 , 5, 512, 32, (-self.Owner:GetAngles().y/360) * 1024 + 0*143, 0 , 1024, 0,1024,64 );
 		surface.SetTexture(compass_letters)
 		surface.SetDrawColor( 0 ,255 ,0 ,200 )
-		surface.DrawPartialTexturedRect( w/2-256 , 35, 512, 32, (-LocalPlayer():GetAngles().y/360) * 1024 + 143, 0, 512, 32,1024,32 );
+		surface.DrawTexturedRectUV( w/2-256 , 35, 512, 32, yaw, 0, yaw+0.4,1 );
 
 		local grey = Color(100, 100, 100, 255)
 		local green = Color(0, 100, 0, 255)
