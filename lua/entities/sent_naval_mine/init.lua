@@ -19,7 +19,7 @@ function ENT:Initialize()
 	
 		self.PhysObj:EnableGravity( true )
 		self.PhysObj:SetMass( 200 )
-		self.PhysObj:SetBuoyancyRatio( 0.0025 ) --Don't mess with this value or I will find you and stab you with a spork.
+		self.PhysObj:SetBuoyancyRatio( 0.125 ) --Don't mess with this value or I will find you and stab you with a spork.
 		self.PhysObj:EnableDrag( true )
 		self.PhysObj:Wake()
 		

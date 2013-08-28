@@ -3041,7 +3041,7 @@ function implode( pos, offset, radius, amplitude )
 		
 		for k,v in pairs( ents ) do
 		
-			if ( IsValid( v ) && v:GetClass() == "prop_physics" || v:IsVehicle() ) then
+			if ( IsValid( v ) &&( v:GetClass() == "prop_physics" || v:IsVehicle() ) ) then
 				
 				local vPos = v:GetPos()
 				
@@ -3052,13 +3052,15 @@ function implode( pos, offset, radius, amplitude )
 				end
 				
 				local p = v:GetPhysicsObject()
+				if( !p ) then return end
+				
 				local forceimp = amplitude / ( ( ( pos - vPos ):Length() - ( offset ) ) ^ 2 )
 				local normalized = ( pos - vPos ):GetNormalized()
 				local Towards = normalized * forceimp
 				
 				if ( !p || p == NULL || p == nil ) then return end
 				
-				p:ApplyForceCenter( normalized * forceimp )
+				v:SetVelocity( normalized * forceimp )
 				
 			end
 			
