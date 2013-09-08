@@ -1416,17 +1416,20 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		r.Radius = wep.Radius
 		
 		local tr, trace = {},{}
-			tr.start = self:GetPos() + self:GetForward() * 600 + self:GetUp() * 600
+			tr.start = self:GetPos() + self:GetForward() * 600 + self:GetUp() * 1000
 			tr.endpos = tr.start + pilot:GetAimVector() * 36000
 			tr.filter = { self, pilot }
 			tr.mask = MASK_SOLID
 		trace = util.TraceLine( tr )
 		
+		debugoverlay.Line( tr.start, trace.HitPos, 0.1, Color( 255,0,0,255 ), true  )
+		
+		
 		if( trace.Hit ) then
 			
 			local pos
 			// Auto lock-on
-			local dist = 2048
+			local dist = 1024
 			local tempd = tempd or 0
 			local pos
 		

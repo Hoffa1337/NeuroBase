@@ -17,7 +17,8 @@ function ENT:Initialize()
 	self.flip = false
 	
 	self.Owner = self:GetOwner().Owner or self // lolol
-
+	
+	self.PhysObj = self:GetPhysicsObject() 
 	if ( self.PhysObj:IsValid() ) then
 	
 		self.PhysObj:Wake()
@@ -125,20 +126,5 @@ end
 
 function ENT:OnRemove()
 
-	-- self.MissileSound:Stop()
-	
-	local explo1 = EffectData()
-	explo1:SetOrigin(self:GetPos())
-	explo1:SetScale(3.25)
-	util.Effect("Explosion", explo1)
-	
-	for i = 0, 5 do
-	
-		local explo1 = EffectData()
-		explo1:SetOrigin(self:GetPos() + Vector( math.random(-80,80), math.random(-65,75), math.random(10,100) ) )
-		explo1:SetScale(0.25)
-		util.Effect("HelicopterMegaBomb", explo1)
-		
-	end
 	
 end
