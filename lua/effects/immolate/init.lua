@@ -19,15 +19,15 @@ function EFFECT:Init( data )
 	--firecloud
 		for i=1, 4 do
 		
-			local particle = emitter:Add( "particles/flamelet"..math.random( 1, 5 ), Pos + Vector(math.random(-20,20),math.random(-20,20),math.random(-30,50)))
+			local particle = emitter:Add( "particles/flamelet"..math.random( 1, 5 ), Pos + Vector(math.random(-2,2),math.random(-2,2),math.random(-2,2)))
 				
 				if( particle ) then
 				
 					particle:SetVelocity( Vector(math.random(-30,30),math.random(-30,30),math.random(45,190)) )
-					particle:SetDieTime( math.Rand( 1.9, 2.4 ) )
+					particle:SetDieTime( math.Rand( 0.2, 0.9 ) )
 					particle:SetStartAlpha( math.random( 200, 240 ) )
-					particle:SetStartSize( 16 )
-					particle:SetEndSize( math.random( 48, 64 ) )
+					particle:SetStartSize( 0 )
+					particle:SetEndSize( math.random( 28, 94 ) )
 					particle:SetRoll( math.random( 360, 480 ) )
 					particle:SetRollDelta( math.Rand( -1, 1 ) )
 					particle:SetColor( math.random( 150, 255 ), math.random( 100, 150 ), 100 )
@@ -40,15 +40,15 @@ function EFFECT:Init( data )
 	--smoke cloud
 		for i=1, 7 do
 		
-		local particle = emitter:Add( "particles/smokey", Pos + Vector(math.random(-95,95),math.random(-95,25),math.random(5,95)))
+		local particle = emitter:Add( "particles/smokey", Pos + Vector(math.random(-5,5),math.random(-5,5),math.random(-5,5)))
 			
 			if( particle ) then
 					
 				particle:SetVelocity( Vector(math.random(-60,60),math.random(-66,70),math.random(55,200)) )
-				particle:SetDieTime( math.Rand( 5, 9 ) )
+				particle:SetDieTime( math.Rand( 2, 7 ) )
 				particle:SetStartAlpha( math.random( 35, 55 ) )
 				particle:SetEndAlpha( math.random( 0, 1 ) )
-				particle:SetStartSize( math.random( 32,54 ) )
+				particle:SetStartSize( math.random( 5,20 ) )
 				particle:SetEndSize( math.random( 60, 150 ) )
 				particle:SetRoll( math.random( 360, 480 ) )
 				particle:SetRollDelta( math.Rand( -1, 1 ) )
