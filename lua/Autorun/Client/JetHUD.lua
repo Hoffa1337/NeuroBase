@@ -1315,9 +1315,9 @@ local case_b = ( pl:GetNetworkedBool("NeuroPlanes__DrawAC130Overlay", false ) ==
 			*/
 			end
 			
-			local vr,vg,rb,va = v:GetColor()
+			local va = v:GetColor()
 			
-			if( v:IsVehicle() && va > 100 ) then
+			if( IsValid( v ) && v:IsVehicle() && va.a > 100 ) then
 			
 				render.SuppressEngineLighting(true)
 				render.SetColorModulation( .15, .15, .15 )
