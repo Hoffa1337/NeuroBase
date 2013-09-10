@@ -1371,6 +1371,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	
 	if( wep.SubType && wep.SubType == "Cluster" ) then
 		
+		print("Clusterbomb" )
 		r.ShouldCluster = true	
 	
 	end
@@ -1416,7 +1417,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		r.Radius = wep.Radius
 		
 		local tr, trace = {},{}
-			tr.start = self:GetPos() + self:GetForward() * 600 + self:GetUp() * 1000
+			tr.start = self:GetPos() + self:GetForward() * 600 + self:GetUp() * 500
 			tr.endpos = tr.start + pilot:GetAimVector() * 36000
 			tr.filter = { self, pilot }
 			tr.mask = MASK_SOLID
