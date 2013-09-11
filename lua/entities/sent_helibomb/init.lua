@@ -50,7 +50,7 @@ end
 function ENT:Think()
 
 	
-	self.SeekSound:ChangePitch( 100 )
+	-- self.SeekSound:ChangePitch( 100, 0.1 )
 	
 	self.SplodeTimer = self.SplodeTimer - 1
 	

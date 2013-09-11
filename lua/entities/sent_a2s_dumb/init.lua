@@ -15,11 +15,12 @@ function ENT:Initialize()
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )	
 	self:SetSolid( SOLID_VPHYSICS )
-	self:SetColor( 0, 0, 0, 0 )
+	-- self:SetColor( Color( 0, 0, 0, 0 ) )
 	
-	self.Owner = self:GetOwner().Owner or self // lolol
+	-- self.Owner = self:GetOwner().Owner or self // lolol
 	
 
+	self.PhysObj = self:GetPhysicsObject()
 	
 	if ( self.PhysObj:IsValid() ) then
 	
@@ -27,13 +28,13 @@ function ENT:Initialize()
 	
 	end
 	
-	/*
-	local ent = ents.Create( "rpg_missile" )
-	ent:SetPos( self:GetPos() )
-	ent:SetParent( Self )
-	ent:SetAngles( self:GetAngles() )
-	ent:Spawn()
-	ent:Activate() */
+	-- /*
+	-- local ent = ents.Create( "rpg_missile" )
+	-- ent:SetPos( self:GetPos() )
+	-- ent:SetParent( Self )
+	-- ent:SetAngles( self:GetAngles() )
+	-- ent:Spawn()
+	-- ent:Activate() */
 	self.SpawnTime = CurTime()
 	
 	util.PrecacheSound("Missile.Accelerate")

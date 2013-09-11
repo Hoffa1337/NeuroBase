@@ -16,7 +16,7 @@ function ENT:Initialize()
 	self:SetSolid( SOLID_VPHYSICS )
 	self.flip = false
 	
-	self.Owner = self:GetOwner().Owner or self // lolol
+	-- self.Owner = self:GetOwner().Owner or self // lolol
 	
 	self.PhysObj = self:GetPhysicsObject() 
 	if ( self.PhysObj:IsValid() ) then
@@ -52,9 +52,11 @@ function ENT:PhysicsCollide( data, physobj )
 	
 	if (data.Speed > 100 && data.DeltaTime > 0.2 ) then 
 	
-		util.BlastDamage( self.Owner, self.Owner, data.HitPos, 512, 150)
-		self:ExplosionImproved()
-             self:EmitSound( "explosion5.wav", 511, math.random( 70, 100 ) )
+		util.BlastDamage( self.Owner, self.Owner, data.HitPos, 512, 350)
+		-- self:ExplosionImproved()
+		
+		ParticleEffect( "HE_impact_dirt", self:GetPos(), Angle(0,0,0), nil )
+        self:EmitSound( "explosion5.wav", 511, math.random( 70, 100 ) )
 		self:Remove()
 		
 	end

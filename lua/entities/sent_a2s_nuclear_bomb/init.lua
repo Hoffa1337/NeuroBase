@@ -88,25 +88,7 @@ function ENT:PhysicsCollide( data, physobj )
 		local pp = self:GetPos()
 		
 		util.BlastDamage( p, p, v, 8000, math.random( 6000, 8000 ) )  
-									
-		for i=1,80 do
-			
-			timer.Simple( i / 10, 
-			
-								function() 	
-								
-									if( !IsValid( p ) ) then return end
-									if( !v ) then return end	
-									
-									implode( v, 8008, 8000, -6000000000000 ) // blow away errrythign
-		
-									util.BlastDamage( p.Owner, p.Owner, v, 8000, math.random( 6000, 8000 ) )  
-									
-								end	)
-								
-			timer.Simple( i / 5, function() if( pp != nil ) then util.BlastDamage( ents.GetAll()[1],ents.GetAll()[1], pp, 8000, math.random(2,3) ) end  end )
-			
-		end
+
 		
 		self:SetColor( 0,0,0,0 )
 		self:Fire("kill","",30)
@@ -114,7 +96,9 @@ function ENT:PhysicsCollide( data, physobj )
 		self:SetMoveType( MOVETYPE_NONE )
 		
 		self.Detonated = true 
-	
+		self:Remove()
+		
+		
 	end
 	
 end
