@@ -1625,9 +1625,12 @@ function Meta:Jet_DefaultUseStuff( ply, caller )
 	self.Pilot = ply
 	self.Owner = ply
 	
+
 	ply:Spectate( OBS_MODE_CHASE  )
 	ply:DrawViewModel( false )
 	ply:DrawWorldModel( false )
+	
+	ply:SetScriptedVehicle( self )
 	
 	ply.Weapons = {}
 	
@@ -1644,9 +1647,13 @@ function Meta:Jet_DefaultUseStuff( ply, caller )
 	ply:SetNetworkedEntity( "Plane", self ) 
 	self:SetNetworkedEntity("Pilot", ply )
 	
-	ply:SendLua("RunConsoleCommand([[cl_pitchdown]], [[360]])") --bypassing FVAR_SERVER_CAN_EXECUTE like a boss
-	ply:SendLua("RunConsoleCommand([[cl_pitchup]], [[360]])")
+	if( GetConVarNumber( "sv_cheats", 0 ) > 0 ) then
+	
+		ply:SendLua("RunConsoleCommand([[cl_pitchdown]], [[360]])") --bypassing FVAR_SERVER_CAN_EXECUTE like a boss
+		ply:SendLua("RunConsoleCommand([[cl_pitchup]], [[360]])")
 		
+	end
+	
 	self.NPCTarget = NULL
 	self:NPCTargetCreate()
 
@@ -1870,6 +1877,7 @@ function Meta:SpawnTrails()
 		self.Trails[i]:SetAngles( self:GetAngles() )
 		self.Trails[i]:SetParent( self )	
 		self.Trails[i]:SetColor( Color( 0,0,0,0) )
+		self.Trails[i]:SetRenderMode( RENDERMODE_TRANSALPHA )
 		self.Trails[i]:Spawn()
 		
 		local col = Color( 255,255,255,90 )

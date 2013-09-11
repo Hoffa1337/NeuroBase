@@ -66,12 +66,12 @@ function ENT:PhysicsCollide( data, physobj )
 	explo:SetStart( Vector( 0, 0, 100 ) )
 	explo:SetScale( 1.45 )
 	explo:SetNormal( data.HitNormal )
-	util.Effect("Airstrike_explosion", explo)
+	util.Effect("v1_impact", explo)
 
-	util.BlastDamage( self.Owner, self.Owner, data.HitPos, self.Radius, self.Damage )
+	util.BlastDamage( self, self.Owner, data.HitPos, self.Radius, self.Damage )
 
-	self:NeuroPlanes_BlowWelds( self:GetPos(), self.Radius )
-	self:ExplosionImproved()
+	-- self:NeuroPlanes_BlowWelds( self:GetPos(), self.Radius )
+	-- self:ExplosionImproved()
 	self:Remove()
 		
 end
