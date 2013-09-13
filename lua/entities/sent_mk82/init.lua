@@ -87,10 +87,15 @@ function ENT:DispatchCluster()
 		
 	end
 	
-	local explo = EffectData()
-	explo:SetOrigin( self:GetPos() )
-	explo:SetScale( 0.45 )
-	util.Effect( "nn_explosion", explo )
+	local fx = "VBIED_explosion"
+	if( math.random( 1,3 ) == 1 ) then
+		
+		fx = "VBIED_b_explosion"
+		
+	end
+	
+	ParticleEffect( fx, self:GetPos(), self:GetAngles(), nil )
+	
 	
 	self:Remove()
 	
