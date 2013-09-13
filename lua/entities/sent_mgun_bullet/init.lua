@@ -12,12 +12,12 @@ function ENT:Initialize()
 
 --//Need a better bullet model! Using the hl2 AR2 grenade until the new model...	
 --	self:SetModel( "models/Shells/shell_large.mdl" )
-	self:SetModel( "models/items/ar2_grenade.mdl" )
+	self:SetModel( "models/Items/AR2_Grenade.mdl" )
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )	
 	self:SetSolid( SOLID_VPHYSICS )
 	
-	self.Owner = self:GetOwner().Owner or self // lolol
+	-- self.Owner = self:GetOwner().Owner or self // lolol
 	
 	self.PhysObj = self:GetPhysicsObject()
 	
@@ -43,7 +43,7 @@ function ENT:Initialize()
 	self.SmokeTrail:SetKeyValue( "HDRColorScale", .75 )
 	self.SmokeTrail:Spawn()
 
-	self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(215,255), math.random(215,255), math.random(215,255), math.random(120,160) ), false, math.random(3,5), math.random(2,3), TrailDelay + 0.85, 1/(0+4)*0.5, "trails/smoke.vmt");  
+	self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(245,255), math.random(245,255), math.random(244,255), math.random(21,22) ), false, math.random(3,5), math.random(2,3), TrailDelay + 0.85, 1/(0+4)*0.5, "trails/smoke.vmt");  
 
 		local e = EffectData()
 		e:SetStart( self:GetPos() )
@@ -55,12 +55,12 @@ function ENT:Initialize()
 		util.Effect( "A10_muzzlesmoke", e )
 
 		local Shell = EffectData()
-		Shell:SetStart( self:GetPos() )
-		Shell:SetOrigin( self:GetPos() )
-		Shell:SetNormal( self:GetForward() * -128 )
+		Shell:SetStart( self:GetPos() + self:GetForward() * -100)
+		Shell:SetOrigin( self:GetPos() + self:GetForward() * -100)
+		Shell:SetNormal( self:GetRight() * -1 )
 		util.Effect( "RifleShellEject", Shell )  
 		
-		self:SetAngles( self:GetAngles() + Angle( math.Rand(-.15,.15 ), math.Rand(-.15,.15 ), math.Rand(-.15,.15 ) ) )
+		self:SetAngles( self:GetAngles() + Angle( math.Rand(-.05,.05 ), math.Rand(-.05,.05 ), math.Rand(-.05,.05 ) ) )
 		
 end
 
@@ -80,7 +80,7 @@ function ENT:PhysicsCollide( data, physobj )
 		impact:SetStart( data.HitNormal * 100 )
 		impact:SetScale( 1.0 )
 		impact:SetNormal(data.HitNormal)
-		util.Effect("ImpactGunship", impact)
+		util.Effect("FlareSpark", impact)
 		util.BlastDamage( self.Owner, self.Owner, data.HitPos, 400, 50 )
 		
 		self:Remove()
@@ -119,7 +119,8 @@ function ENT:PhysicsUpdate()
 		
 	end
 	
-	self.PhysObj:SetVelocity( self:GetForward() * self.Speed )
+	self:GetPhysicsObject():ApplyForceCenter( self:GetForward() * 123456790 )
+	-- self.PhysObj:SetVelocity( self:GetForward() * self.Speed )
 	
 end
 
@@ -128,11 +129,11 @@ end
 
 function ENT:OnRemove()
 	
-//Flyby sound	self:StopSound( "" )
+-- //Flyby sound	self:StopSound( "" )
 	
-	local Impact = EffectData()
-	Impact:SetOrigin( self:GetPos() )
-	Impact:SetScale( 0.01 )
-	util.Effect( "HelicopterMegaBomb", Impact )
+	-- local Impact = EffectData()
+	-- Impact:SetOrigin( self:GetPos() )
+	-- Impact:SetScale( 0.01 )
+	-- util.Effect( "HelicopterMegaBomb", Impact )
 		
 end

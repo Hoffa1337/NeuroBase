@@ -50,11 +50,16 @@ function ENT:PhysicsCollide( data, physobj )
 	
 	if (data.Speed > 150 && data.DeltaTime > 0.8 ) then 
 		
-		local explo = EffectData()
-		explo:SetOrigin(self.Entity:GetPos())
-		explo:SetScale( 1.3 )
-		util.Effect("nn_explosion", explo)
-		util.BlastDamage( self.Owner, self.Owner, data.HitPos, 2000, 1000 )
+		local fx = "VBIED_explosion"
+		if( math.random( 1,3 ) == 1 ) then
+			
+			fx = "VBIED_b_explosion"
+			
+		end
+		
+		ParticleEffect( fx, self:GetPos(), self:GetAngles(), nil )
+		
+		util.BlastDamage( self.Owner, self.Owner, data.HitPos, 1500, math.random( 3000, 5000) )
 		util.Decal("Scorch", data.HitPos + data.HitNormal * 768, data.HitPos - data.HitNormal * 768 )
 	
 		self.Entity:Remove()
