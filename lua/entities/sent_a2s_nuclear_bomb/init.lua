@@ -14,7 +14,7 @@ function ENT:Initialize()
 	self.Owner = self:GetOwner().Owner or self // lolol
 	
 	self.PhysObj = self:GetPhysicsObject()
-	
+	 
 	if ( self.PhysObj:IsValid() ) then
 	
 		self.PhysObj:Wake()
