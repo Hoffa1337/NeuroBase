@@ -632,19 +632,14 @@ function Meta:Jet_FireMultiBarrel()
 								
 							end 
 							
-		 local effectdata = EffectData()
-		effectdata:SetStart( self.Miniguns[i]:GetPos() )
-		effectdata:SetOrigin( self.Miniguns[i]:GetPos() )
-		effectdata:SetEntity( self.Miniguns[i] )
-		effectdata:SetNormal( self:GetForward() )
-		util.Effect( "A10_muzzlesmoke", effectdata )
+		-- local sm = EffectData()
+		-- sm:SetStart( self.Miniguns[i]:GetPos() )
+		-- sm:SetOrigin( self.Miniguns[i]:GetPos() )
+		-- sm:SetScale( 10.5 )
+		-- util.Effect( "A10_muzzlesmoke", sm )
+		ParticleEffect( "AA_muzzleflash", self.Miniguns[i]:GetPos() + self.Miniguns[i]:GetForward() * 55,  self:GetAngles(), self )
 		
-		local e = EffectData()
-			e:SetStart( self.Miniguns[i]:GetPos() )
-			e:SetOrigin( self.Miniguns[i]:GetPos() )
-			e:SetEntity( self.Miniguns[i] )
-			e:SetAttachment(1)
-		util.Effect( "ChopperMuzzleFlash", e )
+
 		
 		self.Miniguns[i]:FireBullets( bullet )
 		
@@ -781,33 +776,8 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		end
 		
 	end
-	
-	if ( #self.EquipmentNames > 0 && self.Pilot:KeyDown( IN_ATTACK2 ) && self.LastAttackKeyDown + 0.5 < CurTime() ) then
-		
-		local id = self.EquipmentNames[ self.FireMode ].Identity
-		local wep = self.RocketVisuals[ id ]
-		
-		if ( wep.LastAttack + wep.Cooldown <= CurTime() ) then
-		
-			self:NeuroPlanes_FireRobot( wep, id )
-			
-		else
-		
 
-			local cd = math.ceil( ( wep.LastAttack + wep.Cooldown ) - CurTime() ) 
-			
-			if ( cd > 2 ) then
-			
-				self.Pilot:PrintMessage( HUD_PRINTTALK, self.PrintName..": "..wep.PrintName.." ready in "..tostring( cd ).. " seconds." )	
-			
-			end
-			
-		end
-		
-		self.LastAttackKeyDown = CurTime()
-
-	end
-	
+	-- print( "???")
 	// Firemode 
 	if ( self.Pilot:KeyDown( IN_RELOAD ) && self.LastFireModeChange + 0.5 <= CurTime() ) then
 			
@@ -930,6 +900,44 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		end
 		end
 		
+	end
+	
+	if ( #self.EquipmentNames > 0 && self.Pilot:KeyDown( IN_ATTACK2 ) && self.LastAttackKeyDown + 0.5 < CurTime() ) then
+		
+		local id = self.EquipmentNames[ self.FireMode ].Identity
+		local wep = self.RocketVisuals[ id ]
+		
+		self.LastAttackKeyDown = CurTime()
+						
+		if( !IsValid( wep ) ) then
+				
+			self.Pilot:PrintMessage( HUD_PRINTCENTER, "NO AMMO" )
+			
+			-- print( wep )
+			
+			return 
+			
+		end
+		
+		if ( wep.LastAttack + wep.Cooldown <= CurTime() ) then
+			
+		
+			self:NeuroPlanes_FireRobot( wep, id )
+			
+			
+		else
+		
+
+			local cd = math.ceil( ( wep.LastAttack + wep.Cooldown ) - CurTime() ) 
+			
+			if ( cd > 2 ) then
+			
+				self.Pilot:PrintMessage( HUD_PRINTTALK, self.PrintName..": "..wep.PrintName.." ready in "..tostring( cd ).. " seconds." )	
+			
+			end
+			
+		end
+
 	end
 	
 end
@@ -1187,10 +1195,22 @@ function Meta:NeuroPlanes_CycleThroughHeliKeyBinds()
 	
 		local id = self.EquipmentNames[ self.FireMode ].Identity
 		local wep = self.RocketVisuals[ id ]
+			
+		self.LastAttackKeyDown = CurTime()
+						
+		if( !IsValid( wep ) ) then
+				
+			self.Pilot:PrintMessage( HUD_PRINTCENTER, "NO AMMO" )
 		
+			return 
+			
+		end
+			
 		if ( wep.LastAttack + wep.Cooldown <= CurTime() ) then
 		
+	
 			self:NeuroPlanes_FireRobot( wep, id )
+		
 			
 		else
 
@@ -1203,8 +1223,6 @@ function Meta:NeuroPlanes_CycleThroughHeliKeyBinds()
 			end
 			
 		end
-		
-		self.LastAttackKeyDown = CurTime()
 
 	end
 	
@@ -1398,12 +1416,12 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	r:Fire( "Kill", "", 40 )
 	r:SetAngles( wep:GetAngles() )
 	r.Owner = pilot
-	
+	r:GetPhysicsObject():SetVelocity( self:GetVelocity() )
 	--print( wep.SubType )
 	
 	if( wep.SubType && wep.SubType == "Cluster" ) then
 		
-		print("Clusterbomb" )
+		-- print("Clusterbomb" )
 		r.ShouldCluster = true	
 	
 	end
@@ -1522,6 +1540,9 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		
 	wep.LastAttack = CurTime()
 	
+	-- wep:Remove()
+	self:CycleThroughWeaponsList()
+	
 end
 
 function Meta:NeuroPlanes_MissileStorm( wep )
@@ -1597,7 +1618,9 @@ end
 
 
 function Meta:CycleThroughWeaponsList()
-	
+		
+		
+		-- print( "walla" )
 	self.LastFireModeChange = CurTime()
 	self.FireMode = self:IncrementFireVar( self.FireMode, self.NumRockets, 1 )
 	
@@ -1644,7 +1667,7 @@ function Meta:CycleThroughWeaponsList()
 		self.Pilot:PrintMessage( HUD_PRINTCENTER, ""..wep.Name )
 		self:SetNetworkedString("NeuroPlanes_ActiveWeapon", wep.Name)
 		self:SetNetworkedString("NeuroPlanes_ActiveWeaponType", wepData.Type)
-		
+
 	end
 	
 end
@@ -1777,7 +1800,7 @@ function Meta:EjectPilot()
 	self.Pilot:UnSpectate()
 	self.Pilot:DrawViewModel( true )
 	self.Pilot:DrawWorldModel( true )
-	self.Pilot:Spawn()
+	-- self.Pilot:Spawn()
 	self.Pilot:SetNetworkedBool( "InFlight", false )
 	self.Pilot:SetNetworkedBool( "DrawDesignator", false )
 	self.Pilot:SetNetworkedEntity( "Plane", NULL ) 
@@ -1786,7 +1809,7 @@ function Meta:EjectPilot()
 	self.Pilot:SetPos( self:GetPos() + self:GetUp() * 150 )
 	self.Pilot:SetAngles( Angle( 0, self:GetAngles().y,0 ) )
 	self.Owner = NULL
-	-- self.Pilot:SetScriptedVehicle( NULL ) ---------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	self.Pilot:SetScriptedVehicle( NULL ) ---------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 		
 	if( type(self.Pilot.Weapons) == "table" ) then
 		

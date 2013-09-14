@@ -67,7 +67,10 @@ function ENT:PhysicsCollide( data, physobj )
 	explo:SetScale( 1.45 )
 	explo:SetNormal( data.HitNormal )
 	util.Effect("v1_impact", explo)
-
+	
+	if( !self.Radius ) then self.Radius = 512 end
+	if( !self.Damage ) then self.Damage = 2048 end
+	
 	util.BlastDamage( self, self.Owner, data.HitPos, self.Radius, self.Damage )
 
 	-- self:NeuroPlanes_BlowWelds( self:GetPos(), self.Radius )
