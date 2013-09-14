@@ -957,6 +957,8 @@ function Meta:NeuroTec_Explosion( pos, radius, dmin, dmax, effect )
 	pe:Fire( "Explode", "", 0 );
 	pe:Fire( "Kill", "", 0.5 );
 	
+	if( !IsValid( self.Owner ) ) then self.Owner = self end
+	
 	util.BlastDamage( self, self.Owner, pos, radius, math.random( dmin, dmax ) )
 	
 	-- util.Decal("Scorch", data.HitPos + data.HitNormal * 16, data.HitPos - data.HitNormal * 16 )

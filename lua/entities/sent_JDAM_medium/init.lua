@@ -47,12 +47,8 @@ end
 
 function ENT:PhysicsCollide( data, physobj )
 		
-	if (  self:GetOwner().Owner && IsValid( self:GetOwner().Owner ) ) then
-		
-		self.Owner = self:GetOwner().Owner
+	if (  !IsValid( self.Owner ) ) then
 	
-	else
-		
 		self.Owner = self
 	
 	end
