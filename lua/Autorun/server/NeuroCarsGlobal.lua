@@ -934,6 +934,36 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 	
 end
 
+
+function Meta:NeuroTec_Explosion( pos, radius, dmin, dmax, effect )
+	
+	if( self:WaterLevel() > 0 ) then
+
+		ParticleEffect( "water_impact_big", self:GetPos(), Angle(0,0,0), nil )
+	
+	else
+		
+		ParticleEffect( effect, pos, self:GetAngles(), nil )
+	
+	end
+	
+	local pe = ents.Create( "env_physexplosion" );
+	pe:SetPos( self:GetPos() );
+	pe:SetKeyValue( "Magnitude", dmax * 10 );
+	pe:SetKeyValue( "radius", radius * 1.2 );
+	pe:SetKeyValue( "spawnflags", 19 );
+	pe:Spawn();
+	pe:Activate();
+	pe:Fire( "Explode", "", 0 );
+	pe:Fire( "Kill", "", 0.5 );
+	
+	util.BlastDamage( self, self:GetOwner(), pos, radius, math.random( dmin, dmax ) )
+	
+	util.Decal("Scorch", data.HitPos + data.HitNormal * 16, data.HitPos - data.HitNormal * 16 )
+	self:Remove()
+		
+end 
+
 function Meta:NeuroPlanes_EjectPlayer( ply )
 	
 	ply:ExitVehicle()
