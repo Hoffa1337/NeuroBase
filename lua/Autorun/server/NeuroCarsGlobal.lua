@@ -939,11 +939,11 @@ function Meta:NeuroTec_Explosion( pos, radius, dmin, dmax, effect )
 	
 	if( self:WaterLevel() > 0 ) then
 
-		ParticleEffect( "water_impact_big", self:GetPos(), Angle(0,0,0), nil )
+		ParticleEffect( "water_impact_big", pos, Angle(0,0,0), nil )
 	
 	else
 		
-		ParticleEffect( effect, pos, self:GetAngles(), nil )
+		ParticleEffect( effect, pos, Angle( 0,0,0 ), nil )
 	
 	end
 	
@@ -957,9 +957,9 @@ function Meta:NeuroTec_Explosion( pos, radius, dmin, dmax, effect )
 	pe:Fire( "Explode", "", 0 );
 	pe:Fire( "Kill", "", 0.5 );
 	
-	util.BlastDamage( self, self:GetOwner(), pos, radius, math.random( dmin, dmax ) )
+	util.BlastDamage( self, self.Owner, pos, radius, math.random( dmin, dmax ) )
 	
-	util.Decal("Scorch", data.HitPos + data.HitNormal * 16, data.HitPos - data.HitNormal * 16 )
+	-- util.Decal("Scorch", data.HitPos + data.HitNormal * 16, data.HitPos - data.HitNormal * 16 )
 	self:Remove()
 		
 end 
