@@ -637,7 +637,7 @@ function Meta:Jet_FireMultiBarrel()
 		-- sm:SetOrigin( self.Miniguns[i]:GetPos() )
 		-- sm:SetScale( 10.5 )
 		-- util.Effect( "A10_muzzlesmoke", sm )
-		ParticleEffect( "AA_muzzleflash", self.Miniguns[i]:GetPos() + self.Miniguns[i]:GetForward() * 55,  self:GetAngles(), self )
+		ParticleEffect( "AA_muzzleflash", self.Miniguns[i]:GetPos() + self.Miniguns[i]:GetForward() * 105,  self:GetAngles(), self )
 		
 
 		
@@ -1541,7 +1541,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	wep.LastAttack = CurTime()
 	
 	-- wep:Remove()
-	self:CycleThroughWeaponsList()
+	-- self:CycleThroughWeaponsList()
 	
 end
 
