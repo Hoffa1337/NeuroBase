@@ -65,15 +65,8 @@ function ENT:PhysicsCollide( data, physobj )
 	
 	if ( data.Speed > 50 && data.DeltaTime > 0.2 ) then 
 		
-		local explo = EffectData()
-		explo:SetOrigin(self:GetPos())
-		explo:SetStart( data.HitNormal * 100 )
-		explo:SetScale( 1.20 )
-		explo:SetNormal(data.HitNormal)
-		util.Effect("Airstrike_explosion", explo)
-		util.BlastDamage( self.Owner, self.Owner, data.HitPos, self.BlastRadius, 950)
-		self:NeuroPlanes_BlowWelds( self:GetPos(), 600 )
-		
+		self:NeuroTec_Explosion( data.HitPos, 512, 1500, 2500, "HE_impact_dirt" )
+	
 		self:Remove()
 		 
 	end

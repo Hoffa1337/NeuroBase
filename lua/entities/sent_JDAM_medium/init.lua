@@ -67,7 +67,7 @@ function ENT:PhysicsCollide( data, physobj )
 		ParticleEffect( fx, self:GetPos(), self:GetAngles(), nil )
 		
 		
-		util.BlastDamage( self.Owner, self.Owner, data.HitPos, 1024, math.random( 1500,2500 ) )
+		util.BlastDamage( self.Owner, self.Owner, data.HitPos, 1024, math.random( 1800,4500 ) )
 		-- self:NeuroPlanes_BlowWelds( self:GetPos(), 1000 )
 		util.Decal("Scorch", data.HitPos + data.HitNormal * 256, data.HitPos - data.HitNormal * 256 )
 	

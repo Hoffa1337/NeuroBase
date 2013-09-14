@@ -87,16 +87,20 @@ function ENT:PhysicsCollide( data, physobj )
 				end
 				
 				timer.Simple( i / 30, function() 
-					
-						local explo = EffectData()
-						explo:SetOrigin( trace.HitPos )
-						explo:SetScale( 1.0 + math.Rand( -.2,.2) )
-						util.Effect("Napalm_Bomb", explo)
 						
-						util.BlastDamage( self.Owner, self.Owner, trace.HitPos, 3048, 25 ) 
+						if( IsValid( self ) ) then
 						
-						util.Decal("Scorch", trace.HitPos + trace.HitNormal * 512, trace.HitPos - trace.HitNormal * 512 )
-				
+							local explo = EffectData()
+							explo:SetOrigin( trace.HitPos )
+							explo:SetScale( 1.0 + math.Rand( -.2,.2) )
+							util.Effect("Napalm_Bomb", explo)
+							
+							util.BlastDamage( self, self.Owner, trace.HitPos, 3048, 55 ) 
+							
+							util.Decal("Scorch", trace.HitPos + trace.HitNormal * 512, trace.HitPos - trace.HitNormal * 512 )
+							
+						end
+						
 					end )
 				
 			end
@@ -104,7 +108,8 @@ function ENT:PhysicsCollide( data, physobj )
 		end
 		
 		self:SetMoveType( MOVETYPE_NONE )
-		self:SetColor( 0,0,0,0 )
+		self:SetColor( Color( 0,0,0,0 ) )
+		self:SetRenderMode( RENDERMODE_TRANSALPHA )
 		self:Fire("kill","",3)
 		self.Detonated = true
 		
