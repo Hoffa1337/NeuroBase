@@ -80,7 +80,7 @@ end
 
 function ENT:PhysicsUpdate()
 
-	if( self:WaterLevel() > 1 ) then
+	if( self:WaterLevel() > 0 ) then
 		
 		self:NeuroPlanes_SurfaceExplosion()
 		
