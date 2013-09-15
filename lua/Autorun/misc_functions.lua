@@ -5,7 +5,7 @@ function DrawHUDEllipse(center,scale,color)
 //
 /****************************************************************************/
 /* Draw an ellipse whatever the size of the HUD							 	*/
-/* center: a vector with 0 on z axis (ex: Vecctor( ScrW()/2,ScrH()/2, 0 )	*/
+/* center: a vector with 0 on z axis (ex: Vector( ScrW()/2,ScrH()/2, 0 )	*/
 /* scale : same as center. You can get a circle if x and y axis are equal	*/
 /* color : use Color(red,green,blue,alpha) values between 0-255.			*/
 /****************************************************************************/
@@ -23,4 +23,12 @@ function DrawHUDLine(startpos,endpos,color)
 	surface.SetDrawColor( color )
 	surface.DrawLine( startpos.x, startpos.y, endpos.x, endpos.y  )
 
+end
+function DrawHUDRect(startpos,width,height,color)
+	surface.SetDrawColor( color )
+	surface.DrawRect( startpos.x, startpos.y, width, height )
+end
+function DrawHUDOutlineRect(startpos,width,height,color)
+	surface.SetDrawColor( color )
+	surface.DrawOutlinedRect( startpos.x, startpos.y, width, height )
 end
