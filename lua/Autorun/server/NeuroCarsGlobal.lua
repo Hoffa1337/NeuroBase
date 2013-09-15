@@ -1265,16 +1265,22 @@ end
 
 function Meta:NeuroPlanes_SurfaceExplosion()
 
-	for i = 1, 25 do
-	
+
+	if( self:WaterLevel() > 0 ) then
+		
 		local explo = EffectData()
-		explo:SetOrigin( self:GetPos() + Vector( math.random(-128, 128 ), math.random( -128,128 ), 0 ) )
-		explo:SetScale( 200 )
-		explo:SetMagnitude( 10 )
+		explo:SetOrigin( self:GetPos() )
+		explo:SetScale( 1 )
+		explo:SetMagnitude( 1 )
 		explo:SetNormal( Vector( 0,0,1 ) )
 		util.Effect( "WaterSurfaceExplosion", explo )
-		
+
+		ParticleEffect( "water_impact_big", self:GetPos(), Angle(0,0,0), nil )
+	
 	end
+	
+	self:Remove()
+		
 
 end
 
@@ -1960,13 +1966,13 @@ function Meta:RocketBarrage( wep )
 	
 	end
 	
-	local r = ents.Create( wep.Class )
+	local r = ents.Create( "sent_a2s_dumb" ) -- wep.Class // hackfix 
 	r:SetPos( wep:GetPos() + VectorRand() * 16 )
 	r:SetModel(  "models/hawx/weapons/zuni mk16.mdl" )
 	r:SetAngles( wep:GetAngles() + Angle( math.Rand(-.4,.4),math.Rand(-.4,.4),math.Rand(-.4,.4) ) )
 	r:SetPhysicsAttacker( self.Pilot )
 	r:Spawn()
-	r:Fire("Kill","",25)
+	r:Fire("Kill","",15)
 	r:SetOwner( self )
 	r.Owner = self.Pilot
 	
@@ -1978,16 +1984,14 @@ function Meta:RocketBarrage( wep )
 	
 	r:EmitSound( "LockOn/MissileLaunch.mp3", 511, 140 )
 	
-	for i=1,5 do
-		
-		local sm = EffectData()
-		sm:SetStart( r:GetPos() + Vector( math.random(-16,16),math.random(-16,16),math.random(-16,16) ) )
-		sm:SetOrigin( r:GetPos() )
-		sm:SetScale(2.5)
-		util.Effect( "A10_muzzlesmoke", sm )
+	local sm = EffectData()
+	sm:SetStart( r:GetPos() )
+	sm:SetOrigin( r:GetPos() )
+	sm:SetScale(5.5)
+	util.Effect( "A10_muzzlesmoke", sm )
 	
-	end
-	
+	ParticleEffect( "apc_muzzleflash", r:GetPos(), r:GetAngles(), r )
+				
 end
 
 function Meta:ClearTarget()
