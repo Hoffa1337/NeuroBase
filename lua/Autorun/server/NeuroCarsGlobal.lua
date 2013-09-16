@@ -124,12 +124,7 @@ hook.Add("Think","NeuroPlanes____CorrectHealthValues",FixHealth)
 
 hook.Add("PlayerSpawn", "FixColor", function( ply )
 	
-	local r,g,b,a = ply:GetColor()
-	if( a == 0 ) then
-	
-		ply:SetColor( Color( r,g,b,255 ) )
-		
-	end
+	ply:SetColor( Color( 255,255,255,255 ) )
 	
 end ) 
 
@@ -213,12 +208,7 @@ end )
 
 hook.Add("PlayerLeaveVehicle","NeuroPlanes_OnLeftVehicle", function( player, vehicle ) 
 	
-	-- if( vehicle.IsNeuroGroundVehicle ) then
-		
-		-- player:Unspectate()
-	
-	
-	-- end
+	player:SetColor( Color( 255,255,255, 255 ) )
 	
 	if ( vehicle.isChopperGunnerSeat ) then
 	
@@ -247,7 +237,7 @@ hook.Add("PlayerLeaveVehicle","NeuroPlanes_OnLeftVehicle", function( player, veh
 	
 	if ( vehicle.IsAC130GunnerSeat ) then
 		
-		player:SetNetworkedBool( "NeuroPlanes__DrawAC130Overlay", false )
+		-- player:SetNetworkedBool( "NeuroPlanes__DrawAC130Overlay", false )
 		player:Spawn()
 		player:SetPos( vehicle:GetParent():LocalToWorld( Vector( 60, 0, 53 ) )  )
 		player:SetFOV( player.OriginalFOV, 0 )
@@ -1057,6 +1047,7 @@ function Meta:SpawnPassengerSeat( pos, ang )
 	self.PassengerSeat:SetAngles( self:GetAngles() + ang )
 	self.PassengerSeat:SetParent( self )
 	self.PassengerSeat:SetColor( Color( 0,0,0,0 ) )
+	self.PassengerSeat:SetRenderMode( RENDERMODE_TRANSALPHA )
 	self.PassengerSeat:Spawn()
 	self.PassengerSeat.IsChopperGunnerSeat = true
 	self.PassengerSeat.IsHelicopterCoPilotSeat = true
@@ -2095,6 +2086,7 @@ function Meta:AddAdminEquipment()
 			self.RocketVisuals[i]:Spawn()
 			self.RocketVisuals[i].LastAttack = CurTime()
 			self.RocketVisuals[i]:SetColor( Color( 0,0,0,0 ) )
+			self.RocketVisuals[i]:SetRenderMode( RENDERMODE_TRANSALPHA )
 			
 			if ( v.Damage && v.Radius ) then
 				
