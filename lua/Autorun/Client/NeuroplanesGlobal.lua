@@ -170,6 +170,7 @@ function JetFighter.CustomWeaponHUD()
 		for i=1,5 do
 		surface.DrawRect( bx-16-i*4 , by+i*32 , 32+i*8, 1 )
 		end
+		JetFighter.BombsightHUD()
 	end
 	
 	//Laser guided Missile	
@@ -234,6 +235,7 @@ function JetFighter.CustomWeaponHUD()
 
 	//Torpedo
 	if( wepType == "Torpedo" ) then
+		JetFighter.BombsightHUD()
 	end
 
 	//Dumb rocket
@@ -241,6 +243,10 @@ function JetFighter.CustomWeaponHUD()
 		surface.DrawCircle( x, y, 16, Color( 0, 255, 0, 200) )				
 	end
 	
+end
+
+function JetFighter.BombsightHUD()
+
 end
 
 if( table.HasValue( hook.GetTable(), "Neuroplanes_Weapons_HeadsUpDisplay" ) ) then
