@@ -1079,17 +1079,12 @@ end
 
 function Meta:NeuroPlanes_EjectionSeat()
 
-	self.Destroyed = true
+	-- self.Destroyed = true
 	self.Burning = true
 	self.HealthVal = 0
 	self:NextThink( CurTime() )
 	
-	local f1 = EffectData()
-	f1:SetOrigin(self:GetPos())
-	util.Effect("immolate",f1)
-	local f2 = EffectData()
-	f2:SetOrigin(self:GetPos())
-	util.Effect("Explosion",f2)
+
 	
 	local ejectionseat = ents.Create( "prop_vehicle_prisoner_pod" )
 	ejectionseat:SetPos( self:GetPos() + self:GetUp() * 128 )
@@ -1149,9 +1144,17 @@ function Meta:NeuroPlanes_EjectionSeat()
 	
 
 
-
-	
 	local pilot = self.Pilot
+	
+	local f1 = EffectData()
+	f1:SetOrigin(pilot:GetPos())
+	util.Effect("immolate",f1)
+	local f2 = EffectData()
+	
+	f2:SetOrigin(pilot:GetPos())
+	util.Effect("Explosion",f2)
+	
+
 	self:NeuroJets_EjectPilot()
 	timer.Simple(0.2, function() pilot:EnterVehicle( ejectionseat ) end )
 	
