@@ -1832,12 +1832,13 @@ function Meta:EjectPilot()
 	self.Pilot:SetNetworkedEntity( "Plane", NULL ) 
 	self:SetNetworkedEntity("Pilot", NULL )
 	self.Pilot:SetNetworkedBool( "isGunner", false )
-	self.Pilot:SetPos( self:GetPos() + self:GetUp() * 150 )
+	self.Pilot:Spawn()
+	self.Pilot:SetPos( self:GetPos() + self:GetUp() * 190 )
 	self.Pilot:SetAngles( Angle( 0, self:GetAngles().y,0 ) )
 	self.Owner = NULL
 	self.Pilot:SetScriptedVehicle( NULL ) ---------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	self.Pilot:SetColor( Color( 255,255,255,255 ) )
-	self.Pilot:Spawn()
+	
 	self.Pilot:SetHealth( 100 )
 	self:SetNetworkedBool( "NA_Started",false )
 		
