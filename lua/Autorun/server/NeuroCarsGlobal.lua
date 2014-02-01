@@ -790,7 +790,7 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		if( self.ShootingLoop != nil ) then
 		
 			
-			self.ShootingLoop:FadeOut( 1 )
+			self.ShootingLoop:Stop( )
 		
 		end
 	
