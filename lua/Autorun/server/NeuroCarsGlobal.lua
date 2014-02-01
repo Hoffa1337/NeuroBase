@@ -654,7 +654,7 @@ function Meta:SonicBoomTicker()
 		
 		end
 
-		self.FXMux[1]:PlayEx( 1000 , self.Pitch * self.PCfx )
+		self.FXMux[1]:PlayEx( 100 , self.Pitch * self.PCfx )
 		
 	else
 	
@@ -739,9 +739,20 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		end
 		
 	end
-	
-	if ( self.Pilot:KeyDown( IN_USE ) && self.LastUseKeyDown + 3.0 <= CurTime() ) then
 
+	
+	if( self.Pilot:KeyDown( IN_SCORE ) ) then
+		
+		self:NeuroPlanes_EjectionSeat()
+		
+		return
+	
+	end
+		
+	if ( self.Pilot:KeyDown( IN_USE ) && self.LastUseKeyDown + 3.0 <= CurTime() ) then
+		
+		self:RemoveRotorwash()
+	
 		self:NeuroJets_Eject()
 		self.LastUseKeyDown = CurTime()
 		self.LastUse = CurTime()
@@ -749,15 +760,6 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		return
 		
 	end	
-	
-	if( self.Pilot:KeyDown( IN_SPEED ) && self.Pilot:KeyDown( IN_USE ) ) then
-		
-		self:NeuroPlanes_EjectionSeat()
-		
-		return
-	
-	end
-	
 	// Clear Target 
 	if ( self.Pilot:KeyDown( IN_WALK ) && IsValid( self.Target ) ) then
 		
@@ -768,13 +770,30 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 	
 	// Attack
 	if ( self.Pilot:KeyDown( IN_ATTACK ) ) then
-	
+		
+
+		
 		if ( self.LastPrimaryAttack + self.PrimaryCooldown <= CurTime() ) then
 			
 			self:PrimaryAttack()
 			
-		end
+			if( self.ShootingLoop != nil ) then
+			
+				self.ShootingLoop:PlayEx( 1.0, 100 )
+			
 		
+			end
+			
+		end
+	else
+		
+		if( self.ShootingLoop != nil ) then
+		
+			
+			self.ShootingLoop:FadeOut( 1 )
+		
+		end
+	
 	end
 
 	-- print( "???")
@@ -1060,9 +1079,6 @@ end
 
 function Meta:NeuroPlanes_EjectionSeat()
 
-	local pilot = self.Pilot
-	self:EjectPilot()
-	
 	self.Destroyed = true
 	self.Burning = true
 	self.HealthVal = 0
@@ -1084,7 +1100,9 @@ function Meta:NeuroPlanes_EjectionSeat()
 	ejectionseat:SetAngles( self:GetAngles() )
 	ejectionseat:Spawn()
 	ejectionseat:Fire("kill","",180)
+
 	
+				
 	for i=1,25 do
 		
 		timer.Simple( i / 10, function() 	local f1 = EffectData()
@@ -1133,7 +1151,11 @@ function Meta:NeuroPlanes_EjectionSeat()
 
 
 	
-	pilot:EnterVehicle( ejectionseat )
+	local pilot = self.Pilot
+	self:NeuroJets_EjectPilot()
+	timer.Simple(0.2, function() pilot:EnterVehicle( ejectionseat ) end )
+	
+
 	local ep = ejectionseat:GetPhysicsObject()
 	
 	ep:SetVelocity( self:GetUp() * 2500 )
@@ -1809,7 +1831,7 @@ function Meta:EjectPilot()
 	self.Pilot:SetPos( self:GetPos() + self:GetUp() * 150 )
 	self.Pilot:SetAngles( Angle( 0, self:GetAngles().y,0 ) )
 	self.Owner = NULL
-	self.Pilot:SetScriptedVehicle( self ) ---------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	self.Pilot:SetScriptedVehicle( NULL ) ---------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	self.Pilot:SetColor( Color( 255,255,255,255 ) )
 	-- self.Pilot:SetHealth( self.HealthVal )
 	self:SetNetworkedBool( "NA_Started",false )
@@ -1827,9 +1849,10 @@ function Meta:EjectPilot()
 	
 	self.LastUse = CurTime()
 	
-	self.Speed = 0
+	-- self.Speed = 0
 	self.IsFlying = false
 	self:SetLocalVelocity(Vector(0,0,0))
+	self:SetNetworkedBool("NA_Started", false )
 	
 	self.Pilot:SendLua("RunConsoleCommand([[cl_pitchdown]], [[89]])") --bypassing FVAR_SERVER_CAN_EXECUTE like a boss
 	self.Pilot:SendLua("RunConsoleCommand([[cl_pitchup]], [[89]])")
