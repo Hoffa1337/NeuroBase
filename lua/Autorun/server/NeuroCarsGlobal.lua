@@ -1823,7 +1823,7 @@ function Meta:EjectPilot()
 		
 	end
 	
-	print( "whyy" )
+	-- print( "whyy" )
 	self.Pilot:UnSpectate()
 	self.Pilot:DrawViewModel( true )
 	self.Pilot:DrawWorldModel( true )
@@ -1837,7 +1837,7 @@ function Meta:EjectPilot()
 	self.Owner = NULL
 	self.Pilot:SetScriptedVehicle( NULL ) ---------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	self.Pilot:SetColor( Color( 255,255,255,255 ) )
-	-- self.Pilot:Spawn()
+	self.Pilot:Spawn()
 	self.Pilot:SetHealth( 100 )
 	self:SetNetworkedBool( "NA_Started",false )
 		
