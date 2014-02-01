@@ -627,7 +627,7 @@ function Meta:Jet_FireMultiBarrel()
 		-- sm:SetOrigin( self.Miniguns[i]:GetPos() )
 		-- sm:SetScale( 10.5 )
 		-- util.Effect( "A10_muzzlesmoke", sm )
-		ParticleEffect( "AA_muzzleflash", self.Miniguns[i]:GetPos() + self.Miniguns[i]:GetForward() * 105,  self:GetAngles(), self )
+		ParticleEffect( "MG_muzzleflash", self.Miniguns[i]:GetPos() + self.Miniguns[i]:GetForward() * 105,  self:GetAngles(), self )
 		
 
 		
@@ -2442,10 +2442,11 @@ end
 /*********************************************************************/
 function Meta:DeathFX()
 	
+
 	for i=0,4 do
 		
 		local explo = EffectData()
-		explo:SetOrigin(self:GetPos())
+		explo:SetOrigin(self:GetPos() + Vector( math.random(-128,128),math.random(-128,128),math.random(-128,128) ) )
 		util.Effect("Explosion", explo)
 
 	end
@@ -2468,26 +2469,12 @@ function Meta:DeathFX()
 	
 	end
 	
-	local f1 = EffectData()
-	f1:SetOrigin(self:GetPos())
-	util.Effect("immolate",f1)
-
-	for i=1,10 do
-	
-		local fx=EffectData()
-		fx:SetOrigin(self:GetPos()+Vector(math.random(-256,256),math.random(-256,256),math.random(-256,256)))
-		fx:SetScale( i / 5 )
-		util.Effect("AC130_Napalm",fx)
-		
-	end
-	
-	local fx1=EffectData()
-	fx1:SetOrigin(self:GetPos())
-	util.Effect("ShockWave2000",fx1)
 
 	self:EmitSound("npc/combine_gunship/gunship_explode2.wav",511, 170 )
 	
-	util.BlastDamage( self, self, self:GetPos(), 1628, 100 )
+	ParticleEffect( "Jet_EX_smoke", self:GetPos() + self:GetUp() * 1,self:GetAngles(), nil )
+		
+	util.BlastDamage( self, self, self:GetPos(), 1628, 500 )
 	
 	if ( IsValid( self.NPCTarget ) ) then
 		
@@ -2496,8 +2483,9 @@ function Meta:DeathFX()
 		
 	end
 	
-	self:Remove()
+	-- self:Fire("kill","",1)
 	
+	self:Remove()
 	return
 	
 end
