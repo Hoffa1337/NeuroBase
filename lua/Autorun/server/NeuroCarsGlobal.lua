@@ -740,6 +740,16 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		
 	end
 	
+	if ( self.Pilot:KeyDown( IN_USE ) && self.LastUseKeyDown + 3.0 <= CurTime() ) then
+
+		self:NeuroJets_Eject()
+		self.LastUseKeyDown = CurTime()
+		self.LastUse = CurTime()
+		
+		return
+		
+	end	
+	
 	if( self.Pilot:KeyDown( IN_SPEED ) && self.Pilot:KeyDown( IN_USE ) ) then
 		
 		self:NeuroPlanes_EjectionSeat()
@@ -808,13 +818,7 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		end
 	end
 	
-	if ( self.Pilot:KeyDown( IN_USE ) && self.LastUseKeyDown + 1.0 <= CurTime() ) then
 
-		self:EjectPilot()
-		self.LastUseKeyDown = CurTime()
-		self.LastUse = CurTime()
-		
-	end	
 	
 	if( !IsValid( self.Pilot ) ) then
 		
@@ -1797,7 +1801,6 @@ function Meta:EjectPilot()
 	self.Pilot:UnSpectate()
 	self.Pilot:DrawViewModel( true )
 	self.Pilot:DrawWorldModel( true )
-	-- self.Pilot:Spawn()
 	self.Pilot:SetNetworkedBool( "InFlight", false )
 	self.Pilot:SetNetworkedBool( "DrawDesignator", false )
 	self.Pilot:SetNetworkedEntity( "Plane", NULL ) 
@@ -1806,7 +1809,10 @@ function Meta:EjectPilot()
 	self.Pilot:SetPos( self:GetPos() + self:GetUp() * 150 )
 	self.Pilot:SetAngles( Angle( 0, self:GetAngles().y,0 ) )
 	self.Owner = NULL
-	self.Pilot:SetScriptedVehicle( NULL ) ---------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	self.Pilot:SetScriptedVehicle( self ) ---------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	self.Pilot:SetColor( Color( 255,255,255,255 ) )
+	-- self.Pilot:SetHealth( self.HealthVal )
+	self:SetNetworkedBool( "NA_Started",false )
 		
 	if( type(self.Pilot.Weapons) == "table" ) then
 		

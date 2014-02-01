@@ -5,7 +5,7 @@
  
 function ENT:Initialize()
 	pos = self:GetPos()
-	self.emitter = ParticleEmitter( pos )
+	self.emitter = ParticleEmitter( pos, false )
  end
  
  function ENT:Think()
