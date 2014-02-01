@@ -9,7 +9,7 @@ local matFire			= Material( "effects/fire_cloud1" )
 function ENT:Initialize()
 
 	local pos = self:GetPos() + self:GetForward() * -55
-	self.Emitter = ParticleEmitter( pos )
+	self.Emitter = ParticleEmitter( pos, false )
 	self.Seed = math.Rand( 0, 10000 )
 
 end
