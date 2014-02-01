@@ -1155,8 +1155,8 @@ function Meta:NeuroPlanes_EjectionSeat()
 	util.Effect("Explosion",f2)
 	
 
-	self:NeuroJets_EjectPilot()
-	timer.Simple(0.2, function() pilot:EnterVehicle( ejectionseat ) end )
+	self:NeuroJets_Eject()
+	pilot:EnterVehicle( ejectionseat )
 	
 
 	local ep = ejectionseat:GetPhysicsObject()
@@ -1275,7 +1275,7 @@ function Meta:NeuroPlanes_CycleThroughHeliKeyBinds()
 	
 	if ( self.Pilot:KeyDown( IN_USE ) && self.LastUseKeyDown + 1.0 <= CurTime() ) then
 
-		self:EjectPilot()
+		self:NeuroJets_Eject()
 		self.LastUseKeyDown = CurTime()
 		
 	end	
@@ -1823,6 +1823,7 @@ function Meta:EjectPilot()
 		
 	end
 	
+	print( "whyy" )
 	self.Pilot:UnSpectate()
 	self.Pilot:DrawViewModel( true )
 	self.Pilot:DrawWorldModel( true )
@@ -1836,7 +1837,8 @@ function Meta:EjectPilot()
 	self.Owner = NULL
 	self.Pilot:SetScriptedVehicle( NULL ) ---------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	self.Pilot:SetColor( Color( 255,255,255,255 ) )
-	-- self.Pilot:SetHealth( self.HealthVal )
+	-- self.Pilot:Spawn()
+	self.Pilot:SetHealth( 100 )
 	self:SetNetworkedBool( "NA_Started",false )
 		
 	if( type(self.Pilot.Weapons) == "table" ) then
@@ -2184,7 +2186,7 @@ function Meta:UpdateRadar()
 	// Ejection Situations.
 	if ( self:WaterLevel() > 1 ) then
 	
-		self:EjectPilot()
+		self:NeuroJets_Eject()
 		
 	end
 		
