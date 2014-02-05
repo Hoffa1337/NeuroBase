@@ -701,6 +701,7 @@ end
 
 function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 	
+	self:NextThink( CurTime() )
 	if ( !self.Pilot || !self.IsFlying ) then
 		
 		return
@@ -772,14 +773,13 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 	if ( self.Pilot:KeyDown( IN_ATTACK ) ) then
 		
 
-		
 		if ( self.LastPrimaryAttack + self.PrimaryCooldown <= CurTime() ) then
 			
 			self:PrimaryAttack()
 			
 			if( self.ShootingLoop != nil ) then
-			
-				self.ShootingLoop:PlayEx( 1.0, 100 )
+				-- print("boom")
+				-- self.ShootingLoop:PlayEx( 511, 100 )
 			
 		
 			end
