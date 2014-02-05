@@ -2472,6 +2472,8 @@ end
 function Meta:DeathFX()
 	
 
+	
+	-- this is the only explosion sound that is audible across the whole map :S Soundscapes are weird in gmod.
 	for i=0,4 do
 		
 		local explo = EffectData()
@@ -2479,7 +2481,7 @@ function Meta:DeathFX()
 		util.Effect("Explosion", explo)
 
 	end
-
+	-- Spawn the junk
 	for k, v in pairs( CrashDebris ) do
 	
 		local shade = math.random(45,110)
@@ -2501,8 +2503,20 @@ function Meta:DeathFX()
 
 	self:EmitSound("npc/combine_gunship/gunship_explode2.wav",511, 170 )
 	
-	ParticleEffect( "Jet_EX_smoke", self:GetPos() + self:GetUp() * 1,self:GetAngles(), nil )
-		
+	local MySize = ( self:OBBMaxs() - self:OBBMins() ):Length()
+
+	if( MySize > 1250 ) then
+	
+		ParticleEffect( "bomber_ex_smoke", self:GetPos() + self:GetUp() * 1,self:GetAngles(), nil )
+	
+	else
+	
+		ParticleEffect( "Jet_EX_smoke", self:GetPos() + self:GetUp() * 1,self:GetAngles(), nil )
+	
+	end
+	
+	
+	
 	util.BlastDamage( self, self, self:GetPos(), 1628, 500 )
 	
 	if ( IsValid( self.NPCTarget ) ) then
