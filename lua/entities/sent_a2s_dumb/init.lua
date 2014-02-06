@@ -11,7 +11,7 @@ function ENT:Initialize()
 	
 	self.seed = math.random( 0, 1000 )
 	
-	self:SetModel( "models/weapons/w_missile_closed.mdl" )
+	self:SetModel( "models/hawx/weapons/zuni mk16.mdl" )
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )	
 	self:SetSolid( SOLID_VPHYSICS )
@@ -28,13 +28,6 @@ function ENT:Initialize()
 	
 	end
 	
-	-- /*
-	-- local ent = ents.Create( "rpg_missile" )
-	-- ent:SetPos( self:GetPos() )
-	-- ent:SetParent( Self )
-	-- ent:SetAngles( self:GetAngles() )
-	-- ent:Spawn()
-	-- ent:Activate() */
 	self.SpawnTime = CurTime()
 	
 	util.PrecacheSound("Missile.Accelerate")
@@ -45,19 +38,17 @@ end
 
 function ENT:PhysicsCollide( data, physobj )
 	
-	//if( self.SpawnTime + 0.01 <= CurTime() ) then return end
+	-- //if( self.SpawnTime + 0.01 <= CurTime() ) then return end
 	
-	if ( IsValid( data.HitEntity ) && data.HitEntity:GetOwner() == self:GetOwner() ) then // Plox gief support for SetOwner ( table )
+	if ( IsValid( data.HitEntity ) && data.HitEntity:GetOwner() == self:GetOwner() ) then --// Plox gief support for SetOwner ( table )
 		
 		return
 		
 	end
 	
 	if (data.Speed > 1 && data.DeltaTime > 0.1 ) then 
-	
-		util.BlastDamage( self.Owner, self.Owner, data.HitPos, 500, 200 )
-		//self:EmitSound( "Explosion2.mp3", 511, math.random( 70, 100 ) )
-		//self:ExplosionImproved()
+		
+		
 		self:Remove()
 		
 		
@@ -66,7 +57,9 @@ function ENT:PhysicsCollide( data, physobj )
 end
 
 function ENT:PhysicsUpdate()
+
 	self.PhysObj = self:GetPhysicsObject()
+	
 	local tr, trace = {},{}
 	tr.start = self:GetPos()
 	tr.endpos = tr.start + self:GetForward() * 250
@@ -77,10 +70,14 @@ function ENT:PhysicsUpdate()
 		
 		self:Remove()
 		
+		return
+		
 	end
 	
 	if ( !IsValid( self.Owner ) ) then
+	
 		self.Owner = self
+		
 	end
 	
 	if self.Flying == true then
@@ -93,9 +90,9 @@ function ENT:PhysicsUpdate()
 					
 			local a = self.PhysObj:GetAngles()
 			// Alcohol Induced Rockets aka Drunk Fire
-			self.PhysObj:SetAngles( Angle( a.p + math.sin( CurTime() - self.seed ) * .1, 
-										  a.y + math.cos( CurTime() - self.seed ) * .1,
-										  a.r + .1 ) )
+			self.PhysObj:SetAngles( Angle( a.p + math.sin( CurTime() - self.seed ) * .01, 
+										  a.y + math.cos( CurTime() - self.seed ) * .01,
+										  a.r + math.sin( CurTime() - self.seed ) * .01 ) )
 										  
 		else
 		
@@ -134,11 +131,8 @@ function ENT:OnRemove()
 
 	self:StopSound("Missile.Accelerate")
 	
-	
-	local ent = ents.Create( "env_explosion" )
-	ent:SetPos( self:GetPos() )
-	ent:Spawn()
-	ent:Activate()
+	util.BlastDamage( self, self.Owner, self:GetPos(), 512, math.random(300,600) )
+	ParticleEffect("rocket_impact_wall", self:GetPos(), self:GetAngles(), nil )
 	
 	for i=0,5 do
 	

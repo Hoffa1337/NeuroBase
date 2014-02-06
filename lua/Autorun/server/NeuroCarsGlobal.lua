@@ -510,17 +510,18 @@ function Meta:Jet_LockOnMethod()
 		filter[#filter+1] = self.CoPilot
 	
 	end
-	// Lock On method
+	-- print("lock me up" )
+	-- // Lock On method
 	local trace,tr = {},{}
-	tr.start = self:GetPos() + self:GetForward() * 1000
-	tr.endpos = tr.start + self:GetForward() * 12500
+	tr.start = self:GetPos() + self:GetForward() * 300
+	tr.endpos = tr.start + self:GetForward() * 15500
 	tr.filter = filter
 	tr.mask = MASK_SOLID
 	trace = util.TraceEntity( tr, self )
-	
+	-- self:DrawLaserTracer( tr.start, trace.HitPos )
 	local e = trace.Entity
 	
-	local logic = ( IsValid( e ) && ( e:IsNPC() || e:IsPlayer() || e:IsVehicle() || e.HealthVal != nil || string.find( e:GetClass(), "prop_vehicle" ) ) )
+	local logic = ( IsValid( e ) && ( e.PrintName || e:IsNPC() || e:IsPlayer() || e:IsVehicle() || e.HealthVal != nil || string.find( e:GetClass(), "prop_" ) ) )
 	local logic2 = ( e != self.Pilot )
 	
 	local NeuroTeam = self:GetNetworkedInt( "NeuroTeam", 0 )
@@ -742,7 +743,7 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 	end
 
 	
-	if( self.Pilot:KeyDown( IN_SCORE ) ) then
+	if( self.Pilot:KeyDown( IN_DUCK ) && self.Pilot:KeyDown( IN_SCORE ) ) then
 		
 		self:NeuroPlanes_EjectionSeat()
 		
@@ -765,7 +766,7 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 	if ( self.Pilot:KeyDown( IN_WALK ) && IsValid( self.Target ) ) then
 		
 		self:ClearTarget( )
-		self.Pilot:PrintMessage( HUD_PRINTCENTER, "Target Released" )
+		self.Pilot:PrintMessage( HUD_PRINTTALK, "Target Released" )
 		
 	end
 	
@@ -777,23 +778,8 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 			
 			self:PrimaryAttack()
 			
-			if( self.ShootingLoop != nil ) then
-				-- print("boom")
-				-- self.ShootingLoop:PlayEx( 511, 100 )
-			
-		
-			end
-			
 		end
-	else
 		
-		if( self.ShootingLoop != nil ) then
-		
-			
-			self.ShootingLoop:Stop( )
-		
-		end
-	
 	end
 
 	-- print( "???")
@@ -847,11 +833,11 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 	
 	
 	
-	if( self.NoBoost ) then
+	-- if( self.NoBoost ) then
 		
-		return
+		-- return
 		
-	end
+	-- end
 	
 	if( self.Speed > 1000 ) then
 		
@@ -1431,6 +1417,34 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		
 	end
 	
+	-- Make the newly fired weapon invisible so it looks like we're actually dropping something.
+	if( wep.Cooldown > 2 ) then
+		
+		wep:SetRenderMode( RENDERMODE_TRANSALPHA )
+		wep:SetColor( Color( 0,0,0,0 ) )
+		timer.Simple( wep.Cooldown-0.5, 
+			function() -- Make the missile re-appear when the cooldown is off.
+			
+				if( IsValid( wep ) ) then 
+				
+					wep:SetColor( Color( 255,255,255,255) ) 
+					local effectdata = EffectData()
+					effectdata:SetOrigin( wep:GetPos()  )
+					effectdata:SetEntity( wep )
+					util.Effect( "propspawn", effectdata )
+					
+					if( IsValid( self.Pilot ) ) then
+					
+						self.Pilot:PrintMessage( HUD_PRINTTALK, self.PrintName..">>"..wep.PrintName.." is armed and ready!" )
+						
+					end
+					-- wep:EmitSound( "
+				end 
+			
+			end )
+	
+	end
+	
 	local r = ents.Create( wep.Class )
 	r:SetPos( pos )
 	r:SetOwner( self )
@@ -1664,7 +1678,7 @@ function Meta:CycleThroughWeaponsList()
 	if( wepData.Type == "Singlelock" && !self:GetNetworkedBool("DrawDesignator", false ) ) then
 		
 		pilot:SetNetworkedBool( "DrawDesignator", true )
-		//self:SetNetworkedInt( "NeuroPlanes_AutolockonRadius", wepData.Radius or 4096 )
+		-- //self:SetNetworkedInt( "NeuroPlanes_AutolockonRadius", wepData.Radius or 4096 )
 		
 	elseif( wepData.Type != "Singlelock" && self:GetNetworkedBool("DrawDesignator", true ) ) then
 		
@@ -1672,7 +1686,7 @@ function Meta:CycleThroughWeaponsList()
 	
 	end
 	
-	//print( wepData.Type, self:GetNetworkedBool("DrawDesignator", false ) )
+	-- //print( wepData.Type, self:GetNetworkedBool("DrawDesignator", false ) )
 	
 	local pilot = NULL
 	
@@ -2248,6 +2262,7 @@ function Meta:SpawnFlare()
 		if ( self.RocketVisuals[i].Type == "Flarepod" ) then
 			
 			pod = self.RocketVisuals[i]
+			 
 			
 		end
 	
@@ -2267,13 +2282,13 @@ function Meta:SpawnFlare()
 	
 	local f = ents.Create("nn_flare")
 	f:SetPos( pos )
-	f:SetAngles( self:GetAngles() )
+	f:SetAngles( pod:GetAngles() )
 	f:Spawn()
 	f:SetOwner( self )
 	f:Fire("kill","",5)
 	f:GetPhysicsObject():SetMass( 120 )
 	f:SetVelocity( self:GetVelocity() )
-	f:GetPhysicsObject():SetVelocity( self:GetUp() * 50000 ) //ApplyForceCenter( self:GetForward() * -5000000 )
+	f:GetPhysicsObject():SetVelocity( self:GetForward() * -50000  + self:GetUp() * -7500 ) //ApplyForceCenter( self:GetForward() * -5000000 )
 	f.Owner = self
 	
 end

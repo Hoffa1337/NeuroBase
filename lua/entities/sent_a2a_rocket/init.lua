@@ -159,29 +159,26 @@ function ENT:Think()
 	
 	trace = util.TraceLine( tr )
 	
-	local fx = { "Flaksmoke", "ac130_napalm" }
+	local fx = {  }
 	if( trace.Hit ) then
 		
-		for i=1,10 do 
 
-			local effectdata = EffectData()
-			effectdata:SetStart( self:GetPos() + self:GetForward() * i * 25 )
-			effectdata:SetOrigin( self:GetPos() + self:GetForward() * i * 25 )
-			effectdata:SetScale( 5 )
+		local effectdata = EffectData()
+		effectdata:SetStart( self:GetPos() )
+		effectdata:SetOrigin( self:GetPos() )
+		effectdata:SetScale( 5 )
+		util.Effect( "Explosion", effectdata )
+		
+		ParticleEffect( "rocket_impact_wall", self:GetPos(), self:GetAngles(), nil )
 	
-			util.Effect( fx[math.random(1,2)], effectdata )
-		
-		
-		end
-					
 		local bullet = {} 
-		bullet.Num 		= math.random(15,22) 
+		bullet.Num 		= math.random(20,25) 
 		bullet.Src 		= self:GetPos()+self:GetForward() * 150
 		bullet.Dir 		= self:GetAngles():Forward()
-		bullet.Spread 	= Vector( .03,.03,.03 )
+		bullet.Spread 	= Vector( .04,.04,.04 )
 		bullet.Tracer	= 1	
 		bullet.Force	= 1
-		bullet.Damage	= math.random( 155, 375 )
+		bullet.Damage	= math.random( 255, 475 )
 		bullet.AmmoType = "Ar2" 
 		bullet.TracerName = "GunshipTracer" 
 		bullet.Callback = function (a,b,c)
@@ -193,7 +190,7 @@ function ENT:Think()
 									e:SetNormal( b.HitNormal )
 									e:SetScale(0.5)
 									
-									util.Effect("HelicopterMegaBomb", e)
+									util.Effect("Explosion", e)
 									util.Effect("Launch2", e)
 									
 									local p = self.Owner.Pilot
