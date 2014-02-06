@@ -75,8 +75,8 @@ function ENT:DispatchCluster()
 		p.y = p.y + math.cos( CurTime() ) * 64
 		
 		local r = ents.Create("sent_C100_cluster")
-		r:SetPos( p ) 
-		r:SetAngles( Angle( 25 + math.random(-5,5), i * ( 360 / self.Cluster ), 0 ) )
+		r:SetPos( p + VectorRand() * 2 ) 
+		r:SetAngles( Angle( 25 + math.random(-15,15), i * ( 360 / self.Cluster ), 0 ) )
 		r:SetOwner( self:GetOwner() )
 		r:Spawn()
 		r.Owner = self.Owner
@@ -87,12 +87,12 @@ function ENT:DispatchCluster()
 		
 	end
 	
-	local fx = "VBIED_explosion"
-	if( math.random( 1,3 ) == 1 ) then
+	local fx = "rocket_impact_wall"
+	-- if( math.random( 1,3 ) == 1 ) then
 		
-		fx = "VBIED_b_explosion"
+		-- fx = "VBIED_b_explosion"
 		
-	end
+	-- end
 	
 	ParticleEffect( fx, self:GetPos(), self:GetAngles(), nil )
 	

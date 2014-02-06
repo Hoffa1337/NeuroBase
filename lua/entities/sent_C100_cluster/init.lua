@@ -23,19 +23,21 @@ function ENT:PhysicsCollide( data, physobj )
 	
 	if ( IsValid( self.Owner ) ) then
 	
-		util.BlastDamage( self.Owner, self.Owner, data.HitPos, 700, math.random( 100, 455 ) )
+		util.BlastDamage( self.Owner, self.Owner, data.HitPos, 700, math.random( 100, 555 ) )
 		
 	end
 	
 	self:EmitSound( "ambient/fire/gascan_ignite1.wav",211,100 )
+
+	ParticleEffect("rocket_impact_wall", self:GetPos(), self:GetAngles(), nil )
 	
 	util.Decal("Scorch", data.HitPos + data.HitNormal * 10, data.HitPos - data.HitNormal * 10 )
 	
-	local fx = EffectData()
-	fx:SetOrigin( data.HitPos )
-	fx:SetStart( data.HitPos )
-	fx:SetScale( 0.8 )
-	util.Effect( "ac130_napalm", fx )
+	-- local fx = EffectData()
+	-- fx:SetOrigin( data.HitPos )
+	-- fx:SetStart( data.HitPos )
+	-- fx:SetScale( 0.8 )
+	-- util.Effect( "ac130_napalm", fx )
 	
 	self:Remove()
 	
