@@ -558,10 +558,12 @@ function Meta:Turret_LockOnMethod()
 	// Lock On method
 	local trace,tr = {},{}
 	tr.start = self.Weapon:GetPos() + self.Weapon:GetForward() * 1000
-	tr.endpos = tr.start + self.Weapon:GetForward() * 9000
+	tr.endpos = tr.start + self.Weapon:GetForward() * 15000
 	tr.filter = { self.Pilot, self, self.Weapon }
 	tr.mask = MASK_SOLID
 	trace = util.TraceEntity( tr, self.Weapon )
+	
+	self:DrawLaserTracer( tr.start, trace.HitPos )
 	
 	local e = trace.Entity
 	
@@ -742,6 +744,14 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		
 	end
 
+	
+	if( self.Pilot:KeyDown( IN_DUCK ) && self.Pilot:KeyDown( IN_SPEED ) && self.Pilot:KeyDown( IN_WALK ) && self.Speed > self.MaxVelocity * 0.6 && !IsValid( self.Wingman ) ) then
+		
+		self:CreateWingmanNPC()
+		
+		return 
+		
+	end
 	
 	if( self.Pilot:KeyDown( IN_DUCK ) && self.Pilot:KeyDown( IN_SCORE ) ) then
 		
