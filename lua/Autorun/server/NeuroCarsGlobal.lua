@@ -173,6 +173,7 @@ hook.Add("PlayerEnteredVehicle","NeuroPlanes_OnEnterVehicle", function( player, 
 		
 		player:DrawWorldModel( false )
 		player.OldColor = player:GetColor()
+		player:SetRenderMode( RENDERMODE_TRANSALPHA )
 		player:SetColor( Color( 0,0,0,0 ) )
 	
 	end
