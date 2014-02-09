@@ -74,9 +74,13 @@ function ENT:PhysicsCollide( data, physobj )
 	
 	end
 	
+	if( !self.Radius ) then self.Radius = 512 end
+	if( !self.Damage ) then self.Damage = 2500 end
+	if( !IsValid( self.Pointer ) ) then self.Pointer = self end
+	
 	if ( self.Pointer:IsPlayer() ) then
 		
-		util.BlastDamage( self.Pointer, self.Pointer, data.HitPos, self.Radius, self.Damage )
+		util.BlastDamage( self.Pointer, self.Pointer, self:GetPos(), self.Radius, self.Damage )
 		
 	else
 	
@@ -84,7 +88,7 @@ function ENT:PhysicsCollide( data, physobj )
 	
 	end
 	
-	-- self:NeuroPlanes_BlowWelds( self:GetPos(), self.Radius )
+	self:NeuroPlanes_BlowWelds( self:GetPos(), self.Radius )
 	self:EmitSound( "explosion2.wav", 511, math.random( 70, 100 ) )
 	-- self:ExplosionImproved()
 	self:NeuroTec_Explosion( self:GetPos(), 512, 1500, 2500, "HE_impact_dirt" )
