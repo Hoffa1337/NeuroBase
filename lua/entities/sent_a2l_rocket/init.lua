@@ -44,57 +44,10 @@ end
 function ENT:PhysicsCollide( data, physobj )
 	
 	if( data.DeltaTime < 0.2 ) then return end
-	
-	if ( !self.Pointer || !IsValid( self.Pointer ) ) then
-		
-		self.Pointer = self
-		
-	end
-	
-	
-	if( data.HitEntity:IsWorld() ) then
-	
-		local explo = EffectData()
-		explo:SetOrigin( self:GetPos() )
-		explo:SetStart( Vector( 0, 0, 100 ) )
-		explo:SetScale( 1.45 )
-		explo:SetNormal( data.HitNormal )
-		util.Effect("Airstrike_explosion", explo)
-	
-	else
-	
-		for i=1,10 do
-	
-			local fx=EffectData()
-			fx:SetOrigin(self:GetPos()+Vector(math.random(-256,256),math.random(-256,256),math.random(-256,256)))
-			fx:SetScale(20*i)
-			util.Effect("Firecloud",fx)
-		
-		end
-	
-	end
-	
-	if( !self.Radius ) then self.Radius = 512 end
-	if( !self.Damage ) then self.Damage = 2500 end
-	if( !IsValid( self.Pointer ) ) then self.Pointer = self end
-	
-	if ( self.Pointer:IsPlayer() ) then
-		
-		util.BlastDamage( self.Pointer, self.Pointer, self:GetPos(), self.Radius, self.Damage )
-		
-	else
-	
-		util.BlastDamage( self, self, data.HitPos, self.Radius, self.Damage )
-	
-	end
-	
-	self:NeuroPlanes_BlowWelds( self:GetPos(), self.Radius )
+
+	self:NeuroPlanes_BlowWelds( self:GetPos(), 256 )
 	self:EmitSound( "explosion2.wav", 511, math.random( 70, 100 ) )
-	-- self:ExplosionImproved()
 	self:NeuroTec_Explosion( self:GetPos(), 512, 1500, 2500, "HE_impact_dirt" )
-	
-	
-		
 	self:Remove()
 		
 end
@@ -165,8 +118,10 @@ function ENT:PhysicsUpdate()
 			
 			end
 			
-			util.BlastDamage( self.Pointer, self.Pointer, self:GetPos(), self.Radius, self.Damage )
-						
+			-- util.BlastDamage( self.Pointer, self.Pointer, self:GetPos(), self.Radius, self.Damage )
+			self:NeuroPlanes_BlowWelds( self:GetPos(), self.Radius )
+			self:EmitSound( "explosion2.wav", 511, math.random( 70, 100 ) )
+			self:NeuroTec_Explosion( self:GetPos(), 512, 1500, 2500, "HE_impact_dirt" )
 			self:Remove()
 			
 			return
