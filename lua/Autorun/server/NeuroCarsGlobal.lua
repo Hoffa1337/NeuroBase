@@ -514,7 +514,7 @@ function Meta:Jet_LockOnMethod()
 	-- print("lock me up" )
 	-- // Lock On method
 	local trace,tr = {},{}
-	tr.start = self:GetPos() + self:GetForward() * 300
+	tr.start = self:GetPos() + self:GetForward() * 600
 	tr.endpos = tr.start + self:GetForward() * 15500
 	tr.filter = filter
 	tr.mask = MASK_SOLID
