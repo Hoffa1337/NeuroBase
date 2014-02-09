@@ -27,18 +27,6 @@ function ENT:Initialize()
 	
 	util.PrecacheSound("Missile.Accelerate")
 
-	self.smoketrail = {}
-	
-	for i=1,2 do
-	
-		self.smoketrail[i] = ents.Create("env_rockettrail")
-		self.smoketrail[i]:SetPos(self:GetPos() + self:GetForward() * -83)
-		self.smoketrail[i]:SetParent(self)
-		self.smoketrail[i]:SetLocalAngles(Angle(0,0,0))
-		self.smoketrail[i]:Spawn()
-		
-	end
-		
 	if ( self:GetModel() ) then
 		
 		self:SetModel( self:GetModel() )
@@ -49,7 +37,7 @@ function ENT:Initialize()
 		
 	end
 	
-	util.SpriteTrail( self, 0, Color( 120,120,120, math.random(110,120)), false, 0, 48, 0.75, math.sin(CurTime()) / math.pi * 48, "trails/smoke.vmt");  
+	-- util.SpriteTrail( self, 0, Color( 120,120,120, math.random(110,120)), false, 0, 48, 0.75, math.sin(CurTime()) / math.pi * 48, "trails/smoke.vmt");  
 
 end
 
@@ -96,9 +84,13 @@ function ENT:PhysicsCollide( data, physobj )
 	
 	end
 	
-	self:NeuroPlanes_BlowWelds( self:GetPos(), self.Radius )
+	-- self:NeuroPlanes_BlowWelds( self:GetPos(), self.Radius )
 	self:EmitSound( "explosion2.wav", 511, math.random( 70, 100 ) )
-	self:ExplosionImproved()
+	-- self:ExplosionImproved()
+	self:NeuroTec_Explosion( self:GetPos(), 512, 1500, 2500, "HE_impact_dirt" )
+	
+	
+		
 	self:Remove()
 		
 end
