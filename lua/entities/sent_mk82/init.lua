@@ -3,6 +3,27 @@ AddCSLuaFile( "shared.lua" )
 include( 'shared.lua' )
 
 ENT.Cluster = 16
+function ENT:OnTakeDamage(dmginfo)
+	
+	if( !self.HealthVal ) then self.HealthVal = 100 end
+	
+	self:TakePhysicsDamage( dmginfo )
+	
+	self.HealthVal = self.HealthVal - dmginfo:GetDamage()
+	
+	self:SetNetworkedInt( "health" , self.HealthVal )
+	
+	if ( self.HealthVal < 0 ) then
+
+		ParticleEffect( "ap_impact_wall", self:GetPos(), self:GetAngles(), nil )
+		util.BlastDamage( self, self, self:GetPos(), 256, 256 )
+		self:Remove()
+		return
+		
+		
+	end
+	
+end
 
 function ENT:Initialize()
 
