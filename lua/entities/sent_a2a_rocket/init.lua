@@ -8,8 +8,8 @@ ENT.Speed = 5000
 ENT.BlastRadius = 256
 function ENT:OnTakeDamage(dmginfo)
 	
-	if( !self.HealthVal ) then self.HealthVal = 100 end
-	
+	if( !self.HealthVal ) then self.HealthVal = 100 end 
+  	if( self.HealthVal < 0 ) then return end
 	self:TakePhysicsDamage( dmginfo )
 	
 	self.HealthVal = self.HealthVal - dmginfo:GetDamage()
