@@ -134,6 +134,7 @@ for k,v in pairs( langObjects ) do
 end
 
 CreateClientConVar( "jet_cockpitview", "0", true, false )
+CreateClientConVar( "jet_freelook", "0", true, false )
 CreateClientConVar( "jet_bomberview", "0", true, false )
 CreateClientConVar( "jet_markenemies", "1", true, false )
 CreateClientConVar( "jet_health", "1", true, false )

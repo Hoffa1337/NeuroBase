@@ -1451,7 +1451,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 					
 					if( IsValid( self.Pilot ) ) then
 					
-						self.Pilot:PrintMessage( HUD_PRINTTALK, self.PrintName..">>"..wep.PrintName.." is armed and ready!" )
+						self.Pilot:PrintMessage( HUD_PRINTTALK, self.PrintName..": "..wep.PrintName.." is armed and ready!" )
 						
 					end
 					-- wep:EmitSound( "
@@ -1460,6 +1460,8 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 			end )
 	
 	end
+	
+	if( wep.Class == nil ) then error("NeuroTec: Tried to call NeuroPlanes_FireRobot with"..tostring(wep).." as argument!" ) return end
 	
 	local r = ents.Create( wep.Class )
 	r:SetPos( pos )
@@ -1472,7 +1474,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	r:Fire( "Kill", "", 40 )
 	r:SetAngles( wep:GetAngles() )
 	r.Owner = pilot
-	r:GetPhysicsObject():SetVelocity( self:GetVelocity() )
+	-- r:GetPhysicsObject():SetVelocity( self:GetVelocity() )
 	--print( wep.SubType )
 	
 	if( wep.SubType && wep.SubType == "Cluster" ) then
