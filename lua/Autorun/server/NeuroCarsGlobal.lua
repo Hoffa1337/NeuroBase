@@ -1249,7 +1249,7 @@ function Meta:NeuroPlanes_CycleThroughHeliKeyBinds()
 		self.LastFireModeChange = CurTime()
 		self.FireMode = self:IncrementFireVar( self.FireMode, self.NumRockets, 1 )
 		self:SetNetworkedInt( "FireMode", self.FireMode)
-		self.Pilot:PrintMessage( HUD_PRINTCENTER, "Selected Equipment: "..self.EquipmentNames[ self.FireMode ].Name )
+		-- self.Pilot:PrintMessage( HUD_PRINTCENTER, "Selected Equipment: "..self.EquipmentNames[ self.FireMode ].Name )
 
 	end
 	
