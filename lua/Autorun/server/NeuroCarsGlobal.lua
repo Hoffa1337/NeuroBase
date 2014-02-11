@@ -1248,6 +1248,7 @@ function Meta:NeuroPlanes_CycleThroughHeliKeyBinds()
 		
 		self.LastFireModeChange = CurTime()
 		self.FireMode = self:IncrementFireVar( self.FireMode, self.NumRockets, 1 )
+		self:SetNetworkedInt( "FireMode", self.FireMode)
 		self.Pilot:PrintMessage( HUD_PRINTCENTER, "Selected Equipment: "..self.EquipmentNames[ self.FireMode ].Name )
 
 	end
@@ -1433,12 +1434,16 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		
 		wep:SetRenderMode( RENDERMODE_TRANSALPHA )
 		wep:SetColor( Color( 0,0,0,0 ) )
+		self:SetNetworkedInt( "IdCoolingDown", wep.Identity)
+		self:SetNetworkedInt( "CoolDown", wep.Cooldown-0.5)
+
 		timer.Simple( wep.Cooldown-0.5, 
 			function() -- Make the missile re-appear when the cooldown is off.
 			
 				if( IsValid( wep ) ) then 
 				
 					wep:SetColor( Color( 255,255,255,255) ) 
+					self:SetNetworkedBool( "IdCoolingDown", 0 )
 					local effectdata = EffectData()
 					effectdata:SetOrigin( wep:GetPos()  )
 					effectdata:SetEntity( wep )
@@ -1674,7 +1679,8 @@ function Meta:CycleThroughWeaponsList()
 		-- print( "walla" )
 	self.LastFireModeChange = CurTime()
 	self.FireMode = self:IncrementFireVar( self.FireMode, self.NumRockets, 1 )
-	
+	self:SetNetworkedInt( "FireMode", self.FireMode)
+
 	local wep = self.EquipmentNames[ self.FireMode ]
 	local wepData = self.RocketVisuals[ wep.Identity ]
 	 
