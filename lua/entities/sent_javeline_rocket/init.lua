@@ -7,7 +7,7 @@ ENT.Delay = 1
 ENT.Speed = 400
 
 function ENT:OnTakeDamage(dmginfo)
- self:NA_RPG_damagehook()
+ self:NA_RPG_damagehook(dmginfo)
  end
 function ENT:Initialize()
 

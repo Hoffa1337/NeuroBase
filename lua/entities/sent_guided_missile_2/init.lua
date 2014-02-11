@@ -8,7 +8,7 @@ ENT.Speed = 120
 local deleteTrail = false
 
 function ENT:OnTakeDamage(dmginfo)
- self:NA_RPG_damagehook()
+ self:NA_RPG_damagehook(dmginfo)
  end
 
 function ENT:Initialize()

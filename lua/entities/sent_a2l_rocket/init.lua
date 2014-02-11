@@ -6,7 +6,7 @@ ENT.Radius = 256
 ENT.Damage = 1000
 ENT.Speed = 2000
 function ENT:OnTakeDamage(dmginfo)
- self:NA_RPG_damagehook()
+ self:NA_RPG_damagehook(dmginfo)
  end
 function ENT:Initialize()
 	

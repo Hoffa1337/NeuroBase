@@ -7,7 +7,7 @@ ENT.Damage = 2500
 ENT.Radius = 1236
 ENT.Cluster = 12
 function ENT:OnTakeDamage(dmginfo)
- self:NA_RPG_damagehook()
+ self:NA_RPG_damagehook(dmginfo)
  end
 function ENT:Initialize()
 	
