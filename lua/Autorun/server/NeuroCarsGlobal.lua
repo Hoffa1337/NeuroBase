@@ -369,7 +369,7 @@ end )
 
 local Meta = FindMetaTable("Entity")
 
-function Meta:NA_RPG_damagehook()
+function Meta:NA_RPG_damagehook(dmginfo)
 
 	if( !self.HealthVal ) then self.HealthVal = 100 end 
   	if( self.HealthVal < 0 ) then return end
