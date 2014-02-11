@@ -397,7 +397,14 @@ function Meta:NA_RPG_damagehook(dmginfo)
 		local jphys = inertjunk:GetPhysicsObject()
 		local mphys = self:GetPhysicsObject()
 		jphys:SetVelocity( mphys:GetVelocity() )
-		jphys:AddAngleVelocity( VectorRand() * 4 )
+		jphys:AddAngleVelocity( VectorRand() * 50 )
+		
+		if( IsValid( self.Owner ) ) then
+			
+			inertjunk:SetPhysicsAttacker( self.Owner )
+			inertjunk:SetOwner( self.Owner )
+		
+		end
 		
 		inertjunk:Fire("kill","",math.random(8,10))
 		
