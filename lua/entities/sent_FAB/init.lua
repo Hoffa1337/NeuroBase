@@ -37,14 +37,14 @@ function ENT:Initialize()
 	
 	self.PhysObj = self:GetPhysicsObject()
 	
-	local junk = ents.Create("prop_physics")
-	junk:SetPos( self:GetPos() + self:GetForward()*90 )
-	junk:SetAngles( self:GetAngles() )
-	junk:SetModel( "models/Gibs/HGIBS.mdl" )
-	junk:Spawn()
-	junk:GetPhysicsObject():SetMass( self:GetPhysicsObject():GetMass()  )
+	-- local junk = ents.Create("prop_physics")
+	-- junk:SetPos( self:GetPos() + self:GetForward()*90 )
+	-- junk:SetAngles( self:GetAngles() )
+	-- junk:SetModel( "models/Gibs/HGIBS.mdl" )
+	-- junk:Spawn()
+	-- junk:GetPhysicsObject():SetMass( self:GetPhysicsObject():GetMass()  )
 	
-	self.JunkWeld = constraint.Weld( junk, self, 0, 0, 9999999999, true, true )
+	-- self.JunkWeld = constraint.Weld( junk, self, 0, 0, 9999999999, true, true )
 	
 	if (self.PhysObj:IsValid()) then
 		

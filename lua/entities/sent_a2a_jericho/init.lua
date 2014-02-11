@@ -8,25 +8,9 @@ ENT.Speed = 5000
 ENT.DTime = 0
 
 function ENT:OnTakeDamage(dmginfo)
-	
-	if( !self.HealthVal ) then self.HealthVal = 100 end 
-  	if( self.HealthVal < 0 ) then return end
-	self:TakePhysicsDamage( dmginfo )
-	
-	self.HealthVal = self.HealthVal - dmginfo:GetDamage()
-	
-	self:SetNetworkedInt( "health" , self.HealthVal )
-	
-	if ( self.HealthVal < 0 ) then
+		
+	self:NA_RPG_damagehook()
 
-		ParticleEffect( "ap_impact_wall", self:GetPos(), self:GetAngles(), nil )
-		util.BlastDamage( self, self, self:GetPos(), 256, 256 )
-		self:Remove()
-		return
-		
-		
-	end
-	
 end
 
 function ENT:Initialize()

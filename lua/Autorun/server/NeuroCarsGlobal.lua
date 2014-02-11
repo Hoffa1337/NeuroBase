@@ -369,7 +369,43 @@ end )
 
 local Meta = FindMetaTable("Entity")
 
+function Meta:NA_RPG_damagehook()
+
+	if( !self.HealthVal ) then self.HealthVal = 100 end 
+  	if( self.HealthVal < 0 ) then return end
 	
+	self:TakePhysicsDamage( dmginfo )
+	
+	self.HealthVal = self.HealthVal - dmginfo:GetDamage()
+
+	if ( self.HealthVal < 0 ) then
+		
+		-- make a big explosion
+		ParticleEffect( "ap_impact_wall", self:GetPos(), self:GetAngles(), nil )
+		-- makes metal sound + flash effect
+		local fx = EffectData()
+		fx:SetOrigin( self:GetPos() )
+		fx:SetScale( 1 )
+		util.Effect( "RPGShotDown", fx )
+		
+		local inertjunk = ents.Create("prop_physics")
+		inertjunk:SetPos( self:GetPos() )
+		inertjunk:SetAngles( self:GetAngles() )
+		inertjunk:SetModel( self:GetModel() )
+		inertjunk:SetSkin( self:GetSkin() )
+		inertjunk:Spawn()
+		inertjunk:SetVelocity( self:GetVelocity() )
+		inertjunk:Fire("kill","",math.random(8,10))
+		
+		util.BlastDamage( self, self, self:GetPos(), 512, math.random( 75, 95 ) )
+		self:Remove()
+		
+		return
+		
+	end
+	
+end
+
 function Meta:RotorTrash()
 
 	if ( math.random( 1,5 ) == 5 ) then
@@ -1723,7 +1759,7 @@ function Meta:CycleThroughWeaponsList()
 		
 		end	
 		
-		self.Pilot:PrintMessage( HUD_PRINTCENTER, ""..wep.Name )
+		-- self.Pilot:PrintMessage( HUD_PRINTCENTER, ""..wep.Name )
 		self:SetNetworkedString("NeuroPlanes_ActiveWeapon", wep.Name)
 		self:SetNetworkedString("NeuroPlanes_ActiveWeaponType", wepData.Type)
 
