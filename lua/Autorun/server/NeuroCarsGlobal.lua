@@ -394,7 +394,11 @@ function Meta:NA_RPG_damagehook(dmginfo)
 		inertjunk:SetModel( self:GetModel() )
 		inertjunk:SetSkin( self:GetSkin() )
 		inertjunk:Spawn()
-		inertjunk:SetVelocity( self:GetVelocity() )
+		local jphys = inertjunk:GetPhysicsObject()
+		local mphys = self:GetPhysicsObject()
+		jphys:SetVelocity( mphys:GetVelocity() )
+		jphys:AddAngleVelocity( VectorRand() * 4 )
+		
 		inertjunk:Fire("kill","",math.random(8,10))
 		
 		util.BlastDamage( self, self, self:GetPos(), 512, math.random( 75, 95 ) )

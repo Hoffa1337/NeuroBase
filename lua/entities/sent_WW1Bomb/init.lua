@@ -3,7 +3,7 @@ AddCSLuaFile( "shared.lua" )
 include( 'shared.lua' )
 function ENT:OnTakeDamage(dmginfo)
  self:NA_RPG_damagehook(dmginfo)
- end
+end
 function ENT:Initialize()
 
 	self.Entity:SetModel( "models/props_phx/ww2bomb.mdl" )
