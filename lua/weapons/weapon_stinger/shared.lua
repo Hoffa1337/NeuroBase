@@ -103,7 +103,7 @@ function SWEP:Think()
 		tr.filter = { self, self.Owner }
 		tr.mask = MASK_SOLID
 		trace = util.TraceEntity( tr, self.Owner )
-		self:DrawLaserTracer( tr.start, trace.HitPos )
+		-- self:DrawLaserTracer( tr.start, trace.HitPos )
 		
 		if ( trace.Hit && IsValid( trace.Entity ) ) then
 			
