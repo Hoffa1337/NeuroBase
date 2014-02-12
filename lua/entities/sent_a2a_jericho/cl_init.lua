@@ -8,7 +8,7 @@ local matFire			= Material( "effects/fire_cloud1" )
 
 function ENT:Initialize()
 
-	local pos = self:GetPos() + self:GetForward() * -200
+	local pos = self:GetPos() + self:GetForward() * -55
 	self.Emitter = ParticleEmitter( pos, false )
 	self.Seed = math.Rand( 0, 10000 )
 
@@ -19,11 +19,9 @@ function ENT:Draw()
 	self.Entity:DrawModel()
 	self.OnStart = self.OnStart or CurTime()
 	
-	if( self:GetNetworkedBool("Launched",false) ) then
+
+	self:EffectDraw_fire()
 	
-		self:EffectDraw_fire()
-	
-	end
 	
 end
 function ENT:OnRemove()
@@ -32,7 +30,7 @@ end
 
 function ENT:EffectDraw_fire()
 	
-	local pos = self:LocalToWorld( Vector( -160, 0, 11 ) ) -- self:GetPos() + self:GetForward() * -200
+	local pos = self:LocalToWorld( Vector( -55, 0, 11 ) ) -- self:GetPos() + self:GetForward() * -200
 	
 	for i=1,3 do
 	
@@ -58,7 +56,7 @@ function ENT:EffectDraw_fire()
 	end
 	
 	// Thanks garry :D
-	local vOffset = self:GetPos() + self:GetForward() * -150 + self:GetUp()*8
+	local vOffset = self:GetPos() + self:GetForward() * -55 + self:GetUp()*8
 	local vNormal = (vOffset - self:GetPos()):GetNormalized()
 
 	local scroll = self.Seed + (CurTime() * -10)

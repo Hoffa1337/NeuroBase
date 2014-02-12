@@ -155,7 +155,7 @@ function ENT:Think()
 	
 	local tr, trace = {}, {}
 	tr.start = self:GetPos() + self:GetForward() * 128
-	tr.endpos = self:GetPos() + self:GetForward() * 2800
+	tr.endpos = self:GetPos() + self:GetForward() * 1024
 	tr.filter = self
 	tr.mask = MASK_SOLID
 	

@@ -9,7 +9,7 @@ ENT.DTime = 0
 
 function ENT:OnTakeDamage(dmginfo)
 		
-	self:NA_RPG_damagehook()
+	self:NA_RPG_damagehook(dmginfo)
 
 end
 
@@ -44,21 +44,6 @@ function ENT:Initialize()
 	
 	util.PrecacheSound("Missile.Accelerate")
 	
-	
-	self.smoketrail = {}
-	
-	for i=1,2 do
-	
-		self.smoketrail[i] = ents.Create("env_rockettrail")
-		self.smoketrail[i]:SetPos(self:GetPos() + self:GetForward() * -83)
-		self.smoketrail[i]:SetParent(self)
-		self.smoketrail[i]:SetLocalAngles(Angle(0,0,0))
-		self.smoketrail[i]:Spawn()
-		
-	end
-	
-	util.SpriteTrail(self, 0, Color(255,255,255,math.random(130,170)), false, 8, math.random(1,2), 2, math.sin(CurTime()) / math.pi * 0.5, "trails/smoke.vmt");  
-
 end
 
 function ENT:PhysicsCollide( data, physobj )
@@ -73,13 +58,15 @@ function ENT:PhysicsCollide( data, physobj )
 	
 	if ( data.Speed > 50 && data.DeltaTime > 0.2 ) then 
 	
-		local explo = EffectData()
-		explo:SetOrigin(self:GetPos())
-		explo:SetStart( data.HitNormal * 100 )
-		explo:SetScale( 1.20 )
-		explo:SetNormal(data.HitNormal)
-		util.Effect("Airstrike_explosion", explo)
-		util.BlastDamage( self.Owner, self.Owner, data.HitPos, 512, 950 )
+		local effectdata = EffectData()
+		effectdata:SetStart( self:GetPos() )
+		effectdata:SetOrigin( self:GetPos() )
+		effectdata:SetScale( 5 )
+		util.Effect( "Explosion", effectdata )
+		
+		ParticleEffect( "rocket_impact_wall", self:GetPos(), self:GetAngles(), nil )
+	
+		util.BlastDamage( self.Owner, self.Owner, data.HitPos, 512, math.random(750,1950) )
 		self:Remove()
 		
 	end
@@ -150,7 +137,8 @@ function ENT:PhysicsUpdate()
 			trash:Fire("kill",10)
 			trash:GetPhysicsObject():SetVelocity( -self:GetVelocity() )
 			
-			self:ExplosionImproved()
+			ParticleEffect( "rocket_impact_wall", self:GetPos(), self:GetAngles(), nil )
+	
 			self.Inert = true
 			
 			self:Remove()

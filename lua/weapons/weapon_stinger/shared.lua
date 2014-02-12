@@ -25,17 +25,17 @@ if ( CLIENT ) then
 end
 
 SWEP.Author			= "Hoffa"
-SWEP.Contact		= "Hoffa1337 @ Facepunch\nSluggomc @ Steam"
-SWEP.Purpose		= ""
+SWEP.Contact		= "Hoffa"
+SWEP.Purpose		= "fuck shit up"
 SWEP.Instructions	= "Aim away from face"
 SWEP.HoldType = "rpg"
-
+SWEP.Category = "NeuroTec Weapons"
 SWEP.Spawnable			= true
 SWEP.AdminSpawnable		= false
 
 SWEP.Primary.Sound			= Sound( "sounds/lockon/missilelaunch.mp3" )
 SWEP.Primary.Recoil			= 1.5
-SWEP.Primary.Delay			= 5
+SWEP.Primary.Delay			= 1.5
 
 SWEP.Primary.ClipSize		= 1
 SWEP.Primary.DefaultClip	= 1
@@ -70,27 +70,9 @@ function SWEP:Initialize()
 		self:SetNPCFireRate( 6.0 )
 	end
 	
-	
-	
-	/*if( CLIENT ) then
-		self.RocketProps = {}
-		local s = self.Owner:GetViewModel()
-		
-		for i = 1, 4 do 
-		
-			self.RocketProps[i] = ClientsideModel( "models/hawx/weapons/agm-65 maverick.mdl", RENDERGROUP_OPAQUE )
-			self.RocketProps[i]:SetPos( s:GetPos() + s:GetRight() * ( i * -3 ) )
-			self.RocketProps[i]:SetParent( s )
-			self.RocketProps[i]:SetAttachment( 1 )
-			self.RocketProps[i]:SetAngles( s:GetAngles() + Angle( -90, 0, 0 ) )
-			self.RocketProps[i]:SetModelScale( Vector( .05, .05, .05 ) )
-			
-		end
-		
-	end */
-	
 	self:SetWeaponHoldType( self.HoldType )
 	self.LastRelease = CurTime()
+	self.LastAttack = CurTime()
 	
 end
 
@@ -101,6 +83,7 @@ end
 function SWEP:Reload()
 
 	self.Weapon:DefaultReload( ACT_VM_RELOAD );
+	if( IsValid( self.Target ) ) then self.Target = NULL self:SetNetworkedEntity("Target",NULL) end
 	
 end
 
@@ -113,13 +96,14 @@ function SWEP:Think()
 	if ( CLIENT ) then return end
 	
 	if( !IsValid( self.Target ) ) then 
-	
+	-- print("Walla")
 		local tr, trace = {},{}
 		tr.start =  self.Owner:GetShootPos() + self.Owner:GetAimVector() * 100
-		tr.endpos = self.Owner:GetAimVector() * 14000
+		tr.endpos = tr.start + self.Owner:GetAimVector() * 14000
 		tr.filter = { self, self.Owner }
 		tr.mask = MASK_SOLID
 		trace = util.TraceEntity( tr, self.Owner )
+		self:DrawLaserTracer( tr.start, trace.HitPos )
 		
 		if ( trace.Hit && IsValid( trace.Entity ) ) then
 			
@@ -127,10 +111,10 @@ function SWEP:Think()
 			
 			if( te:IsVehicle() || te:IsNPC() || te:IsPlayer() || te.HealthVal ) then
 				
-				self.Owner:PrintMessage( HUD_PRINTCENTER, "LOCKED ON" )
+				-- self.Owner:PrintMessage( HUD_PRINTCENTER, "LOCKED ON" )
 				self.Target = te
 				self:SetNetworkedEntity( "Target", te )
-				self:EmitSound( "LockOn/Lock.mp3", 511, 100 )
+				self.Owner:EmitSound( "LockOn/Lock.mp3", 511, 100 )
 				
 				return
 				
@@ -138,21 +122,6 @@ function SWEP:Think()
 		
 		end
 	
-	end
-	
-
-	
-	if( self.Owner:KeyPressed( IN_USE ) && self.LastRelease + 0.5 <= CurTime() ) then
-		
-		if( IsValid( self.Target ) ) then
-		
-			self.Target = NULL
-			self:SetNetworkedEntity("Target", NULL )
-			self.LastRelease = CurTime()
-			self.Owner:PrintMessage( HUD_PRINTCENTER, "TARGET CLEARED" )
-		
-		end
-		
 	end
 	
 	if( NEUROPLANES_CINEMATIC_ROCKET && !IsValid( self.Missile ) && self.Launched == true ) then
@@ -173,9 +142,6 @@ function SWEP:Think()
 			
 		end
 		
-		//self.Owner:SetEyeAngles( LerpAngle( 0.1, ( self.Owner:GetPos() - self.Missile:GetPos()):Normalize():Angle() ), self.Owner:EyeAngles() )
-		//self.Owner:SetEyeAngles( LerpAngle( 0.01, self.Missile:GetAngles(), self.Owner:EyeAngles() ) )
-	
 	end
 	
 end
@@ -183,14 +149,8 @@ end
 
 function SWEP:LaunchRocket()
 	
-	if( !self.Target ) then
-		
-		self.Owner:PrintMessage( HUD_PRINTCENTER, "NO TARGET - BLIND FIRE" )
-		
-	end
-
-	self.Missile = ents.Create("sent_a3a_rocket")
-	self.Missile:SetPos( self.Owner:GetShootPos() )
+	self.Missile = ents.Create("sent_a2a_rocket")
+	self.Missile:SetPos( self.Owner:GetShootPos() + self.Owner:GetRight()*18 + self.Owner:GetAimVector()*-16 + self.Owner:GetUp()*-2)
 	self.Missile:SetAngles( self.Owner:GetAimVector():Angle() )
 	self.Missile:SetModel( "models/BF2/weapons/Predator/predator_rocket.mdl" )
 	self.Missile.Target = self.Target
@@ -199,12 +159,10 @@ function SWEP:LaunchRocket()
 	self.Missile:SetPhysicsAttacker( self.Owner )
 	self.Missile:Spawn()
 	self.Missile:EmitSound("LockOn/MissileLaunchEngine.mp3",511,100)
-			
-	local sm = EffectData()
-	sm:SetStart( self.Owner:GetShootPos() )
-	sm:SetOrigin( self.Owner:GetShootPos() )
-	sm:SetScale( 6.5 )
-	util.Effect( "A10_muzzlesmoke", sm )
+
+	self.Owner:EmitSound( "LockOn/MissileLaunchEngine.mp3", 510, 100 )
+	
+	ParticleEffect("tank_muzzleflash",self.Owner:GetShootPos() + self.Owner:GetRight()*18 + self.Owner:GetAimVector()*-16 + self.Owner:GetUp()*-2 ,self.Owner:GetAngles()*-1,self)
 	
 	if( NEUROPLANES_CINEMATIC_ROCKET ) then
 		
@@ -214,9 +172,10 @@ function SWEP:LaunchRocket()
 		self.Launched = true
 		self.Owner:PrintMessage( HUD_PRINTCENTER, "Press Shift to exit" )
 		self.Owner:SetNetworkedBool("DrawTracker", true ) 
-		//self.Owner:SendLua("EnableCinematicRocketShit()")
 
 	end
+	
+	self:Reload()
 	
 end
 
@@ -225,12 +184,37 @@ end
 ---------------------------------------------------------*/
 function SWEP:PrimaryAttack()
 	
+	if( self.LastAttack + self.Primary.Delay > CurTime() ) then return false end
+	
 	if( IsValid( self.Target ) && self:GetPos():Distance( self.Target:GetPos() ) < 4000 ) then
 		
 		self.Owner:PrintMessage( HUD_PRINTCENTER, "You're too close to your target!" )
 		
 		return
 		
+	end
+	
+	self.LastAttack = CurTime()
+	
+	if( !IsValid( self.Target ) ) then
+	
+		local tr, trace = {},{}
+		tr.start =  self.Owner:GetShootPos() + self.Owner:GetForward() * 100 + self.Owner:GetUp() * 16
+		tr.endpos = tr.start + self.Owner:GetAimVector() * 14000
+		tr.filter = { self, self.Owner }
+		tr.mask = MASK_SOLID
+		trace = util.TraceEntity( tr, self.Owner )
+		
+		if( !trace.Hit ) then
+			
+			self.Owner:EmitSound( "LockOn/Track.mp3", 511, 100 )
+			
+			return false
+			
+		end
+		
+		
+			
 	end
 	
 	self.Weapon:SetNextSecondaryFire( CurTime() + self.Primary.Delay )
@@ -276,39 +260,40 @@ function SWEP:OnRestore()
 	self.NextSecondaryAttack = 0
 	
 end
---local targetMat = Material("JetCH/aim")
+
 function SWEP:DrawHUD()
 	
 	if( self.Owner:GetNetworkedBool("DrawTracker", false ) ) then return end
 	
 	local tr, trace = {},{}
 	tr.start =  self.Owner:GetShootPos() + self.Owner:GetForward() * 100 + self.Owner:GetUp() * 16
-	tr.endpos = self.Owner:GetAimVector() * 14000
+	tr.endpos = tr.start + self.Owner:GetAimVector() * 14000
 	tr.filter = { self, self.Owner }
 	tr.mask = MASK_SOLID
 	trace = util.TraceEntity( tr, self.Owner )
-	local sizex,sizey = 100,70
-	local x,y = ScrW()/2, ScrH()/2
-	
-	surface.SetDrawColor( 255, 255, 255, 220 )
-	surface.DrawOutlinedRect( x - sizex / 2, y - sizey / 2, sizex, sizey )
-	surface.DrawLine( x - sizex, y, x - sizex/2, y )
-	surface.DrawLine( x + sizex, y, x + sizex/2, y )
-	surface.DrawLine( x, y - sizey/2, x, y - sizey )
-	surface.DrawLine( x, y + sizey/2, x, y + sizey )
-	
-	if( !trace.Hit ) then
-		
-		draw.SimpleText("OUT OF RANGE", "HudHintTextLarge", ScrW() / 2, ScrH() / 2, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-	
-	else
-	
-		surface.DrawOutlinedRect( x - 30, y - 20, 60, 40 )
-		
-	end
 
 	local target = self:GetNetworkedEntity("Target", NULL )
+
+	local Col = Color( 0, 255, 0, 255 )
+	if( IsValid( target ) ) then
+				
+		Col = Color( 255, 0, 0, 255 )
 	
+	end
+	draw.SimpleText("[    ]", "HudHintTextLarge", ScrW() / 2, ScrH() / 2, Col, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )	
+
+
+	if( !trace.Hit || trace.HitSky ) then
+
+		draw.SimpleText("X", "HudHintTextLarge", ScrW() / 2, ScrH() / 2, Color( 255, 0, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+	
+	else
+		
+		draw.SimpleText("X", "HudHintTextLarge", ScrW() / 2, ScrH() / 2, Color( 0, 255, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+
+	end
+
+
 	for k,v in pairs( ents.FindByClass( "sent*" ) ) do
 			
 		if ( IsValid( v ) && v.PrintName && ( v.Type == "vehicle" || ( v.PrintName == "Missile" ) ) ) then
@@ -316,22 +301,13 @@ function SWEP:DrawHUD()
 			local pos = v:GetPos():ToScreen( )
 			local x,y = pos.x, pos.y
 		
-			if( v.PrintName == "Missile" ) then
-	
-				--surface.DrawTexturedRect( x - size / 2, y - size / 2, size, size )
-				//draw.SimpleText( "Missile", "ChatFont", x, y, Color( 255, 40, 0, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-			
-			else
-			
-				draw.SimpleText( v.PrintName, "ChatFont", x, y - 35, Color( 255, 102, 0, 240 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-			
-			end
-	
-			
 			if ( target != nil && v == target ) then
 				
 				draw.SimpleText( "Locked On", "ChatFont", x, y, Color( 255, 0, 0, 240 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+			else
 				
+				draw.SimpleText( v.PrintName, "ChatFont", x, y - 35, Color( 255, 102, 0, 240 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+
 			end
 			
 		end
@@ -343,19 +319,18 @@ function SWEP:DrawHUD()
 		local pos = v:GetPos( ):ToScreen( )
 		local x,y = pos.x, pos.y
 		
-		if ( !v:OnGround() ) then
-		
-			draw.SimpleText( "Valid Target", "ChatFont", x, y - 35, Color( 255, 102, 0, 240 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		if ( !v:OnGround() && v:GetPos().z > self:GetPos().z+128) then
 			
-			--surface.SetMaterial( targetMat )
-			--surface.DrawTexturedRect( x - size / 2, y - size / 2, size, size )
-		
-		end
-		
-		if ( target && v == target ) then
+			if ( target && v == target ) then
 				
-			draw.SimpleText( "Locked On", "ChatFont", x, y, Color( 255, 0, 0, 240 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+				draw.SimpleText( "LOCKED", "ChatFont", x, y, Color( 255, 0, 0, 240 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 				
+			else
+			
+				draw.SimpleText( "Valid Target", "ChatFont", x, y, Color( 255, 102, 0, 240 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+			
+			end
+			
 		end
 		
 	end

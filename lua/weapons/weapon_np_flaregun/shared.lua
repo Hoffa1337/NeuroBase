@@ -29,7 +29,7 @@ SWEP.Contact		= "Hoffa1337 @ Facepunch\nSluggomc @ Steam"
 SWEP.Purpose		= ""
 SWEP.Instructions	= "In case of of emergency, fire flare towards sky\nand wait to see if the enemy can beat your team mates to the spot."
 SWEP.HoldType = "rpg"
-
+SWEP.Category = "Military Accessories"
 SWEP.Spawnable			= true
 SWEP.AdminSpawnable		= false
 
