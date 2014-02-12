@@ -139,6 +139,8 @@ function ENT:Think()
 	
 		self:Remove()
 		
+		return
+		
 	end
 	
 	if( self.Flying ) then

@@ -2576,7 +2576,13 @@ function Meta:DeathFX()
 		cdeb:SetMaterial( self:GetMaterial() )
 		cdeb:SetColor( Color( shade,shade,shade, 255 ) )
 		cdeb:Spawn()
-		cdeb:Fire("ignite","",0)
+		if( self:WaterLevel() == 0 ) then
+		
+			cdeb:Fire("ignite","",0)
+			
+			self:NeuroPlanes_SurfaceExplosion()
+			
+		end
 		cdeb:Fire("kill","",math.random(15,20))
 		cdeb:GetPhysicsObject():SetVelocity( self:GetVelocity() )
 		cdeb:GetPhysicsObject():AddAngleVelocity( Vector( math.Rand( -1,1), math.Rand( -1,1), math.Rand( -1,1) ) )
@@ -2588,7 +2594,7 @@ function Meta:DeathFX()
 	
 	local MySize = ( self:OBBMaxs() - self:OBBMins() ):Length()
 
-	if( MySize > 1250 ) then
+	if( MySize > 1050 ) then
 	
 		ParticleEffect( "bomber_ex_smoke", self:GetPos() + self:GetUp() * 1,self:GetAngles(), nil )
 	
