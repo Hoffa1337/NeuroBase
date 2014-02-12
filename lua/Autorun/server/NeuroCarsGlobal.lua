@@ -2554,7 +2554,9 @@ end
 /*********************************************************************/
 function Meta:DeathFX()
 	
-
+	if( self.IsExploded ) then return end
+	
+	if( !self.IsExploded ) then self.IsExploded = true end
 	
 	-- this is the only explosion sound that is audible across the whole map :S Soundscapes are weird in gmod.
 	for i=0,4 do
