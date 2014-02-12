@@ -374,6 +374,8 @@ function Meta:NA_RPG_damagehook(dmginfo)
 	if( !self.HealthVal ) then self.HealthVal = 100 end 
   	if( self.HealthVal < 0 ) then return end
 	
+	if( !IsValid( self ) ) then return end
+	
 	self:TakePhysicsDamage( dmginfo )
 	
 	self.HealthVal = self.HealthVal - dmginfo:GetDamage()
