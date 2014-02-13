@@ -1484,6 +1484,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		wep:SetRenderMode( RENDERMODE_TRANSALPHA )
 		wep:SetColor( Color( 0,0,0,0 ) )
 		self:SetNetworkedInt( "IdCoolingDown", wep.Identity)
+		self:SetNetworkedBool( "IsCoolingDown", true)
 		self:SetNetworkedInt( "CoolDown", wep.Cooldown-0.5)
 
 		timer.Simple( wep.Cooldown-0.5, 
@@ -1492,7 +1493,8 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 				if( IsValid( wep ) ) then 
 				
 					wep:SetColor( Color( 255,255,255,255) ) 
-					self:SetNetworkedBool( "IdCoolingDown", 0 )
+					-- self:SetNetworkedInt( "IdCoolingDown", 0 )
+					self:SetNetworkedBool( "IsCoolingDown", 0 )
 					local effectdata = EffectData()
 					effectdata:SetOrigin( wep:GetPos()  )
 					effectdata:SetEntity( wep )
