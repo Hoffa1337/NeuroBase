@@ -2420,8 +2420,14 @@ end
 /*  Damage Radius, Do Custom Effect, Effect Name                     */
 /*                                                                   */
 /*********************************************************************/
-function Meta:DealDamage( Type, Damage, Pos, Radius, DoEffect, Effect )
-
+function Meta:Neuro_DealDamage( Type, Damage, Pos, Radius, DoEffect, Effect )
+	
+	if( !IsValid( self ) ) then return end -- this shouldn't be happening
+	if( !Type ) then return end
+	if( !Damage ) then return end
+	if( !Pos ) then return end
+	if( !Radius ) then return end
+	
 	local info = DamageInfo( )  
 		info:SetDamageType( Type )  
 		info:SetDamagePosition( Pos )  
