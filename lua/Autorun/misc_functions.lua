@@ -1,5 +1,14 @@
 local Meta = FindMetaTable("Entity")
 
+function COS(ang)
+	return math.cos(ang)
+end
+function SIN(ang)
+	return math.sin(ang)
+end
+function TAN(ang)
+	return math.tan(ang)
+end
 
 function DrawHUDEllipse(center,scale,color) 
 //
