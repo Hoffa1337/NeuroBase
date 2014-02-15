@@ -18,15 +18,9 @@ function AddDir(dir) // recursively adds everything in a directory to be downloa
 	-- end
 end
 	
--- AddCSLuaFile("autorun/npcinit.lua") 
 AddCSLuaFile("autorun/client/JetHUD.lua")
--- AddCSLuaFile("autorun/client/NeuroBase_Checker.lua")
--- //AddDir("Materials/VGUI/entities")
--- AddDir("Sound/AC-130")
 AddDir("Models/AC-130")
 AddDir("Materials/models/AC-130")
--- //AddDir("Materials/particles")
--- AddDir("Materials/JetCH")
 resource.AddFile("materials/particles/fatsmoke.vtf")
 resource.AddFile("materials/effects/GAU-8_MuzzleSmoke.vtf")
 resource.AddFile("sound/ah64fire.wav")

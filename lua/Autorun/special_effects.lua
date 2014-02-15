@@ -3,8 +3,8 @@ game.AddParticles("particles/vman_explosion.pcf")
 -- game.AddParticles("particles/neuro_tank_flash.pcf") --AA_muzzleflash
 game.AddParticles("particles/neuro_tank_arty.pcf")
 game.AddParticles("particles/neuro_gore.pcf") -- tank_gore
-game.AddParticles("particles/neuro_tank_he.pcf")
-game.AddParticles("particles/neuro_tank_ap.pcf") 
+game.AddParticles("particles/neuro_tank_he.pcf") --
+game.AddParticles("particles/neuro_tank_ap.pcf") -- 30cal_impact
 game.AddParticles("particles/neuro_ricochet.pcf") -- tank_ric
 game.AddParticles("particles/neuro_tankfire.pcf") -- tank_fire
 game.AddParticles("particles/neuro_tank_flash.pcf") -- tank_muzzleflash
@@ -16,6 +16,7 @@ game.AddParticles("particles/neuro_rocket.pcf") --  rocket_impact_dirt  rocket_i
 game.AddParticles("particles/neuro_water_impact.pcf") --  water_impact_big  
 game.AddParticles("particles/neuro_nuke.pcf") --  nuke  
 game.AddParticles("particles/neuro_vehic_explosions.pcf") --  Jet_EX_smoke 
-game.AddParticles("particles/neuro_bombs.pcf") --  FAB_Explosion FAB_groundwave 
+game.AddParticles("particles/neuro_bombs.pcf") --  FAB_Explosion FAB_groundwave carpet_explode
+
 -- rocketrail/s
 print( "NeuroTec Special Effects loaded" )
