@@ -1,9 +1,11 @@
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
 include( 'shared.lua' )
-function ENT:OnTakeDamage(dmginfo)
- self:NA_RPG_damagehook(dmginfo)
- end
+-- function ENT:OnTakeDamage(dmginfo)
+
+	-- self:NA_RPG_damagehook(dmginfo)
+
+-- end
 
 function ENT:Initialize()
 
@@ -40,11 +42,8 @@ end
 
 function ENT:PhysicsCollide( data, physobj )
 		
-	if ( IsValid( self:GetOwner().Owner ) ) then
-		
-		self.Owner = self:GetOwner().Owner
+	if ( !IsValid( self.Owner ) ) then
 	
-	else
 		
 		self.Owner = self
 	
@@ -53,19 +52,14 @@ function ENT:PhysicsCollide( data, physobj )
 	
 	if (data.Speed > 150 && data.DeltaTime > 0.8 ) then 
 		
-		local fx = "VBIED_explosion"
-		if( math.random( 1,3 ) == 1 ) then
-			
-			fx = "VBIED_b_explosion"
-			
-		end
+		local fx = "carpet_explosion"
+	
+		ParticleEffect( fx, self:GetPos(), self:GetAngles(), NULL )
 		
-		ParticleEffect( fx, self:GetPos(), self:GetAngles(), nil )
-		
-		util.BlastDamage( self.Owner, self.Owner, data.HitPos, 1500, math.random( 3000, 5000) )
+		util.BlastDamage( self, self.Owner, data.HitPos, 1500, math.random( 3000, 5000) )
 		util.Decal("Scorch", data.HitPos + data.HitNormal * 768, data.HitPos - data.HitNormal * 768 )
 	
-		self.Entity:Remove()
+		self:Remove()
 	
 	end
 	
