@@ -30,25 +30,6 @@ function ENT:PhysicsCollide( data, physobj )
 
 	if ( data.Speed > 50 && data.DeltaTime > 0.2 ) then 
 	
-		for i = 0, 6 do	
-		
-			local effect2 = EffectData()
-			effect2:SetOrigin(self:GetPos() + i * Vector(math.Rand(-50,50),math.Rand(-50,50),0))
-			util.Effect("WaterSurfaceExplosion", effect2)
-			
-		end	
-		
-		for i = 0, 4 do
-		
-			local explo1 = EffectData()
-			explo1:SetOrigin(self:GetPos()+i*self:GetForward()*64)
-			explo1:SetScale(6.15)
-			util.Effect("HelicopterMegaBomb", explo1)
-			
-		end
-		
-		util.BlastDamage( self, self, data.HitPos, 512, 400 )
-		
 		self:Remove()
 	
 	end
@@ -64,8 +45,7 @@ function ENT:PhysicsUpdate()
 		
 		--Target escaped to the surface. Destroy torpedo
 		if( self.Target:WaterLevel() == 0 ) then
-		
-			self:ExplosionImproved()
+
 			self:Remove()
 			
 			return
@@ -93,8 +73,21 @@ function ENT:PhysicsUpdate()
 	
 end
 
-function ENT:OnRemove()
 
-	self:EmitSound("Torpedo_Impact.wav",300,100)
+function ENT:OnRemove()
+	
+	if( self:WaterLevel() > 0 ) then
+			
+		ParticleEffect( "water_impact_big", self:GetPos(),self:GetAngles(), nil )
+
+	end
+	
+	local e = EffectData()
+	e:SetOrigin( self:GetPos() )
+	util.Effect( "Explosion", e )
+	
+	util.BlastDamage( self, self, self:GetPos(), 750, math.random(750,2500) )
+
+	self:EmitSound("LockOn/ExplodeWater.mp3",300,100)
 	
 end
