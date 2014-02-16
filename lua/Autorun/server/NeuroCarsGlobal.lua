@@ -1334,7 +1334,7 @@ function Meta:NeuroPlanes_SurfaceExplosion()
 		explo:SetScale( 1 )
 		explo:SetMagnitude( 1 )
 		explo:SetNormal( Vector( 0,0,1 ) )
-		util.Effect( "WaterSurfaceExplosion", explo )
+		util.Effect( "Explosion", explo )
 
 		ParticleEffect( "water_impact_big", self:GetPos(), Angle(0,0,0), nil )
 	
