@@ -557,7 +557,7 @@ function Meta:Jet_LockOnMethod()
 	-- print("lock me up" )
 	-- // Lock On method
 	local trace,tr = {},{}
-	tr.start = self:GetPos() + self:GetForward() * 600
+	tr.start = self:GetPos() + self:GetForward() * 1000
 	tr.endpos = tr.start + self:GetForward() * 15500
 	tr.filter = filter
 	tr.mask = MASK_SOLID
@@ -565,7 +565,7 @@ function Meta:Jet_LockOnMethod()
 	-- self:DrawLaserTracer( tr.start, trace.HitPos )
 	local e = trace.Entity
 	
-	local logic = ( IsValid( e ) && ( e.PrintName || e:IsNPC() || e:IsPlayer() || e:IsVehicle() || e.HealthVal != nil || string.find( e:GetClass(), "prop_" ) ) )
+	local logic = ( IsValid( e ) && ( e.PrintName || e:IsNPC() || e:IsPlayer() || e:IsVehicle() || e.HealthVal != nil ) )
 	local logic2 = ( e != self.Pilot )
 	
 	local NeuroTeam = self:GetNetworkedInt( "NeuroTeam", 0 )
