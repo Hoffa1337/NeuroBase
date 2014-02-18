@@ -1488,9 +1488,10 @@ end
 -- Missile Alert && Valid Target Markers
 function JetFighter.MissileAlert()
 
-	JetFighter.Pilot.LockonSound:PlayEx( 1.0, 100 )
+	-- 
 	if ( JetFighter.DrawWarning ) then
-		
+	
+		JetFighter.Pilot.LockonSound:PlayEx( 1.0, 100 )
 		local pos = JetFighter.Plane:GetPos() + JetFighter.Plane:GetForward() * -805
 		local ang = JetFighter.Plane:GetAngles()
 		
