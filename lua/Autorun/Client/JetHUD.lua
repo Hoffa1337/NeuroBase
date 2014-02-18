@@ -748,7 +748,7 @@ function JetFighter.MarkEnemies()
 	
 	for k,v in pairs( player.GetAll() ) do
 		
-		if ( v:GetPos():Distance( JetFighter.Plane:GetPos() ) < 6500 && v != JetFighter.Pilot ) then
+		if ( v:GetPos():Distance( JetFighter.Plane:GetPos() ) < 15500 && v != JetFighter.Pilot ) then
 			
 			if ( v:OnGround() && !v.ColdBlooded && inLOS( JetFighter.Plane, v ) ) then
 				
@@ -770,15 +770,8 @@ function JetFighter.MarkEnemies()
 	
 	if( count > 0 ) then
 		
-		if( JetFighter.Pilot:GetDrivingEntity() == JetFighter.Plane ) then
-			
-			JetFighter.DrawWarning = true
-		
-		else
-			
-			JetFighter.DrawWarning = false
-		
-		end
+		JetFighter.DrawWarning = true
+
 		
 	else
 	
@@ -1495,8 +1488,8 @@ end
 -- Missile Alert && Valid Target Markers
 function JetFighter.MissileAlert()
 
-	//JetFighter.Pilot.LockonSound:PlayEx( 1.0, 100 )
-	if ( JetFighter.DrawWarning && JetFighter.Plane && JetFighter.Pilot:GetNetworkedBool("InFlight") ) then
+	JetFighter.Pilot.LockonSound:PlayEx( 1.0, 100 )
+	if ( JetFighter.DrawWarning ) then
 		
 		local pos = JetFighter.Plane:GetPos() + JetFighter.Plane:GetForward() * -805
 		local ang = JetFighter.Plane:GetAngles()
@@ -1505,7 +1498,7 @@ function JetFighter.MissileAlert()
 
 	else
 	
-		//JetFighter.Pilot.LockonSound:FadeOut( 0.15 )
+		JetFighter.Pilot.LockonSound:FadeOut( 0.15 )
 		/*if( JetFighter.Pilot.LastBeep + 3.1 <= CurTime() ) then
 			
 			JetFighter.Pilot.LastBeep = CurTime()
