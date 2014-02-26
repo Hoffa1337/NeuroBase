@@ -2,31 +2,6 @@ AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
 include( 'shared.lua' )
 
-function ENT:OnTakeDamage(dmginfo)
-	
-	if( self.Detonated ) then return end
-	if( !self.HealthVal ) then self.HealthVal = 120 end 
-  	if( self.HealthVal < 0 ) then return end
-	
-	self:TakePhysicsDamage( dmginfo )
-	
-	self.HealthVal = self.HealthVal - dmginfo:GetDamage()
-	
-	self:SetNetworkedInt( "health" , self.HealthVal )
-	
-
-	if ( self.HealthVal < 0 ) then
-
-		ParticleEffect( "ap_impact_wall", self:GetPos(), self:GetAngles(), nil )
-		util.BlastDamage( self, self, self:GetPos(), 256, 256 )
-		self:Remove()
-		return
-		
-		
-	end
-	
-end
-
 function ENT:Initialize()
 
 //    self:SetModel( "models/hawx/weapons/mk-82.mdl" )
@@ -94,7 +69,7 @@ function ENT:Think()
 	tr.mask = MASK_SOLID
 	trace = util.TraceLine ( tr )
 	
-	self:DrawLaserTracer( tr.start, trace.HitPos )
+	-- self:DrawLaserTracer( tr.start, trace.HitPos )
 	
 	if ( trace.Hit ) then
 		
