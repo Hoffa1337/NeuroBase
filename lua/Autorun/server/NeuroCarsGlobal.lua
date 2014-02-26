@@ -895,6 +895,8 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 	
 	if( self.Speed > 1000 ) then
 		
+		if( self.NoAirbrake ) then return end
+		
 		//Post Combustion (Boost) and Airbrake
 		local SpeedVar
 		local AirbrakeVar = 0

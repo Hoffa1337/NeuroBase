@@ -14,7 +14,7 @@ function ENT:Initialize()
 	self.PhysObj = self.Entity:GetPhysicsObject()
 	if (self.PhysObj:IsValid()) then
 		self.PhysObj:Wake()
-		self.PhysObj:EnableDrag(false)
+		self.PhysObj:EnableDrag(true)
 		self.PhysObj:EnableGravity(true)
 		self.PhysObj:SetMass(5500)
 	end
@@ -38,7 +38,7 @@ end
 
 function ENT:PhysicsCollide( data, physobj )
 		
-	if (  self:GetOwner().Owner && IsValid( self:GetOwner().Owner ) ) then
+	if ( IsValid( self:GetOwner() ) && IsValid( self:GetOwner().Owner ) ) then
 		
 		self.Owner = self:GetOwner().Owner
 	
@@ -48,21 +48,16 @@ function ENT:PhysicsCollide( data, physobj )
 	
 	end
 
-	
 	if (data.Speed > 150 && data.DeltaTime > 0.8 ) then 
 		
-		local explo = EffectData()
-		explo:SetOrigin(self.Entity:GetPos())
-		explo:SetScale(0.6)
-		util.Effect("nn_explosion", explo)
-		
-		self:ExplosionImproved()
-		
-		util.BlastDamage( self.Owner, self.Owner, data.HitPos, 3048, 750 )
-		self:NeuroPlanes_BlowWelds( self:GetPos(), 666 )
-		util.Decal("Scorch", data.HitPos + data.HitNormal * 256, data.HitPos - data.HitNormal * 256 )
+		local fx = "carpet_explosion"
 	
-		self.Entity:Remove()
+		ParticleEffect( fx, self:GetPos(), self:GetAngles(), NULL )
+		
+		util.BlastDamage( self, self.Owner, data.HitPos, 1500, math.random( 3000, 5000) )
+		util.Decal("Scorch", data.HitPos + data.HitNormal * 768, data.HitPos - data.HitNormal * 768 )
+	
+		self:Remove()
 	
 	end
 	
