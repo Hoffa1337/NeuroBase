@@ -533,7 +533,10 @@ function Meta:SpawnPilotModel( pos, ang )
 	p:SetKeyValue( "DefaultAnim", "ACT_DRIVE_AIRBOAT" )
 	p:SetKeyValue( "disableshadows", 1 )
 	p:Spawn()
+	p:SetRenderMode( RENDERMODE_TRANSALPHA )
 	p:SetColor( Color( 255,255,255,255 ) )
+	
+	-- print( p )
 	
 	if( IsValid( p ) ) then
 		-- print ( "Valid Pilot Model" )
@@ -2441,7 +2444,7 @@ function Meta:Neuro_DealDamage( Type, Damage, Pos, Radius, DoEffect, Effect )
 		
 	end
 	
-	for k, v in ipairs( ents.GetAll( ) ) do  
+	for k, v in pairs( ents.GetAll( ) ) do  
 		
 		if ( v && IsValid( v ) && v:Health( ) > 0 && ( v:IsNPC() || v:IsPlayer() ) ) then  
 			
@@ -2461,6 +2464,8 @@ function Meta:Neuro_DealDamage( Type, Damage, Pos, Radius, DoEffect, Effect )
 					info:SetDamage( Damage * ( 1 - p:Distance( Pos ) / Radius ) )  
 					info:SetDamageForce( ( p - Pos ):GetNormalized( ) * 10 )  
 					v:TakeDamageInfo( info )  
+					
+					print( "Damage: ", Damage * ( 1 - p:Distance( Pos ) / Radius ) )
 					
 				end
 				
@@ -2513,8 +2518,12 @@ function Meta:ScanForEnemies()
 		end
 		
 		if ( !IsValid( self.Target ) ) then //better safe than sorry
-		
-			self.Target = self.CycleTarget
+			
+			if( IsValid( self.CycleTarget ) ) then
+			
+				self.Target = self.CycleTarget
+			
+			end
 			
 		end
 		

@@ -17,6 +17,7 @@ game.AddParticles("particles/neuro_water_impact.pcf") --  water_impact_big
 game.AddParticles("particles/neuro_nuke.pcf") --  nuke  
 game.AddParticles("particles/neuro_vehic_explosions.pcf") --  Jet_EX_smoke 
 game.AddParticles("particles/neuro_bombs.pcf") --  FAB_Explosion FAB_groundwave carpet_explode
+game.AddParticles("particles/neuro_flamethrower.pcf") --  FAB_Explosion FAB_groundwave carpet_explode
 
 -- rocketrail/s
 print( "NeuroTec Special Effects loaded" )
