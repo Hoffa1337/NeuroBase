@@ -30,19 +30,19 @@ resource.AddFile("models/h500_gatling.mdl")
 local CrashDebris = {
 					{"models/props_citizen_tech/Firetrap_PropaneCanister01a.mdl"};
 					{"models/props_junk/iBeam01a.mdl"};
-					{"models/props_combine/tprotato2_chunk04.mdl"};
-					{"models/props_wasteland/barricade001a_chunk05.mdl"};
+					-- {"models/props_combine/tprotato2_chunk04.mdl"};
+					-- {"models/props_wasteland/barricade001a_chunk05.mdl"};
 					{"models/props_wasteland/gear02.mdl"};
 					{"models/props_c17/playground_teetertoter_stan.mdl"};
 					{"models/props_vehicles/carparts_muffler01a.mdl"};
-					{"models/props_c17/canisterchunk01a.mdl"};
+					-- {"models/props_c17/canisterchunk01a.mdl"};
 					{"models/props_c17/utilityconnecter006c.mdl"};
 					{"models/props_debris/metal_panelshard01d.mdl"};
 					{"models/props_c17/TrapPropeller_Engine.mdl"};
 					{"models/props_debris/beam01a.mdl"};
 					{"models/props_debris/beam01b.mdl"};
-					{"models/props_debris/metal_panelchunk01f.mdl"};
-					{"models/props_debris/metal_panelchunk01e.mdl"};
+					-- {"models/props_debris/metal_panelchunk01f.mdl"};
+					-- {"models/props_debris/metal_panelchunk01e.mdl"};
 					}
 
 for k, v in pairs( CrashDebris ) do
