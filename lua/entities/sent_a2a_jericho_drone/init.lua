@@ -6,9 +6,9 @@ ENT.Sauce = 9000
 ENT.Delay = 1
 ENT.Speed = 5000
 
-function ENT:OnTakeDamage(dmginfo)
- self:NA_RPG_damagehook(dmginfo)
- end
+-- function ENT:OnTakeDamage(dmginfo)
+ -- self:NA_RPG_damagehook(dmginfo)
+ -- end
 
 function ENT:Initialize()
 	
@@ -138,16 +138,22 @@ function ENT:PhysicsUpdate()
 		
 		if( dist < 250 ) then
 		
-			local explo1 = EffectData()
-			explo1:SetOrigin(self:GetPos())
-			explo1:SetScale(4.25)
-			util.Effect("Explosion", explo1)
+			local explo = EffectData()
+			explo:SetOrigin(self:GetPos())
+			util.Effect("Explosion", explo)
 			
-			util.BlastDamage( self.Owner, self.Owner, self:GetPos(), 1524, math.random(100,200) )
-			self:ExplosionImproved()
+			ParticleEffect( "rocket_impact_wall", self:GetPos(), self:GetAngles(), nil )
 			
+			local own = self.Owner
+			if( !IsValid( own ) ) then own = self end
+			
+			util.BlastDamage( self, self.Owner, self:GetPos(), self.Radius, self.Damage )
+			
+			-- 
 			self:Remove()
-		
+			
+			return
+			
 		end
 		
 		local dir = ( ( self.Target:GetPos() + pos ) - self:GetPos() ):Angle()
