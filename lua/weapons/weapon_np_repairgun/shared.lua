@@ -2,7 +2,7 @@
 if (SERVER) then
 
 	AddCSLuaFile( "shared.lua" )
-	SWEP.Weight				= 5
+	SWEP.Weight				= 1
 	SWEP.AutoSwitchTo		= false
 	SWEP.AutoSwitchFrom		= false
 
@@ -19,8 +19,8 @@ if ( CLIENT ) then
 	SWEP.PrintName			= "Repair Tool"			
 	SWEP.Author				= "Hoffa"
 	SWEP.Category			= "NeuroTec Weapons"
-	SWEP.Slot				= 5
-	SWEP.SlotPos			= 10
+	SWEP.Slot				= 1
+	SWEP.SlotPos			= 1
 	SWEP.IconLetter			= "b"
 	
 end
@@ -154,7 +154,7 @@ function SWEP:PrimaryAttack()
 		
 	else
 		self.Weapon:EmitSound("weapons/iceaxe/iceaxe_swing1.wav")
-		self.Weapon:SendWeaponAnim(ACT_VM_MISSCENTER)
+		self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
 	end
 	self.Owner:SetAnimation( PLAYER_ATTACK1 )
 		if (trace.Entity:IsNPC()) or (trace.Entity:IsPlayer()) then
@@ -202,6 +202,7 @@ function SWEP:PrimaryAttack()
 				
 				a.Burning = false
 				a.HealthVal = math.Approach( b, c, 100 )
+				a:SetNetworkedInt("health",a.HealthVal )
 				a.OilLevel = 100
 				a:SetNWFloat( "EngineOilLevel", 100 )
 				a.GearBoxHealth = 500
