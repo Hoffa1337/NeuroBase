@@ -136,7 +136,7 @@ function SWEP:PrimaryAttack()
 	local tr,trace = {},{}
 	tr.start = self.Owner:GetShootPos()
 	tr.endpos = tr.start + self.Owner:GetAimVector() * 100
-	tr.mask = MASK_SOLID
+	-- tr.mask = MASK_SOLID
 	tr.filter = { self, self.Owner }
 	trace = util.TraceLine( tr )
 	
