@@ -147,7 +147,7 @@ function ENT:PhysicsUpdate()
 			local own = self.Owner
 			if( !IsValid( own ) ) then own = self end
 			
-			util.BlastDamage( self, self.Owner, self:GetPos(), self.Radius, self.Damage )
+			util.BlastDamage( self, own, self:GetPos(), self.Radius, self.Damage )
 			
 			-- 
 			self:Remove()
