@@ -2332,6 +2332,7 @@ function Meta:SpawnFlare()
 			
 			pod = self.RocketVisuals[i]
 			 
+			break
 			
 		end
 	
@@ -2346,6 +2347,7 @@ function Meta:SpawnFlare()
 		
 		pos = self:GetPos() + self:GetUp() * -8 + self:GetForward() * -256
 		self:EmitSound( "weapons/flaregun/fire.wav",411, 100 )
+		pod = self
 		
 	end
 	
