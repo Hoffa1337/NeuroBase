@@ -18,6 +18,8 @@ game.AddParticles("particles/neuro_nuke.pcf") --  nuke
 game.AddParticles("particles/neuro_vehic_explosions.pcf") --  Jet_EX_smoke 
 game.AddParticles("particles/neuro_bombs.pcf") --  FAB_Explosion FAB_groundwave carpet_explode
 game.AddParticles("particles/neuro_flamethrower.pcf") --  FAB_Explosion FAB_groundwave carpet_explode
+game.AddParticles("particles/neuro_gascan.pcf") -- neuro_gascan_explo - neuro_gascan_explo_air - air
+game.AddParticles("particles/neuro_nuke_lowyield.pcf") --  lowyield_nuke_air_main lowyield_nuke_ground_main 
 
 -- rocketrail/s
 print( "NeuroTec Special Effects loaded" )
