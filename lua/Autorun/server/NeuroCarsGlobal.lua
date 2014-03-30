@@ -1,7 +1,7 @@
 local NeuroPlanesVersion = Revision()
-local Authors = "Hoffa, StarChick971, Sillirion"
-local Contributors = "Fireking552, Flyboi, Inaki, Sakarias88"
-local Testers = "Virus, Elenion, Flubbadoo, xXAcePilotXx, (WEED)Kamikaze"
+local Authors = "Hoffa, StarChick971, Sillirion, Aftokinito, Professor Heavy"
+local Contributors = "Fireking552, Flyboi, Inaki, Sakarias88, Beat the Zombie, Braxen"
+local Testers = "Virus, Elenion, Flubbadoo, xXAcePilotXx, (WEED)Kamikaze, Pimmie, Rifleman"
 
 function AddDir(dir) // recursively adds everything in a directory to be downloaded by client
 	
