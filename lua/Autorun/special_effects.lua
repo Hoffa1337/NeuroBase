@@ -16,7 +16,7 @@ game.AddParticles("particles/neuro_rocket.pcf") --  rocket_impact_dirt  rocket_i
 game.AddParticles("particles/neuro_water_impact.pcf") --  water_impact_big  
 game.AddParticles("particles/neuro_nuke.pcf") --  nuke  
 game.AddParticles("particles/neuro_vehic_explosions.pcf") --  Jet_EX_smoke 
-game.AddParticles("particles/neuro_bombs.pcf") --  FAB_Explosion FAB_groundwave carpet_explode
+game.AddParticles("particles/neuro_bombs.pcf") --  FAB_Explosion FAB_groundwave carpet_explosion
 game.AddParticles("particles/neuro_flamethrower.pcf") --  
 game.AddParticles("particles/neuro_gascan.pcf") -- neuro_gascan_explo - neuro_gascan_explo_air - air
 game.AddParticles("particles/neuro_nuke_lowyield.pcf") --  lowyield_nuke_air_main lowyield_nuke_ground_main 
