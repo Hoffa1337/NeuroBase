@@ -9,7 +9,7 @@
 local Meta = FindMetaTable("Entity")
 local g = 600 --Default ource engine gravity force.
 -- local g = -physenv.GetGravity( ).z --To get the server's gravity force.
-local DefaultMinRange = 1800  --Min range by default.
+local DefaultMinRange = 450  --Min range by default.
 local DefaultMaxRange = 18000  --Max range by default.
 local DefaultLaunchVelocity = AMMO_VELOCITY_ARTILLERY_SHELL  --The default speed we use for artillery.
 local AverageTravellingVelocity = 33500/3 --AMMO_VELOCITY_HE_SHELL  --The default speed we use for common tanks.
@@ -54,25 +54,51 @@ function Meta:BallisticCalculation(TargetPos) //Use a vector as argument.
 			
 		-- if R*InMeters < self.MinRange then R = self.MinRange/InMeters end
 		-- if R*InMeters > self.MaxRange then R = self.MaxRange/InMeters end
-		if R < self.MinRange then R = self.MinRange end
-		if R > self.MaxRange then R = self.MaxRange end
+	
+		
+		if( self.TankType == TANK_TYPE_ARTILLERY ) then
+			
+			if R < self.MinRange then R = self.MaxRange end
+			if R > self.MaxRange then R = self.MinRange end
+			
+		else
+			
+			if R < self.MinRange then R = self.MinRange end
+			if R > self.MaxRange then R = self.MaxRange end
+			
+		end
 		
 		if self.Accuracy==nil then self.Accuracy=DefaultAccuracy end
 		 self.Accuracy = math.Clamp( self.Accuracy, 0, 100 )
 
-		local v0
-		if self.TankType != 5 then 
-		v0 = TANK_AMMO_SPEEDS[self.AmmoTypes[ self.AmmoIndex ].Type]
-		-- v0 = AverageTravellingVelocity
-		else
-		v0 = DefaultLaunchVelocity
-		end
+		local v0 = TANK_AMMO_SPEEDS[self.AmmoTypes[ self.AmmoIndex ].Type]
 	
--- print("v0: "..v0)		
-		local LaunchAngle = -self:CalculateLaunchAngle(R,v0,h)
-				
+	
+	
+	local LaunchAngle = -self:CalculateLaunchAngle(R,v0,h, false)
+
+	if( self.TankType == TANK_TYPE_ARTILLERY ) then
+	
+		local maxpitch = self.MaxBarrelPitch or 60
+		-- local highArc = true
+		
+		if( R >= self.MaxRange/10 ) then 
+			
+			LaunchAngle = -self:CalculateLaunchAngle(R,v0,h, true )
+			
+		end
+		-- print( maxpitch, LaunchAngle, LaunchAngle > maxpitch  )
+		if( math.abs(LaunchAngle) >= math.abs(maxpitch)  ) then
+			
+			LaunchAngle = -self:CalculateLaunchAngle(R,v0,h, false )
+			
+		end	
+		
+	end
+	
 	self.Owner:SetNetworkedFloat( "LaunchVelocity", v0 )
 	self.Owner:SetNetworkedFloat( "LaunchAngle", LaunchAngle )
+	
 	local R =CalculateTrajectoryRange(v0,LaunchAngle,h)
 	self.Owner:SetNetworkedFloat( "Range", R )
 	
@@ -81,13 +107,22 @@ function Meta:BallisticCalculation(TargetPos) //Use a vector as argument.
 	return LaunchAngle	
 end
 
-function Meta:CalculateLaunchAngle(R,v0,h)
+function Meta:CalculateLaunchAngle(R,v0,h,HighArc)
 		
 	-- if self.IsArtillery == nil then self.IsArtillery = false end
 
 	local theta,sgn,tan,discriminant
+
 	-- if h<0 then sgn =1 else sgn =1 end //Not sure if the 2nd solution of the equation works properly.
-	if self.TankType == TANK_TYPE_ARTILLERY then sgn =1 else sgn =-1 end //Not sure if the 2nd solution of the equation works properly.
+	if ( self.TankType == TANK_TYPE_ARTILLERY && HighArc ) then 
+		
+		sgn =1 
+		
+	else 
+		
+		sgn =-1 
+		
+	end --//Not sure if the 2nd solution of the equation works properly.
 
 	discriminant = v0*v0*v0*v0-g*(g*R*R+2*h*v0*v0)
 	if discriminant < 0 then discriminant = 0 end
@@ -110,3 +145,4 @@ function CalculateTrajectoryRange(v0,theta,h)
 	-- return v0*v0 * math.sin( math.rad(2*theta) ) / g
 
 end
+print( "NeuroTec Ballistics Loaded") 
