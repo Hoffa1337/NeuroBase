@@ -1,0 +1,7 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/thedoctor/mat_napalm/metallic_rings_red_darker"
+	"$surfaceprop" "metal"
+	"$model" 1
+}
+
