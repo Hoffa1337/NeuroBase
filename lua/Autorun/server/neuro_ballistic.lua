@@ -10,9 +10,9 @@ local Meta = FindMetaTable("Entity")
 local g = 600 --Default ource engine gravity force.
 -- local g = -physenv.GetGravity( ).z --To get the server's gravity force.
 local DefaultMinRange = 450  --Min range by default.
-local DefaultMaxRange = 18000  --Max range by default.
+local DefaultMaxRange = TANK_RANGE_ARTILLERY_SHELL  --Max range by default.
 local DefaultLaunchVelocity = AMMO_VELOCITY_ARTILLERY_SHELL  --The default speed we use for artillery.
-local AverageTravellingVelocity = 33500/3 --AMMO_VELOCITY_HE_SHELL  --The default speed we use for common tanks.
+local AverageTravellingVelocity = AMMO_VELOCITY_HE_SHELL-- 33500/3 --AMMO_VELOCITY_HE_SHELL  --The default speed we use for common tanks.
 local DefaultAccuracy = 0.85 --It is the default accuracy of the cannon in meters.
 local InMeters = 0.3048/16 //This is constant to convert map grid unit to meters.
 local InFeet = 1/16 //Constant to get distances from map unit in feet.
@@ -56,27 +56,32 @@ function Meta:BallisticCalculation(TargetPos) //Use a vector as argument.
 		-- if R*InMeters > self.MaxRange then R = self.MaxRange/InMeters end
 	
 		
-		if( self.TankType == TANK_TYPE_ARTILLERY ) then
+		-- if( self.TankType == TANK_TYPE_ARTILLERY ) then
 			
-			if R < self.MinRange then R = self.MaxRange end
-			if R > self.MaxRange then R = self.MinRange end
+			-- if R < self.MinRange then R = self.MaxRange end
+			-- if R > self.MaxRange then R = self.MinRange end
 			
-		else
+		-- else
 			
 			if R < self.MinRange then R = self.MinRange end
 			if R > self.MaxRange then R = self.MaxRange end
 			
-		end
+		-- end
 		
 		if self.Accuracy==nil then self.Accuracy=DefaultAccuracy end
 		 self.Accuracy = math.Clamp( self.Accuracy, 0, 100 )
-
-		local v0 = TANK_AMMO_SPEEDS[self.AmmoTypes[ self.AmmoIndex ].Type]
+		local speed = DefaultLaunchVelocity
+		if( self.AmmoTypes &&  self.AmmoIndex ) then 
+			
+			speed = TANK_AMMO_SPEEDS[ self.AmmoTypes[ self.AmmoIndex ].Type ]
+			
+		end
+		local v0 = speed
 		-- local v0 = AMMO_VELOCITY_ARTILLERY_SHELL								//Uncomment this line to test the R/C SU-8 artillery.
 	
 	
 	
-	local LaunchAngle = -self:CalculateLaunchAngle(R,v0,h, false)
+	local LaunchAngle = -self:CalculateLaunchAngle(R,v0,h, self.TankType == TANK_TYPE_ARTILLERY )
 
 	if( self.TankType == TANK_TYPE_ARTILLERY ) then
 	
@@ -110,6 +115,7 @@ function Meta:BallisticCalculation(TargetPos) //Use a vector as argument.
 	local R =CalculateTrajectoryRange(v0,LaunchAngle,h)
 	self.Owner:SetNetworkedFloat( "Range", R )
 	
+	-- print( LaunchAngle )
 -- print("R="..R..", Height= "..h..", v0="..v0..", Angle="..LaunchAngle.."\n")		
 
 	return LaunchAngle	
