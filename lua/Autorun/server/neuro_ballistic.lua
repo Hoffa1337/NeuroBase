@@ -87,12 +87,19 @@ function Meta:BallisticCalculation(TargetPos) //Use a vector as argument.
 			LaunchAngle = -self:CalculateLaunchAngle(R,v0,h, true )
 			
 		end
-		-- print( maxpitch, LaunchAngle, LaunchAngle > maxpitch  )
-		if( math.abs(LaunchAngle) >= math.abs(maxpitch)  ) then
+		-- local TooSteep = false
+		
+		-- if( LaunchAngle < 0 ) then
+			-- if( LaunchAngle <= -maxpitch ) then
+				-- LaunchAngle = -self:CalculateLaunchAngle(R,v0,h, false )
+			-- end
+		-- end
+		-- print( -maxpitch, LaunchAngle, LaunchAngle > maxpitch  )
+		-- if( math.abs(LaunchAngle) >= math.abs(maxpitch)  ) then
 			
-			LaunchAngle = -self:CalculateLaunchAngle(R,v0,h, false )
+			-- LaunchAngle = -self:CalculateLaunchAngle(R,v0,h, false )
 			
-		end	
+		-- end	
 		
 	end
 	
