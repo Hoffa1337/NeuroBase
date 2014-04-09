@@ -72,6 +72,7 @@ function Meta:BallisticCalculation(TargetPos) //Use a vector as argument.
 		 self.Accuracy = math.Clamp( self.Accuracy, 0, 100 )
 
 		local v0 = TANK_AMMO_SPEEDS[self.AmmoTypes[ self.AmmoIndex ].Type]
+		-- local v0 = AMMO_VELOCITY_ARTILLERY_SHELL								//Uncomment this line to test the R/C SU-8 artillery.
 	
 	
 	
