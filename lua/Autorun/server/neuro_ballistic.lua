@@ -74,6 +74,11 @@ function Meta:BallisticCalculation(TargetPos) //Use a vector as argument.
 		if( self.AmmoTypes &&  self.AmmoIndex ) then 
 			
 			speed = TANK_AMMO_SPEEDS[ self.AmmoTypes[ self.AmmoIndex ].Type ]
+			if( TANK_AMMO_RANGE[ self.AmmoTypes[self.AmmoIndex ].Type ] ) then
+			
+				R = TANK_AMMO_RANGE[ self.AmmoTypes[self.AmmoIndex ].Type ]
+
+			end			
 			
 		end
 		local v0 = speed
