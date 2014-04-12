@@ -56,17 +56,17 @@ function Meta:BallisticCalculation(TargetPos) //Use a vector as argument.
 		-- if R*InMeters > self.MaxRange then R = self.MaxRange/InMeters end
 	
 		
-		-- if( self.TankType == TANK_TYPE_ARTILLERY ) then
+		if( self.TankType == TANK_TYPE_ARTILLERY ) then
 			
-			-- if R < self.MinRange then R = self.MaxRange end
-			-- if R > self.MaxRange then R = self.MinRange end
+			if R < self.MinRange then R = self.MaxRange end
+			if R > self.MaxRange then R = self.MinRange end
 			
-		-- else
+		else
 			
 			if R < self.MinRange then R = self.MinRange end
 			if R > self.MaxRange then R = self.MaxRange end
 			
-		-- end
+		end
 		
 		if self.Accuracy==nil then self.Accuracy=DefaultAccuracy end
 		 self.Accuracy = math.Clamp( self.Accuracy, 0, 100 )
@@ -86,14 +86,14 @@ function Meta:BallisticCalculation(TargetPos) //Use a vector as argument.
 	
 	
 	
-	local LaunchAngle = -self:CalculateLaunchAngle(R,v0,h, self.TankType == TANK_TYPE_ARTILLERY )
+	local LaunchAngle = -self:CalculateLaunchAngle(R,v0,h, false )
 
 	if( self.TankType == TANK_TYPE_ARTILLERY ) then
 	
 		local maxpitch = self.MaxBarrelPitch or 60
 		-- local highArc = true
 		
-		if( R >= self.MaxRange/10 ) then 
+		if( R >= 6000 ) then 
 			
 			LaunchAngle = -self:CalculateLaunchAngle(R,v0,h, true )
 			
