@@ -9,7 +9,7 @@
 local Meta = FindMetaTable("Entity")
 local g = 600 --Default ource engine gravity force.
 -- local g = -physenv.GetGravity( ).z --To get the server's gravity force.
-local DefaultMinRange = 200  --Min range by default.
+local DefaultMinRange = 1  --Min range by default.
 local DefaultMaxRange = TANK_RANGE_ARTILLERY_SHELL  --Max range by default.
 local DefaultLaunchVelocity = AMMO_VELOCITY_ARTILLERY_SHELL  --The default speed we use for artillery.
 local AverageTravellingVelocity = AMMO_VELOCITY_HE_SHELL-- 33500/3 --AMMO_VELOCITY_HE_SHELL  --The default speed we use for common tanks.
