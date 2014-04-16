@@ -1,0 +1,3 @@
+propellant_large_main -- Main exhaust
+
+propellant_smoke_blast -- collision smoke
