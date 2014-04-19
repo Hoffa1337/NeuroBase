@@ -203,12 +203,19 @@ function SWEP:PrimaryAttack()
 				a.Burning = false
 				a.HealthVal = math.Approach( b, c, 100 )
 				a:SetNetworkedInt("health",a.HealthVal )
-				a.OilLevel = 100
-				a:SetNWFloat( "EngineOilLevel", 100 )
-				a.GearBoxHealth = 500
-				a.OilLeaking = false
-				a.EngineHeat = 0
-				a.OilPumpBroken = false
+				
+				if( b > c * 0.8 ) then				
+					
+					a.OilLevel = 100
+					a:SetNWFloat( "EngineOilLevel", 100 )
+					a.GearBoxHealth = 355
+					a:SetNetworkedInt( "EngineGearBoxHealth", a.GearBoxHealth )
+					a.GearBoxBroken = false
+					a.OilLeaking = false
+					a.EngineHeat = 0
+					a.OilPumpBroken = false
+					
+				end
 				
 				for k,v in pairs( ents.FindInSphere( trace.HitPos, 128 )  ) do
 					
