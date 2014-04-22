@@ -5,7 +5,7 @@ function EFFECT:Init( data )
 	self.Position = data:GetOrigin()
 	local Pos = self.Position		
 	local Norm = Vector(0,0,1)
-	
+	local scale = data:GetScale() or 1.0
 	Pos = Pos + Norm * 2
 	
 	local emitter = ParticleEmitter( Pos )
@@ -15,9 +15,10 @@ function EFFECT:Init( data )
 			local particle = emitter:Add( "particle/mat1", Pos + Vector( math.random( -50, 50 ), math.random( -50, 50 ), math.random( 10, 150 ) ) ) -- Unser Effekt: (  "PFAD ZUM EFFEKT",  POSITION_DES_EFFEKTES )
 				
 				particle:SetVelocity( Vector( math.random( -50, 50 ), math.random( -50, 50 ), math.random( -10, 10 ) ) )
-				particle:SetDieTime( math.Rand( 2.1, 3.1 ) )
+				particle:SetDieTime( math.Rand( 2.1, 3.1 ) * scale )
 				particle:SetStartAlpha( math.random( 100, 200 ) )
-				particle:SetStartSize( math.random( 60, 90 ) )
+				particle:SetEndAlpha( 0 )
+				particle:SetStartSize( math.random( 60, 90 ) * scale )
 				particle:SetEndSize( math.random( 0, 10 ) )
 				particle:SetRoll( math.random( -360, 360 ) )
 				particle:SetRollDelta( math.random( -0.6, 0.6 ) )
