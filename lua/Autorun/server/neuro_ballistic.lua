@@ -13,7 +13,7 @@ local DefaultMinRange = 1  --Min range by default.
 local DefaultMaxRange = TANK_RANGE_ARTILLERY_SHELL  --Max range by default.
 local DefaultLaunchVelocity = AMMO_VELOCITY_ARTILLERY_SHELL  --The default speed we use for artillery.
 local AverageTravellingVelocity = AMMO_VELOCITY_HE_SHELL-- 33500/3 --AMMO_VELOCITY_HE_SHELL  --The default speed we use for common tanks.
-local DefaultAccuracy = 0.85 --It is the default accuracy of the cannon in meters.
+local DefaultAccuracy = 0.0 --It is the default accuracy of the cannon in meters.
 local InMeters = 0.3048/16 //This is constant to convert map grid unit to meters.
 local InFeet = 1/16 //Constant to get distances from map unit in feet.
 
