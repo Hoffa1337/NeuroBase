@@ -1,0 +1,1 @@
+Internal ground detonation name -  nitro_main
