@@ -574,6 +574,15 @@ function JetFighter.HUD() --Real Head-Up Display by StarChick. ;)
 	//Health indicator
 	draw.SimpleText( "Armor: "..math.floor(100*h).."%", "TargetID", ScrW()*5/6-48, ScrH()*4/5-40, Color(255*(1-h),255*h,0,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )		
 
+/*	//Bombing Impact Prediction (this lag so much...)
+	local bpos = JetFighter.Plane:GetNetworkedVector("BombingImpactPos", JetFighter.Plane:GetPos() )
+	local ang = JetFighter.Plane:GetAngles()
+	local eyeang = JetFighter.Pilot:EyeAngles()
+	local d = (bpos-JetFighter.Plane:GetPos() ):Length()
+	local w,h = 50,50*math.abs(math.sin(ang.p/180*math.pi/2) )
+	
+	DrawHUDEllipse(bpos:ToScreen(),Vector(w,h,0),Color(255,255,0,255) )
+*/
 	//
 	surface.SetDrawColor( 0, 255, 0, 200)
 
