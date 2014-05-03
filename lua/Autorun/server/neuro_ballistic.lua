@@ -164,4 +164,26 @@ function CalculateTrajectoryRange(v0,theta,h)
 	-- return v0*v0 * math.sin( math.rad(2*theta) ) / g
 
 end
+
+function Meta:BombingImpact(v0,pitch)
+
+	local pos = self:GetPos()
+	local ang = self:GetAngles()
+
+	local trace,tr = {},{}
+	tr.start = pos
+	tr.endpos = tr.start + self:GetUp()*-1000000
+	tr.filter = { self.Pilot, self, self.Weapon }
+	tr.mask = MASK_SOLID
+	trace = util.TraceEntity( tr, self )
+
+	local h = pos.z - trace.HitPos.z
+	local R = v0*math.abs( math.sin(math.rad(-ang.p))* math.sqrt( 2*h/g ) )
+	
+
+	local ImpactPos = pos + self:GetForward()*R + self:GetUp()*-h
+	return ImpactPos
+	
+end
+
 print( "NeuroTec Ballistics Loaded") 
