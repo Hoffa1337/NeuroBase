@@ -25,5 +25,7 @@ game.AddParticles("particles/propellant_large_hoffa.pcf") -- propellant_large_ma
 game.AddParticles("particles/aang_poison_gas.pcf") --poison_gas_main -- Ground explosionm poison_air_main -- You know what it means..
 game.AddParticles("particles/poison_gas_main.pcf") --poison_gas_large_ground poison_gas_large_air
 game.AddParticles("particles/neuro_fireball.pcf") --fireball_explosion
+-- game.AddParticles("particles/nitro_effect.pcf") --nitro_main
+-- game.AddParticles("particles/nitro_effect.pcf") --nitro_main
 -- rocketrail/s
 print( "NeuroTec Special Effects loaded" )
