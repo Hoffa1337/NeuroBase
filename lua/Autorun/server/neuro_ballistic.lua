@@ -46,6 +46,12 @@ end
 function Meta:BallisticCalculation(TargetPos) //Use a vector as argument.
 		
 		local pos = self:GetPos()
+		if( IsValid( self.Barrel ) && self.BarrelLength ) then
+			
+			pos = self.Barrel:GetPos() + self.Barrel:GetForward() * self.BarrelLength
+		
+		end
+		
 		local R = (TargetPos - pos):Length2D()
 		local h = (TargetPos.z - pos.z)
 				
