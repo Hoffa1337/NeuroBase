@@ -25,8 +25,8 @@ game.AddParticles("particles/aang_poison_gas.pcf") 		-- poison_gas_main -- Groun
 game.AddParticles("particles/poison_gas_main.pcf") 		-- poison_gas_large_ground poison_gas_large_air
 game.AddParticles("particles/neuro_fireball.pcf") 		-- fireball_explosion
 -- game.AddParticles("particles/neuro_fireball.pcf") --fireball_explosion
-game.AddParticles("particles/gbe_trinity_explo.pcf.pcf") --trinity_main and trinity_air
--- game.AddParticles("particles/nitro_effect.pcf") --nitro_main
+game.AddParticles("particles/gbe_trinity_explo.pcf") --trinity_main and trinity_air
+-- game.AddParticles("particles/nitro_effect.pcf") --nitro_main 
 -- game.AddParticles("particles/nitro_effect.pcf") --nitro_main
 -- rocketrail/s
 print( "NeuroTec Special Effects loaded" )
