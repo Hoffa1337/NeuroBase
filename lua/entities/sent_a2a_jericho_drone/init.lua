@@ -28,12 +28,6 @@ function ENT:Initialize()
 		self.PhysObj:Wake()
 	
 	end
-	
-	local smoke = ents.Create("env_rockettrail")
-	smoke:SetPos(self:GetPos() + self:GetForward() * -5)
-	smoke:SetParent( self )
-	smoke:SetLocalAngles(Angle(0,0,0))
-	smoke:Spawn()
 		
 	util.PrecacheSound("Missile.Accelerate")
 	self.Sound = CreateSound( self, "Missile.Accelerate" )
@@ -58,12 +52,7 @@ function ENT:PhysicsCollide( data, physobj )
 	
 	if (data.Speed > 10 && data.DeltaTime > 0.2 ) then 
 		
-		local explo1 = EffectData()
-		explo1:SetOrigin(self:GetPos())
-		explo1:SetScale(2.25)
-		util.Effect("Explosion", explo1)
-		util.BlastDamage( self.Owner, self.Owner, data.HitPos, 1024, 300 )
-		self:ExplosionImproved()
+		ParticleEffect( "rocket_impact_wall", self:GetPos(), self:GetAngles(), nil )
 		self:Remove()
 	
 	end

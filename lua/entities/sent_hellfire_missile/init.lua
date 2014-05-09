@@ -33,12 +33,6 @@ function ENT:Initialize()
 	
 	util.PrecacheSound("Missile.Accelerate")
 
-	self.smoketrail = ents.Create("env_rockettrail")
-	self.smoketrail:SetPos(self:GetPos() + self:GetForward() * -83)
-	self.smoketrail:SetParent(self)
-	self.smoketrail:SetLocalAngles(Angle(0,0,0))
-	self.smoketrail:Spawn()
-
 	if ( self:GetModel() ) then
 		
 		self:SetModel( self:GetModel() )
@@ -63,13 +57,7 @@ function ENT:PhysicsCollide( data, physobj )
 		
 	end
 	
-	local explo = EffectData()
-	explo:SetOrigin( self:GetPos() )
-	explo:SetStart( Vector( 0, 0, 100 ) )
-	explo:SetScale( 1.45 )
-	explo:SetNormal( data.HitNormal )
-	util.Effect("v1_impact", explo)
-	
+	ParticleEffect( "carpet_explosion", self:GetPos(), Angle(0, 0, 0), nil )
 	if( !self.Radius ) then self.Radius = 512 end
 	if( !self.Damage ) then self.Damage = 2048 end
 	
