@@ -1,5 +1,5 @@
 
-CreateConVar("neurotec_funstuff", 0,  FCVAR_NOTIFY )
+CreateConVar("neurotec_funstuff", 1,  FCVAR_NOTIFY )
 
 
 local CarrierPos = {}
