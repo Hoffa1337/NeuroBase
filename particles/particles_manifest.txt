@@ -14,4 +14,5 @@ particles_manifest
 	"file"		"particles/neuro_rocket.pcf"
 	"file"		"particles/neuro_vehic_explosions.pcf"
 	"file"		"particles/neuro_bombs.pcf"
+	"file"		"particles/neuro_ratteexplo.pcf"
 }
