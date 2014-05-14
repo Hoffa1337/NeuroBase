@@ -1,6 +1,6 @@
 -- This is where we register custom particle effect systems.
 game.AddParticles("particles/vman_explosion.pcf") 		-- dusty_rockets
-game.AddParticles("particles/neuro_tank_arty.pcf") 		-- rt_impact_wall / rt_impact_dirt
+game.AddParticles("particles/neuro_tank_arty.pcf") 		-- rt_impact / rt_impact_tank
 game.AddParticles("particles/neuro_gore.pcf") 			-- tank_gore
 game.AddParticles("particles/neuro_tank_he.pcf") 		-- tank_impact_dirt / tank_impact_wall
 game.AddParticles("particles/neuro_tank_ap.pcf") 		-- 30cal_impact
@@ -24,9 +24,9 @@ game.AddParticles("particles/propellant_large_hoffa.pcf")-- propellant_large_mai
 game.AddParticles("particles/aang_poison_gas.pcf") 		-- poison_gas_main -- Ground explosionm poison_air_main -- You know what it means..
 game.AddParticles("particles/poison_gas_main.pcf") 		-- poison_gas_large_ground poison_gas_large_air
 game.AddParticles("particles/neuro_fireball.pcf") 		-- fireball_explosion
--- game.AddParticles("particles/neuro_fireball.pcf") --fireball_explosion
+game.AddParticles("particles/neuro_fireboom.pcf") 		-- fireboom_explosion 
+game.AddParticles("particles/neuro_inferno.pcf") 		-- neuro_tankfire 
 game.AddParticles("particles/gbe_trinity_explo.pcf") --trinity_main and trinity_air
--- game.AddParticles("particles/nitro_effect.pcf") --nitro_main 
--- game.AddParticles("particles/nitro_effect.pcf") --nitro_main
+
 -- rocketrail/s
 print( "NeuroTec Special Effects loaded" )
