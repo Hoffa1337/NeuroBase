@@ -24,8 +24,8 @@ game.AddParticles("particles/propellant_large_hoffa.pcf")-- propellant_large_mai
 game.AddParticles("particles/aang_poison_gas.pcf") 		-- poison_gas_main -- Ground explosionm poison_air_main -- You know what it means..
 game.AddParticles("particles/poison_gas_main.pcf") 		-- poison_gas_large_ground poison_gas_large_air
 game.AddParticles("particles/neuro_fireball.pcf") 		-- fireball_explosion
-game.AddParticles("particles/neuro_fireboom.pcf") 		-- fireboom_explosion 
-game.AddParticles("particles/neuro_inferno.pcf") 		-- neuro_tankfire 
+game.AddParticles("particles/neuro_fireboom.pcf") 		-- fireboom_explosion - fireboom_explosion_midair 
+game.AddParticles("particles/neuro_inferno.pcf") 		-- fireplume -  fireplume_small 
 game.AddParticles("particles/gbe_trinity_explo.pcf") --trinity_main and trinity_air
 
 -- rocketrail/s
