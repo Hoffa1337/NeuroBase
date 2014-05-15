@@ -67,7 +67,7 @@ function ENT:PhysicsCollide( data, physobj )
 		
 		//self:EmitSound( "LockOn/ExplodeNapalm.mp3", 511, 100 )
 					
-		for i=1,15 do
+		for i=1,2 do
 			
 			local tr, trace = {}, {}
 			tr.start = self:GetPos() + Vector(0,0,752) + self:GetForward() * 256 * i + Vector(math.random(-512,512),math.random(-512,512),0)
@@ -92,10 +92,12 @@ function ENT:PhysicsCollide( data, physobj )
 						
 						if( IsValid( self ) ) then
 						
-							local explo = EffectData()
-							explo:SetOrigin( trace.HitPos )
-							explo:SetScale( 1.0 + math.Rand( -.2,.2) )
-							util.Effect("Napalm_Bomb", explo)
+							-- local explo = EffectData()
+							-- explo:SetOrigin( trace.HitPos )
+							-- explo:SetScale( 1.0 + math.Rand( -.2,.2) )
+							-- util.Effect("Napalm_Bomb", explo)
+							
+							ParticleEffect("fireboom_explosion", trace.HitPos,Angle(0,0,0), nil )
 							
 							util.BlastDamage( self, self.Owner, trace.HitPos, 3048, 55 ) 
 							
