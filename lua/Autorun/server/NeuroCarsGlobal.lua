@@ -1144,13 +1144,15 @@ function Meta:NeuroPlanes_EjectionSeat()
 	ejectionseat:Spawn()
 	ejectionseat:Fire("kill","",180)
 
+	ParticleEffectAttach( "scud_trail", PATTACH_ABSORIGIN_FOLLOW, ejectionseat, 0 )
+	timer.Simple( 2, function() if(IsValid(ejectionseat))then ejectionseat:StopParticles() end end )
 	
 				
 	for i=1,25 do
 		
-		timer.Simple( i / 10, function() 	local f1 = EffectData()
-											f1:SetOrigin( ejectionseat:GetPos() )
-											util.Effect("immolate",f1) end )
+		-- timer.Simple( i / 10, function() 	local f1 = EffectData()
+											-- f1:SetOrigin( ejectionseat:GetPos() )
+											-- util.Effect("immolate",f1) end )
 		
 		if( i == 25 ) then
 			
