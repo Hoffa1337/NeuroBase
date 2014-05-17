@@ -13,41 +13,48 @@ N_ents_misc_list = {}
 NT_ents_list = {}
 NN_ents_list = {}
 NW_ents_list = {}
+hook.Add("InitPostEntity", "NeuroTecBuildSpawnMenu", function() 
 
-for k, v in pairs( scripted_ents.GetSpawnable( )) do
-	if( !v.Category ) then return end 
-	
-	cat = string.lower( v.Category )
-	if( string.find( cat, "neurotec aviation" ) || string.find( cat, "neurotec civil" ) ) then
-		table.insert( NP_ents_list, v.ClassName )
+	for k, v in pairs( scripted_ents.GetSpawnable( )) do
+		
+		if( v.Category ) then 
+			
+			local cat = string.lower( v.Category )
+			if( string.find( cat, "neurotec aviation" ) || string.find( cat, "neurotec civil" ) ) then
+				table.insert( NP_ents_list, v.ClassName )
+			end
+			if( string.find( cat, "neurotec warbirds" ) ) then
+				table.insert( NP_ents_warbirds_list, v.ClassName )
+			end
+
+			if( string.find( cat, "neurotec helicopters" )) then
+				table.insert( NP_ents_helicopters_list, v.ClassName )
+			end
+
+			if( string.find( cat, "neurotec fun" ) || string.find( cat, "neurotec admin" ) || string.find( cat, "neurotec work" ) ) then
+				table.insert( N_ents_misc_list, v.ClassName )
+			end
+
+			-- tanks only
+			if( v.TankType && string.find( cat, "neurotec tanks" ) || string.find( cat, "neurotec ground" ) ) then
+				table.insert( NT_ents_list, v )
+				-- print("woop")
+			end
+
+
+			if( string.find( cat, "neurotec naval" )  ) then
+				table.insert( NN_ents_list, v.ClassName )
+			end
+
+			if( string.find( cat, "neurotec weapons" ) ) then
+				table.insert( NW_ents_list, v.ClassName )
+			end
+			
+		end
+		
 	end
-	if( string.find( cat, "neurotec warbirds" ) ) then
-		table.insert( NP_ents_warbirds_list, v.ClassName )
-	end
 
-	if( string.find( cat, "neurotec helicopters" )) then
-		table.insert( NP_ents_helicopters_list, v.ClassName )
-	end
-
-	if( string.find( cat, "neurotec fun" ) || string.find( cat, "neurotec admin" ) || string.find( cat, "neurotec work" ) ) then
-		table.insert( N_ents_misc_list, v.ClassName )
-	end
-
-
-	if( string.find( cat, "neurotec tanks" ) || string.find( cat, "neurotec ground" ) ) then
-		table.insert( NT_ents_list, v.ClassName )
-	end
-
-
-	if( string.find( cat, "neurotec naval" )  ) then
-		table.insert( NN_ents_list, v.ClassName )
-	end
-
-	if( string.find( cat, "neurotec weapons" ) ) then
-		table.insert( NW_ents_list, v.ClassName )
-	end
-
-end
+end )
 
 /*-- ***************************************delete this line to see the Neuro Tab (doesn't work yet)********************************************
 base_weapons = {}
@@ -249,21 +256,32 @@ NeuroTecSheet:AddSheet( "NeuroPlanes", NP_Scroll, "icon16/control_repeat_blue.pn
 		NT_CollapsibleCategory[2]:SetExpanded( 1 )
 		NT_CollapsibleCategory[2]:SetLabel( "Tanks" )
 		
-			local TanksContent   = vgui.Create( "DIconLayout" )
-			NT_CollapsibleCategory[2]:SetContents( TanksContent )
-			TanksContent:SetSize( w, 50 )
-			TanksContent:SetSpaceY( 5 )
-			TanksContent:SetSpaceX( 5 )
+		local TanksContent   = vgui.Create( "DIconLayout" )
+		NT_CollapsibleCategory[2]:SetContents( TanksContent )
+		TanksContent:SetSize( w, 50 )
+		TanksContent:SetSpaceY( 5 )
+		TanksContent:SetSpaceX( 5 )
 
-				local NT_TankIconsListItem = {}
-				for i = 1,#tank do
-						NT_TankIconsListItem[i] = TanksContent:Add( "DImageButton" )
-						NT_TankIconsListItem[i]:SetSize( icon_size, icon_size )
-						NT_TankIconsListItem[i]:SetImage( "vgui/entities/"..tank[i]..".vtf" )
-						NT_TankIconsListItem[i].DoClick = function()
-							Msg("This is still a work in progress... \n")
-							end
-				end
+		local NT_TankIconsListItem = {}
+
+		for k,v in pairs( NT_ents_list ) do
+			-- print(  )
+			NT_TankIconsListItem[k] = TanksContent:Add( "DImageButton" )
+			NT_TankIconsListItem[k]:SetSize( icon_size, icon_size )
+			NT_TankIconsListItem[k]:SetImage( "vgui/entities/"..v.ClassName..".vtf" )
+			NT_TankIconsListItem[k].DoClick = function()
+				RunConsoleCommand("neurotec_spawnvehicle", v.ClassName )
+			end
+			local t = vgui.Create("DLabel", NT_TankIconsListItem[k] )
+			-- t:SetPos( 3,3 )
+			t:SetSize( 100,100 )
+			t:SetFont("HUDNumber")
+			t:SetText( v.PrintName )
+			-- t:SetWrap(true)
+			-- t:SizeToContents()
+			-- Label( v.PrintName, NT_TankIconsListItem[k] )
+			
+		end
 
 		NT_CollapsibleCategory[3] = NT_List:Add( "DCollapsibleCategory" )
 		NT_CollapsibleCategory[3]:SetSize( w, 50 )
