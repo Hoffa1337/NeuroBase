@@ -27,6 +27,28 @@ resource.AddFile("sound/ah64fire.wav")
 resource.AddFile("models/h500_gatling.mdl")
 
 
+concommand.Add("neurotec_spawnvehicle",function( ply, cmd, args ) 
+
+	for k, v in pairs( scripted_ents.GetSpawnable( )) do
+		
+		if( v.ClassName == args[1] ) then
+			
+			if( v.AdminSpawnable == true && !ply:IsAdmin() ) then return end
+			
+			local ride = ents.Create( v.ClassName )
+			ride:SetPos( ply:GetPos() + Vector(0,0,100) )
+			ride:SetAngles( Angle( 0,ply:GetAngles().y, 0 ) )
+			ride:Spawn()
+			ride:Use( ply, ply, 0, 0 )
+			undo.Create( v.PrintName )
+			 undo.AddEntity( ride )
+			 undo.SetPlayer( ply )
+			undo.Finish()
+		end
+		
+	end
+	
+end )
 local CrashDebris = {
 					{"models/props_citizen_tech/Firetrap_PropaneCanister01a.mdl"};
 					{"models/props_junk/iBeam01a.mdl"};
