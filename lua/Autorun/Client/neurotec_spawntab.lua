@@ -9,54 +9,78 @@
 NP_ents_list = {}
 NP_ents_helicopters_list = {}
 NP_ents_warbirds_list = {}
-N_ents_misc_list = {}
 NT_ents_list = {}
+NT_ents_ground_list = {}
+NT_ents_cars_list = {}
+NT_ents_artillery_list = {}
+NT_ents_AAgun_list = {}
 NN_ents_list = {}
+NN_ents_submarines_list = {}
 NW_ents_list = {}
+NW_ents_bomb_list = {}
+NW_ents_missile_list = {}
+NW_ents_gun_list = {}
+NW_ents_mine_list = {}
+N_ents_misc_list = {}
 hook.Add("InitPostEntity", "NeuroTecBuildSpawnMenu", function() 
 
 	for k, v in pairs( scripted_ents.GetSpawnable( )) do
 		
 		if( v.Category ) then 
 			
+			//aviation
 			local cat = string.lower( v.Category )
-			if( string.find( cat, "neurotec aviation" ) || string.find( cat, "neurotec civil" ) ) then
-				table.insert( NP_ents_list, v.ClassName )
+			if( (v.VehicleType == VEHICLE_PLANE) || string.find( cat, "neurotec aviation" ) || string.find( cat, "neurotec civil" ) ) then
+				table.insert( NP_ents_list, v )
 			end
-			if( string.find( cat, "neurotec warbirds" ) ) then
-				table.insert( NP_ents_warbirds_list, v.ClassName )
+			if( (v.VehicleType == VEHICLE_WARBIRD) && string.find( cat, "neurotec warbirds" ) ) then
+				table.insert( NP_ents_warbirds_list, v )
 			end
-
-			if( string.find( cat, "neurotec helicopters" )) then
-				table.insert( NP_ents_helicopters_list, v.ClassName )
-			end
-
+			if ( (v.VehicleType == VEHICLE_HELICOPTER) ) then
+				table.insert( NP_ents_helicopters_list, v )
+			end			
+			//misc
 			if( string.find( cat, "neurotec fun" ) || string.find( cat, "neurotec admin" ) || string.find( cat, "neurotec work" ) ) then
-				table.insert( N_ents_misc_list, v.ClassName )
+				table.insert( N_ents_misc_list, v )
 			end
-
-			-- tanks only
-			if( v.TankType && string.find( cat, "neurotec tanks" ) || string.find( cat, "neurotec ground" ) ) then
-				table.insert( NT_ents_list, v )
-				-- print("woop")
+			//tanks
+			if( v.TankType && (v.VehicleType == TANK_TYPE_CAR) ) then
+				table.insert( NT_ents_cars_list, v )			
+			elseif( v.TankType && (v.VehicleType == TANK_TYPE_ARTILLERY) ) then
+				table.insert( NT_ents_artillery_list, v )			
+			elseif( v.TankType && (v.VehicleType == TANK_TYPE_AA) ) then
+				table.insert( NT_ents_AAgun_list, v )
+			elseif( v.TankType && ((v.VehicleType == TANK_TYPE_LIGHT)or(v.VehicleType == TANK_TYPE_MEDIUM)or(v.VehicleType == TANK_TYPE_HEAVY)or(v.VehicleType == TANK_TYPE_SUPERHEAVY) )) then
+				table.insert( NT_ents_list, v )			
+			elseif( v.TankType && string.find( cat, "neurotec tanks" ) || string.find( cat, "neurotec ground" ) ) then
+				table.insert( NT_ents_ground_list, v )
 			end
-
-
-			if( string.find( cat, "neurotec naval" )  ) then
-				table.insert( NN_ents_list, v.ClassName )
+			//naval
+			if (v.VehicleType == VEHICLE_SUBMARINE  )  then
+				table.insert( NN_ents_submarines_list, v )	
+			elseif( string.find( cat, "neurotec naval" )  ) then
+				table.insert( NN_ents_list, v )
 			end
-
-			if( string.find( cat, "neurotec weapons" ) ) then
-				table.insert( NW_ents_list, v.ClassName )
+			//weapons
+			if (v.WeaponType == WEAPON_BOMB  ) then
+				table.insert( NW_ents_bomb_list, v )
+			elseif (v.WeaponType == WEAPON_MISSILE  ) or (v.WeaponType == WEAPON_ROCKET  )or (v.WeaponType == WEAPON_TORPEDO  ) then
+				table.insert( NW_ents_missile_list, v )
+			elseif (v.WeaponType == WEAPON_GUN  ) then
+				table.insert( NW_ents_gun_list, v )
+			elseif (v.WeaponType == WEAPON_MINE  ) then
+				table.insert( NW_ents_mine_list, v )
+			elseif( string.find( cat, "neurotec weapons" ) ) then
+				table.insert( NW_ents_list, v )
 			end
 			
 		end
 		
 	end
-
+-- PrintTable(NP_ents_warbirds_list)
 end )
 
-/*-- ***************************************delete this line to see the Neuro Tab (doesn't work yet)********************************************
+-- ***************************************delete this line to see the Neuro Tab (doesn't work yet)********************************************
 base_weapons = {}
 base_weapons[1] = "TargetDesignator"
 base_weapons[2] = "weapon_jericho"
@@ -90,7 +114,7 @@ NeuroTecSheet = vgui.Create( "DPropertySheet" )
 NeuroTecSheet:SetPos( 5, 30 )
 NeuroTecSheet:SetSize( 340, 315 )
 
-
+/*
 //NeuroBase
 	local NB_Scroll = vgui.Create( "DScrollPanel" )
 	
@@ -144,81 +168,6 @@ NeuroTecSheet:SetSize( 340, 315 )
 
 NeuroTecSheet:AddSheet( "NeuroBase", NB_Scroll, "icon16/control_repeat_blue.png", false, false, "NeuroTec SWEPs" )
 
-
-//NeuroPlanes
-	local NP_Scroll = vgui.Create( "DScrollPanel" )
-	
-	local NP_List = vgui.Create( "DIconLayout",NP_Scroll )
-	NP_List:SetSize( w, 50 )
-	NP_List:SetSpaceY( 5 )
-	NP_List:SetSpaceX( 5 )
-
-		local NP_CollapsibleCategory = {}
-		NP_CollapsibleCategory[1] = NP_List:Add( "DCollapsibleCategory" )
-		NP_CollapsibleCategory[1]:SetSize( w, 50 )
-		NP_CollapsibleCategory[1]:SetExpanded( 1 )
-		NP_CollapsibleCategory[1]:SetLabel( "Aircraft" )
-
-			local AircraftContent   = vgui.Create( "DIconLayout" )
-			NP_CollapsibleCategory[1]:SetContents( AircraftContent )
-			AircraftContent:SetSize( w, 50 )
-			AircraftContent:SetSpaceY( 5 )
-			AircraftContent:SetSpaceX( 5 )
-
-				local NP_AircraftContentIconsListItem = {}
-				for i = 1,#aircraft do
-						NP_AircraftContentIconsListItem[i] = AircraftContent:Add( "DImageButton" )
-						NP_AircraftContentIconsListItem[i]:SetSize( icon_size, icon_size )
-						NP_AircraftContentIconsListItem[i]:SetImage( "vgui/entities/"..aircraft[i]..".vtf" )
-						NP_AircraftContentIconsListItem[i].DoClick = function()
-							Msg("This is still a work in progress... \n")
-							end
-				end
-
-		NP_CollapsibleCategory[2] = NP_List:Add( "DCollapsibleCategory" )
-		NP_CollapsibleCategory[2]:SetSize( w, 50 )
-		NP_CollapsibleCategory[2]:SetExpanded( 1 )
-		NP_CollapsibleCategory[2]:SetLabel( "Helicopters" )
-		
-			local HelicoptersContent   = vgui.Create( "DIconLayout" )
-			NP_CollapsibleCategory[2]:SetContents( HelicoptersContent )
-			HelicoptersContent:SetSize( w, 50 )
-			HelicoptersContent:SetSpaceY( 5 )
-			HelicoptersContent:SetSpaceX( 5 )
-
-				local NP_HelicoptersIconsListItem = {}
-				for i = 1,#helicopter do
-						NP_HelicoptersIconsListItem[i] = HelicoptersContent:Add( "DImageButton" )
-						NP_HelicoptersIconsListItem[i]:SetSize( icon_size, icon_size )
-						NP_HelicoptersIconsListItem[i]:SetImage( "vgui/entities/"..helicopter[i]..".vtf" )
-						NP_HelicoptersIconsListItem[i].DoClick = function()
-							Msg("This is still a work in progress... \n")
-							end
-				end
-
-		NP_CollapsibleCategory[3] = NP_List:Add( "DCollapsibleCategory" )
-		NP_CollapsibleCategory[3]:SetSize( w, 50 )
-		NP_CollapsibleCategory[3]:SetExpanded( 1 )
-		NP_CollapsibleCategory[3]:SetLabel( "Warbirds" )
-
-			local WarbirdsContent   = vgui.Create( "DIconLayout" )
-			NP_CollapsibleCategory[3]:SetContents( WarbirdsContent )
-			WarbirdsContent:SetSize( w, 50 )
-			WarbirdsContent:SetSpaceY( 5 )
-			WarbirdsContent:SetSpaceX( 5 )
-
-				local NP_AircraftContentIconsListItem = {}
-				for i = 1,#aircraft do
-						NP_AircraftContentIconsListItem[i] = WarbirdsContent:Add( "DImageButton" )
-						NP_AircraftContentIconsListItem[i]:SetSize( icon_size, icon_size )
-						NP_AircraftContentIconsListItem[i]:SetImage( "vgui/entities/"..aircraft[i]..".vtf" )
-						NP_AircraftContentIconsListItem[i].DoClick = function()
-							Msg("This is still a work in progress... \n")
-							end
-				end
-
-NeuroTecSheet:AddSheet( "NeuroPlanes", NP_Scroll, "icon16/control_repeat_blue.png", false, false, "Aviation" )
-
 //NeuroTanks
 	local NT_Scroll = vgui.Create( "DScrollPanel" )
 	-- NT_Scroll:SetSize( 355, 200 )
@@ -267,20 +216,16 @@ NeuroTecSheet:AddSheet( "NeuroPlanes", NP_Scroll, "icon16/control_repeat_blue.pn
 		for k,v in pairs( NT_ents_list ) do
 			-- print(  )
 			NT_TankIconsListItem[k] = TanksContent:Add( "DImageButton" )
+			NT_TankIconsListItem[k].label = NeuroTecCreateContentTab_Label(NT_TankIconsListItem[k],v.PrintName,icon_size)
 			NT_TankIconsListItem[k]:SetSize( icon_size, icon_size )
 			NT_TankIconsListItem[k]:SetImage( "vgui/entities/"..v.ClassName..".vtf" )
 			NT_TankIconsListItem[k].DoClick = function()
 				RunConsoleCommand("neurotec_spawnvehicle", v.ClassName )
-			end
-			local t = vgui.Create("DLabel", NT_TankIconsListItem[k] )
-			-- t:SetPos( 3,3 )
-			t:SetSize( 100,100 )
-			t:SetFont("HUDNumber")
-			t:SetText( v.PrintName )
-			-- t:SetWrap(true)
-			-- t:SizeToContents()
-			-- Label( v.PrintName, NT_TankIconsListItem[k] )
-			
+				NT_TankIconsListItem[k].label:SetText( "Go!" )
+				end
+			NT_TankIconsListItem[k].OnCursorEntered = function() NT_TankIconsListItem[k].label:SetText( "" ) end
+			NT_TankIconsListItem[k].OnCursorExited = function() NT_TankIconsListItem[k].label:SetText( v.PrintName ) end
+		
 		end
 
 		NT_CollapsibleCategory[3] = NT_List:Add( "DCollapsibleCategory" )
@@ -305,142 +250,149 @@ NeuroTecSheet:AddSheet( "NeuroPlanes", NP_Scroll, "icon16/control_repeat_blue.pn
 				end
 
 NeuroTecSheet:AddSheet( "NeuroTanks", NT_Scroll, "icon16/control_repeat_blue.png", false, false, "Ground Forces!" )
+*/
+//NeuroPlanes
+local Aviation = { {Category = "Aircraft",
+				CategoryEntities = NP_ents_list
+				},
+				{Category ="Helicopters",
+				CategoryEntities = NP_ents_helicopters_list
+				},
+				{Category = "Warbirds",
+				CategoryEntities = NP_ents_warbirds_list
+				}
+			}	
+local NeuroPlaneTab = NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(Aviation,w,icon_size)
+NeuroTecSheet:AddSheet( "NeuroPlanes", NeuroPlaneTab, "icon16/control_repeat_blue.png", false, false, "Test" )
+
+//NeuroTanks
+local Tanks = { {Category ="Tanks",
+				CategoryEntities = NT_ents_list
+				},
+				{Category ="Wheeled Armor",
+				CategoryEntities = NT_ents_cars_list
+				},
+				{Category = "AntiAir vehicles",
+				CategoryEntities = NT_ents_AAgun_list
+				},
+				{Category ="Artillery",
+				CategoryEntities = NT_ents_artillery_list
+				}
+			}
+
+local NeuroTanksTab = NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(Tanks,w,icon_size)
+NeuroTecSheet:AddSheet( "NTanks", NeuroTanksTab, "icon16/control_repeat_blue.png", false, false, "Test" )
 
 //NeuroNaval
-	local NN_Scroll = vgui.Create( "DScrollPanel" )
-	
-	local NN_List = vgui.Create( "DIconLayout",NN_Scroll )
-	NN_List:SetSize( w, 50 )
-	NN_List:SetSpaceY( 5 )
-	NN_List:SetSpaceX( 5 )
+local Naval = { {Category = "Battleships",
+				CategoryEntities = NN_ents_list
+				},
+				{Category = "Submarines",
+				CategoryEntities = NN_ents_submarines_list
+				}
+			}
+local NeuroNavalTab = NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(Naval,w,icon_size)
+NeuroTecSheet:AddSheet( "NeuroNaval", NeuroNavalTab, "icon16/control_repeat_blue.png", false, false, "Test" )
 
-		local NN_CollapsibleCategory = {}
-		NN_CollapsibleCategory[1] = NN_List:Add( "DCollapsibleCategory" )
-		NN_CollapsibleCategory[1]:SetSize( w, 50 )
-		NN_CollapsibleCategory[1]:SetExpanded( 1 )
-		NN_CollapsibleCategory[1]:SetLabel( "Battleships" )
-
-			local BattleshipsContent   = vgui.Create( "DIconLayout" )
-			NN_CollapsibleCategory[1]:SetContents( BattleshipsContent )
-			BattleshipsContent:SetSize( w, 50 )
-			BattleshipsContent:SetSpaceY( 5 )
-			BattleshipsContent:SetSpaceX( 5 )
-
-				local NN_BattleshipsContentIconsListItem = {}
-				for i = 1,#aircraft do
-						NN_BattleshipsContentIconsListItem[i] = BattleshipsContent:Add( "DImageButton" )
-						NN_BattleshipsContentIconsListItem[i]:SetSize( icon_size, icon_size )
-						NN_BattleshipsContentIconsListItem[i]:SetImage( "vgui/entities/"..aircraft[i]..".vtf" )
-						NN_BattleshipsContentIconsListItem[i].DoClick = function()
-							Msg("This is still a work in progress... \n")
-							end
-				end
-
-		NN_CollapsibleCategory[2] = NN_List:Add( "DCollapsibleCategory" )
-		NN_CollapsibleCategory[2]:SetSize( w, 50 )
-		NN_CollapsibleCategory[2]:SetExpanded( 1 )
-		NN_CollapsibleCategory[2]:SetLabel( "Submarines" )
-		
-			local SubmarinesContent   = vgui.Create( "DIconLayout" )
-			NP_CollapsibleCategory[2]:SetContents( SubmarinesContent )
-			SubmarinesContent:SetSize( w, 50 )
-			SubmarinesContent:SetSpaceY( 5 )
-			SubmarinesContent:SetSpaceX( 5 )
-
-				local NN_SubmarinesIconsListItem = {}
-				for i = 1,#helicopter do
-						NN_SubmarinesIconsListItem[i] = SubmarinesContent:Add( "DImageButton" )
-						NN_SubmarinesIconsListItem[i]:SetSize( icon_size, icon_size )
-						NN_SubmarinesIconsListItem[i]:SetImage( "vgui/entities/"..helicopter[i]..".vtf" )
-						NN_SubmarinesIconsListItem[i].DoClick = function()
-							Msg("This is still a work in progress... \n")
-							end
-				end
-
-NeuroTecSheet:AddSheet( "NeuroNaval", NN_Scroll, "icon16/control_repeat_blue.png", false, false, "Naval strike!" )
+//NeuroWeapons
+local Weapons = { {Category = "Weapons",
+				CategoryEntities = NW_ents_list
+				},
+				{Category = "Bombs",
+				CategoryEntities = NW_ents_bomb_list
+				},
+				{Category = "Missiles and Rockets",
+				CategoryEntities = NW_ents_missile_list
+				},
+				{Category = "Turrets and guns",
+				CategoryEntities = NW_ents_gun_list
+				},
+				{Category = "Mines",
+				CategoryEntities = NW_ents_mine_list
+				}
+			}
+local NeuroWeaponsTab = NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(Weapons,w,icon_size)
+NeuroTecSheet:AddSheet( "NeuroWeapons", NeuroWeaponsTab, "icon16/control_repeat_blue.png", false, false, "Test" )
 
 //Miscellaneous
-	local NMisc_Scroll = vgui.Create( "DScrollPanel" )
-	
-	local NMisc_List = vgui.Create( "DIconLayout",NMisc_Scroll )
-	NMisc_List:SetSize( w, 50 )
-	NMisc_List:SetSpaceY( 5 )
-	NMisc_List:SetSpaceX( 5 )
-
-		local NMisc_CollapsibleCategory = {}
-		NMisc_CollapsibleCategory[1] = NMisc_List:Add( "DCollapsibleCategory" )
-		NMisc_CollapsibleCategory[1]:SetSize( w, 50 )
-		NMisc_CollapsibleCategory[1]:SetExpanded( 1 )
-		NMisc_CollapsibleCategory[1]:SetLabel( "Admin" )
-
-			local MiscContent_1   = vgui.Create( "DIconLayout" )
-			NMisc_CollapsibleCategory[1]:SetContents( MiscContent_1 )
-			MiscContent_1:SetSize( w, 50 )
-			MiscContent_1:SetSpaceY( 5 )
-			MiscContent_1:SetSpaceX( 5 )
-
-				local NMisc_MiscContentIconsListItem_1 = {}
-				for i = 1,#base_weapons do
-						NMisc_MiscContentIconsListItem_1[i] = MiscContent_1:Add( "DImageButton" )
-						NMisc_MiscContentIconsListItem_1[i]:SetSize( icon_size, icon_size )
-						NMisc_MiscContentIconsListItem_1[i]:SetImage( "vgui/entities/"..base_weapons[i]..".vtf" )
-						NMisc_MiscContentIconsListItem_1[i].DoClick = function()
-							Msg("This is still a work in progress... \n")
-							end
-				end
-
-		NMisc_CollapsibleCategory[2] = NMisc_List:Add( "DCollapsibleCategory" )
-		NMisc_CollapsibleCategory[2]:SetSize( w, 50 )
-		NMisc_CollapsibleCategory[2]:SetExpanded( 1 )
-		NMisc_CollapsibleCategory[2]:SetLabel( "Work in Progress" )
-		
-			local MiscContent_2   = vgui.Create( "DIconLayout" )
-			NMisc_CollapsibleCategory[2]:SetContents( MiscContent_2 )
-			MiscContent_2:SetSize( w, 50 )
-			MiscContent_2:SetSpaceY( 5 )
-			MiscContent_2:SetSpaceX( 5 )
-
-				local NMisc_MiscContentIconsListItem_2 = {}
-				for i = 1,#aircraft do
-						NMisc_MiscContentIconsListItem_2[i] = MiscContent_2:Add( "DImageButton" )
-						NMisc_MiscContentIconsListItem_2[i]:SetSize( icon_size, icon_size )
-						NMisc_MiscContentIconsListItem_2[i]:SetImage( "vgui/entities/"..aircraft[i]..".vtf" )
-						NMisc_MiscContentIconsListItem_2[i].DoClick = function()
-							Msg("This is still a work in progress... \n")
-							end
-				end
-
-		NMisc_CollapsibleCategory[3] = NMisc_List:Add( "DCollapsibleCategory" )
-		NMisc_CollapsibleCategory[3]:SetSize( w, 50 )
-		NMisc_CollapsibleCategory[3]:SetExpanded( 1 )
-		NMisc_CollapsibleCategory[3]:SetLabel( "Work in Progress" )
-		
-			local MiscContent_3   = vgui.Create( "DIconLayout" )
-			NMisc_CollapsibleCategory[3]:SetContents( MiscContent_3 )
-			MiscContent_3:SetSize( w, 50 )
-			MiscContent_3:SetSpaceY( 5 )
-			MiscContent_3:SetSpaceX( 5 )
-
-				local EntView = MiscContent_3:Add( "DModelPanel" )
-				EntView:SetModel( "models/hawx/planes/A-6 Intruder.mdl" )
-				EntView:SetSize( icon_size*2, icon_size*2 )
-				EntView:SetCamPos( Vector( 512, 512, 512 ) )
-				EntView:SetLookAt( Vector( 0, 0, 0 ) )
-				
-				local NMisc_MiscContentIconsListItem_3 = {}
-				for i = 1,#tank do
-						NMisc_MiscContentIconsListItem_3[i] = MiscContent_3:Add( "DImageButton" )
-						NMisc_MiscContentIconsListItem_3[i]:SetSize( icon_size, icon_size )
-						NMisc_MiscContentIconsListItem_3[i]:SetImage( "vgui/entities/"..tank[i]..".vtf" )
-						NMisc_MiscContentIconsListItem_3[i].DoClick = function()
-							Msg("This is still a work in progress... \n")
-							end
-				end
-
-NeuroTecSheet:AddSheet( "Miscellaneous", NMisc_Scroll, "icon16/control_repeat_blue.png", false, false, "Work in Progress" )
-
+local Miscellaneous = { {Category = "Misc",
+				CategoryEntities = N_ents_misc_list
+				}
+			}
+local NeuroMiscTab = NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(Miscellaneous,w,icon_size)
+NeuroTecSheet:AddSheet( "Miscellaneous", NeuroMiscTab, "icon16/control_repeat_blue.png", false, false, "Test" )
 
 	return NeuroTecSheet
 	
 end
 spawnmenu.AddCreationTab( "NeuroTec", NeuroTecCreateContentTab, "icon16/control_repeat_blue.png", 200 )
+
+function NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(CategoriesList,width,icon_size)
+
+	local Scroll = vgui.Create( "DScrollPanel" )
+	-- NT_Scroll:SetSize( 355, 200 )
+	-- NT_Scroll:SetPos( 10, 30 )
+	
+	local List = vgui.Create( "DIconLayout",Scroll )
+	List:SetSize( width, 50 )
+	List:SetSpaceY( 5 )
+	List:SetSpaceX( 5 )
+
+		local CollapsibleCategory = {}
+		local CategoryContent = {}
+		for i=1,#CategoriesList do
+		CollapsibleCategory[i] = List:Add( "DCollapsibleCategory" )
+		CollapsibleCategory[i]:SetSize( width, 50 )
+		CollapsibleCategory[i]:SetExpanded( 1 )
+		if CategoriesList[i].Category then
+		CollapsibleCategory[i]:SetLabel( CategoriesList[i].Category )
+		end
+		
+			CategoryContent[i]   = vgui.Create( "DIconLayout" )
+			CollapsibleCategory[i]:SetContents( CategoryContent[i] )
+			CategoryContent[i]:SetSize( width, 50 )
+			CategoryContent[i]:SetSpaceY( 5 )
+			CategoryContent[i]:SetSpaceX( 5 )
+			
+				local CategoryContentIconsListItem = {}
+				if CategoriesList[i].CategoryEntities then
+					for k,v in pairs( CategoriesList[i].CategoryEntities ) do			
+							CategoryContentIconsListItem[k] = CategoryContent[i]:Add( "DImageButton" )
+							CategoryContentIconsListItem[k].label = NeuroTecCreateContentTab_Label(CategoryContentIconsListItem[k],v.PrintName,icon_size)
+							CategoryContentIconsListItem[k]:SetSize( icon_size, icon_size )
+							CategoryContentIconsListItem[k]:SetImage( "vgui/entities/"..v.ClassName..".vtf" )
+							CategoryContentIconsListItem[k].DoClick = function()
+								RunConsoleCommand("neurotec_spawnvehicle", v.ClassName )
+								CategoryContentIconsListItem[k].label:SetText( "Go!" )
+								end
+							CategoryContentIconsListItem[k].OnCursorEntered = function()
+								CategoryContentIconsListItem[k].label:SetText( "" )
+								//Need to code a windows which displays entity's status here.
+								end
+							
+							CategoryContentIconsListItem[k].OnCursorExited = function()
+								CategoryContentIconsListItem[k].label:SetText( v.PrintName )
+								//close the windows status here
+								end
+					end				
+				end				
+		end
+		
+
+	return Scroll
+end
+
+function NeuroTecCreateContentTab_Label(parent,text,icon_size)
+
+	local t = vgui.Create("DLabel", parent )
+	t:SetText( text )
+	t:SetFont("ChatFont")
+	-- t:SetPos( (icon_size-string.len(text))/2,icon_size-20 )
+	t:SetPos( 5, icon_size-20 )
+	-- t:SetSize( icon_size,50 )
+	-- t:SetWrap(true)
+	t:SizeToContents()
+	-- Label( v.PrintName, NT_TankIconsListItem[k] )
+
+	return t
+end
