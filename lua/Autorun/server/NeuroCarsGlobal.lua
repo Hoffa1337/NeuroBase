@@ -35,11 +35,26 @@ concommand.Add("neurotec_spawnvehicle",function( ply, cmd, args )
 			
 			if( v.AdminSpawnable == true && !ply:IsAdmin() ) then return end
 			
+			local pos =  ply:GetPos() + Vector(0,0,100) 
+			
+			if( !v.VehicleType ) then
+				
+				local tr = ply:GetEyeTrace()
+				pos = tr.HitPos + tr.HitNormal * 50
+			
+			end
+				
 			local ride = ents.Create( v.ClassName )
-			ride:SetPos( ply:GetPos() + Vector(0,0,100) )
+			ride:SetPos( pos )
 			ride:SetAngles( Angle( 0,ply:GetAngles().y, 0 ) )
 			ride:Spawn()
-			ride:Use( ply, ply, 0, 0 )
+			
+			if( v.VehicleType ) then
+			
+				ride:Use( ply, ply, 0, 0 )
+				
+			end
+			
 			undo.Create( v.PrintName )
 			 undo.AddEntity( ride )
 			 undo.SetPlayer( ply )
