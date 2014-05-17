@@ -275,6 +275,9 @@ local Tanks = { {Category ="Tanks",
 				{Category = "AntiAir vehicles",
 				CategoryEntities = NT_ents_AAgun_list
 				},
+				{Category = "Other Ground Vehicles",
+				CategoryEntities = NT_ents_ground_list
+				},
 				{Category ="Artillery",
 				CategoryEntities = NT_ents_artillery_list
 				}
