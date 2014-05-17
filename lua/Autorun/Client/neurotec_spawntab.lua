@@ -44,13 +44,13 @@ hook.Add("InitPostEntity", "NeuroTecBuildSpawnMenu", function()
 				table.insert( N_ents_misc_list, v )
 			end
 			//tanks
-			if( v.TankType && (v.VehicleType == TANK_TYPE_CAR) ) then
+			if( v.TankType && (v.TankType == TANK_TYPE_CAR) ) then
 				table.insert( NT_ents_cars_list, v )			
-			elseif( v.TankType && (v.VehicleType == TANK_TYPE_ARTILLERY) ) then
+			elseif( v.TankType && (v.TankType == TANK_TYPE_ARTILLERY) && !(v.VehicleType == STATIC_GUN) ) then
 				table.insert( NT_ents_artillery_list, v )			
-			elseif( v.TankType && (v.VehicleType == TANK_TYPE_AA) ) then
+			elseif( v.TankType && (v.TankType == TANK_TYPE_AA) ) then
 				table.insert( NT_ents_AAgun_list, v )
-			elseif( v.TankType && ((v.VehicleType == TANK_TYPE_LIGHT)or(v.VehicleType == TANK_TYPE_MEDIUM)or(v.VehicleType == TANK_TYPE_HEAVY)or(v.VehicleType == TANK_TYPE_SUPERHEAVY) )) then
+			elseif( v.TankType && ((v.TankType == TANK_TYPE_LIGHT)or(v.TankType == TANK_TYPE_MEDIUM)or(v.TankType == TANK_TYPE_HEAVY)or(v.TankType == TANK_TYPE_SUPERHEAVY) )) then
 				table.insert( NT_ents_list, v )			
 			elseif( v.TankType && string.find( cat, "neurotec tanks" ) || string.find( cat, "neurotec ground" ) ) then
 				table.insert( NT_ents_ground_list, v )
@@ -66,7 +66,7 @@ hook.Add("InitPostEntity", "NeuroTecBuildSpawnMenu", function()
 				table.insert( NW_ents_bomb_list, v )
 			elseif (v.WeaponType == WEAPON_MISSILE  ) or (v.WeaponType == WEAPON_ROCKET  )or (v.WeaponType == WEAPON_TORPEDO  ) then
 				table.insert( NW_ents_missile_list, v )
-			elseif (v.WeaponType == WEAPON_GUN  ) then
+			elseif (v.WeaponType == WEAPON_GUN  )or(v.VehicleType == STATIC_GUN  )or(v.VehicleType == WEAPON_TURRET  ) then
 				table.insert( NW_ents_gun_list, v )
 			elseif (v.WeaponType == WEAPON_MINE  ) then
 				table.insert( NW_ents_mine_list, v )
@@ -76,8 +76,8 @@ hook.Add("InitPostEntity", "NeuroTecBuildSpawnMenu", function()
 			
 		end
 		
-	end
 -- PrintTable(NP_ents_warbirds_list)
+	end
 end )
 
 -- ***************************************delete this line to see the Neuro Tab (doesn't work yet)********************************************
@@ -281,7 +281,7 @@ local Tanks = { {Category ="Tanks",
 			}
 
 local NeuroTanksTab = NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(Tanks,w,icon_size)
-NeuroTecSheet:AddSheet( "NTanks", NeuroTanksTab, "icon16/control_repeat_blue.png", false, false, "Test" )
+NeuroTecSheet:AddSheet( "NeuroTanks", NeuroTanksTab, "icon16/control_repeat_blue.png", false, false, "Test" )
 
 //NeuroNaval
 local Naval = { {Category = "Battleships",

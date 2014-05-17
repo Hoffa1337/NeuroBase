@@ -4,5 +4,6 @@ ENT.PrintName	= "Aerial Mine"
 ENT.Author	= "Hoffa"
 ENT.Description = "Spawns a floating mine that explodes in the vicinity of an enemy"
 ENT.Category 		= "NeuroTec Weapons";
+ENT.WeaponType 		= WEAPON_MINE
 ENT.Spawnable	= true
 ENT.AdminSpawnable = false
