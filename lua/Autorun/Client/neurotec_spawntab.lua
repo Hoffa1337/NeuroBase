@@ -78,6 +78,9 @@ hook.Add("InitPostEntity", "NeuroTecBuildSpawnMenu", function()
 		
 -- PrintTable(NP_ents_warbirds_list)
 	end
+	
+	table.SortByMember( NT_ents_list, "Category", true )
+	
 end )
 
 -- ***************************************delete this line to see the Neuro Tab (doesn't work yet)********************************************
