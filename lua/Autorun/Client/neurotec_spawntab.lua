@@ -110,7 +110,7 @@ local function NeuroTecCreateContentTab()
 
 local ply = LocalPlayer()
 
-local icon_size = 128
+local icon_size = 200
 local w = ScrW()*0.57
 
 NeuroTecSheet = vgui.Create( "DPropertySheet" )
@@ -218,16 +218,32 @@ NeuroTecSheet:AddSheet( "NeuroBase", NB_Scroll, "icon16/control_repeat_blue.png"
 
 		for k,v in pairs( NT_ents_list ) do
 			-- print(  )
+			print( v )
 			NT_TankIconsListItem[k] = TanksContent:Add( "DImageButton" )
-			NT_TankIconsListItem[k].label = NeuroTecCreateContentTab_Label(NT_TankIconsListItem[k],v.PrintName,icon_size)
+			NT_TankIconsListItem[k].label = NeuroTecCreateContentTab_Label(NT_TankIconsListItem[k],v,icon_size)
 			NT_TankIconsListItem[k]:SetSize( icon_size, icon_size )
 			NT_TankIconsListItem[k]:SetImage( "vgui/entities/"..v.ClassName..".vtf" )
-			NT_TankIconsListItem[k].DoClick = function()
+			NT_TankIconsListItem[k].DoClick = 
+			function()
+				
 				RunConsoleCommand("neurotec_spawnvehicle", v.ClassName )
 				NT_TankIconsListItem[k].label:SetText( "Go!" )
-				end
-			NT_TankIconsListItem[k].OnCursorEntered = function() NT_TankIconsListItem[k].label:SetText( "" ) end
-			NT_TankIconsListItem[k].OnCursorExited = function() NT_TankIconsListItem[k].label:SetText( v.PrintName ) end
+			
+			end
+				
+			NT_TankIconsListItem[k].OnCursorEntered = 
+			function() 
+				
+				NT_TankIconsListItem[k].label:SetText( "" ) 
+				
+			end
+			
+			NT_TankIconsListItem[k].OnCursorExited = 
+			function() 
+				
+				NT_TankIconsListItem[k].label:SetText( v.PrintName ) 
+				
+			end
 		
 		end
 
@@ -252,7 +268,7 @@ NeuroTecSheet:AddSheet( "NeuroBase", NB_Scroll, "icon16/control_repeat_blue.png"
 							end
 				end
 
-NeuroTecSheet:AddSheet( "NeuroTanks", NT_Scroll, "icon16/control_repeat_blue.png", false, false, "Ground Forces!" )
+NeuroTecSheet:AddSheet( "NeuroTanks", NT_Scroll, "vgui/tank.png", false, false, "Ground Forces!" )
 */
 //NeuroPlanes
 local Aviation = { {Category = "Aircraft",
@@ -266,7 +282,7 @@ local Aviation = { {Category = "Aircraft",
 				}
 			}	
 local NeuroPlaneTab = NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(Aviation,w,icon_size)
-NeuroTecSheet:AddSheet( "NeuroPlanes", NeuroPlaneTab, "icon16/control_repeat_blue.png", false, false, "Test" )
+NeuroTecSheet:AddSheet( "NeuroPlanes", NeuroPlaneTab, "vgui/plane.png", false, false, "Test" )
 
 //NeuroTanks
 local Tanks = { {Category ="Tanks",
@@ -287,7 +303,7 @@ local Tanks = { {Category ="Tanks",
 			}
 
 local NeuroTanksTab = NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(Tanks,w,icon_size)
-NeuroTecSheet:AddSheet( "NeuroTanks", NeuroTanksTab, "icon16/control_repeat_blue.png", false, false, "Test" )
+NeuroTecSheet:AddSheet( "NeuroTanks", NeuroTanksTab, "vgui/tank.png", false, false, "Armored Ground Units" )
 
 //NeuroNaval
 local Naval = { {Category = "Battleships",
@@ -298,7 +314,7 @@ local Naval = { {Category = "Battleships",
 				}
 			}
 local NeuroNavalTab = NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(Naval,w,icon_size)
-NeuroTecSheet:AddSheet( "NeuroNaval", NeuroNavalTab, "icon16/control_repeat_blue.png", false, false, "Test" )
+NeuroTecSheet:AddSheet( "NeuroNaval", NeuroNavalTab, "icon16/control_repeat_blue.png", false, false, "Avast Ye Matey!" )
 
 //NeuroWeapons
 local Weapons = { {Category = "Weapons",
@@ -318,7 +334,7 @@ local Weapons = { {Category = "Weapons",
 				}
 			}
 local NeuroWeaponsTab = NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(Weapons,w,icon_size)
-NeuroTecSheet:AddSheet( "NeuroWeapons", NeuroWeaponsTab, "icon16/control_repeat_blue.png", false, false, "Test" )
+NeuroTecSheet:AddSheet( "NeuroWeapons", NeuroWeaponsTab, "vgui/weps.png", false, false, "Weapons of Mass Mingebagging" )
 
 //Miscellaneous
 local Miscellaneous = { {Category = "Misc",
@@ -326,12 +342,12 @@ local Miscellaneous = { {Category = "Misc",
 				}
 			}
 local NeuroMiscTab = NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(Miscellaneous,w,icon_size)
-NeuroTecSheet:AddSheet( "Miscellaneous", NeuroMiscTab, "icon16/control_repeat_blue.png", false, false, "Test" )
+NeuroTecSheet:AddSheet( "Miscellaneous", NeuroMiscTab, "icon16/control_repeat_blue.png", false, false, "Various Stuff" )
 
 	return NeuroTecSheet
 	
 end
-spawnmenu.AddCreationTab( "NeuroTec", NeuroTecCreateContentTab, "icon16/control_repeat_blue.png", 200 )
+spawnmenu.AddCreationTab( "NeuroTec", NeuroTecCreateContentTab, "vgui/skull.png", 200 )
 
 function NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(CategoriesList,width,icon_size)
 
@@ -364,9 +380,13 @@ function NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(CategoriesLis
 				if CategoriesList[i].CategoryEntities then
 					for k,v in pairs( CategoriesList[i].CategoryEntities ) do			
 							CategoryContentIconsListItem[k] = CategoryContent[i]:Add( "DImageButton" )
-							CategoryContentIconsListItem[k].label = NeuroTecCreateContentTab_Label(CategoryContentIconsListItem[k],v.PrintName,icon_size)
+							CategoryContentIconsListItem[k].label = NeuroTecCreateContentTab_Label(CategoryContentIconsListItem[k],v,icon_size)
 							CategoryContentIconsListItem[k]:SetSize( icon_size, icon_size )
-							CategoryContentIconsListItem[k]:SetImage( "vgui/entities/"..v.ClassName..".vtf" )
+							local _icon = "vgui/entities/"..v.ClassName..".vtf"
+							-- if( !file.Exists( _icon, "MOD" ) ) then
+								-- _icon = "vgui/error.png"
+							-- end
+							CategoryContentIconsListItem[k]:SetImage( _icon )
 							CategoryContentIconsListItem[k].DoClick = function()
 								RunConsoleCommand("neurotec_spawnvehicle", v.ClassName )
 								CategoryContentIconsListItem[k].label:SetText( "Go!" )
@@ -389,16 +409,65 @@ function NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(CategoriesLis
 end
 
 function NeuroTecCreateContentTab_Label(parent,text,icon_size)
+	
+	local strng = ""
+	local name = text.PrintName
+	
+	if( string.find( text.Category, "NeuroTec Tanks - " ) != nil ) then
+	
+		strng = string.Replace( text.Category, "NeuroTec Tanks - ", "" ) 
 
+		-- local damage = ""
+		
+		-- print( strng, text.AmmoTable )
+		
+		-- if( type( text.AmmoTable ) == "table" ) then
+			
+			-- for k,m in pairs( text.AmmoTable ) do
+					
+				-- damage = damage..m.PrintName.."\nDamage: "..tostring( m.MinDmg or text.MinDamage ).." - "..tostring( m.MaxDmg or text.MaxDamage ).."\n"
+				-- damage = damage.."RPS: "..tostring( 1/( m.Delay or text.PrimaryDelay ) ).."\n"
+			
+			-- end
+		
+		-- end
+		-- print( damage ) 
+		local tier = vgui.Create("DLabel", parent )
+		tier:SetText( strng )
+		tier:SetFont("ChatFont")
+		tier:SetPos( 5, 5 )
+		tier:SizeToContents()
+		local graph_size = icon_size/3
+		
+		local DProgress = vgui.Create( "DProgress", parent )
+		DProgress:SetPos( 5, 20 )
+		DProgress:SetSize( graph_size, 10 )
+		DProgress:SetFraction(  ( text.MaxVelocity or 0 ) / 62  )
+		
+		DProgress = vgui.Create( "DProgress", parent )
+		DProgress:SetPos( 5, 30 )
+		DProgress:SetSize( graph_size, 10 )
+		DProgress:SetFraction( ( text.MaxDamage or 0 ) / 5000 )
+		
+		DProgress = vgui.Create( "DProgress", parent )
+		DProgress:SetPos( 5, 40 )
+		DProgress:SetSize( graph_size, 10 )
+		DProgress:SetFraction( ( text.InitialHealth or 0 ) / 9000 )
+								
+		-- DProgress = vgui.Create( "DProgress" )
+		-- DProgress:SetPos( 5, 50 )
+		-- DProgress:SetSize( 100, 10 )
+		-- DProgress:SetFraction( 0.75 )
+				
+	end
+	
+
+		
 	local t = vgui.Create("DLabel", parent )
-	t:SetText( text )
+	t:SetText( name )
 	t:SetFont("ChatFont")
-	-- t:SetPos( (icon_size-string.len(text))/2,icon_size-20 )
 	t:SetPos( 5, icon_size-20 )
-	-- t:SetSize( icon_size,50 )
-	-- t:SetWrap(true)
 	t:SizeToContents()
-	-- Label( v.PrintName, NT_TankIconsListItem[k] )
-
+	
 	return t
 end
