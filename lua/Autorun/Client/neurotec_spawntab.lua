@@ -116,7 +116,7 @@ local w = ScrW()*0.57
 NeuroTecSheet = vgui.Create( "DPropertySheet" )
 NeuroTecSheet:SetPos( 5, 30 )
 NeuroTecSheet:SetSize( 340, 315 )
-
+--[[
 /*
 //NeuroBase
 	local NB_Scroll = vgui.Create( "DScrollPanel" )
@@ -269,7 +269,7 @@ NeuroTecSheet:AddSheet( "NeuroBase", NB_Scroll, "icon16/control_repeat_blue.png"
 				end
 
 NeuroTecSheet:AddSheet( "NeuroTanks", NT_Scroll, "vgui/tank.png", false, false, "Ground Forces!" )
-*/
+*/]]--
 //NeuroPlanes
 local Aviation = { {Category = "Aircraft",
 				CategoryEntities = NP_ents_list
@@ -314,7 +314,7 @@ local Naval = { {Category = "Battleships",
 				}
 			}
 local NeuroNavalTab = NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(Naval,w,icon_size)
-NeuroTecSheet:AddSheet( "NeuroNaval", NeuroNavalTab, "icon16/control_repeat_blue.png", false, false, "Avast Ye Matey!" )
+NeuroTecSheet:AddSheet( "NeuroNaval", NeuroNavalTab, "vgui/anchor.png", false, false, "Avast Ye Matey!" )
 
 //NeuroWeapons
 local Weapons = { {Category = "Weapons",
@@ -383,21 +383,21 @@ function NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(CategoriesLis
 							CategoryContentIconsListItem[k].label = NeuroTecCreateContentTab_Label(CategoryContentIconsListItem[k],v,icon_size)
 							CategoryContentIconsListItem[k]:SetSize( icon_size, icon_size )
 							local _icon = "vgui/entities/"..v.ClassName..".vtf"
-							-- if( !file.Exists( _icon, "MOD" ) ) then
-								-- _icon = "vgui/error.png"
-							-- end
+							if( !file.Exists( "materials/".._icon, "GAME" ) ) then
+								_icon = "vgui/error.png"
+							end
 							CategoryContentIconsListItem[k]:SetImage( _icon )
 							CategoryContentIconsListItem[k].DoClick = function()
 								RunConsoleCommand("neurotec_spawnvehicle", v.ClassName )
-								CategoryContentIconsListItem[k].label:SetText( "Go!" )
+								-- CategoryContentIconsListItem[k].label:SetText( "Go!" )
 								end
 							CategoryContentIconsListItem[k].OnCursorEntered = function()
-								CategoryContentIconsListItem[k].label:SetText( "" )
+								-- CategoryContentIconsListItem[k].label:SetText( "" )
 								//Need to code a windows which displays entity's status here.
 								end
 							
 							CategoryContentIconsListItem[k].OnCursorExited = function()
-								CategoryContentIconsListItem[k].label:SetText( v.PrintName )
+								-- CategoryContentIconsListItem[k].label:SetText( v.PrintName )
 								//close the windows status here
 								end
 					end				
@@ -407,67 +407,87 @@ function NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(CategoriesLis
 
 	return Scroll
 end
+local __Stats ={}
+local function GenerateTankStats( parent, text, icon_size )
+
+end
+
+hook.Add("Initialize", "NTSP_AddFonts", function()
+
+	surface.CreateFont( "NeuroTankSpawnName", {
+	 font = "Impact",
+	 size = 20,
+	 weight = 400,
+	 blursize = 0,
+	 scanlines = 0,
+	 antialias = true,
+	 underline = false,
+	 italic = false,
+	 strikeout = false,
+	 symbol = false,
+	 rotary = false,
+	 shadow = false,
+	 additive = false,
+	 outline = true
+	} )
+
+end )
 
 function NeuroTecCreateContentTab_Label(parent,text,icon_size)
-	
-	local strng = ""
+
 	local name = text.PrintName
-	
+
 	if( string.find( text.Category, "NeuroTec Tanks - " ) != nil ) then
-	
-		strng = string.Replace( text.Category, "NeuroTec Tanks - ", "" ) 
-
-		-- local damage = ""
 		
-		-- print( strng, text.AmmoTable )
+		local maxspeed = 62
+		local maxdamage = 5000
+		local maxhealth = 9000
 		
-		-- if( type( text.AmmoTable ) == "table" ) then
-			
-			-- for k,m in pairs( text.AmmoTable ) do
+		__Stats = {
+					{ "Speed", ( text.MaxVelocity or 0 ) / maxspeed };
+					{ "Armor" , ( text.InitialHealth or 0 ) / maxhealth };
+					{ ( text.MinDamage or "nil" ).."-"..( text.MaxDamage or "nil" ), ( text.MaxDamage or 0 ) / maxdamage  };
 					
-				-- damage = damage..m.PrintName.."\nDamage: "..tostring( m.MinDmg or text.MinDamage ).." - "..tostring( m.MaxDmg or text.MaxDamage ).."\n"
-				-- damage = damage.."RPS: "..tostring( 1/( m.Delay or text.PrimaryDelay ) ).."\n"
+				}
+					
+		local size = 14
+		local graph_size = icon_size/2.5
+		local xp,yp = icon_size - graph_size, icon_size - ( size * ( #__Stats + 1 ) )-- icon_size-70
+		local _font = "ChatFont"
+		
+		name = name.. " / "..string.Replace( text.Category, "NeuroTec Tanks - ", "" )
+		-- local tier = vgui.Create("DLabel", parent )
+		-- tier:SetText( string.Replace( text.Category, "NeuroTec Tanks - ", "" ) )
+		-- tier:SetFont("ChatFont")
+		-- tier:SetPos( xp, yp+(#__Stats+1*size) )
+		-- tier:SizeToContents()
+		
+		for _k,v in pairs( __Stats ) do
+		
+			local DProgress = vgui.Create( "DProgress", parent )
+			DProgress:SetPos( xp, yp+(size*_k-2) )
+			DProgress:SetSize( graph_size, size )
+			DProgress:SetFraction(  v[2] )
 			
-			-- end
-		
-		-- end
-		-- print( damage ) 
-		local tier = vgui.Create("DLabel", parent )
-		tier:SetText( strng )
-		tier:SetFont("ChatFont")
-		tier:SetPos( 5, 5 )
-		tier:SizeToContents()
-		local graph_size = icon_size/3
-		
-		local DProgress = vgui.Create( "DProgress", parent )
-		DProgress:SetPos( 5, 20 )
-		DProgress:SetSize( graph_size, 10 )
-		DProgress:SetFraction(  ( text.MaxVelocity or 0 ) / 62  )
-		
-		DProgress = vgui.Create( "DProgress", parent )
-		DProgress:SetPos( 5, 30 )
-		DProgress:SetSize( graph_size, 10 )
-		DProgress:SetFraction( ( text.MaxDamage or 0 ) / 5000 )
-		
-		DProgress = vgui.Create( "DProgress", parent )
-		DProgress:SetPos( 5, 40 )
-		DProgress:SetSize( graph_size, 10 )
-		DProgress:SetFraction( ( text.InitialHealth or 0 ) / 9000 )
-								
-		-- DProgress = vgui.Create( "DProgress" )
-		-- DProgress:SetPos( 5, 50 )
-		-- DProgress:SetSize( 100, 10 )
-		-- DProgress:SetFraction( 0.75 )
-				
-	end
+			local lb = vgui.Create("DLabel", parent )
+			lb:SetText( v[1] )
+			lb:SetTextColor( Color( 0, 0, 0, 150 ) ) -- 
+			lb:SetFont( _font )
+			lb:SetPos( xp+2, yp+(size*_k-2) )
+			lb:SizeToContents()
+			
+		end
+					
 	
-
+	end
 		
 	local t = vgui.Create("DLabel", parent )
 	t:SetText( name )
-	t:SetFont("ChatFont")
-	t:SetPos( 5, icon_size-20 )
+	t:SetFont("NeuroTankSpawnName")
+	t:SetPos( 5, 5 )
+	-- t:SetTextColor( Color( 
 	t:SizeToContents()
 	
 	return t
+	
 end
