@@ -377,6 +377,7 @@ function NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(CategoriesLis
 			CategoryContent[i]:SetSpaceX( 5 )
 			
 				local CategoryContentIconsListItem = {}
+				local StatsPanel = {}
 				if CategoriesList[i].CategoryEntities then
 					for k,v in pairs( CategoriesList[i].CategoryEntities ) do			
 							CategoryContentIconsListItem[k] = CategoryContent[i]:Add( "DImageButton" )
@@ -387,18 +388,19 @@ function NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(CategoriesLis
 								_icon = "vgui/error.png"
 							end
 							CategoryContentIconsListItem[k]:SetImage( _icon )
+
 							CategoryContentIconsListItem[k].DoClick = function()
 								RunConsoleCommand("neurotec_spawnvehicle", v.ClassName )
 								-- CategoryContentIconsListItem[k].label:SetText( "Go!" )
 								end
+							CategoryContentIconsListItem[k].DoRightClick = function()
+								NeuroTecCreateContentTab_StatsPanel(StatsPanel[k],Scroll,v)
+								end
 							CategoryContentIconsListItem[k].OnCursorEntered = function()
 								-- CategoryContentIconsListItem[k].label:SetText( "" )
-								//Need to code a windows which displays entity's status here.
-								end
-							
+								end							
 							CategoryContentIconsListItem[k].OnCursorExited = function()
 								-- CategoryContentIconsListItem[k].label:SetText( v.PrintName )
-								//close the windows status here
 								end
 					end				
 				end				
@@ -490,4 +492,44 @@ function NeuroTecCreateContentTab_Label(parent,text,icon_size)
 	
 	return t
 	
+end
+
+function NeuroTecCreateContentTab_StatsPanel(frame,parent,ent)
+
+	local w,h = ScrW(),ScrH()
+
+	if (frame!=nil) then frame:Close() end
+	-- frame = vgui.Create( "DFrame", parent )
+	frame = vgui.Create( "DFrame" )
+	frame:SetPos( w*0.03, h*0.15 )
+	frame:SetSize( h, h*0.8 )
+	frame:SetTitle( ent.PrintName )
+	frame:SetDraggable( true )
+	frame:SetSizable( false )
+	frame:ShowCloseButton( true )
+	frame:MakePopup()
+	
+	local panel = vgui.Create( "DPanel", frame )
+	-- panel:SetParent( frame )
+	panel:SetPos( 4, 25 )
+	panel:SetSize( h-8, h*0.8-28 )
+	panel:SetBackgroundColor(Color(255,255,255,100))
+	
+	-- if ent.Model then
+		-- local View = vgui.Create( "DAdjustableModelPanel", panel )
+		-- View:SetModel( ent.Model )
+		-- View:SetPos( 0, 0 )
+		-- View:SetSize( h*0.4, h*0.4 )
+		-- View:SetCamPos( Vector( 512, 512, 512 ) )
+		-- View:SetLookAt( Vector( 0, 0, 0 ) )
+	-- else
+		local lb = vgui.Create("DLabel", panel )
+		lb:SetText( "Interactive view of the entity" )
+		-- lb:SetTextColor( Color( 0, 0, 0, 150 ) ) -- 
+		-- lb:SetFont( _font )
+		lb:SetPos( h*0.2, h*0.2 )
+		lb:SizeToContents()
+	-- end
+	
+	// return panel
 end
