@@ -428,21 +428,101 @@ function NeuroTecCreateContentTab_StatsPanel(frame,parent,ent)
 	panel:SetSize( h-8, h*0.8-28 )
 	panel:SetBackgroundColor(Color(255,255,255,100))
 	
-	-- if ent.Model then
-		-- local View = vgui.Create( "DAdjustableModelPanel", panel )
-		-- View:SetModel( ent.Model )
-		-- View:SetPos( 0, 0 )
-		-- View:SetSize( h*0.4, h*0.4 )
-		-- View:SetCamPos( Vector( 512, 512, 512 ) )
-		-- View:SetLookAt( Vector( 0, 0, 0 ) )
-	-- else
+	if ent.Model then
+		local View = vgui.Create( "DAdjustableModelPanel", panel )
+		View:SetModel( ent.Model )
+		View:SetPos( 0, 2 )
+		View:SetSize( h*0.6-6, h*0.4 )
+		View:SetCamPos( Vector( 512, 512, 512 ) )
+		View:SetLookAt( Vector( 0, 0, 0 ) )
+	else
 		local lb = vgui.Create("DLabel", panel )
 		lb:SetText( "Interactive view of the entity" )
 		-- lb:SetTextColor( Color( 0, 0, 0, 150 ) ) -- 
 		-- lb:SetFont( _font )
 		lb:SetPos( h*0.2, h*0.2 )
 		lb:SizeToContents()
-	-- end
+	end
 	
+	local NeuroProperties = vgui.Create( "DProperties",panel )
+	NeuroProperties:SetPos( 2, h*0.4 )
+	-- NeuroProperties:SetSize( h-10, h*0.8-h*0.4-2 )
+	NeuroProperties:SetSize( h-10, h*0.4-32 )
+
+	//Description (Wiki?)
+	if (ent.Description) then
+		local Name = NeuroProperties:CreateRow( ent.PrintName, "Type" )
+		Name:Setup( "Generic" )
+		Name:SetValue( ent.Description )
+		Name.DataChanged = function( _, val ) print( val ) end
+	end
+	if (ent.Category) then
+		local Name = NeuroProperties:CreateRow( ent.PrintName, "Category" )
+		Name:Setup( "Generic" )
+		Name:SetValue( ent.Category )
+		Name.DataChanged = function( _, val ) print( val ) end
+	end
+	local Country = NeuroProperties:CreateRow( ent.PrintName, "Country" )
+	Country:Setup( "Generic" )
+	Country:SetValue( "N/A" )
+	Country.DataChanged = function( _, val ) print( val ) end
+
+	if (ent.MaxVelocity) then
+		local Speed = NeuroProperties:CreateRow( ent.PrintName, "Speed" )
+		Speed:Setup( "Generic" )
+		Speed:SetValue( "".. ent.MaxVelocity .." units/s" )
+		Speed.DataChanged = function( _, val ) print( val ) end
+	end
+	//Armament
+	if (ent.InitialHealth) then
+		local Speed = NeuroProperties:CreateRow( ent.PrintName, "Armor (HP)" )
+		Speed:Setup( "Generic" )
+		Speed:SetValue( ent.InitialHealth )
+		Speed.DataChanged = function( _, val ) print( val ) end
+	end
+	if (ent.AmmoTypes) then
+		local Ammo={}
+		for i=1,#ent.AmmoTypes do
+			Ammo[i] = NeuroProperties:CreateRow( "Armament", "Ammo" )
+			Ammo[i]:Setup( "Generic" )
+			Ammo[i]:SetValue( AmmoTypes[i].PrintName )
+			Ammo[i].DataChanged = function( _, val ) print( val ) end
+		end
+	end
+		if (ent.Armament) then
+		local Ammo={}
+		for i=1,#ent.Armament do
+			if (ent.Armament[i].Type != "Effect") or !(ent.Armament[i].Type != "Flarepod") then
+				Ammo[i] = NeuroProperties:CreateRow( "Armament", "Ammo "..i )
+				Ammo[i]:Setup( "Generic" )
+				Ammo[i]:SetValue( ent.Armament[i].PrintName )
+				Ammo[i].DataChanged = function( _, val ) print( val ) end
+			end
+		end
+	end
+	if (ent.MaxRange) then
+		local MaxRange = NeuroProperties:CreateRow( ent.PrintName, "Maximum Range" )
+		MaxRange:Setup( "Generic" )
+		MaxRange:SetValue( ent.MaxRange )
+		MaxRange.DataChanged = function( _, val ) print( val ) end
+	end
+	
+	//Customize
+	local Lock = NeuroProperties:CreateRow( "Custom", "Lock? (Unavailable)" )
+	Lock:Setup( "Boolean" )
+	Lock:SetValue( true )
+	local Skin = NeuroProperties:CreateRow( "Custom", "Skin (Unavailable)" )
+	Skin:Setup( "Float", {min = 0, max = 5} )
+	Skin:SetValue( 0 )
+	local color = NeuroProperties:CreateRow( "Custom", "Color (Unavailable)" )
+	color:Setup( "VectorColor" )
+	color:SetValue( Vector( 1, 0, 0 ) )
+	
+	local summary = vgui.Create( "DPanel", frame )
+	-- summary:SetParent( frame )
+	summary:SetPos( h+2-h*0.4, 27 )
+	summary:SetSize( h*0.4-8, h*0.4-4 )
+	summary:SetBackgroundColor(Color(255,255,255,100))
+
 	// return panel
 end
