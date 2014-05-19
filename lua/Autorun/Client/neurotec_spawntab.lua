@@ -4,8 +4,6 @@
 /* 																	 */
 /*********************************************************************/
 
--- local NP,NT,NN,NW = {},{},{},{}
-
 NP_ents_list = {}
 NP_ents_helicopters_list = {}
 NP_ents_warbirds_list = {}
@@ -22,6 +20,10 @@ NW_ents_missile_list = {}
 NW_ents_gun_list = {}
 NW_ents_mine_list = {}
 N_ents_misc_list = {}
+
+NB_sweps_list = {}
+NB_tools_list = {}
+
 hook.Add("InitPostEntity", "NeuroTecBuildSpawnMenu", function() 
 
 	for k, v in pairs( scripted_ents.GetSpawnable( )) do
@@ -81,32 +83,21 @@ hook.Add("InitPostEntity", "NeuroTecBuildSpawnMenu", function()
 	
 	table.SortByMember( NT_ents_list, "Category", true )
 	
+	for k, v in pairs( weapons.GetList( )) do
+		if( v.Category ) then 
+		local cat = string.lower( v.Category )			
+			if( string.find( cat, "neurotec weapons" ) )	then			
+				table.insert( NB_sweps_list, v )
+			end
+			if( string.find( cat, "military accessories" ) )	then
+				table.insert( NB_tools_list, v )
+			end
+		end
+	end
+	-- PrintTable(NB_tools_list)
 end )
 
--- ***************************************delete this line to see the Neuro Tab (doesn't work yet)********************************************
-base_weapons = {}
-base_weapons[1] = "TargetDesignator"
-base_weapons[2] = "weapon_jericho"
-base_weapons[3] = "weapon_np_flaregun"
-base_weapons[4] = "weapon_np_repairgun"
-base_weapons[5] = "weapon_stinger"
-
-helicopter= {}
-helicopter[1] = "sent_AH-64_Apache_p"
-helicopter[2] = "sent_mi-28_p"
-aircraft = {}
-aircraft[1] = "sent_Spitfire_p"
-aircraft[2] = "sent_A-10_p"
-aircraft[3] = "sent_He-111_p"
-aircraft[4] = "sent_FA22raptor"
-tank = {}
-tank[1] = "sent_Stryker_p"
-tank[2] = "sent_bmp3_p"
-tank[3] = "sent_T-80BV_p"
-tank[4] = "sent_paladin_p"
-
 local function NeuroTecCreateContentTab()
--- spawnmenu.AddCreationTab( "NeuroTec", function()
 
 local ply = LocalPlayer()
 
@@ -116,8 +107,8 @@ local w = ScrW()*0.57
 NeuroTecSheet = vgui.Create( "DPropertySheet" )
 NeuroTecSheet:SetPos( 5, 30 )
 NeuroTecSheet:SetSize( 340, 315 )
---[[
-/*
+
+
 //NeuroBase
 	local NB_Scroll = vgui.Create( "DScrollPanel" )
 	
@@ -139,13 +130,24 @@ NeuroTecSheet:SetSize( 340, 315 )
 			SwepsContent:SetSpaceX( 5 )
 
 				local NB_SwepsContentIconsListItem = {}
-				for i = 1,4 do
-						NB_SwepsContentIconsListItem[i] = SwepsContent:Add( "DImageButton" )
-						NB_SwepsContentIconsListItem[i]:SetSize( icon_size, icon_size )
-						NB_SwepsContentIconsListItem[i]:SetImage( "vgui/entities/"..base_weapons[i]..".vtf" )
-						NB_SwepsContentIconsListItem[i].DoClick = function()
-							Msg("This is still a work in progress... \n")
-							end
+				for i = 1,#NB_sweps_list do
+						-- NB_SwepsContentIconsListItem[i] = SwepsContent:Add( "DImageButton" )
+						-- NB_SwepsContentIconsListItem[i]:SetSize( icon_size, icon_size )
+						-- NB_SwepsContentIconsListItem[i]:SetImage( "vgui/entities/"..NB_sweps_list[i]..".vtf" )
+						-- NB_SwepsContentIconsListItem[i].DoClick = function()
+							-- Msg("This is still a work in progress... \n")
+							-- end			-- NB_SwepsContentIconsListItem[i] = SwepsContent:Add( "DImageButton" )
+						NB_SwepsContentIconsListItem[i] = SwepsContent:Add( "ContentIcon" )
+						-- NB_SwepsContentIconsListItem[i]:SetSize( icon_size, icon_size )
+						NB_SwepsContentIconsListItem[i]:SetMaterial( "vgui/entities/"..NB_sweps_list[i].ClassName..".vtf" )
+						NB_SwepsContentIconsListItem[i]:SetName( NB_sweps_list[i].PrintName )
+						NB_SwepsContentIconsListItem[i].DoClick = function() RunConsoleCommand( "gm_spawnswep", NB_sweps_list[i].ClassName ) end
+						NB_SwepsContentIconsListItem[i].OpenMenu = function()
+							local menu = DermaMenu()
+							menu:AddOption( "Copy to clipboard", function() SetClipboardText( NB_sweps_list[i].ClassName ) ply:ChatPrint( NB_sweps_list[i].PrintName.." copied to clipboard." ) end )
+							menu:Open()
+						end
+				
 				end
 
 		NB_CollapsibleCategory[2] = NB_List:Add( "DCollapsibleCategory" )
@@ -160,116 +162,27 @@ NeuroTecSheet:SetSize( 340, 315 )
 			ToolsContent:SetSpaceX( 5 )
 
 				local NB_ToolsIconsListItem = {}
-				for i = 1,4 do
-						NB_ToolsIconsListItem[i] = ToolsContent:Add( "DImageButton" )
-						NB_ToolsIconsListItem[i]:SetSize( icon_size, icon_size )
-						NB_ToolsIconsListItem[i]:SetImage( "vgui/entities/"..base_weapons[i]..".vtf" )
-						NB_ToolsIconsListItem[i].DoClick = function()
-							Msg("This is still a work in progress... \n")
-							end
+				for i = 1,#NB_tools_list do
+						-- NB_ToolsIconsListItem[i] = ToolsContent:Add( "DImageButton" )
+						-- NB_ToolsIconsListItem[i]:SetSize( icon_size, icon_size )
+						-- NB_ToolsIconsListItem[i]:SetImage( "vgui/entities/"..NB_tools_list[i].ClassName..".vtf" )
+						-- NB_ToolsIconsListItem[i].DoClick = function()
+							-- Msg("This is still a work in progress... \n")
+							-- end
+						NB_ToolsIconsListItem[i] = ToolsContent:Add( "ContentIcon" )
+						-- NB_ToolsIconsListItem[i]:SetSize( icon_size, icon_size )
+						NB_ToolsIconsListItem[i]:SetMaterial( "vgui/entities/"..NB_tools_list[i].ClassName..".vtf" )
+						NB_ToolsIconsListItem[i]:SetName( NB_tools_list[i].PrintName )
+						NB_ToolsIconsListItem[i].DoClick = function() RunConsoleCommand( "give", NB_tools_list[i].ClassName ) end
+						NB_ToolsIconsListItem[i].OpenMenu = function()
+							local menu = DermaMenu()
+							menu:AddOption( "Copy to clipboard", function() SetClipboardText( NB_tools_list[i].ClassName ) ply:ChatPrint( NB_sweps_list[i].PrintName.." copied to clipboard." ) end )
+							menu:Open()
+						end
 				end
 
 NeuroTecSheet:AddSheet( "NeuroBase", NB_Scroll, "icon16/control_repeat_blue.png", false, false, "NeuroTec SWEPs" )
 
-//NeuroTanks
-	local NT_Scroll = vgui.Create( "DScrollPanel" )
-	-- NT_Scroll:SetSize( 355, 200 )
-	-- NT_Scroll:SetPos( 10, 30 )
-	
-	local NT_List = vgui.Create( "DIconLayout",NT_Scroll )
-	NT_List:SetSize( w, 50 )
-	NT_List:SetSpaceY( 5 )
-	NT_List:SetSpaceX( 5 )
-
-		local NT_CollapsibleCategory = {}
-		NT_CollapsibleCategory[1] = NT_List:Add( "DCollapsibleCategory" )
-		NT_CollapsibleCategory[1]:SetSize( w, 50 )
-		NT_CollapsibleCategory[1]:SetExpanded( 1 )
-		NT_CollapsibleCategory[1]:SetLabel( "Ground Units" )
-
-			local GroundUnitContent   = vgui.Create( "DIconLayout" )
-			NT_CollapsibleCategory[1]:SetContents( GroundUnitContent )
-			GroundUnitContent:SetSize( w, 50 )
-			GroundUnitContent:SetSpaceY( 5 )
-			GroundUnitContent:SetSpaceX( 5 )
-
-				local NT_GroundUnitIconsListItem = {}
-				for i = 1,4 do
-						NT_GroundUnitIconsListItem[i] = GroundUnitContent:Add( "DImageButton" )
-						NT_GroundUnitIconsListItem[i]:SetSize( icon_size, icon_size )
-						NT_GroundUnitIconsListItem[i]:SetImage( "vgui/entities/"..tank[i]..".vtf" )
-						NT_GroundUnitIconsListItem[i].DoClick = function()
-							Msg("This is still a work in progress... \n")
-							end
-				end
-
-		NT_CollapsibleCategory[2] = NT_List:Add( "DCollapsibleCategory" )
-		NT_CollapsibleCategory[2]:SetSize( w, 50 )
-		NT_CollapsibleCategory[2]:SetExpanded( 1 )
-		NT_CollapsibleCategory[2]:SetLabel( "Tanks" )
-		
-		local TanksContent   = vgui.Create( "DIconLayout" )
-		NT_CollapsibleCategory[2]:SetContents( TanksContent )
-		TanksContent:SetSize( w, 50 )
-		TanksContent:SetSpaceY( 5 )
-		TanksContent:SetSpaceX( 5 )
-
-		local NT_TankIconsListItem = {}
-
-		for k,v in pairs( NT_ents_list ) do
-			-- print(  )
-			print( v )
-			NT_TankIconsListItem[k] = TanksContent:Add( "DImageButton" )
-			NT_TankIconsListItem[k].label = NeuroTecCreateContentTab_Label(NT_TankIconsListItem[k],v,icon_size)
-			NT_TankIconsListItem[k]:SetSize( icon_size, icon_size )
-			NT_TankIconsListItem[k]:SetImage( "vgui/entities/"..v.ClassName..".vtf" )
-			NT_TankIconsListItem[k].DoClick = 
-			function()
-				
-				RunConsoleCommand("neurotec_spawnvehicle", v.ClassName )
-				NT_TankIconsListItem[k].label:SetText( "Go!" )
-			
-			end
-				
-			NT_TankIconsListItem[k].OnCursorEntered = 
-			function() 
-				
-				NT_TankIconsListItem[k].label:SetText( "" ) 
-				
-			end
-			
-			NT_TankIconsListItem[k].OnCursorExited = 
-			function() 
-				
-				NT_TankIconsListItem[k].label:SetText( v.PrintName ) 
-				
-			end
-		
-		end
-
-		NT_CollapsibleCategory[3] = NT_List:Add( "DCollapsibleCategory" )
-		NT_CollapsibleCategory[3]:SetSize( w, 50 )
-		NT_CollapsibleCategory[3]:SetExpanded( 1 )
-		NT_CollapsibleCategory[3]:SetLabel( "Artillery" )
-		
-			local ArtilleryContent   = vgui.Create( "DIconLayout" )
-			NT_CollapsibleCategory[3]:SetContents( ArtilleryContent )
-			ArtilleryContent:SetSize( w, 50 )
-			ArtilleryContent:SetSpaceY( 5 )
-			ArtilleryContent:SetSpaceX( 5 )
-
-				local NT_ArtilleryIconsListItem = {}
-				for i = 1,#tank do
-						NT_ArtilleryIconsListItem[i] = ArtilleryContent:Add( "DImageButton" )
-						NT_ArtilleryIconsListItem[i]:SetSize( icon_size, icon_size )
-						NT_ArtilleryIconsListItem[i]:SetImage( "vgui/entities/"..tank[i]..".vtf" )
-						NT_ArtilleryIconsListItem[i].DoClick = function()
-							Msg("This is still a work in progress... \n")
-							end
-				end
-
-NeuroTecSheet:AddSheet( "NeuroTanks", NT_Scroll, "vgui/tank.png", false, false, "Ground Forces!" )
-*/]]--
 //NeuroPlanes
 local Aviation = { {Category = "Aircraft",
 				CategoryEntities = NP_ents_list
