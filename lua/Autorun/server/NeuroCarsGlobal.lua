@@ -29,11 +29,19 @@ resource.AddFile("models/h500_gatling.mdl")
 
 concommand.Add("neurotec_spawnvehicle",function( ply, cmd, args ) 
 
+	if( IsValid( ply:GetScriptedVehicle() ) ) then
+		
+		ply:PrintMessage( HUD_PRINTCENTER, "You can't do that right now." )
+		
+		return
+		
+	end
+	
 	for k, v in pairs( scripted_ents.GetSpawnable( )) do
 		
 		if( v.ClassName == args[1] ) then
 			
-			if( v.AdminSpawnable == true && !ply:IsAdmin() ) then return end
+			if( v.AdminSpawnable == true && v.Spawnable == false && !ply:IsAdmin() ) then return end
 			
 			local pos =  ply:GetPos() + Vector(0,0,100) 
 			
