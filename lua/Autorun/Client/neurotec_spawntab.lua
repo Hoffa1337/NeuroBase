@@ -20,6 +20,7 @@ NW_ents_missile_list = {}
 NW_ents_gun_list = {}
 NW_ents_mine_list = {}
 N_ents_misc_list = {}
+N_ents_accessories_list = {}
 
 NB_sweps_list = {}
 NB_tools_list = {}
@@ -44,6 +45,9 @@ hook.Add("InitPostEntity", "NeuroTecBuildSpawnMenu", function()
 			//misc
 			if( string.find( cat, "neurotec fun" ) || string.find( cat, "neurotec admin" ) || string.find( cat, "neurotec work" ) ) then
 				table.insert( N_ents_misc_list, v )
+			end
+			if( string.find( cat, "accessories" ) ) then
+				table.insert( N_ents_accessories_list, v )
 			end
 			//tanks
 			if( v.TankType && (v.TankType == TANK_TYPE_CAR) ) then
@@ -250,7 +254,10 @@ local NeuroWeaponsTab = NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicon
 NeuroTecSheet:AddSheet( "NeuroWeapons", NeuroWeaponsTab, "vgui/weps.png", false, false, "Weapons of Mass Mingebagging" )
 
 //Miscellaneous
-local Miscellaneous = { {Category = "Misc",
+local Miscellaneous = { {Category = "Accessories",
+				CategoryEntities = N_ents_accessories_list
+				},
+				{Category = "Misc",
 				CategoryEntities = N_ents_misc_list
 				}
 			}
