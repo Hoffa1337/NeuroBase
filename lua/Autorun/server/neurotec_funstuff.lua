@@ -972,8 +972,16 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 											
 											local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
 											
-											local vr = math.random(10,15)
-											
+											local vr = math.random(15,25)
+											local bombs = {
+											"models/hawx/weapons/cbu-100 clusterbomb.mdl",
+											"models/military2/bomb/bomb_cbu.mdl",
+											"models/military2/bomb/bomb_gbu.mdl",
+											"models/props_phx/ww2bomb.mdl",
+											"models/thedoctor/napalm_bomb.mdl",
+											"models/props_c17/gravestone_cross001a.mdl",
+											"models/props_cemetery/grave_06.mdl"
+											};
 											for i=1,vr do
 												
 												timer.Simple( i / vr, 
@@ -983,7 +991,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 														a:SetPos( Target:GetPos() + Vector( math.random( -1512,1512 ), math.random( -1512,1512 ), 5000 + math.random( -1512,1512 ) ) )
 														a:SetAngles( Angle( math.random(0,360), math.random(0,360), math.random(0,360) ) )
 														a.Owner = ply
-														a:SetModel("models/military2/bomb/bomb_mk82.mdl")
+														a:SetModel(bombs[math.random(1,#bombs)])
 														a:SetPhysicsAttacker( ply )
 														a:SetOwner( ply )
 														a:Spawn()
@@ -1000,7 +1008,46 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 									end
 									
 						};
+						{
+						Var = "!dickrain",
+						Callback = function( ply, txt, team )
+									
+										if( ply:IsAdmin()) then
+											
+											local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
+											
+											local vr = math.random(10,15)
+											
+											for i=1,vr do
+												
+												timer.Simple( i / vr, 
+													function() 
+														
+														local a = ents.Create("sent_tank_shell")
+														a:SetPos( Target:GetPos() + Vector( math.random( -1512,1512 ), math.random( -1512,1512 ), 5000 + math.random( -1512,1512 ) ) )
+														a:SetAngles( Angle( math.random(0,360), math.random(0,360), math.random(0,360) ) )
+														a.Owner = ply
+														a:SetModel("models/hawx/weapons/cbu-100 clusterbomb.mdl")
+														a:SetMaterial( "models/shiny" )
+														a:SetRenderMode( RENDERMODE_TRANSALPHA )
+														a:SetColor( Color( 226, 105, 177, 255 )  )
+														a:SetPhysicsAttacker( ply )
+														a:SetOwner( ply )
+														a:Spawn()
+														
+													
+													end )
 						
+											
+											end
+											
+											
+										end
+										
+									end
+									
+						};
+
 						{
 						Var = "!train",
 						Callback = function( ply, txt, team )
@@ -1024,6 +1071,35 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 											-- ParticleEffect("fire_b", train:GetPos(), Angle(0,0,0), train )
 											-- ParticleEffect("fire_b", train:GetPos(), Angle(0,0,0), train )
 										
+										end
+										
+									end
+									
+						};						
+						{
+						Var = "!cockslap", -- Suggestion by Rifleman[DK] 
+						Callback = function( ply, txt, team )
+									
+										if( ply:IsAdmin()) then
+											
+											local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
+											
+											local train = ents.Create("prop_physics")
+											train:SetPos( Target:GetPos() + Target:GetForward() * 1048 + Target:GetUp() * 70 )
+											train:SetAngles( Angle( 90, Target:GetAngles().y, 180 ) )
+											train:SetModel("models/props_phx/rocket1.mdl")
+											train:SetOwner( ply )
+											train:SetPhysicsAttacker( ply )
+											train:Spawn()
+											-- train:Ignite( 100, 100 )
+											train:SetMaterial( "models/shiny" )
+											train:SetRenderMode( RENDERMODE_TRANSALPHA )
+											train:SetColor( Color( 226, 105, 177, 255 ) )
+											train:GetPhysicsObject():ApplyForceCenter( train:GetForward() * -95000000 )
+											train:Fire( "kill", "", 10 )
+											train:EmitSound( "vo/ravenholm/engage01.wav", 511, 80 )
+											ParticleEffect("rt_impact_tank", train:GetPos(), Angle(0,0,0), train )
+								
 										end
 										
 									end
