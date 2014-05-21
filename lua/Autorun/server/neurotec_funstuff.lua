@@ -1023,7 +1023,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 												timer.Simple( i / vr, 
 													function() 
 														
-														local a = ents.Create("sent_tank_shell")
+														local a = ents.Create("sent_napalm_bomb")
 														a:SetPos( Target:GetPos() + Vector( math.random( -1512,1512 ), math.random( -1512,1512 ), 5000 + math.random( -1512,1512 ) ) )
 														a:SetAngles( Angle( math.random(0,360), math.random(0,360), math.random(0,360) ) )
 														a.Owner = ply
