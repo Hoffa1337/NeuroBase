@@ -177,7 +177,7 @@ hook.Add( "PlayerSpawnedSENT", "FixGhostCollisionModels", function( ply, e )
 	
 	for k,v in pairs( ents.GetAll() ) do 
 		
-		if( v != e && v:GetParent() == e ) then
+		if( v != e && v:GetParent() == e && e.VehicleType != nil ) then
 			
 			v:SetSolid( SOLID_NONE )
 			
