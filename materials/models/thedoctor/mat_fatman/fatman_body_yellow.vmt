@@ -1,0 +1,14 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/thedoctor/mat_fatman/fatman_body_yellow"
+	"$surfaceprop" "metal"
+	"$model" 1
+	"$phong" 1
+	"$ssbump" 1
+	"$bumpmap" "models/thedoctor/mat_fatman/fatman_body_yellow_NRM"
+	"$normalmapalphaenvmapmask" 1
+	"$envmaptint" "[0.05 0.05 0.05]"
+	"$envmap" "env_cubemap"
+	"$envmapmask"		"models/thedoctor/mat_fatman/fatman_body_yellow_SPEC"
+}
+

@@ -27,6 +27,7 @@ game.AddParticles("particles/neuro_fireball.pcf") 		-- fireball_explosion
 game.AddParticles("particles/neuro_fireboom.pcf") 		-- fireboom_explosion - fireboom_explosion_midair 
 game.AddParticles("particles/neuro_inferno.pcf") 		-- fireplume -  fireplume_small 
 game.AddParticles("particles/gbe_trinity_explo.pcf") --trinity_main and trinity_air
-
+game.AddParticles("particles/gb5_napalm.pcf") --napalm_explosion and napalm_air
+ 
 -- rocketrail/s
 print( "NeuroTec Special Effects loaded" )
