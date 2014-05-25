@@ -57,8 +57,34 @@ hook.Add("InitPostEntity", "NeuroTecBuildSpawnMenu", function()
 			elseif( v.TankType && (v.TankType == TANK_TYPE_AA) ) then
 				table.insert( NT_ents_AAgun_list, v )
 			elseif( v.TankType && ((v.TankType == TANK_TYPE_LIGHT)or(v.TankType == TANK_TYPE_MEDIUM)or(v.TankType == TANK_TYPE_HEAVY)or(v.TankType == TANK_TYPE_SUPERHEAVY) )) then
-				table.insert( NT_ents_list, v )			
-			elseif( v.TankType && string.find( cat, "neurotec tanks" ) || string.find( cat, "neurotec ground" ) ) then
+				table.insert( NT_ents_list, v )
+			/*	if( string.find( cat, "tier i" )  ) then
+					table.insert( NT_ents_list[1], v )
+				elseif( string.find( cat, "tier ii" )  ) then
+					table.insert( NT_ents_list[2], v )
+				elseif( string.find( cat, "tier iii" )  ) then
+					table.insert( NT_ents_list[3], v )
+				elseif( string.find( cat, "tier iv" )  ) then
+					table.insert( NT_ents_list[4], v )
+				elseif( string.find( cat, "tier v" )  ) then
+					table.insert( NT_ents_list[5], v )
+				elseif( string.find( cat, "tier vi" )  ) then
+					table.insert( NT_ents_list[6], v )
+				elseif( string.find( cat, "tier vii" )  ) then
+					table.insert( NT_ents_list[7], v )
+				elseif( string.find( cat, "tier viii" )  ) then
+					table.insert( NT_ents_list[8], v )
+				elseif( string.find( cat, "tier ix" )  ) then
+					table.insert( NT_ents_list[9], v )
+				elseif( string.find( cat, "tier x" )  ) then
+					table.insert( NT_ents_list[10], v )
+				elseif( string.find( cat, "tier mcccxxxvii" )  ) then
+					table.insert( NT_ents_list[11], v )
+				else
+					table.insert( NT_ents_list[12], v )				
+
+				end
+*/			elseif( v.TankType && string.find( cat, "neurotec tanks" ) || string.find( cat, "neurotec ground" ) ) then
 				table.insert( NT_ents_ground_list, v )
 			end
 			//naval
@@ -205,7 +231,48 @@ NeuroTecSheet:AddSheet( "NeuroPlanes", NeuroPlaneTab, "vgui/plane.png", false, f
 local Tanks = { {Category ="Tanks",
 				CategoryEntities = NT_ents_list
 				},
-				{Category ="Wheeled Armor",
+
+				
+				/* --This need to be fixed because the categories are stacked and cause stack overflow...
+				{Category ="Tier I",
+				CategoryEntities = NT_ents_list[1]
+				},
+				{Category ="Tier II",
+				CategoryEntities = NT_ents_list[2]
+				},
+				{Category ="Tier III",
+				CategoryEntities = NT_ents_list[3]
+				},
+				{Category ="Tier IV",
+				CategoryEntities = NT_ents_list[4]
+				},
+				{Category ="Tier V",
+				CategoryEntities = NT_ents_list[5]
+				},
+				{Category ="Tier VI",
+				CategoryEntities = NT_ents_list[6]
+				},
+				{Category ="Tier VII",
+				CategoryEntities = NT_ents_list[7]
+				},
+				{Category ="Tier VIII",
+				CategoryEntities = NT_ents_list[8]
+				},
+				{Category ="Tier IX",
+				CategoryEntities = NT_ents_list[9]
+				},
+				{Category ="Tier X",
+				CategoryEntities = NT_ents_list[10]
+				},
+				{Category ="Tier MCCCXXXVII",
+				CategoryEntities = NT_ents_list[11]
+				},
+				{Category ="Other tanks",
+				CategoryEntities = NT_ents_list[12]
+				},
+*/
+
+			{Category ="Wheeled Armor",
 				CategoryEntities = NT_ents_cars_list
 				},
 				{Category = "AntiAir vehicles",
@@ -355,20 +422,20 @@ hook.Add("Initialize", "NTSP_AddFonts", function()
 
 end )
 
-function NeuroTecCreateContentTab_Label(parent,text,icon_size)
+function NeuroTecCreateContentTab_Label(parent,ent,icon_size)
 
-	local name = text.PrintName
+	local name = ent.PrintName
 
-	if( string.find( text.Category, "NeuroTec Tanks - " ) != nil ) then
+	if( string.find( ent.Category, "NeuroTec Tanks - " ) != nil ) then
 		
 		local maxspeed = 62
 		local maxdamage = 5000
 		local maxhealth = 9000
 		
 		__Stats = {
-					{ "Speed", ( text.MaxVelocity or 0 ) / maxspeed };
-					{ "Armor" , ( text.InitialHealth or 0 ) / maxhealth };
-					{ ( text.MinDamage or "nil" ).."-"..( text.MaxDamage or "nil" ), ( text.MaxDamage or 0 ) / maxdamage  };
+					{ "Speed", ( ent.MaxVelocity or 0 ) / maxspeed };
+					{ "Armor" , ( ent.InitialHealth or 0 ) / maxhealth };
+					{ ( ent.MinDamage or "nil" ).."-"..( ent.MaxDamage or "nil" ), ( ent.MaxDamage or 0 ) / maxdamage  };
 					
 				}
 					
@@ -377,9 +444,9 @@ function NeuroTecCreateContentTab_Label(parent,text,icon_size)
 		local xp,yp = icon_size - graph_size, icon_size - ( size * ( #__Stats + 1 ) )-- icon_size-70
 		local _font = "ChatFont"
 		
-		name = name.. " / "..string.Replace( text.Category, "NeuroTec Tanks - ", "" )
+		name = name.. " / "..string.Replace( ent.Category, "NeuroTec Tanks - ", "" )
 		-- local tier = vgui.Create("DLabel", parent )
-		-- tier:SetText( string.Replace( text.Category, "NeuroTec Tanks - ", "" ) )
+		-- tier:SetText( string.Replace( ent.Category, "NeuroTec Tanks - ", "" ) )
 		-- tier:SetFont("ChatFont")
 		-- tier:SetPos( xp, yp+(#__Stats+1*size) )
 		-- tier:SizeToContents()
@@ -402,7 +469,14 @@ function NeuroTecCreateContentTab_Label(parent,text,icon_size)
 					
 	
 	end
-		
+
+	if (ent.Spawnable) and (ent.AdminSpawnable) then //Need to check if the entity only Admin spawnable.
+		local AdminIcon = vgui.Create( "DImage", parent )
+		AdminIcon:SetImage( "gui/silkicons/shield.vtf" )
+		AdminIcon:SetPos( icon_size-21, 5 )
+		AdminIcon:SizeToContents()   
+	end
+	
 	local t = vgui.Create("DLabel", parent )
 	t:SetText( name )
 	t:SetFont("NeuroTankSpawnName")
@@ -463,8 +537,20 @@ function NeuroTecCreateContentTab_StatsPanel(frame,parent,ent)
 		Name = SimpleLabel(text,InfoPanel,5,5,blk,_f)
 		Name:SetExpensiveShadow( 1, Color( 255, 255, 255, 190 ) )
 		
+		local SpawnModeCheckbox = vgui.Create( "DCheckBoxLabel",InfoPanel )
+		SpawnModeCheckbox:SetText( "Spawn and enter the vehicle?" )
+		SpawnModeCheckbox:SetPos( InfoPanel:GetSize()/2, 5 )
+		-- SpawnModeCheckbox:SetConVar( "tank_WoTstyle" ) //For example
+		SpawnModeCheckbox:SetValue( 1 )
+		SpawnModeCheckbox.DoClick = function ()
+				SpawnModeCheckbox:Toggle()		
+				print("Toggled spawning inside the vehicle. (no code yet)") 
+				end		
+		SpawnModeCheckbox:SetTextColor(blk)            
+		SpawnModeCheckbox:SizeToContents()   
+		
 	local InfoSubPanel = {}
-	for i=1,11,2 do
+	for i=1,15,2 do
 		InfoSubPanel[i]=SimplePanel(InfoPanel, 2,10+26*i/2, InfoPanel:GetSize()/2-4,25, Color(255,255,255,255))
 		InfoSubPanel[i+1]=SimplePanel(InfoPanel, InfoPanel:GetSize()/2,10+26*i/2, InfoPanel:GetSize()/2-4,25, Color(255,255,255,255))
 	end
@@ -493,6 +579,11 @@ function NeuroTecCreateContentTab_StatsPanel(frame,parent,ent)
 		if (ent.InitialHealth) then text=ent.InitialHealth else text= "N/A" end
 		SimpleLabel(text,InfoSubPanel[12],5,5,blk)
 
+		SimpleLabel("Maximum Range",InfoSubPanel[13],5,5,blk)
+		if (ent.MaxRange) then text= ent.MaxRange else text="oo" end
+		SimpleLabel(text,InfoSubPanel[14],5,5,blk)
+		
+	
 		//Armament
 		AmmoCat=SimpleLabel("Armament",InfoPanel,5,15+26*(#InfoSubPanel+1)/2,Color(255,200,0,255),_f)
 		AmmoCat:SetExpensiveShadow( 1, Color( 0, 0, 0, 190 ) )
@@ -506,14 +597,23 @@ function NeuroTecCreateContentTab_StatsPanel(frame,parent,ent)
 		-- end
 	-- end
 	
+		-- if (ent.Armament) then
+			-- local AmmoSubPanel={}
+			-- for i=1,#ent.Armament do
+				-- if (ent.Armament[i].Type != "Effect") or !(ent.Armament[i].Type != "Flarepod") then
+					-- AmmoSubPanel[i]=SimplePanel(InfoPanel, 2,15+26*(i+#InfoSubPanel+1)/2, InfoPanel:GetSize()/2-4,25, Color(255,255,255,255))
+				-- //AmmoSubPanel[i]=SimplePanel(InfoPanel, InfoPanel:GetSize()/2,10+26*#InfoSubPanel/2, InfoPanel:GetSize()/2-4,25, Color(255,255,255,255))
+				-- SimpleLabel( Armament[i].PrintName ,AmmoSubPanel[i],5,5,blk)
+				-- end
+			-- end
+		-- end
 	
-	
-	
-/*	
 	local NeuroProperties = vgui.Create( "DProperties",panel )
 	NeuroProperties:SetPos( 2, h*0.4 )
 	-- NeuroProperties:SetSize( h-10, h*0.8-h*0.4-2 )
 	NeuroProperties:SetSize( h-10, h*0.4-32 )
+	
+/*	
 
 	//Description (Wiki?)
 
@@ -586,13 +686,13 @@ function NeuroTecCreateContentTab_StatsPanel(frame,parent,ent)
 	local color = NeuroProperties:CreateRow( "Custom", "Color (Unavailable)" )
 	color:Setup( "VectorColor" )
 	color:SetValue( Vector( 1, 0, 0 ) )
-	
+*/	
 	local summary = vgui.Create( "DPanel", frame )
 	-- summary:SetParent( frame )
 	summary:SetPos( h+2-h*0.4, 27 )
 	summary:SetSize( h*0.4-8, h*0.4-4 )
 	summary:SetBackgroundColor(Color(255,255,255,100))
-*/
+
 	// return panel
 	
 end
