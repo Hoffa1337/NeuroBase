@@ -417,7 +417,10 @@ end
 function NeuroTecCreateContentTab_StatsPanel(frame,parent,ent)
 
 	local w,h = ScrW(),ScrH()
-
+	local _f = "DefaultFixed"
+	local blk = Color(0,0,0,255)
+	local text
+	
 	if (frame!=nil) then frame:Close() end
 	-- frame = vgui.Create( "DFrame", parent )
 	frame = vgui.Create( "DFrame" )
@@ -451,12 +454,71 @@ function NeuroTecCreateContentTab_StatsPanel(frame,parent,ent)
 		lb:SizeToContents()
 	end
 	
+	local InfoPanel = vgui.Create( "DPanel", panel  )
+	InfoPanel:SetPos( 8, h*0.4 )
+	InfoPanel:SetSize( h-16, h*0.4-6 )
+	InfoPanel:SetBackgroundColor(Color(255,255,255,100))
+	
+		if (ent.PrintName) then text=ent.PrintName else text= "Unknown" end
+		Name = SimpleLabel(text,InfoPanel,5,5,blk,_f)
+		Name:SetExpensiveShadow( 1, Color( 255, 255, 255, 190 ) )
+		
+	local InfoSubPanel = {}
+	for i=1,11,2 do
+		InfoSubPanel[i]=SimplePanel(InfoPanel, 2,10+26*i/2, InfoPanel:GetSize()/2-4,25, Color(255,255,255,255))
+		InfoSubPanel[i+1]=SimplePanel(InfoPanel, InfoPanel:GetSize()/2,10+26*i/2, InfoPanel:GetSize()/2-4,25, Color(255,255,255,255))
+	end
+
+		SimpleLabel("Type",InfoSubPanel[1],5,5,blk)
+		if (ent.Description) then text=ent.Description else text= "Unknown" end
+		SimpleLabel(text,InfoSubPanel[2],5,5,blk)
+
+		SimpleLabel("Country",InfoSubPanel[3],5,5,blk)
+		if (ent.Country) then text=ent.Country else text= "N/A" end
+		SimpleLabel(text,InfoSubPanel[4],5,5,blk)
+		
+		SimpleLabel("Date",InfoSubPanel[5],5,5,blk)
+		if (ent.Date) then text=ent.Country else text= "N/A" end
+		SimpleLabel(text,InfoSubPanel[6],5,5,blk)
+
+		SimpleLabel("Crew",InfoSubPanel[7],5,5,blk)
+		if (ent.CrewPositions) then text=#ent.CrewPositions else text= "N/A" end
+		SimpleLabel(text,InfoSubPanel[8],5,5,blk)
+
+		SimpleLabel("Speed",InfoSubPanel[9],5,5,blk)
+		if (ent.MaxVelocity) then text=ent.MaxVelocity .." units/s" else text= "N/A" end
+		SimpleLabel(text,InfoSubPanel[10],5,5,blk)
+
+		SimpleLabel("Armor (HP)",InfoSubPanel[11],5,5,blk)
+		if (ent.InitialHealth) then text=ent.InitialHealth else text= "N/A" end
+		SimpleLabel(text,InfoSubPanel[12],5,5,blk)
+
+		//Armament
+		AmmoCat=SimpleLabel("Armament",InfoPanel,5,15+26*(#InfoSubPanel+1)/2,Color(255,200,0,255),_f)
+		AmmoCat:SetExpensiveShadow( 1, Color( 0, 0, 0, 190 ) )
+	
+	-- if (ent.AmmoTypes) then
+		-- local AmmoSubPanel = {}
+		-- for i=1,#AmmoTypes do
+			-- AmmoSubPanel[i]=SimplePanel(InfoPanel, 2,15+26*(i+#InfoSubPanel+1)/2, InfoPanel:GetSize()/2-4,25, Color(255,255,255,255))
+			-- //AmmoSubPanel[i]=SimplePanel(InfoPanel, InfoPanel:GetSize()/2,10+26*#InfoSubPanel/2, InfoPanel:GetSize()/2-4,25, Color(255,255,255,255))
+			-- SimpleLabel( AmmoTypes[i].PrintName ,AmmoSubPanel[i],5,5,blk)
+		-- end
+	-- end
+	
+	
+	
+	
+/*	
 	local NeuroProperties = vgui.Create( "DProperties",panel )
 	NeuroProperties:SetPos( 2, h*0.4 )
 	-- NeuroProperties:SetSize( h-10, h*0.8-h*0.4-2 )
 	NeuroProperties:SetSize( h-10, h*0.4-32 )
 
 	//Description (Wiki?)
+
+
+
 	if (ent.Description) then
 		local Name = NeuroProperties:CreateRow( ent.PrintName, "Type" )
 		Name:Setup( "Generic" )
@@ -519,7 +581,7 @@ function NeuroTecCreateContentTab_StatsPanel(frame,parent,ent)
 	Lock:Setup( "Boolean" )
 	Lock:SetValue( true )
 	local Skin = NeuroProperties:CreateRow( "Custom", "Skin (Unavailable)" )
-	Skin:Setup( "Float", {min = 0, max = 5} )
+	Skin:Setup( "Int", {min = 0, max = 5} )
 	Skin:SetValue( 0 )
 	local color = NeuroProperties:CreateRow( "Custom", "Color (Unavailable)" )
 	color:Setup( "VectorColor" )
@@ -530,6 +592,27 @@ function NeuroTecCreateContentTab_StatsPanel(frame,parent,ent)
 	summary:SetPos( h+2-h*0.4, 27 )
 	summary:SetSize( h*0.4-8, h*0.4-4 )
 	summary:SetBackgroundColor(Color(255,255,255,100))
-
+*/
 	// return panel
+	
+end
+
+function SimplePanel(parent,x,y,w,h,color)
+
+	local SPanel = vgui.Create("DPanel",parent)
+	SPanel:SetSize(w,h)
+	SPanel:SetPos(x,y)
+	SPanel:SetBackgroundColor(color)
+	return SPanel
+end
+
+function SimpleLabel(text,parent,x,y,color,font)
+
+	local Slabel = vgui.Create("DLabel",parent)
+	Slabel:SetText(text)
+	if font then Slabel:SetFont(font) end
+	if x and y then	Slabel:SetPos(x,y) else Slabel:SetPos(5,5) end
+	Slabel:SizeToContents()
+	if color then Slabel:SetTextColor(color) end
+	return Slabel
 end
