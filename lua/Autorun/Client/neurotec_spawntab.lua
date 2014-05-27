@@ -127,6 +127,8 @@ hook.Add("InitPostEntity", "NeuroTecBuildSpawnMenu", function()
 	-- PrintTable(NB_tools_list)
 end )
 
+CreateClientConVar("neurotec_spawn_n_drive", 1, false, false)
+
 local function NeuroTecCreateContentTab()
 
 local ply = LocalPlayer()
@@ -472,7 +474,7 @@ function NeuroTecCreateContentTab_Label(parent,ent,icon_size)
 
 	if (ent.Spawnable) and (ent.AdminSpawnable) then //Need to check if the entity only Admin spawnable.
 		local AdminIcon = vgui.Create( "DImage", parent )
-		AdminIcon:SetImage( "gui/silkicons/shield.vtf" )
+		AdminIcon:SetImage( "gui/silkicons/shield.png" )
 		AdminIcon:SetPos( icon_size-21, 5 )
 		AdminIcon:SizeToContents()   
 	end
@@ -536,19 +538,7 @@ function NeuroTecCreateContentTab_StatsPanel(frame,parent,ent)
 		if (ent.PrintName) then text=ent.PrintName else text= "Unknown" end
 		Name = SimpleLabel(text,InfoPanel,5,5,blk,_f)
 		Name:SetExpensiveShadow( 1, Color( 255, 255, 255, 190 ) )
-		
-		local SpawnModeCheckbox = vgui.Create( "DCheckBoxLabel",InfoPanel )
-		SpawnModeCheckbox:SetText( "Spawn and enter the vehicle?" )
-		SpawnModeCheckbox:SetPos( InfoPanel:GetSize()/2, 5 )
-		-- SpawnModeCheckbox:SetConVar( "tank_WoTstyle" ) //For example
-		SpawnModeCheckbox:SetValue( 1 )
-		SpawnModeCheckbox.DoClick = function ()
-				SpawnModeCheckbox:Toggle()		
-				print("Toggled spawning inside the vehicle. (no code yet)") 
-				end		
-		SpawnModeCheckbox:SetTextColor(blk)            
-		SpawnModeCheckbox:SizeToContents()   
-		
+				
 	local InfoSubPanel = {}
 	for i=1,15,2 do
 		InfoSubPanel[i]=SimplePanel(InfoPanel, 2,10+26*i/2, InfoPanel:GetSize()/2-4,25, Color(255,255,255,255))
@@ -608,7 +598,21 @@ function NeuroTecCreateContentTab_StatsPanel(frame,parent,ent)
 			-- end
 		-- end
 	
-	local NeuroProperties = vgui.Create( "DProperties",panel )
+		local SpawnModeCheckbox = vgui.Create( "DCheckBoxLabel",panel )
+		SpawnModeCheckbox:SetText( "Spawn and enter the vehicle?" )
+		-- SpawnModeCheckbox:SetPos( InfoPanel:GetSize()/2, 5 )
+		SpawnModeCheckbox:SetPos( 8, h*0.4-20 )
+		SpawnModeCheckbox:SetConVar( "neurotec_spawn_n_drive" ) //For example
+		SpawnModeCheckbox:SetValue( 1 )
+		-- SpawnModeCheckbox.DoClick = function ()
+				-- SpawnModeCheckbox:Toggle()		
+				-- RunConsoleCommand( "neurotec_spawn_n_drive", 1 )
+				-- print("Toggled spawning inside the vehicle. (no code yet)") 
+				-- end		
+		SpawnModeCheckbox:SetTextColor(blk)            
+		SpawnModeCheckbox:SizeToContents()   
+
+		local NeuroProperties = vgui.Create( "DProperties",panel )
 	NeuroProperties:SetPos( 2, h*0.4 )
 	-- NeuroProperties:SetSize( h-10, h*0.8-h*0.4-2 )
 	NeuroProperties:SetSize( h-10, h*0.4-32 )
