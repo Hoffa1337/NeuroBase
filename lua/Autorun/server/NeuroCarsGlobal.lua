@@ -27,9 +27,9 @@ resource.AddFile("sound/ah64fire.wav")
 resource.AddFile("models/h500_gatling.mdl")
 
 
-concommand.Add("neurotec_spawnvehicle",function( ply, cmd, args ) 
+concommand.Add("ntespv",function( ply, cmd, args ) 
 
-	if( IsValid( ply:GetScriptedVehicle() ) ) then
+	if( IsValid( ply:GetScriptedVehicle() )  || IsValid( ply:GetVehicle() ) ) then
 		
 		ply:PrintMessage( HUD_PRINTCENTER, "You can't do that right now." )
 		
@@ -37,9 +37,9 @@ concommand.Add("neurotec_spawnvehicle",function( ply, cmd, args )
 		
 	end
 	
-	for k, v in pairs( scripted_ents.GetSpawnable( )) do
+	for k, v in pairs( scripted_ents.GetList( ) )  do
 		
-		if( v.ClassName == args[1] ) then
+		if( string.lower(v.ClassName) ==  string.lower(args[1]) ) then
 			
 			if( v.AdminSpawnable == true && v.Spawnable == false && !ply:IsAdmin() ) then return end
 			
