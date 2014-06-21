@@ -379,7 +379,7 @@ function NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(CategoriesLis
 							CategoryContentIconsListItem[k]:SetImage( _icon )
 
 							CategoryContentIconsListItem[k].DoClick = function()
-								RunConsoleCommand("neurotec_spawnvehicle", v.ClassName )
+								RunConsoleCommand("ntespv", v.ClassName )
 								-- CategoryContentIconsListItem[k].label:SetText( "Go!" )
 								end
 							CategoryContentIconsListItem[k].DoRightClick = function()
