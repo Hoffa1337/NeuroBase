@@ -37,7 +37,7 @@ concommand.Add("ntespv",function( ply, cmd, args )
 		
 	end
 	
-	for k, v in pairs( scripted_ents.GetList( ) )  do
+	for k, v in pairs( scripted_ents.GetSpawnable( ) )  do
 		
 		if( string.lower(v.ClassName) ==  string.lower(args[1]) ) then
 			
