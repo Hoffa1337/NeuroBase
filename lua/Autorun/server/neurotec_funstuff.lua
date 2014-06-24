@@ -369,6 +369,39 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 						
 						
 					};
+					{ 
+						Var = "!bignuke", 
+						Callback = function( ply, txt, team )	
+										
+										if( !ply:IsAdmin() ) then return end
+										local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
+										
+										
+										if( IsValid( Target ) ) then
+											
+											local tr, trace = {},{}
+											tr.start = Target:GetPos()
+											tr.endpos = tr.start + Vector( 0,0,35000 )
+											tr.filter = { ply, Target }
+											tr.mask = MASK_SOLID
+											trace = util.TraceLine( tr )
+											
+											local n = ents.Create("sent_neurotec_taepodong")
+											n:SetPos( trace.HitPos - Vector( 0,0,512 ) )
+											n:SetAngles( Angle( 90, 0, 0 ) )
+											n:Spawn()
+											n:SetVelocity( Vector( 0,0,-25000 ) )
+											n.Owner = ply
+											n:SetOwner( ply )
+											n:Use( ply, ply, 0, 0  )
+											
+										
+										end
+										
+									end 
+						
+						
+					};
 					{
 					Var = "!boost",
 					Callback = function( ply, txt, team ) 
