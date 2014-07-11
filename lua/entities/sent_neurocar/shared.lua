@@ -1,0 +1,10 @@
+ENT.Type = "anim"
+ENT.Base = "base_anim"
+ENT.PrintName	= "Neuro Car"
+ENT.Author	= "Robin Hoffa"
+ENT.Contact	= "toxin_guy@msn.com or Sluggomc @ steam"
+ENT.Purpose	= ""
+ENT.Spawnable	= true
+ENT.AdminSpawnable = true
+ENT.Category		= "NeuroTec Entities"
+ENT.Information= "Base Neuro Vehicle \n Weapon: none"
