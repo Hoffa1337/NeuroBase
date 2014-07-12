@@ -175,6 +175,14 @@ end
 	
 hook.Add( "PlayerSpawnedSENT", "FixGhostCollisionModels", function( ply, e )
 	
+	local mats = e:GetMaterials()
+	
+	if( e.InitialHealth && table.HasValue( mats, "___error" ) ) then
+		
+		e:SetSkin( 0 )
+		
+	end
+	
 	for k,v in pairs( ents.GetAll() ) do 
 		
 		if( v != e && v:GetParent() == e && e.VehicleType != nil ) then
@@ -2411,7 +2419,7 @@ function Meta:SpawnFlare()
 	f:Fire("kill","",5)
 	f:GetPhysicsObject():SetMass( 120 )
 	f:SetVelocity( self:GetVelocity() )
-	f:GetPhysicsObject():SetVelocity( self:GetForward() * -50000  + self:GetUp() * -7500 ) //ApplyForceCenter( self:GetForward() * -5000000 )
+	f:GetPhysicsObject():SetVelocity( self:GetVelocity() + self:GetUp() * -7500 ) //ApplyForceCenter( self:GetForward() * -5000000 )
 	f.Owner = self
 	
 end
