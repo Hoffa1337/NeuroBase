@@ -20,7 +20,7 @@ hook.Add("InitPostEntity", "NeuroPlanes_DetectGroundLevelAverage", function()
 	
 	for k,v in pairs( ents.GetAll() ) do
 		
-		if( v:OnGround() ) then
+		if( IsValid( v ) && v:OnGround() ) then
 		
 			count = count + 1
 			AverageZ = AverageZ + v:GetPos().z

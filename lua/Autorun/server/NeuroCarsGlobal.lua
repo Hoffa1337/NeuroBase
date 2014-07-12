@@ -1847,13 +1847,14 @@ function Meta:Jet_DefaultUseStuff( ply, caller )
 	self.Pilot = ply
 	self.Owner = ply
 	
-	
+	-- ply:SetCollisionGroup( 
 	-- ply:SetParent( self )
-	ply:Spectate( OBS_MODE_CHASE  )
-	ply:SpectateEntity( self )
+	-- ply:SpectateEntity( self )
+	-- ply:Spectate( OBS_MODE_CHASE  )
+	
 	ply:DrawViewModel( false )
 	ply:DrawWorldModel( false )
-	
+	-- self:SetOwner( ply )
 	ply:SetScriptedVehicle( self )
 	
 	ply.Weapons = {}
@@ -1976,7 +1977,7 @@ function Meta:EjectPilot()
 	self:SetNetworkedEntity("Pilot", NULL )
 	self.Pilot:SetNetworkedBool( "isGunner", false )
 	self.Pilot:Spawn()
-	self.Pilot:SetPos( self:GetPos() + self:GetUp() * 190 )
+	self.Pilot:SetPos( self:GetPos() + self:GetUp() * 150 )
 	self.Pilot:SetAngles( Angle( 0, self:GetAngles().y,0 ) )
 	self.Owner = NULL
 	self.Pilot:SetScriptedVehicle( NULL ) ---------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
