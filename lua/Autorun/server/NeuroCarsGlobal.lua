@@ -1839,8 +1839,10 @@ function Meta:Jet_DefaultUseStuff( ply, caller )
 	self.Pilot = ply
 	self.Owner = ply
 	
-
+	
+	-- ply:SetParent( self )
 	ply:Spectate( OBS_MODE_CHASE  )
+	ply:SpectateEntity( self )
 	ply:DrawViewModel( false )
 	ply:DrawWorldModel( false )
 	
