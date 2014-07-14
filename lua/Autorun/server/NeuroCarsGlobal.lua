@@ -2439,7 +2439,7 @@ function Meta:SpawnFlare()
 	f:Fire("kill","",5)
 	f:GetPhysicsObject():SetMass( 120 )
 	f:SetVelocity( self:GetVelocity() )
-	f:GetPhysicsObject():SetVelocity( self:GetVelocity() + self:GetUp() * -7500 ) //ApplyForceCenter( self:GetForward() * -5000000 )
+	f:GetPhysicsObject():SetVelocity( self:GetVelocity() + self:GetUp() * -750 ) //ApplyForceCenter( self:GetForward() * -5000000 )
 	f.Owner = self
 	
 end
