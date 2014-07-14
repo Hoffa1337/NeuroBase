@@ -1994,6 +1994,12 @@ function Meta:EjectPilot()
 	self.Owner = NULL
 	self.Pilot:SetScriptedVehicle( NULL ) ---------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	
+	if( IsValid( self.PilotModel ) ) then
+		
+		self.PilotModel:Remove()
+	
+	end
+	
 	self.Pilot:SetColor( Color( 255,255,255,255 ) )
 	
 	self.Pilot:SetHealth( 100 )
