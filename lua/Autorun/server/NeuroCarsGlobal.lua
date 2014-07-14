@@ -161,11 +161,11 @@ local function FixHealth() -- Hackfix
 end
 hook.Add("Think","NeuroPlanes____CorrectHealthValues",FixHealth)
 
-hook.Add("PlayerSpawn", "FixColor", function( ply )
+-- hook.Add("PlayerSpawn", "FixColor", function( ply )
 	
-	ply:SetColor( Color( 255,255,255,255 ) )
+	-- ply:SetColor( Color( 255,255,255,255 ) )
 	
-end ) 
+-- end ) 
 
 if( table.HasValue( hook.GetTable(), "FixGhostCollisionModels" ) ) then
 	
@@ -276,6 +276,7 @@ hook.Add("PlayerLeaveVehicle","NeuroPlanes_OnLeftVehicle", function( player, veh
 	if( vehicle.IsB17GunnerSeat ) then
 		
 		player:DrawWorldModel( true )
+		player:SetRenderMode( RENDERMODE_TRANSALPHA )
 		player:SetColor( player.OldColor or Color( 255, 255, 255, 255 ) )
 		player:SetPos( vehicle:GetPos() + vehicle:GetRight() * 200 )
 		player:SetFOV( player.OriginalFOV, 0.15 )
@@ -405,11 +406,20 @@ end )
 
 hook.Add( "OnEntityCreated", "NeuroPlanes_EntCreatedHook", function( ent ) 
 	
-	if( ent.FlareCount ) then
-		
-		ent:SetNetworkedInt( "FlareCount", ent.FlareCount )
+	timer.Simple( 1, 
+	function()
 	
-	end
+		if( IsValid( ent ) ) then
+		
+			if( ent.FlareCount ) then
+				
+				ent:SetNetworkedInt( "FlareCount", ent.FlareCount )
+			
+			end
+			
+		end
+		
+	end )
 	
 end )
 
@@ -1849,8 +1859,10 @@ function Meta:Jet_DefaultUseStuff( ply, caller )
 	
 	-- ply:SetCollisionGroup( 
 	-- ply:SetParent( self )
-	-- ply:SpectateEntity( self )
-	-- ply:Spectate( OBS_MODE_CHASE  )
+	ply:SpectateEntity( self )
+	ply:Spectate( OBS_MODE_CHASE  )
+	ply:SetRenderMode( RENDERMODE_TRANSALPHA )
+	ply:SetColor( Color( 0,0,0,0 ) )
 	
 	ply:DrawViewModel( false )
 	ply:DrawWorldModel( false )
@@ -1981,6 +1993,7 @@ function Meta:EjectPilot()
 	self.Pilot:SetAngles( Angle( 0, self:GetAngles().y,0 ) )
 	self.Owner = NULL
 	self.Pilot:SetScriptedVehicle( NULL ) ---------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+	
 	self.Pilot:SetColor( Color( 255,255,255,255 ) )
 	
 	self.Pilot:SetHealth( 100 )
