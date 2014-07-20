@@ -1412,7 +1412,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 		
 		PrintCmds( ply )
 		
-		return
+		return ""
 		
 	end
 	
@@ -1427,7 +1427,9 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 		end
 		
 	end
-
+	
+	return
+	
 end )
 
 concommand.Add("jet_zinvasion", function( ply, cmd, arg )
