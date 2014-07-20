@@ -477,7 +477,9 @@ function Meta:NA_RPG_damagehook(dmginfo)
 end
 
 function Meta:RotorTrash()
-
+	
+	if true then return end -- borked
+	
 	if ( math.random( 1,5 ) == 5 ) then
 		
 		for i=1,3 do
@@ -498,46 +500,17 @@ function Meta:RotorTrash()
 		
 		end
 		 
-		local p = { 
-					"models/props_wasteland/wood_fence02a_board04a.mdl",
-					"models/props_wasteland/wood_fence02a_board04a.mdl",
-					"models/props_wasteland/wood_fence02a_board04a.mdl",
-					"models/props_wasteland/wood_fence02a_board04a.mdl",
-					"models/props_wasteland/wood_fence02a_board04a.mdl",
-					"models/props_wasteland/wood_fence02a_board04a.mdl",
-					"models/props_wasteland/wood_fence02a_board04a.mdl",
-					"models/props_wasteland/wood_fence02a_board04a.mdl"
-					}
+		-- local p = { 
+					-- "models/props_wasteland/wood_fence02a_board04a.mdl",
+					-- "models/props_wasteland/wood_fence02a_board04a.mdl",
+					-- "models/props_wasteland/wood_fence02a_board04a.mdl",
+					-- "models/props_wasteland/wood_fence02a_board04a.mdl"
+					-- }
 							
 		self.Owner.Destroyed = true
 		self.Owner.Burning = true
-		
 		self.Destroyed = true
-		
-		for i=1,#p do
-			
-			local board = ents.Create("prop_physics")
-			board:SetModel( p[i] )
-			board:SetMaterial( self:GetMaterial() )
-			board:SetPos( self:GetPos() + Vector( math.sin( CurTime() ) * 15, math.cos( CurTime() ) * 15, 0 ) )
-			board:SetAngles( self:GetAngles() + Angle( 0, 360/i * 36, 0 ) )
-			board:SetOwner( self )
-			board:SetSolid( SOLID_VPHYSICS )
-			board:Spawn()
-			board:SetVelocity( self:GetVelocity() )
-			
-			local bphys = board:GetPhysicsObject()
-			if( bphys != nil ) then
-			
-				board:GetPhysicsObject():AddAngleVelocity( Vector( 0, 100, 0 ) )
-			
-			end
-			
-			
-		
-		end
-
-		
+	
 		self:Remove()
 	
 	end
