@@ -254,7 +254,9 @@ hook.Add( "Think","NeuroTec_ChuteThink", function()
 			local vr = v.RagdollObject
 			local vc = v.ChuteObject
 			
-			v:SetPos( vr:GetPos() + Vector( 0,0,72 ) )
+			v:SetPos( vr:GetPos() + Vector( 0,0,150 ) )
+			
+			vr:GetPhysicsObject():ApplyForceCenter( VectorRand() )
 			
 			local tr,trace = {},{}
 			tr.start = vr:GetPos()
@@ -273,15 +275,17 @@ hook.Add( "Think","NeuroTec_ChuteThink", function()
 			
 			else
 				
-				local ragpos = vr:GetPos()
+				-- local ragpos = vr:GetPos()
 				constraint.RemoveAll( vr )
 				v:UnSpectate()
 				v:Spawn()
 				vc:SetVelocity( vc:GetUp() * 12750 + vc:GetForward() * -150 )
 				vc:Fire( "kill","",15 )
 				
+				-- 
+				v:SetPos(  vr:GetPos() )
+				
 				vr:Remove()
-				v:SetPos( ragpos )
 				
 			end
 			
@@ -822,8 +826,9 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 											ply.Chute_W2 = constraint.Weld( rag, chute, BoneIndx2, 0, 0, true, true )
 											ply:SpectateEntity( rag )
 											
+											ply:SetMoveType( MOVETYPE_NONE )
 											ply:Spectate( OBS_MODE_CHASE )
-											ply:SetParent( rag )
+											-- ply:SetParent( rag )
 											ply:StripWeapons()
 										
 											
