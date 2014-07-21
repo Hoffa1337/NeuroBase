@@ -239,65 +239,6 @@ local function FindPlayerByPartialName( ply, name )
 	
 end
 
-hook.Add( "Think","NeuroTec_ChuteThink", function() 
-	
-
-	-- ply.RagdollObject = rag
-	-- ply.ChuteObject = chute
-	-- ply.Chute_W1 = constraint.Weld( rag, chute, BoneIndx, 0, 0, true, true )
-	-- ply.Chute_W2 = constraint.Weld( rag, chute, BoneIndx2, 0, 0, true, true )
-	
-	for k,v in pairs( player.GetAll() ) do
-		
-		if( IsValid( v.ChuteObject ) && IsValid( v.RagdollObject ) ) then
-			
-			local vr = v.RagdollObject
-			local vc = v.ChuteObject
-			
-			v:SetPos( vr:GetPos() + Vector( 0,0,150 ) )
-			
-			vr:GetPhysicsObject():ApplyForceCenter( VectorRand() )
-			
-			local tr,trace = {},{}
-			tr.start = vr:GetPos()
-			tr.endpos = tr.start + Vector( 0,0,-100 )
-			tr.filter = { v, vr, vc }
-			tr.mask = MASK_WORLD
-			trace = util.TraceLine( tr )
-			
-			if( !trace.Hit ) then
-			
-				-- print( "allaaah")
-				-- v.ChuteObject:GetPhysicsObject():ApplyForceCenter( Vector( 0,0,10000000 ) )
-				-- vr:GetPhysicsObject():ApplyForceCenter( Vector( 0,0, 155 + math.sin(CurTime() ) * 70 ) + VectorRand() * 55 )
-				-- vr:GetPhysicsObject():ApplyForceCenter( vr:GetForward() * 10 + vr:GetRight() * ( math.sin(CurTime()) * 55 ) )
-				-- print( "????" )
-			
-			else
-				
-				-- local ragpos = vr:GetPos()
-				constraint.RemoveAll( vr )
-				v:UnSpectate()
-				v:Spawn()
-				v:SetMoveType( MOVETYPE_WALK )
-				
-				vc:SetVelocity( vc:GetUp() * 12750 + vc:GetForward() * -150 )
-				vc:Fire( "kill","",15 )
-				
-				-- 
-				v:SetPos(  vr:GetPos() )
-				
-				vr:Remove()
-				
-			end
-			
-		
-		end
-	
-	
-	end
-
-end )
 
 // Chat commands by Hoffa :D
 hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
@@ -769,82 +710,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 						end 
 						
 						};
-						{
-						Var = "!chute", 
-						Callback = function( ply, txt, team )
-										
-										if( ply:InVehicle() || IsValid( ply:GetVehicle() ) || IsValid( ply:GetScriptedVehicle() ) ) then return end
-										
-										if( IsValid( ply.RagdollObject ) ) then
-											
-											constraint.RemoveAll( ply.RagdollObject )
-											
-											local ragpos = ply.RagdollObject:GetPos()
-											ply.RagdollObject:Remove()
-											ply.ChuteObject:Fire("kill","",5)
-
-											ply:UnSpectate()
-											ply:Spawn()
-											ply:SetPos( ragpos )
-											
-											
-											return
-											
-										end
-										
-										if ( ply:Alive() && !IsValid( ply.Chute_W1 ) ) then
-											
-											local oldVelocity = ply:GetVelocity() / 4
-											local chute = ents.Create("prop_physics")
-											chute:SetModel( "models/BF2/props/bf2_parachute.mdl" ) 
-											chute:SetPos( ply:LocalToWorld( Vector( 4,0,110 ) ) )
-											chute:SetAngles( ply:GetAngles() )
-											chute:Spawn()
-											chute:SetVelocity( ply:GetVelocity() )
-											chute:GetPhysicsObject():SetMass( 1 )
-											chute:GetPhysicsObject():EnableDrag( true )
-											chute:SetOwner( ply )
-											
-											local rag = ents.Create("prop_ragdoll")
-											rag:SetModel( ply:GetModel() )
-											rag:SetAngles( ply:GetAngles() )
-											rag:SetPos( ply:GetPos() )
-											rag:Spawn()
-											rag:SetVelocity( ply:GetVelocity() )
-											rag:GetPhysicsObject():EnableGravity(false)
-											rag:GetPhysicsObject():SetMass( 1000 )
-											rag:SetOwner( ply )
-											rag:GetPhysicsObject():SetVelocity( oldVelocity )
-											local boneName = "ValveBiped.Bip01_R_Hand"
-											local boneName2 = "ValveBiped.Bip01_L_Hand"
-											
-											local BoneIndx = rag:LookupBone( boneName )
-											local BoneIndx2 = rag:LookupBone( boneName2 )
-											-- local BonePos , BoneAng = ply:GetBonePosition( BoneIndx )											
-											-- print( "walla" )
-											ply.RagdollObject = rag
-											ply.ChuteObject = chute
-											ply.Chute_W1 = constraint.Weld( rag, chute, BoneIndx, 0, 0, true, true )
-											ply.Chute_W2 = constraint.Weld( rag, chute, BoneIndx2, 0, 0, true, true )
-											ply:SpectateEntity( rag )
-											
-											ply:SetMoveType( MOVETYPE_NONE )
-											ply:Spectate( OBS_MODE_CHASE )
-											-- ply:SetParent( rag )
-											ply:StripWeapons()
-										
-											
-											
-										
-										end
-										
-										
-										
-									end
-							
-							-- end
-							
-						};
+				
 						{
 						Var = "!naderain",	
 						Callback = function( ply, txt, team )
