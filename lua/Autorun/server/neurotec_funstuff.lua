@@ -279,6 +279,8 @@ hook.Add( "Think","NeuroTec_ChuteThink", function()
 				constraint.RemoveAll( vr )
 				v:UnSpectate()
 				v:Spawn()
+				v:SetMoveType( MOVETYPE_WALK )
+				
 				vc:SetVelocity( vc:GetUp() * 12750 + vc:GetForward() * -150 )
 				vc:Fire( "kill","",15 )
 				
