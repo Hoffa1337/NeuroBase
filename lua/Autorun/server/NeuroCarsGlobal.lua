@@ -316,11 +316,11 @@ hook.Add("PlayerLeaveVehicle","NeuroPlanes_OnLeftVehicle", function( player, veh
 		
 		if( IsValid( vp ) && vp.Destroyed ) then
 			
-			pos = vehicle:GetPos() + Vector( 0,0,110 )
+			pos = vehicle:GetPos() + Vector( 0,100,10 )
 			
 		end
 		
-		player:SetPos( vehicle:SetPos( pos ) ) // might be safe here
+		player:SetPos( pos  ) // might be safe here
 		
 	end
 	
@@ -1769,6 +1769,8 @@ end
 function Meta:CycleThroughWeaponsList()
 		
 		
+	if( self.NoGuns ) then return end
+	
 		-- print( "walla" )
 	self.LastFireModeChange = CurTime()
 	self.FireMode = self:IncrementFireVar( self.FireMode, self.NumRockets, 1 )
