@@ -62,17 +62,17 @@ function Meta:BallisticCalculation(TargetPos) //Use a vector as argument.
 		-- if R*InMeters > self.MaxRange then R = self.MaxRange/InMeters end
 	
 		
-		if( self.TankType == TANK_TYPE_ARTILLERY ) then
+		-- if( self.TankType == TANK_TYPE_ARTILLERY ) then
 			
-			if R < self.MinRange then R = self.MaxRange end
-			if R > self.MaxRange then R = self.MinRange end
+			-- if R < self.MinRange then R = self.MaxRange end
+			-- if R > self.MaxRange then R = self.MinRange end
 			
-		else
+		-- else
 			
 			if R < self.MinRange then R = self.MinRange end
 			if R > self.MaxRange then R = self.MaxRange end
 			
-		end
+		-- end
 		
 		if self.Accuracy==nil then self.Accuracy=DefaultAccuracy end
 		 self.Accuracy = math.Clamp( self.Accuracy, 0, 100 )
