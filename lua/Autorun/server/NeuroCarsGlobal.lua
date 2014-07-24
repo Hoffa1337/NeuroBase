@@ -203,6 +203,7 @@ hook.Add("PlayerEnteredVehicle","NeuroPlanes_OnEnterVehicle", function( player, 
 		
 		player:SetNetworkedBool( "isGunner", false )
 		player:SetNetworkedEntity( "ChopperGunnerEnt", vehicle.MountedWeapon )
+
 		-- player:SetFOV( 55, 0.1 )
 		
 	end
