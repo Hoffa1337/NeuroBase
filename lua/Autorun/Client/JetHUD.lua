@@ -232,12 +232,13 @@ end
 
 function JetFighter.CopilotCalcView( ply, Origin, Angles, Fov )
 
-	local plane = NULL// plr:GetDrivingEntity()
-	if( IsValid( plane ) ) then 
+	-- local plane = NULL// plr:GetDrivingEntity()
+	-- if( IsValid( plane ) ) then 
 
-		return  -- Dont fuck up our cameras plskthx
+		-- return  -- Dont fuck up our cameras plskthx
 		
-	end
+	-- end
+	-- 
 	
 	local copilotplane = ply:GetNetworkedEntity( "Plane", NULL ) 
 	
@@ -271,7 +272,7 @@ function JetFighter.CopilotCalcView( ply, Origin, Angles, Fov )
 		}
 	
 	if( isGunner && IsValid( plane ) ) then
-	
+	-- print( "AHMED VAD GÖR DU???")
 		local pos
 		local fov = GetConVarNumber("fov_desired")
 		local ang = ply:GetAimVector():Angle()
@@ -311,6 +312,22 @@ function JetFighter.CopilotCalcView( ply, Origin, Angles, Fov )
 		pos = plane:GetPos() + plane:GetForward() * 165 + plane:GetUp() * -59
 		fov = plane.ZoomVar
 		myAng = Angle( ang.p, ang.y, pAng.r / 1.15 )
+		
+		local lg = plane:GetNetworkedEntity("NeuroPlanes_LaserGuided", NULL )
+		if( IsValid( lg ) ) then
+		
+			local pos = lg:GetPos() + lg:GetForward() * 100
+			local myAng = lg:GetAngles()
+				
+			local view = {
+				origin = pos,
+				angles = myAng,
+				fov = GetConVarNumber("fov_desired")
+				}
+				
+			return view
+			
+		end
 		
 		view = {
 			origin = pos,
@@ -1024,6 +1041,19 @@ local function DrawLaserguidanceCrosshair( sizex, sizey )
 	surface.DrawLine( x, y - length, x, y - gap )
 	surface.DrawLine( x, y + length, x, y + gap )
 	
+	-- local copilotplane = LocalPlayer():GetNetworkedEntity( "Plane", NULL ) 
+	
+	-- if( IsValid( copilotplane ) ) then
+		
+		-- local lg = copilotplane:GetNetworkedEntity("NeuroPlanes_LaserGuided", NULL )
+		-- if( IsValid( lg ) ) then
+		
+		
+			
+		-- end
+		
+	-- end
+	
 end
 
 local spos
@@ -1153,13 +1183,13 @@ hook.Add("RenderScreenspaceEffects", "Neuroplanes__PhalanxCIWS", JetFighter.Phal
 function JetFighter.LaserguidanceScreenspace()
 	
 	local plr = LocalPlayer()
-	local plane = NULL// plr:GetDrivingEntity()
+	local plane = plr:GetScriptedVehicle()
 	local drawoverlay = ( ( IsValid( plane ) && plane:GetNetworkedBool( "DrawTracker", false ) ) )
 	
 	local copilot = plane:GetNetworkedEntity("CoPilot", NULL )
 
 	if( IsValid( copilot ) && plane:GetNetworkedBool("DrawTracker", false ) && LocalPlayer() == copilot ) then
-		
+		-- dW
 		DrawThermal()
 		DrawLaserguidanceCrosshair( 250, 250 )
 	
