@@ -25,10 +25,13 @@ resource.AddFile("materials/particles/fatsmoke.vtf")
 resource.AddFile("materials/effects/GAU-8_MuzzleSmoke.vtf")
 resource.AddFile("sound/ah64fire.wav")
 resource.AddFile("models/h500_gatling.mdl")
+CreateConVar("neurotec_disablemenu", 0, FCVAR_NOTIFY )
 
 
 concommand.Add("ntespv",function( ply, cmd, args ) 
-
+	
+	if( GetConVarNumber( "neurotec_disablemenu", 0 ) > 0 ) then return end
+	
 	if( IsValid( ply:GetScriptedVehicle() )  || IsValid( ply:GetVehicle() ) ) then
 		
 		ply:PrintMessage( HUD_PRINTCENTER, "You can't do that right now." )
