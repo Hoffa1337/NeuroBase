@@ -217,7 +217,7 @@ hook.Add("PlayerEnteredVehicle","NeuroPlanes_OnEnterVehicle", function( player, 
 		
 	end
 	
-	if( vehicle.IsB17GunnerSeat ) then
+	if( vehicle.IsB17GunnerSeat != nil ) then
 		
 		player:DrawWorldModel( false )
 		player.OldColor = player:GetColor()
@@ -2523,7 +2523,7 @@ function Meta:Neuro_DealDamage( Type, Damage, Pos, Radius, DoEffect, Effect )
 					info:SetDamageForce( ( p - Pos ):GetNormalized( ) * 10 )  
 					v:TakeDamageInfo( info )  
 					
-					print( "Damage: ", Damage * ( 1 - p:Distance( Pos ) / Radius ) )
+					-- print( "Damage: ", Damage * ( 1 - p:Distance( Pos ) / Radius ) )
 					
 				end
 				
