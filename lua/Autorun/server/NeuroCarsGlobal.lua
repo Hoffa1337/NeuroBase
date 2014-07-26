@@ -34,7 +34,7 @@ concommand.Add( "neurotec_swapseat", function( ply, cmd, args )
 	local seat = ply:GetVehicle()
 	local seatparent = NULL
 	if( IsValid( seat ) ) then
-		print("walla")
+		
 		seatparent = seat:GetParent()
 		
 		if( IsValid( seatparent ) && IsValid( seatparent:GetParent() ) && seatparent:GetParent().ValidSeats ) then
@@ -1887,11 +1887,9 @@ end
 
 
 function Meta:CycleThroughWeaponsList()
-		
-		
+			
 	if( self.NoGuns ) then return end
 	
-		-- print( "walla" )
 	self.LastFireModeChange = CurTime()
 	self.FireMode = self:IncrementFireVar( self.FireMode, self.NumRockets, 1 )
 	self:SetNetworkedInt( "FireMode", self.FireMode)
