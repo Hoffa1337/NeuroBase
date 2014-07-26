@@ -24,7 +24,7 @@ hook.Add("SetupMove", "NeuroTec_KeybindCallback", function( ply, mv, cmd )
 			-- print( v, k )
 			
 			if( input.WasKeyTyped( v ) ) then
-				print("pressed "..k )
+				-- print("pressed "..k )
 				ply.LastKeyPress = CurTime()
 				ply:ConCommand("neurotec_swapseat "..k )
 				

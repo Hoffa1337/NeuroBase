@@ -83,6 +83,8 @@ concommand.Add( "neurotec_swapseat", function( ply, cmd, args )
 				
 				local s = seatparent.ValidSeats[seatnumber][1]
 				
+				local wep = ply:GetActiveWeapon()
+				
 				ply:ExitVehicle()
 				ply:EnterVehicle( s )
 				
@@ -91,6 +93,7 @@ concommand.Add( "neurotec_swapseat", function( ply, cmd, args )
 					ply:SetAllowWeaponsInVehicle( true )
 					ply:DrawViewModel( true )
 					ply:DrawWorldModel( true )
+					ply:SetActiveWeapon( wep )
 					
 				end
 				
