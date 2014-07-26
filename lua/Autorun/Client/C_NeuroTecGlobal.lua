@@ -2,6 +2,42 @@
 local ScrW = ScrW
 local ScrH = ScrH
 
+local KeyCommands = { KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0 }
+
+hook.Add("SetupMove", "NeuroTec_KeybindCallback", function( ply, mv, cmd )
+	
+	-- disable keybinds when we got the chatbox open
+	if( ply:IsTyping() ) then return end
+	
+	if( !ply.LastKeyPress ) then ply.LastKeyPress = CurTime() end
+	
+	if( ply.LastKeyPress + 0.5 <= CurTime() ) then
+		
+		if( input.WasKeyTyped( KEY_F ) ) then
+			
+			ply.LastKeyPress = CurTime()
+			doFLIR = !doFLIR
+			
+		end
+		
+		for k,v in ipairs( KeyCommands ) do	
+			-- print( v, k )
+			
+			if( input.WasKeyTyped( v ) ) then
+				-- print("pressed "..k )
+				ply.LastKeyPress = CurTime()
+				ply:ConCommand("neurotec_swapseat "..k )
+				
+				break
+				
+			end
+			
+		end
+				
+		
+	end
+	
+end ) 
 local Meta = FindMetaTable("Entity")
 
 function Meta:DefaultDrawInfo()
