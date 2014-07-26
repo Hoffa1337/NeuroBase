@@ -58,10 +58,17 @@ concommand.Add( "neurotec_swapseat", function( ply, cmd, args )
 			if( NewSeat:GetClass() == "prop_vehicle_prisoner_pod" && !IsValid( NewSeat:GetDriver() ) ) then
 				
 				
-				if( IsValid( tank ) ) then
+				if( IsValid( tank )  ) then
+						
+					if( tank.TankType ) then
 					
-				
-					tank:TankExitVehicle()
+						tank:TankExitVehicle()
+					
+					else
+							
+						tank:EjectPilotSpecial()
+						
+					end
 					
 				end
 				
@@ -73,7 +80,15 @@ concommand.Add( "neurotec_swapseat", function( ply, cmd, args )
 				if( IsValid( tank ) ) then
 					
 					
-					tank:TankExitVehicle()
+					if( tank.TankType ) then
+					
+						tank:TankExitVehicle()
+					
+					else
+							
+						tank:EjectPilotSpecial()
+						
+					end
 					
 				end
 				
