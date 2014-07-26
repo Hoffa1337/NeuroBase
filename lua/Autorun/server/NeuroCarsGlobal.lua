@@ -34,7 +34,7 @@ concommand.Add( "neurotec_swapseat", function( ply, cmd, args )
 	local seat = ply:GetVehicle()
 	local seatparent = NULL
 	if( IsValid( seat ) ) then
-		
+		print("walla")
 		seatparent = seat:GetParent()
 		
 		if( IsValid( seatparent ) && IsValid( seatparent:GetParent() ) && seatparent:GetParent().ValidSeats ) then
@@ -43,7 +43,15 @@ concommand.Add( "neurotec_swapseat", function( ply, cmd, args )
 		
 		end
 		
+	else
 		
+		if( tank.VehicleType == VEHICLE_HELICOPTER ) then
+		
+			seatparent = tank
+			
+		end
+			
+	
 	end
 	-- print( type( tonumber( args[1]) ) )
 	if( IsValid( seatparent ) && seatparent.ValidSeats ) then
@@ -56,7 +64,7 @@ concommand.Add( "neurotec_swapseat", function( ply, cmd, args )
 			
 			
 			if( NewSeat:GetClass() == "prop_vehicle_prisoner_pod" && !IsValid( NewSeat:GetDriver() ) ) then
-				
+					-- print("HARAM")
 				
 				if( IsValid( tank )  ) then
 						
@@ -64,29 +72,39 @@ concommand.Add( "neurotec_swapseat", function( ply, cmd, args )
 					
 						tank:TankExitVehicle()
 					
-					else
-							
-						tank:EjectPilotSpecial()
+					elseif( tank.VehicleType && tank.VehicleType == VEHICLE_HELICOPTER ) then
+						
+						-- tank.Pilot = NULL
+						tank:HeloEjectPilotSpecial()
 						
 					end
 					
 				end
 				
-				ply:ExitVehicle()
-				ply:EnterVehicle( seatparent.ValidSeats[seatnumber][1] )
-			
-			elseif( NewSeat.TankType != nil && !IsValid( NewSeat.Pilot ) ) then
+				local s = seatparent.ValidSeats[seatnumber][1]
 				
-				if( IsValid( tank ) ) then
+				ply:ExitVehicle()
+				ply:EnterVehicle( s )
+				
+				 if ( s.isChopperGunnerSeat && !IsValid( s.MountedWeapon ) ) then
+			
+					ply:SetAllowWeaponsInVehicle( true )
+					ply:DrawViewModel( true )
+					ply:DrawWorldModel( true )
 					
+				end
+				
+			elseif( NewSeat.VehicleType != nil && !IsValid( NewSeat.Pilot ) ) then
+				-- print("HARAM")
+				if( IsValid( tank ) ) then
 					
 					if( tank.TankType ) then
 					
 						tank:TankExitVehicle()
 					
-					else
+					elseif( tank.VehicleType && tank.VehicleType == VEHICLE_HELICOPTER ) then
 							
-						tank:EjectPilotSpecial()
+						tank:HeloEjectPilotSpecial()
 						
 					end
 					
@@ -289,8 +307,19 @@ hook.Add("PlayerEnteredVehicle","NeuroPlanes_OnEnterVehicle", function( player, 
 	if ( vehicle.isChopperGunnerSeat ) then
 		
 		player:SetNetworkedBool( "isGunner", false )
-		player:SetNetworkedEntity( "ChopperGunnerEnt", vehicle.MountedWeapon )
-
+		
+		if(  IsValid( vehicle.MountedWeapon ) ) then
+		
+			player:SetNetworkedEntity( "ChopperGunnerEnt", vehicle.MountedWeapon )
+			
+		else
+		
+			player:SetAllowWeaponsInVehicle( true )
+			player:DrawViewModel( true )
+			player:DrawWorldModel( true )
+			-- player:EnableCrosshair(false)
+		end
+			
 		-- player:SetFOV( 55, 0.1 )
 		
 	end

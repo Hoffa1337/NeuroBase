@@ -24,7 +24,7 @@ hook.Add("SetupMove", "NeuroTec_KeybindCallback", function( ply, mv, cmd )
 			-- print( v, k )
 			
 			if( input.WasKeyTyped( v ) ) then
-				-- print("pressed "..k )
+				print("pressed "..k )
 				ply.LastKeyPress = CurTime()
 				ply:ConCommand("neurotec_swapseat "..k )
 				
@@ -51,6 +51,7 @@ function Meta:DefaultDrawInfo()
 	local ammo = self:GetNetworkedInt("NeuroTanks_AmmoCount", 0 )
 	local fuel = self:GetNetworkedInt("TankMaxFuel", 0 )
 	local cfuel = self:GetNetworkedInt( "TankFuel", 0 )
+	if( p == driver ) then return end
 	
 	if( self.Description ) then
 		
