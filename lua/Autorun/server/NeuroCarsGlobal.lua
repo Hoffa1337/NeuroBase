@@ -19,6 +19,13 @@ function AddDir(dir) // recursively adds everything in a directory to be downloa
 end
 	
 AddCSLuaFile("autorun/client/JetHUD.lua")
+AddCSLuaFile("autorun/client/C_NeuroTecGlobal.lua")
+AddCSLuaFile("autorun/client/NeuroplanesGlobal.lua")
+AddCSLuaFile("autorun/client/neurotec_spawntab.lua")
+AddCSLuaFile("autorun/client/NeuroTecMenu.lua")
+AddCSLuaFile("autorun/special_effects.lua")
+AddCSLuaFile("autorun/np_enum.lua")
+
 AddDir("Models/AC-130")
 AddDir("Materials/models/AC-130")
 resource.AddFile("materials/particles/fatsmoke.vtf")
