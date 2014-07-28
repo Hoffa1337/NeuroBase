@@ -85,7 +85,7 @@ function Meta:DefaultDrawInfo()
 	
 	if( self.IsAutoLoader ) then
 		
-		extra = extra.."\n(Auto Loader)"
+		extra = extra.."\n(Auto Loader)\n"
 		
 	end
 	

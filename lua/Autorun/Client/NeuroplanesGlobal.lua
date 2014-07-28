@@ -41,7 +41,7 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 		if( GetConVarNumber("jet_cockpitview") > 0 ) then
 				
 			pos = plane:LocalToWorld( plane.CockpitPosition ) //Origin//
-			ang = pAng
+			-- ang = pAng
 			
 			if( IsValid( pilotmodel ) ) then
 				
