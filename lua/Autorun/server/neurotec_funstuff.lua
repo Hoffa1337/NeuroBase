@@ -450,55 +450,55 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 							
 						end
 					};
-					-- {
-						-- Var = "!launch",
-						-- Callback = function( ply, txt, team )
+					{
+						Var = "!launch",
+						Callback = function( ply, txt, team )
 									
-										-- if( ply:IsAdmin()) then
+										if( ply:IsAdmin() || ply:IsBot() ) then
 											
-											-- local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
-											-- local types = { "sent_Spitfire_p", "sent_yf12a_p", "sent_f-15active_p" }
-											-- local plane = ents.Create(types[math.random(1,#types)])
-											-- plane:SetPos( Target:GetPos() + Vector( 0,0,1000 + math.random( 0,2000 ) ) )
-											-- plane:SetAngles( Angle( math.random( -60, 0 ), math.random(0,360), 180 ) )
-											-- plane:Spawn()
-											-- plane:Use( Target, Target )
-											-- ply:EnterVehicle( plane )
-											-- plane.Speed = 9999999
-											-- plane.Stalling = true
-											-- plane.Destroyed = true
-											-- plane.Burning = true
-											-- plane.DeathTimer = 150
+											local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
+											local types = { "sent_Spitfire_p", "sent_yf12a_p", "sent_f-15active_p" }
+											local plane = ents.Create(types[math.random(1,#types)])
+											plane:SetPos( Target:GetPos() + Vector( 0,0,1000 + math.random( 0,2000 ) ) )
+											plane:SetAngles( Angle( math.random( -60, 0 ), math.random(0,360), 180 ) )
+											plane:Spawn()
+											plane:Use( Target, Target,0,0 )
+											ply:EnterVehicle( plane )
+											plane.Speed = 9999999
+											plane.Stalling = true
+											plane.Destroyed = true
+											plane.Burning = true
+											plane.DeathTimer = 150
 											
-											-- if( IsValid( plane.Propeller ) ) then
+											if( IsValid( plane.Propeller ) ) then
 											
-												-- plane.Propeller:GetPhysicsObject():AddAngleVelocity( Angle( 100, 0, 0 ) )
-												-- plane:GetPhysicsObject():AddAngleVelocity( Angle( 200, 0, 0 ) )
+												plane.Propeller:GetPhysicsObject():AddAngleVelocity( Vector( 100, 0, 0 ) )
+												plane:GetPhysicsObject():AddAngleVelocity( Vector( 200, 0, 0 ) )
 											
-											-- end
+											end
 											
-											-- if( math.random( 1,10 ) == 2 ) then
+											if( math.random( 1,10 ) == 2 ) then
 												
-												-- timer.Simple( 1.75, function() plane:NeuroPlanes_EjectPlayer( Target ) end )
+												timer.Simple( 1.75, function() plane:NeuroPlanes_EjectPlayer( Target ) end )
 											
-											-- end
+											end
 											
-											-- plane.HealthVal = 0
-											-- plane.HoverVal = -1000
+											plane.HealthVal = 0
+											plane.HoverVal = -1000
 											
-											-- Target:PrintMessage( HUD_PRINTCENTER, "Bye bye.." )
+											Target:PrintMessage( HUD_PRINTCENTER, "Bye bye.." )
 										
-										-- end
+										end
 										
-									-- end
-						-- };
+									end
+						};
 						
-						// Template
+						-- // Template
 						{
 						Var = "!tp",
 						Callback = function( ply, txt, team )
 									
-										if( ply:IsAdmin()) then
+										if( ply:IsAdmin() || ply:IsBot() ) then
 											
 											ply:SetPos( ply:GetEyeTrace().HitPos + Vector( 0,0,32 ) )
 											
@@ -523,7 +523,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 						Var = "!use",
 						Callback = function( ply, txt, team )
 									
-										if( ply:IsAdmin()) then
+										if( ply:IsAdmin() || ply:IsBot() ) then
 										
 											local tr = ply:GetEyeTrace()
 											local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
@@ -545,7 +545,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 						Var = "!join",
 						Callback = function( ply, txt, team )
 					
-										if( ply:IsAdmin()) then
+										if( ply:IsAdmin() || ply:IsBot() ) then
 											
 											local Target = NULL
 											local SecondTarget = NULL
@@ -715,7 +715,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 						Var = "!naderain",	
 						Callback = function( ply, txt, team )
 								
-								if( ply:IsAdmin()) then
+								if( ply:IsAdmin() || ply:IsBot() ) then
 								
 									local tr = ply:GetEyeTrace()
 									local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
@@ -803,7 +803,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 						Var = "!airstrike",
 						Callback = function( ply, txt, team )
 									
-										if( ply:IsAdmin()) then
+										if( ply:IsAdmin() || ply:IsBot() ) then
 											
 											local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
 											
@@ -838,7 +838,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 						Var = "!carpet",
 						Callback = function( ply, txt, team )
 									
-										if( ply:IsAdmin()) then
+										if( ply:IsAdmin() || ply:IsBot() ) then
 											
 											local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
 											
@@ -874,7 +874,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 						Var = "!bomb",
 						Callback = function( ply, txt, team )
 									
-										if( ply:IsAdmin()) then
+										if( ply:IsAdmin() || ply:IsBot() ) then
 											
 											local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
 											
@@ -918,7 +918,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 						Var = "!dickrain",
 						Callback = function( ply, txt, team )
 									
-										if( ply:IsAdmin()) then
+										if( ply:IsAdmin() || ply:IsBot() ) then
 											
 											local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
 											
@@ -958,7 +958,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 						Var = "!train",
 						Callback = function( ply, txt, team )
 									
-										if( ply:IsAdmin()) then
+										if( ply:IsAdmin() || ply:IsBot() ) then
 											
 											local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
 											
@@ -986,7 +986,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 						Var = "!cockslap", -- Suggestion by Rifleman[DK] 
 						Callback = function( ply, txt, team )
 									
-										if( ply:IsAdmin()) then
+										if( ply:IsAdmin() || ply:IsBot() ) then
 											
 											local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
 											
@@ -1016,7 +1016,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 						Var = "!goto",
 						Callback = function( ply, txt, team )
 									
-										if( ply:IsAdmin()) then
+										if( ply:IsAdmin() || ply:IsBot() ) then
 											
 											local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
 											
@@ -1033,7 +1033,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 						Var = "!burn",
 						Callback = function( ply, txt, team )
 									
-										if( ply:IsAdmin()) then
+										if( ply:IsAdmin() || ply:IsBot() ) then
 											
 											local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
 											
@@ -1050,7 +1050,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 						Var = "!cloak",
 						Callback = function( ply, txt, team )
 									
-										if( ply:IsAdmin()) then
+										if( ply:IsAdmin() || ply:IsBot() ) then
 											
 											local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
 											
@@ -1068,7 +1068,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 						Var = "!uncloak",
 						Callback = function( ply, txt, team )
 									
-										if( ply:IsAdmin()) then
+										if( ply:IsAdmin() || ply:IsBot() ) then
 											
 											local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
 											
@@ -1086,7 +1086,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 						Var = "!bitchslap",
 						Callback = function( ply, txt, team )
 									
-										if( ply:IsAdmin()) then
+										if( ply:IsAdmin() || ply:IsBot() ) then
 											
 											local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
 											Target:ViewPunch( Target:EyeAngles()*-1)
@@ -1113,7 +1113,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 						-- Var = "!dronestrike",
 						-- Callback = function( ply, txt, team )
 									
-										-- if( ply:IsAdmin()) then
+										-- if( ply:IsAdmin() || ply:IsBot() ) then
 										
 											-- local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
 											
@@ -1148,7 +1148,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 						Var = "!rlaunch",
 						Callback = function( ply, txt, team )
 									
-										if( ply:IsAdmin()) then
+										if( ply:IsAdmin() || ply:IsBot() ) then
 												
 												local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
 											
@@ -1184,7 +1184,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 						Var = "!timebomb",
 						Callback = function( ply, txt, team )
 									
-										if( ply:IsAdmin()) then
+										if( ply:IsAdmin() || ply:IsBot() ) then
 												
 												local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
 												
