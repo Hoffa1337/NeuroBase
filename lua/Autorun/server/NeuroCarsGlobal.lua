@@ -686,6 +686,8 @@ end
 
 function Meta:SpawnPilotModel( pos, ang )
 	
+	if( !pos ) then return end
+	
 	
 	local p = ents.Create("prop_dynamic")
 	p:SetModel( self.Pilot:GetModel() )
