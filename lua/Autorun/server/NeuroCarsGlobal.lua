@@ -28,6 +28,7 @@ AddCSLuaFile("autorun/np_enum.lua")
 
 AddDir("Models/AC-130")
 AddDir("Materials/models/AC-130")
+resource.AddFile("particles")
 resource.AddFile("materials/particles/fatsmoke.vtf")
 resource.AddFile("materials/effects/GAU-8_MuzzleSmoke.vtf")
 resource.AddFile("sound/ah64fire.wav")
