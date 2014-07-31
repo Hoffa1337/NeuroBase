@@ -8,6 +8,7 @@ hook.Add("SetupMove", "NeuroTec_KeybindCallback", function( ply, mv, cmd )
 	
 	-- disable keybinds when we got the chatbox open
 	if( ply:IsTyping() ) then return end
+	-- if( ply.doFLIR == nil ) then ply.doFLIR = false end
 	
 	if( !ply.LastKeyPress ) then ply.LastKeyPress = CurTime() end
 	
@@ -16,7 +17,7 @@ hook.Add("SetupMove", "NeuroTec_KeybindCallback", function( ply, mv, cmd )
 		if( input.WasKeyTyped( KEY_F ) ) then
 			
 			ply.LastKeyPress = CurTime()
-			doFLIR = !doFLIR
+			ply.doFLIR = !ply.doFLIR
 			
 		end
 		
