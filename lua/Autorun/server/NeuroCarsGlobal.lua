@@ -136,7 +136,7 @@ end )
 concommand.Add("ntespv",function( ply, cmd, args ) 
 	
 	if( GetConVarNumber( "neurotec_disablemenu", 0 ) > 0 && !a( ply )) then return end
-	if( !ply:OnGround() ) then ply:PrintMessage( HUD_PRINTCENTER, "NOPE" ) return end
+	if( !ply:OnGround() && ply:GetMoveType() != MOVETYPE_NOCLIP ) then ply:PrintMessage( HUD_PRINTCENTER, "NOPE" ) return end
 	
 	if( IsValid( ply:GetScriptedVehicle() )  || IsValid( ply:GetVehicle() ) ) then
 		
