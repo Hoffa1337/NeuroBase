@@ -157,26 +157,38 @@ concommand.Add("ntespv",function( ply, cmd, args )
 			if( !v.VehicleType && !v.HealthVal ) then
 				
 				local tr = ply:GetEyeTrace()
-				pos = tr.HitPos + tr.HitNormal * 50
+				pos = tr.HitPos + tr.HitNormal * 80
 			
 			end
-				
+		
+			ply:SetPos( ply:GetPos() + Vector( 0,0,150 ) )
+			
 			local ride = ents.Create( v.ClassName )
 			ride:SetPos( pos )
 			ride:SetAngles( Angle( 0,ply:GetAngles().y, 0 ) )
 			ride:Spawn()
 			
+			
 			if( v.VehicleType ) then
 				
-				timer.Simple( 0.5, function()
-					
-					if( IsValid( ply ) && ply:Alive() && IsValid( ride ) ) then
-					
-						ride:Use( ply, ply, 0, 0 )
-						
-					end
+				if( v.TankType ) then
 				
-				end )
+					timer.Simple( 0.5, function()
+						
+						if( IsValid( ply ) && ply:Alive() && IsValid( ride ) ) then
+						
+							ride:Use( ply, ply, 0, 0 )
+							
+						end
+					
+					end )
+				
+				else
+					
+					ride:Use( ply, ply, 0, 0 )		
+				
+				end
+				
 				
 			end
 			
