@@ -38,30 +38,32 @@ function ENT:Think()
 end
 
 function ENT:Draw()
-
+	
+	
 	if( SERVER ) then return end
-	self.Owner = self:GetNetworkedEntity("Idiot", NULL )
+	
 	local offs = Vector(0,0,0)
+	self.Owner = self:GetNetworkedEntity("Idiot", NULL )
+	self.DeployTimer = self.DeployTimer + 1
 	
 	if( IsValid( self.Owner ) && !self:GetNetworkedBool("drop",false) ) then 
 	
 		offs = self.Owner:GetUp() * ( 128 * self.DeployTimer / self.DeployDelay  )
 		self:SetAngles( Angle( 0, self.Owner:GetAngles().y, 0 ) )
-		-- self:SetPos( self.Owner:GetPos() + offs ) 
-		
+
 	end
 	
-	self:DrawModel()
-	if( self.DeployTimer < self.DeployDelay && IsValid( self.Owner ) ) then
+	if( self.DeployTimer > 3 )  then
 	
-		-- print( ( 128 * self.DeployTimer / 50  ) )
-		self.DeployTimer = self.DeployTimer + 1
-		-- self.Deployed = true
+		self:DrawModel()
+	
+	end
+	
+	if( self.DeployTimer < self.DeployDelay && IsValid( self.Owner ) ) then
+
 		self:SetModelScale( self.DeployTimer/self.DeployDelay, 0 )
 		self:SetPos( self.Owner:GetPos() + offs )
-		-- self:SetAngles( self.Owner:GetAngles() )
-		
-		
+
 	end
 	
 
