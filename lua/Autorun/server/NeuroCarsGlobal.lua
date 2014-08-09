@@ -151,6 +151,7 @@ concommand.Add("ntespv",function( ply, cmd, args )
 		if( string.lower(v.ClassName) ==  string.lower(args[1]) ) then
 			
 			if( v.AdminSpawnable == true && v.Spawnable == false && !ply:IsAdmin() ) then return end
+			if( v.NeuroAdminOnly && !ply:IsAdmin() ) then return end
 			
 			local pos =  ply:GetPos() + Vector(0,0,80) 
 			
