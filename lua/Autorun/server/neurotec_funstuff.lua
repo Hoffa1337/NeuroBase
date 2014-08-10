@@ -524,10 +524,13 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 						Callback = function( ply, txt, team ) 
 					
 								if( !ply:IsAdmin() ) then return end
-							
-								-- local tr = ply:GetEyeTrace()
+								
+								local tr = ply:GetEyeTrace()
 								local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
 								local pos = Target:GetPos()
+								
+								if( Target == ply ) then pos = tr.HitPos end
+								
 								
 								local _end = ents.Create("info_target")
 								_end:SetPos(pos)
@@ -562,7 +565,11 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 								beam:Fire("Kill","",2)
 								beam:SetOwner( ply )
 								
-								util.BlastDamage( ply, ply, Target:GetPos(), 32, 1337552 )
+								if( Target != ply ) then
+								
+									util.BlastDamage( ply, ply, Target:GetPos(), 32, 1337552 )
+								
+								end
 								
 								local effectdata = EffectData()
 								effectdata:SetOrigin( pos )
