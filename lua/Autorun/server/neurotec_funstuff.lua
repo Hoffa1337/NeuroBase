@@ -519,8 +519,6 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 									end
 									
 						};						
-						+
-					
 						{
 						Var = "!use",
 						Callback = function( ply, txt, team )
