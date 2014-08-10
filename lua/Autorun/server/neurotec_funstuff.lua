@@ -565,11 +565,11 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 								beam:Fire("Kill","",2)
 								beam:SetOwner( ply )
 								
-								if( Target != ply ) then
+								-- if( Target != ply ) then
 								
-									util.BlastDamage( ply, ply, Target:GetPos(), 32, 1337552 )
+									util.BlastDamage( ply, ply, pos, 32, 1337552 )
 								
-								end
+								-- end
 								
 								local effectdata = EffectData()
 								effectdata:SetOrigin( pos )
