@@ -518,7 +518,100 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 										ply:ConCommand("neuro_motd")
 									end
 									
-						};						
+						};
+						{						
+						Var = "!bolt",
+						Callback = function( ply, txt, team ) 
+					
+								if( !ply:IsAdmin() ) then return end
+							
+								-- local tr = ply:GetEyeTrace()
+								local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
+								local pos = Target:GetPos()
+								
+								local _end = ents.Create("info_target")
+								_end:SetPos(pos)
+								_end:Fire("kill","",4)
+								_end:Spawn()
+								_end:SetName("ENDING__".._end:EntIndex())
+							
+								local start = ents.Create("info_target")
+								start:SetPos(pos + Vector(0,0,6000))
+								start:Spawn()
+								start:Fire("kill","",4)
+								start:SetName("STARTING__"..start:EntIndex())
+								 
+
+								local beam = ents.Create("env_beam")
+								beam:SetPhysicsAttacker( ply )
+								beam:SetOwner( ply )
+								beam:SetKeyValue("texture","sprites/bluelaser1")
+								beam:SetKeyValue("rendercolor","255 155 250")
+								beam:SetKeyValue("rendermode","9")
+								beam:SetKeyValue("BoltWidth","45")
+								beam:SetKeyValue("NoiseAmplitude","5")
+								beam:SetKeyValue("damage","5550")
+								beam:SetKeyValue("life","0.4")
+								beam:SetKeyValue("LightningStart",start:GetName())
+								beam:SetKeyValue("LightningEnd",_end:GetName())
+								beam:SetKeyValue("spawnflags","32")
+								beam:SetKeyValue("StrikeTime","0.1")
+								beam:Spawn()
+								beam:Activate()
+								beam:Fire("StrikeOnce","",0)
+								beam:Fire("Kill","",2)
+								beam:SetOwner( ply )
+								
+								util.BlastDamage( ply, ply, Target:GetPos(), 32, 1337552 )
+								
+								local effectdata = EffectData()
+								effectdata:SetOrigin( pos )
+								effectdata:SetNormal( Target:GetUp() )
+								effectdata:SetMagnitude( 24 )
+								effectdata:SetScale( 1 )
+								effectdata:SetRadius( 48 )
+								util.Effect( "Sparks", effectdata )
+								
+								local effectdata = EffectData()
+								effectdata:SetOrigin( pos + Vector(0,0,6000))
+								effectdata:SetNormal( Target:GetUp() )
+								effectdata:SetMagnitude( 24 )
+								effectdata:SetScale(4 )
+								effectdata:SetRadius( 48 )
+								util.Effect( "FlakSmoke", effectdata )
+
+								local physboom = ents.Create("env_physexplosion")
+								physboom:SetPos(pos)
+								physboom:SetKeyValue("Magnitude","505")
+								physboom:SetKeyValue("radius","128")
+								physboom:SetKeyValue("spawnflags","1")
+								physboom:Spawn()
+								physboom:Fire("explode","",0)
+								physboom:SetOwner( ply )
+							
+								local	explosion = ents.Create("env_explosion")
+								explosion:SetPos(pos)
+								explosion:SetKeyValue("iMagnitude","32")
+								-- explosion:SetKeyValue("Radius","512")
+								-- explosion:SetKeyValue("Force","512")
+								explosion:Spawn()
+								explosion:Fire("explode","",0)
+								explosion:SetOwner( ply )
+
+								local	glowage = ents.Create("env_lightglow")
+								glowage:SetPos(pos)
+								glowage:SetKeyValue("rendercolor","255 255 255")
+								glowage:SetKeyValue("VerticalGlowSize","55")
+								glowage:SetKeyValue("HorizontalGlowSize","55")
+								glowage:SetKeyValue("MinDist","0")
+								glowage:SetKeyValue("MaxDist","4096")
+								glowage:Spawn()
+								glowage:Fire("kill","",5)
+
+						
+						end 
+						};
+					
 						{
 						Var = "!use",
 						Callback = function( ply, txt, team )
