@@ -587,6 +587,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 								physboom:SetKeyValue("spawnflags","1")
 								physboom:Spawn()
 								physboom:Fire("explode","",0)
+								physboom:Fire("kill","",5)
 								physboom:SetOwner( ply )
 							
 								local	explosion = ents.Create("env_explosion")
@@ -601,13 +602,13 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 								local	glowage = ents.Create("env_lightglow")
 								glowage:SetPos(pos)
 								glowage:SetKeyValue("rendercolor","255 255 255")
-								glowage:SetKeyValue("VerticalGlowSize","55")
-								glowage:SetKeyValue("HorizontalGlowSize","55")
+								glowage:SetKeyValue("VerticalGlowSize","16")
+								glowage:SetKeyValue("HorizontalGlowSize","16")
 								glowage:SetKeyValue("MinDist","0")
 								glowage:SetKeyValue("MaxDist","4096")
 								glowage:Spawn()
 								glowage:Fire("kill","",5)
-
+								Target:EmitSound( "ambient/energy/zap9.wav", 511, 100 )
 						
 						end 
 						};
