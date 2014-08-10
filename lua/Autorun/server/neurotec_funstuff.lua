@@ -1439,9 +1439,9 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 	
 	for i=1,#cmds do	
 		
-		if( string.find(  string.lower(cmd[i].Var), string.lower(said) ) != nil ) then
+		-- if( string.find(  string.lower(cmd[i].Var), string.lower(said) ) != nil ) then
 		
-		-- if( table.HasValue( said,  cmds[i].Var ) ) then
+		if( table.HasValue( string.lower(said),  cmds[i].Var ) ) then
 			
 			cmds[i].Callback( ply, txt, team )
 			
