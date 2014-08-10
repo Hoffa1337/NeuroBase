@@ -463,12 +463,12 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 											plane:SetAngles( Angle( math.random( -60, 0 ), math.random(0,360), 180 ) )
 											plane:Spawn()
 											plane:Use( Target, Target,0,0 )
-											ply:EnterVehicle( plane )
+											-- ply:EnterVehicle( plane )
 											plane.Speed = 9999999
 											plane.Stalling = true
 											plane.Destroyed = true
 											plane.Burning = true
-											plane.DeathTimer = 150
+											-- plane.DeathTimer = 0
 											
 											if( IsValid( plane.Propeller ) ) then
 											
@@ -511,13 +511,15 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 						Var = "!topic",
 						Callback = function( ply, txt, team )
 										
+										
 										ply:PrintMessage( HUD_PRINTTALK, "NeuroTec Vehicles Addon Pack" )
 										ply:PrintMessage( HUD_PRINTTALK, "www.facepunch.com/threads/1160981" )
 										ply:PrintMessage( HUD_PRINTTALK, "Copy from console or the chatbox" )
-										
+										ply:ConCommand("neuro_motd")
 									end
 									
 						};						
+						+
 					
 						{
 						Var = "!use",
@@ -576,7 +578,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 												
 												if( IsValid( Target ) && IsValid( ply:GetScriptedVehicle() ) ) then
 													
-													ply:GetScriptedVehicle():Use( Target, ply, 0, 0 )
+													ply:GetScriptedVehicle():Use( Target, Target, 0, 0 )
 													
 												end
 												
@@ -587,31 +589,31 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 									end
 									
 						};							
-						{
-						Var = "!stuck",
-						Callback = function( ply, txt, team )
+						-- {
+						-- Var = "!stuck",
+						-- Callback = function( ply, txt, team )
 										
-										for i=1,15 do
+										-- for i=1,15 do
 											
-											local rnd = Vector( math.random( -128, 128), math.random( -128,128 ), 128 )
-											local tr,trace = {},{}
-											tr.start = ply:GetPos() + rnd 
-											tr.endpos = ply:GetPos() + rnd + Vector( 0,0,-256 )
-											tr.filter = ply
-											tr.mask = MASK_SOLID
+											-- local rnd = VectorRand() * 128
+											-- local tr,trace = {},{}
+											-- tr.start = ply:GetPos() + rnd 
+											-- tr.endpos = ply:GetPos() + rnd + Vector( 0,0,-256 )
+											-- tr.filter = ply
+											-- tr.mask = MASK_SOLID
 											
-											if( trace.HitWorld ) then
+											-- if( trace.HitWorld ) then
 												
-												ply:SetPos( trace.HitPos + trace.HitNormal * 16 )
+												-- ply:SetPos( trace.HitPos + trace.HitNormal * 16 )
 												
-												break
+												-- break
 												
-											end
+											-- end
 										
-										end
+										-- end
 										
-									end
-						};
+									-- end
+						-- };
 						
 						{
 						Var = "!template",
@@ -774,6 +776,41 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 						end 
 						
 						};
+						{	
+						Var = "!tswarm",
+						Callback = function( ply, txt, team )
+							
+							if( !ply:IsAdmin() ) then return end
+							
+							-- local types = { "sent_flying_bomb",  }
+							for i=1,2 do
+							
+								for k,v in pairs( player.GetAll() ) do
+								
+									if( v != ply ) then
+										
+										local rpos =  ply:GetPos() + Vector( math.random( -4048, 4048 ), math.random( -4048, 4048 ), math.random( 512, 3000 ) )
+										local v1 = ents.Create( "sent_neuro_tomahawk2" )
+										v1:SetPos( rpos )
+										v1:SetAngles( ( v:GetPos() - rpos ):Angle() )
+										v1.Owner = ply
+										-- v1:SetOwner( ply )
+										v1:Spawn()
+										v1:Use( ply, ply, 0,0 )
+										v1:GetPhysicsObject():EnableMotion( false )
+										timer.Simple( 3, function() if(IsValid(v1)) then v1:GetPhysicsObject():EnableMotion( true ) v1:GetPhysicsObject():ApplyForceCenter( v1:GetForward() * 2500000 ) end end )
+										-- v1:SetVelocity( v1:GetForward() * 250000 )
+										
+									end
+								
+								end
+								
+							end
+							
+								
+						end 
+						
+						};
 						{
 						Var = "!alltarget",
 						Callback = function( ply, txt, team )
@@ -782,13 +819,13 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 	
 											local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
 											ply:PrintMessage( HUD_PRINTTALK, "Everything is locked on "..Target:Name() )
-											
+											Target:PrintMessage( HUD_PRINTCENTER, "ALL EYES ON YOU" )
 											for k,v in pairs( ents.GetAll() ) do
 												
 												-- if( v.Target != nil ) then
 													
 													v.Target = Target
-													
+													-- v:SetNetworkedEntity("Target", Target )
 												-- end
 												
 											end
@@ -1028,7 +1065,19 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 										
 									end
 									
-						};						
+						};
+						-- {
+						-- Var = "!lua",
+						-- Callback = function( ply, txt, team )
+						
+							-- if( ply:IsUserGroup("superadmin") ) then
+												
+								
+									
+							-- end
+						
+						-- end
+						-- };
 						{
 						Var = "!burn",
 						Callback = function( ply, txt, team )
@@ -1108,35 +1157,35 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 									end
 									
 						};	
-						-- {
+						{
 						
-						-- Var = "!dronestrike",
-						-- Callback = function( ply, txt, team )
+						Var = "!dronestrike",
+						Callback = function( ply, txt, team )
 									
-										-- if( ply:IsAdmin() || ply:IsBot() ) then
+										if( ply:IsSuperAdmin() || ply:IsBot() ) then
 										
-											-- local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
+											local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
 											
-											-- if( IsValid( Target ) ) then
+											if( IsValid( Target ) ) then
 												
-												-- for i=1,5 do 
+												for i=1,5 do 
 													
-													-- local d = ents.Create("npc_helidrone")
-													-- d:SetPos( Target:GetPos() + Vector( math.random(-2000,2000), math.random(-2000,2000), 512 + ( i * 64 ) ) )
-													-- d:Spawn()
-													-- d.Target = Target
-													-- d.CycleTarget = Target
-													-- d:Fire("Kill","",120)
+													local d = ents.Create("npc_helidrone")
+													d:SetPos( Target:GetPos() + Vector( math.random(-2000,2000), math.random(-2000,2000), 512 + ( i * 64 ) ) )
+													d:Spawn()
+													d.Target = Target
+													d.CycleTarget = Target
+													d:Fire("Kill","",120)
 													
-												-- end
+												end
 												
-											-- end
+											end
 											
-										-- end
+										end
 										
-									-- end
+									end
 									
-						-- };		
+						};		
 						{
 						Var = "!commands", 
 						Callback = function( ply, txt, team )
@@ -1180,7 +1229,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 									end
 									
 						};
-{
+						{
 						Var = "!timebomb",
 						Callback = function( ply, txt, team )
 									
@@ -1198,8 +1247,8 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 																	
 												local explo = EffectData()
 												explo:SetOrigin( Target:GetPos() )
-												explo:SetScale( 10 )
-												explo:SetMagnitude( 10 )
+												explo:SetScale( 2 )
+												explo:SetMagnitude( 2 )
 												explo:SetEntity( Target )
 												util.Effect("Sparks", explo)
 											
@@ -1208,22 +1257,22 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 
 												local trail = util.SpriteTrail( Target, 0, Color(math.random(0,255),math.random(0,255),math.random(0,255)), false, 15, 1, 4, 1/(15+1)*0.5, "trails/plasma.vmt")
 												
-												for i=1,15 do
-													timer.Simple( i, function()
+												-- for i=1,15 do
+													-- timer.Simple( i, function()
 													
-														if( IsValid( Target ) ) then
+														-- if( IsValid( Target ) ) then
 															
-															Target:PrintMessage( HUD_PRINTCENTER, 16-i.." seconds" )
+												Target:PrintMessage( HUD_PRINTCENTER,"Enjoy your last moments :D" )
 														
-														end
+														-- end
 														
-													end )
+													-- end )
 													
-												end
+												-- end
 												
-												timer.Simple( math.Rand( 15, 3.5 ), function() 		
+												timer.Simple( 15, function() 		
 												
-												util.BlastDamage( ply, ply, Target:GetPos(), 5000, 250000 )
+												util.BlastDamage( ply, ply, Target:GetPos(), 64, 250000 )
 												
 												ParticleEffect("fireball_explosion", Target:GetPos() + Target:GetUp() * 1, Angle(0,0,0), nil )
 												local Shake = ents.Create( "env_shake" )
