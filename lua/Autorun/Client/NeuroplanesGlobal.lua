@@ -184,7 +184,7 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 			tr.mask = MASK_WORLD
 			trace = util.TraceLine( tr )
 			
-			pos = trace.HitPos
+			pos = p-- trace.HitPos
 			
 			if( IsValid( pilotmodel ) ) then
 				
