@@ -809,6 +809,49 @@ function Meta:CoPilot_Attack()
 
 end
 
+function Meta:Micro_FireCannons()
+	
+	if( type(self.Miniguns) != "table" ) then return end
+	
+	self.MinigunIndex = self.MinigunIndex + 1
+	
+	if( self.MinigunIndex > self.MinigunMaxIndex ) then self.MinigunIndex = 1 end
+	
+	if( !self.MinigunTracer ) then	
+	-- else		
+		self.MinigunTracer = "AirboatGunHeavyTracer"	
+	end
+
+	-- for i=1,#self.Miniguns do
+	
+	
+	local i = self.MinigunIndex
+	local g = self.Miniguns[i]
+	if( IsValid( g ) ) then
+		
+		local bullet = ents.Create( self.AmmoType )
+		bullet:SetPos( g:GetPos() + g:GetForward() * 72 )
+		bullet:SetAngles( self:GetAngles() )
+		bullet.TinyTrail = true
+		bullet:Spawn()
+		bullet.MinDamage = self.MinDamage
+		bullet.MaxDamage = self.MaxDamage
+		bullet.Radius = self.Radius
+		bullet.Owner = self.Pilot
+		bullet:GetPhysicsObject():SetMass( 500 )
+		bullet:SetNoDraw( true )
+		
+		bullet:GetPhysicsObject():SetVelocity( self:GetForward() * 50000000000 )
+		
+	end
+		
+	
+	-- end
+	
+	self.LastPrimaryAttack = CurTime()
+
+end
+
 function Meta:Jet_FireMultiBarrel()
 	
 	if( type(self.Miniguns) != "table" ) then return end
