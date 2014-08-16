@@ -851,13 +851,20 @@ function Meta:Jet_FireMultiBarrel()
 								return { damage = true, effects = DoDefaultEffect } 
 								
 							end 
-							
-		-- local sm = EffectData()
-		-- sm:SetStart( self.Miniguns[i]:GetPos() )
-		-- sm:SetOrigin( self.Miniguns[i]:GetPos() )
-		-- sm:SetScale( 10.5 )
-		-- util.Effect( "A10_muzzlesmoke", sm )
-		ParticleEffect( "MG_muzzleflash", self.Miniguns[i]:GetPos() + self.Miniguns[i]:GetForward() * 105,  self:GetAngles(), self )
+		
+		if( self.Muzzle ) then
+			
+			local sm = EffectData()
+			sm:SetStart( self.Miniguns[i]:GetPos() + self.Miniguns[i]:GetForward() * self.MuzzleOffset or 105)
+			sm:SetOrigin( self.Miniguns[i]:GetPos() + self.Miniguns[i]:GetForward() * self.MuzzleOffset or 105)
+			sm:SetScale( 10.5 )
+			util.Effect( self.Muzzle, sm )
+
+		else
+		
+			ParticleEffect( "mg_muzzleflash", self.Miniguns[i]:GetPos() + self.Miniguns[i]:GetForward() * self.MuzzleOffset or 105,  self:GetAngles(), self )
+		
+		end
 		
 
 		
@@ -931,6 +938,7 @@ end
 
 function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 	
+	-- print( "Walla" )
 	self:NextThink( CurTime() )
 	if ( !self.Pilot || !self.IsFlying ) then
 		
@@ -1010,9 +1018,9 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 	// Attack
 	if ( self.Pilot:KeyDown( IN_ATTACK ) ) then
 		
-
+		
 		if ( self.LastPrimaryAttack + self.PrimaryCooldown <= CurTime() ) then
-			
+			-- print("boom")
 			self:PrimaryAttack()
 			
 		end
