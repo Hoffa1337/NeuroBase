@@ -838,7 +838,7 @@ function Meta:Micro_FireCannons()
 		bullet.MaxDamage = self.MaxDamage
 		bullet.Radius = self.Radius
 		bullet.Owner = self.Pilot
-		bullet:GetPhysicsObject():SetMass( 5000 )
+		bullet:GetPhysicsObject():SetMass( 5 )
 		bullet:GetPhysicsObject():SetDamping( 0,0 )
 		bullet:SetNoDraw( true )
 		
