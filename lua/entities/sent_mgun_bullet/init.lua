@@ -82,7 +82,7 @@ function ENT:PhysicsCollide( data, physobj )
 		
 	end
 	
-	if (data.Speed > 100 && data.DeltaTime > 0.2 ) then 
+	if (data.Speed > 55 && data.DeltaTime > 0.12 ) then 
 	
 		self:EmitSound( "IL-2/air_can_03.mp3", 510, math.random( 100, 130 ) )
 		local impact = EffectData()

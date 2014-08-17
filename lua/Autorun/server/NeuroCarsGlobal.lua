@@ -1783,7 +1783,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 
 	if ( r:GetPhysicsObject() != nil ) then
 		
-		r:GetPhysicsObject():SetVelocity( self:GetVelocity() )
+		-- r:GetPhysicsObject():SetVelocity( self:GetVelocity() )
 		
 	end
 	
@@ -2163,7 +2163,7 @@ function Meta:EjectPilot()
 	self:SetNetworkedEntity("Pilot", NULL )
 	self.Pilot:SetNetworkedBool( "isGunner", false )
 	self.Pilot:Spawn()
-	self.Pilot:SetPos( self:GetPos() + self:GetUp() * 150 )
+	self.Pilot:SetPos( self:GetPos() + Vector(0,0,175) )
 	self.Pilot:SetAngles( Angle( 0, self:GetAngles().y,0 ) )
 	self.Owner = NULL
 	self.Pilot:SetScriptedVehicle( NULL ) ---------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
