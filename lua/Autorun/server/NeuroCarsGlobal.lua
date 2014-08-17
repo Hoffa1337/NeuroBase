@@ -838,7 +838,8 @@ function Meta:Micro_FireCannons()
 		bullet.MaxDamage = self.MaxDamage
 		bullet.Radius = self.Radius
 		bullet.Owner = self.Pilot
-		bullet:GetPhysicsObject():SetMass( 500 )
+		bullet:GetPhysicsObject():SetMass( 5000 )
+		bullet:GetPhysicsObject():SetDamping( 0,0 )
 		bullet:SetNoDraw( true )
 		
 		bullet:GetPhysicsObject():SetVelocity( self:GetForward() * 50000000000 )
@@ -1039,7 +1040,7 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 	
 	end
 		
-	if ( self.Pilot:KeyDown( IN_USE ) && self.LastUseKeyDown + 3.0 <= CurTime() ) then
+	if ( self.Pilot:KeyDown( IN_WALK ) && self.Pilot:KeyDown( IN_USE ) && self.LastUseKeyDown + 3.0 <= CurTime() ) then
 		
 		self:RemoveRotorwash()
 	
@@ -1072,9 +1073,13 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 
 	-- print( "???")
 	// Firemode 
-	if ( self.Pilot:KeyDown( IN_RELOAD ) && self.LastFireModeChange + 0.5 <= CurTime() ) then
-			
-		self:CycleThroughWeaponsList()
+	if ( !self.NoSecondaryWeapons && self.Pilot:KeyDown( IN_RELOAD ) && self.LastFireModeChange + 0.5 <= CurTime() ) then
+		
+		-- if(  ) then
+		
+			self:CycleThroughWeaponsList()
+		
+		-- end
 		
 	end
 	
