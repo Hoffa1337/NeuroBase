@@ -119,7 +119,7 @@ function ENT:PhysicsUpdate()
 		
 	end
 		
-	if( self.TinyTrail ) then return end 
+	-- if( self.TinyTrail ) then return end 
 	
 	self:GetPhysicsObject():AddAngleVelocity( Vector( 999999, 0, 0 ) )
 
@@ -141,7 +141,7 @@ function ENT:PhysicsUpdate()
 		
 	end
 	
-	self:GetPhysicsObject():ApplyForceCenter( self:GetForward() * 123456790 )
+	self:GetPhysicsObject():ApplyForceCenter( self:GetForward() * 123456790 + Vector( 0,0,-600 ) )
 	-- self.PhysObj:SetVelocity( self:GetForward() * self.Speed )
 	
 end
