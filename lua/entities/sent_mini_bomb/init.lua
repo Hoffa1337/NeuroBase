@@ -33,7 +33,9 @@ function ENT:Initialize()
 	end
 	
 	self.SpawnTime = CurTime()
-	
+	-- self:EmitSound("weapons/mortar/mortar_shell_incomming1.wav",25,110)
+	self:EmitSound("BF2/Weapons/Artillery_projectile_"..math.random(1,3)..".mp3")
+
 	-- util.SpriteTrail(self, 0, Color(255,255,255,math.random(20,40)), false, 3, math.random(0.5,1.1), 0, math.random(1,3), "trails/smoke.vmt");  
 end
 
@@ -45,7 +47,7 @@ function ENT:PhysicsUpdate()
 	tr.filter = self
 	trace = util.TraceLine( tr )
 	
-	if ( trace.Hit && trace.HitSky ) then
+	if ( trace.Hit && trace.HitSky || self:WaterLevel() > 0 ) then
 		
 		self:Remove()
 		
@@ -55,7 +57,7 @@ end
 
 function ENT:PhysicsCollide( data, physobj )
 	
-	if( self.SpawnTime + 0.7 > CurTime() ) then return end
+	if( self.SpawnTime + 0.25 > CurTime() ) then return end
 	
 	if (  !IsValid( self.Owner ) ) then
 	
@@ -64,11 +66,8 @@ function ENT:PhysicsCollide( data, physobj )
 	end
 
 	
-	if (data.Speed > 150 && data.DeltaTime > 0.8 ) then 
-		
-		-- local fx = 
-	
-		
+	if (data.Speed > 5 && data.DeltaTime > 0.2 ) then 
+
 		ParticleEffect( "rocket_impact_dirt", self:GetPos(), Angle( 0,0,0 ), nil )
 		-- ParticleEffect( "30cal_impact", self:GetPos(), Angle( 0,0,0 ), nil )
 		

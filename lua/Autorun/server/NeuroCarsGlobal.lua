@@ -837,6 +837,7 @@ function Meta:Micro_FireCannons()
 		bullet.MinDamage = self.MinDamage
 		bullet.MaxDamage = self.MaxDamage
 		bullet.Radius = self.Radius
+		bullet:SetPhysicsAttacker( self.Pilot )
 		bullet.Owner = self.Pilot
 		bullet:GetPhysicsObject():SetMass( 5 )
 		bullet:GetPhysicsObject():SetDamping( 0,0 )
@@ -1753,7 +1754,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	end
 	
 	if( wep.Class == nil ) then error("NeuroTec: Tried to call NeuroPlanes_FireRobot with"..tostring(wep).." as argument!" ) return end
-	
+
 	local r = ents.Create( wep.Class )
 	r:SetPos( pos )
 	r:SetOwner( self )
@@ -1765,6 +1766,8 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	r:Fire( "Kill", "", 40 )
 	r:SetAngles( wep:GetAngles() )
 	r.Owner = pilot
+	r:SetPhysicsAttacker( pilot )
+	
 	-- r:GetPhysicsObject():SetVelocity( self:GetVelocity() )
 	--print( wep.SubType )
 	
@@ -1783,10 +1786,11 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 
 	if ( r:GetPhysicsObject() != nil ) then
 		
-		-- r:GetPhysicsObject():SetVelocity( self:GetVelocity() )
+		r:GetPhysicsObject():SetVelocity( wep:GetVelocity() )
 		
 	end
 	
+
 	
 	if( wep.LaunchSound ) then
 		
@@ -1794,7 +1798,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	
 	else
 		
-		r:EmitSound( "weapons/rpg/rocketfire1.wav", 511, 80 )
+		r:EmitSound( self.BombSound or "weapons/rpg/rocketfire1.wav", 511, 80 )
 	
 	end
 	
@@ -1886,7 +1890,36 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		self:ClearTarget()
 	
 	end
+	
+	if( wep.Type == "Fragment" ) then
 		
+		local count = self.NumberOfBombs or 8
+		for i=1,count do 
+			
+			timer.Simple( 2*i/count, function()
+				if( IsValid( wep ) && IsValid( pilot ) ) then
+					
+					local r = ents.Create( wep.Class )
+					r:SetPos( wep:GetPos() + Vector( 0,0,-32 ) + VectorRand() * 16 )
+					r:SetOwner( self )
+					r:SetPhysicsAttacker( pilot )
+					r.Target = self.Target
+					r.Pointer = pilot
+					r:SetModel( wep:GetModel() )
+					r:Spawn()
+					r:Fire( "Kill", "", 40 )
+					r:SetAngles( wep:GetAngles() + Angle() * math.Rand(-1,1) )
+					r:GetPhysicsObject():SetVelocity( wep:GetVelocity() )
+					r.Owner = pilot
+					r:SetPhysicsAttacker( pilot )
+					
+				end
+			
+			end )
+			
+		end
+		
+	end
 	wep.LastAttack = CurTime()
 	
 	-- wep:Remove()
