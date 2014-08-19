@@ -1,9 +1,6 @@
 AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
 include( 'shared.lua' )
--- function ENT:OnTakeDamage(dmginfo)
- -- self:NA_RPG_damagehook(dmginfo)
- -- end
 
 function ENT:Initialize()
 
@@ -27,8 +24,8 @@ function ENT:Initialize()
 		
 		self.PhysObj:Wake()
 		self.PhysObj:EnableGravity(true)
-		self.PhysObj:EnableDrag(true)
-		self.PhysObj:SetMass(1500)
+		self.PhysObj:EnableDrag(false)
+		-- self.PhysObj:SetMass(1500)
 		
 	end
 	
