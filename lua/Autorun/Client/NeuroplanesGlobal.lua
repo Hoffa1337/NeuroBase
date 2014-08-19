@@ -163,14 +163,26 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 		local pilotmodel = ply:GetNetworkedEntity("NeuroPlanes_Pilotmodel", NULL )
 		
 		if( GetConVarNumber("jet_cockpitview") > 0 ) then
-				
-			pos = plane:LocalToWorld( plane.CockpitPosition ) //Origin//
-			-- ang = pAng
 			
-			if( IsValid( pilotmodel ) ) then
+						
+			if( plane.MinClimb && plane.MaxClimb ) then
+
 				
-				pilotmodel:SetColor( Color ( 0,0,0,0 ) )
-				pilotmodel:SetRenderMode( RENDERMODE_TRANSALPHA )
+				pos = plane:GetPos() + plane:GetForward() * -plane.CameraDistance + plane:GetUp() * 15
+				ang = LerpAngle( 0.125, plane.LastAng or Angles, plane:GetAngles() )
+				
+				
+			else
+				
+				pos = plane:LocalToWorld( plane.CockpitPosition ) //Origin//
+				-- ang = pAng
+				
+				if( IsValid( pilotmodel ) ) then
+					
+					pilotmodel:SetColor( Color ( 0,0,0,0 ) )
+					pilotmodel:SetRenderMode( RENDERMODE_TRANSALPHA )
+					
+				end
 				
 			end
 			
@@ -195,12 +207,13 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 		end
 		
 		if( GetConVarNumber( "jet_bomberview" ) > 0 ) then
-			
-			
-			local a = plane:GetAngles()
-			pos = plane:GetPos() + plane:GetUp() * -75 + plane:GetForward() * -200
-			ang = pAng + Angle( 45, 0, 0 )
+			 
+
+				local a = plane:GetAngles()
+				pos = plane:GetPos() + plane:GetUp() * -75 + plane:GetForward() * -200
+				ang = pAng + Angle( 45, 0, 0 )
 		
+			
 		end
 
 		if ( isGuidingRocket ) then
@@ -217,12 +230,16 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 					
 		end
 		
+		plane.LastAng = ang
+		plane.LastPos = pos
+		
 		view = {
 			origin = pos,
 			angles = ang,-- / 2.2 ),
 			fov = fov
 			}
 	end
+	
 	
 	return view
 	
@@ -378,3 +395,4 @@ if( table.HasValue( hook.GetTable(), "Neuroplanes_Weapons_HeadsUpDisplay" ) ) th
 	print("Deleting Neuroplanes_Weapons_HeadsUpDisplay")
 end
 hook.Add( "HUDPaint", "Neuroplanes_Weapons_HeadsUpDisplay", DrawWeaponHUD )
+print("NeuroPlanes Client Loaded")
