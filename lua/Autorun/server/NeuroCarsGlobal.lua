@@ -830,7 +830,7 @@ function Meta:Micro_FireCannons()
 	if( IsValid( g ) ) then
 		
 		local bullet = ents.Create( self.AmmoType )
-		bullet:SetPos( g:GetPos() + g:GetForward() * 72 )
+		bullet:SetPos( g:GetPos() + g:GetForward() * 90 )
 		bullet:SetAngles( self:GetAngles() )
 		bullet.TinyTrail = true
 		bullet:Spawn()
@@ -838,6 +838,7 @@ function Meta:Micro_FireCannons()
 		bullet.MaxDamage = self.MaxDamage
 		bullet.Radius = self.Radius
 		bullet:SetPhysicsAttacker( self.Pilot )
+		bullet:SetOwner( self.Pilot )
 		bullet.Owner = self.Pilot
 		bullet:GetPhysicsObject():SetMass( 5 )
 		bullet:GetPhysicsObject():SetDamping( 0,0 )

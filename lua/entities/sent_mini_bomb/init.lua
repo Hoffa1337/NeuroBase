@@ -25,7 +25,8 @@ function ENT:Initialize()
 		self.PhysObj:Wake()
 		self.PhysObj:EnableGravity(true)
 		self.PhysObj:EnableDrag(false)
-		-- self.PhysObj:SetMass(1500)
+		self.PhysObj:SetMass(1500)
+		self.PhysObj:SetDamping( 0.75,0.75 )
 		
 	end
 	
@@ -45,6 +46,14 @@ function ENT:PhysicsUpdate()
 	trace = util.TraceLine( tr )
 	
 	if ( trace.Hit && trace.HitSky || self:WaterLevel() > 0 ) then
+		
+		if( self:WaterLevel() > 0 ) then
+			
+			ParticleEffect( "water_impact_big", self:GetPos(), Angle( 0,0,0 ), nil )
+			util.BlastDamage( self, self.Owner, self:GetPos() + Vector(0,0,32), 270, math.random( 1500,2500 ) )
+			self:EmitSound(  "ambient/explosions/exp"..math.random(1,4)..".wav", 511, 100 )
+		
+		end
 		
 		self:Remove()
 		
@@ -66,15 +75,14 @@ function ENT:PhysicsCollide( data, physobj )
 	if (data.Speed > 5 && data.DeltaTime > 0.2 ) then 
 
 		ParticleEffect( "rocket_impact_dirt", self:GetPos(), Angle( 0,0,0 ), nil )
-		-- ParticleEffect( "30cal_impact", self:GetPos(), Angle( 0,0,0 ), nil )
-		
+		-- 
 		self:EmitSound(  "ambient/explosions/exp"..math.random(1,4)..".wav", 511, 100 )
 		
-		util.BlastDamage( self, self.Owner, data.HitPos, 256, math.random( 500,1500 ) )
+		util.BlastDamage( self, self.Owner, data.HitPos, 270, math.random( 1500,2500 ) )
 		
 		util.Decal("Scorch", data.HitPos + data.HitNormal * 32, data.HitPos - data.HitNormal * 32 )
 	
-		self.Entity:Remove()
+		self:Remove()
 	
 	end
 	
