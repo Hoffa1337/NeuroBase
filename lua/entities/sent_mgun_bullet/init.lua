@@ -30,7 +30,7 @@ function ENT:Initialize()
 	
 	if( self.TinyTrail ) then
 		
-		self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(245,255), math.random(245,255), math.random(255,255), math.random(245,255) ), false, 1,0, TrailDelay + 0.85, 1/(0+4)*0.55, "trails/smoke.vmt");  
+		self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(225,235), math.random(245,255), math.random(225,235), math.random(245,255) ), false, 1,0, TrailDelay + 0.85, 1/(0+4)*0.55, "trails/smoke.vmt");  
 
 	else
 	
@@ -72,9 +72,13 @@ function ENT:Initialize()
 
 	self:SetAngles( self:GetAngles() + Angle( math.Rand(-.05,.05 ), math.Rand(-.05,.05 ), math.Rand(-.05,.05 ) ) )
 	
+	self.StartTime = CurTime()
+	
 end
 
 function ENT:PhysicsCollide( data, physobj )
+		
+	if( self.StartTime + 0.25 >= CurTime() ) then return end
 	
 	if ( IsValid( data.HitEntity ) && data.HitEntity:GetOwner() == self:GetOwner() ) then // Plox gief support for SetOwner ( table )
 		
@@ -121,7 +125,7 @@ function ENT:PhysicsUpdate()
 		
 	-- if( self.TinyTrail ) then return end 
 	
-	self:GetPhysicsObject():AddAngleVelocity( Vector( 999999, 0, 0 ) )
+	self:GetPhysicsObject():AddAngleVelocity( Vector( 99, 0, 0 ) )
 
 	local tr, trace = {},{}
 	tr.start = self:GetPos()
