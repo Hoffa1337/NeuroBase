@@ -223,7 +223,7 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 
 		if( plane.MinClimb && plane.MaxClimb ) then
 
-			if( !ply:KeyDown( IN_WALK )  ) then
+			if( ply:GetNetworkedBool("MouseAim",false) ) then
 			
 			
 				pos = plane:GetPos() + plane:GetForward() * -plane.CameraDistance + plane:GetUp() * 15
