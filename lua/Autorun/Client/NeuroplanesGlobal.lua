@@ -223,18 +223,18 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 
 		if( plane.MinClimb && plane.MaxClimb ) then
 
-			if( ply:GetNetworkedBool("MouseAim",false) ) then
+			-- if( ply:GetNetworkedBool("MouseAim",false) ) then
 			
 			
-				pos = plane:GetPos() + plane:GetForward() * -plane.CameraDistance + plane:GetUp() * 15
-				ang = LerpAngle( 0.125, plane.LastAng or Angles, plane:GetAngles() )
+				-- pos = plane:GetPos() + plane:GetForward() * -plane.CameraDistance + plane:GetUp() * 15
+				-- ang = LerpAngle( 0.125, plane.LastAng or Angles, plane:GetAngles() )
 				
-			else
+			-- else
 				
 				
 				ang.r = 0
 			
-			end
+			-- end
 			
 		end
 		
