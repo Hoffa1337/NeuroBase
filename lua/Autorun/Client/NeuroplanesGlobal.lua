@@ -164,27 +164,17 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 		
 		if( GetConVarNumber("jet_cockpitview") > 0 ) then
 			
-						
-			if( plane.MinClimb && plane.MaxClimb ) then
 
+			pos = plane:LocalToWorld( plane.CockpitPosition ) //Origin//
+			-- ang = pAng
+			
+			if( IsValid( pilotmodel ) ) then
 				
-				pos = plane:GetPos() + plane:GetForward() * -plane.CameraDistance + plane:GetUp() * 15
-				ang = LerpAngle( 0.125, plane.LastAng or Angles, plane:GetAngles() )
-				
-				
-			else
-				
-				pos = plane:LocalToWorld( plane.CockpitPosition ) //Origin//
-				-- ang = pAng
-				
-				if( IsValid( pilotmodel ) ) then
-					
-					pilotmodel:SetColor( Color ( 0,0,0,0 ) )
-					pilotmodel:SetRenderMode( RENDERMODE_TRANSALPHA )
-					
-				end
+				pilotmodel:SetColor( Color ( 0,0,0,0 ) )
+				pilotmodel:SetRenderMode( RENDERMODE_TRANSALPHA )
 				
 			end
+			
 			
 		else
 			
@@ -228,6 +218,24 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 				ang.p = ang.p + math.Rand(-.2,.2)
 				ang.y = ang.y + math.Rand(-.2,.2)
 					
+		end
+		
+
+		if( plane.MinClimb && plane.MaxClimb ) then
+
+			if( !ply:KeyDown( IN_WALK )  ) then
+			
+			
+				pos = plane:GetPos() + plane:GetForward() * -plane.CameraDistance + plane:GetUp() * 15
+				ang = LerpAngle( 0.125, plane.LastAng or Angles, plane:GetAngles() )
+				
+			else
+				
+				
+				ang.r = 0
+			
+			end
+			
 		end
 		
 		plane.LastAng = ang
