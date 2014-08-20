@@ -316,8 +316,9 @@ hook.Add( "PlayerSpawnedSENT", "FixGhostCollisionModels", function( ply, e )
 	
 	for k,v in pairs( ents.GetAll() ) do 
 		
-		if( v != e && v:GetParent() == e && e.VehicleType != nil ) then
+		if( IsValid( v ) && v != e && v:GetParent() == e && e.VehicleType != nil ) then
 			
+			v:SetMoveType( MOVETYPE_NONE )
 			v:SetSolid( SOLID_NONE )
 			
 		end
@@ -2200,6 +2201,7 @@ function Meta:EjectPilot()
 	self.Pilot:Spawn()
 	self.Pilot:SetPos( self:GetPos() + Vector(0,0,175) )
 	self.Pilot:SetAngles( Angle( 0, self:GetAngles().y,0 ) )
+	self.Pilot:SetEyeAngles( Angle( 0, self:GetAngles().y,0 ) )
 	self.Owner = NULL
 	self.Pilot:SetScriptedVehicle( NULL ) ---------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	
