@@ -1165,6 +1165,92 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 									end
 									
 						};
+
+						{
+						Var = "!js",
+						Callback = function( ply, txt, team )
+									
+										if( ply:IsAdmin() || ply:IsBot() ) then
+											
+											local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
+											
+											local snd = "ambient/levels/citadel/citadel_ambient_scream_loop1.wav"
+											local BW =  { 
+											"pp_colormod_color 0", 
+											"pp_colormod 1", 
+											"pp_motionblur 1",
+											"pp_motionblur_addalpha 0.205",
+											"pp_motionblur_delay 0.05",
+											"pp_motionblur_drawalpha 0.99"
+											}
+											local reset = { "pp_colormod_color 1", "pp_colormod 0", "pp_motionblur 0" }
+											
+											if( IsValid( Target ) ) then
+												
+		
+												
+												Target:SendLua( "surface.PlaySound( \""..snd.. "\" ) ")
+												
+												timer.Simple( 3, function()
+													
+													if( IsValid( Target ) ) then
+														
+														Target:SetMoveType( MOVETYPE_NONE )
+														
+														for i=1,#BW do
+													
+															Target:ConCommand( BW[i] )
+															
+														end
+														
+														local gman = ents.Create("npc_gman")
+														gman:SetPos( Target:GetPos() + Target:GetForward() * 32 )
+														gman:SetAngles( Target:GetAngles() + Angle( 0, 180, 0 ) )
+														gman:Spawn()
+														gman:EmitSound( "ambient/creatures/town_child_scream1.wav", 511, math.random(111,115) )
+														Target:EmitSound( "ambient/creatures/town_child_scream1.wav", 510, 100 )
+														for i=1,15 do -- cheap
+														
+															Target:SendLua( "surface.PlaySound( \"ambient/creatures/town_child_scream1.wav\" ) ")
+													
+														end
+														gman:Fire("kill","",5 )
+													
+													end
+													
+												
+												end ) 
+												
+												timer.Simple( 10, function()
+													
+													if( IsValid( Target ) ) then
+														
+														for i=1,#reset do
+															
+															Target:ConCommand( reset[i] )
+															
+														end
+														
+														Target:ConCommand("stopsound")
+														Target:SetMoveType( MOVETYPE_WALK )
+														
+													end
+													
+												end ) 
+												
+											end
+											
+											-- ply:SetPos( Target:GetPos() + Target:GetForward() * -72 )
+											-- ply:SetAngles( Target:GetAngles() )
+											
+											
+										end
+										
+									end
+									
+						};
+
+
 						-- {
 						-- Var = "!lua",
 						-- Callback = function( ply, txt, team )
