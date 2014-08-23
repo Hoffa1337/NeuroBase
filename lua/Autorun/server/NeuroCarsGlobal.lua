@@ -846,7 +846,7 @@ function Meta:Micro_FireCannons()
 		bullet:GetPhysicsObject():SetDamping( 0,0 )
 		bullet:SetNoDraw( true )
 		
-		bullet:GetPhysicsObject():SetVelocity( self:GetForward() * 50000000000 )
+		bullet:GetPhysicsObject():SetVelocity( self:GetForward() * 500000 )
 		
 	end
 		
@@ -902,14 +902,18 @@ function Meta:Jet_FireMultiBarrel()
 		
 		if( self.Muzzle ) then
 			
+			-- print("YEP")
 			local sm = EffectData()
 			sm:SetStart( self.Miniguns[i]:GetPos() + self.Miniguns[i]:GetForward() * self.MuzzleOffset or 105)
 			sm:SetOrigin( self.Miniguns[i]:GetPos() + self.Miniguns[i]:GetForward() * self.MuzzleOffset or 105)
-			sm:SetScale( 10.5 )
+			sm:SetAttachment(1)
+			sm:SetEntity( self.Miniguns[i] )
+			sm:SetScale( 1.5 )
 			util.Effect( self.Muzzle, sm )
 
 		else
-		
+			
+			-- print("nope")
 			ParticleEffect( "mg_muzzleflash", self.Miniguns[i]:GetPos() + self.Miniguns[i]:GetForward() * self.MuzzleOffset or 105,  self:GetAngles(), self )
 		
 		end
