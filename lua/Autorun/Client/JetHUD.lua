@@ -506,7 +506,7 @@ function JetFighter.HUD() --Real Head-Up Display by StarChick. ;)
 
 	//Targets
 	for k,v in pairs( ents.FindByClass( "sent*" ) ) do
-		if ( IsValid( v ) && v.PrintName && v != JetFighter.Plane && ( v.Type == "vehicle" || ( v.PrintName == "Missile" ) ) ) then
+		if ( IsValid( v ) && inLOS( v ) && v.PrintName && v != JetFighter.Plane && ( v.Type == "vehicle" || ( v.PrintName == "Missile" ) ) ) then
 			
 			local pos = v:GetPos():ToScreen( )
 			local x,y = pos.x, pos.y
@@ -857,6 +857,12 @@ function JetFighter.DrawCrosshair( )
 		local X,Y = x,y
 		surface.SetDrawColor( 0, 255, 0, 100 )
 		surface.DrawCircle( X, Y, 8, Color( 0, 255, 0, 100) ) --horizon circle
+		-- if( GetConVarNumber("jet_cockpitview",0) >  0 ) then
+		
+			surface.DrawCircle( ScrW()/2, ScrH()/2, 12, Color( 0, 255, 0, 100) ) --horizon circle
+			
+		-- end
+		
 		surface.DrawLine( X+8*sinr, Y-8*cosr, X+20*sinr, Y-20*cosr ) --up
 		surface.DrawLine( X-8*cosr, Y-8*sinr, X-20*cosr, Y-20*sinr ) --left
 		surface.DrawLine( X+8*cosr, Y+8*sinr, X+20*cosr, Y+20*sinr ) --right

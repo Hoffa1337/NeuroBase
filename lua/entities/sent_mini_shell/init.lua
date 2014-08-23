@@ -22,6 +22,9 @@ function ENT:Initialize()
 	
 	if ( self.PhysObj:IsValid() ) then
 	
+		self.PhysObj:SetMass( 5000000 )
+		self.PhysObj:EnableGravity( true )
+		self.PhysObj:EnableDrag( true )
 		self.PhysObj:Wake()
 	
 	end
@@ -29,7 +32,7 @@ function ENT:Initialize()
 	
 	if( self.TinyTrail ) then
 		
-		self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(11,15), math.random(11,15), math.random(11,15), math.random(45,66) ), false, 4,0, TrailDelay + 0.85, 1/(0+4)*0.55, "trails/smoke.vmt");  
+		self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(11,15), math.random(11,15), math.random(11,15), math.random(145,166) ), false, 2,0, TrailDelay + 0.85, 1/(0+4)*0.55, "trails/smoke.vmt");  
 
 	else
 	
@@ -79,7 +82,7 @@ end
 
 function ENT:PhysicsCollide( data, physobj )
 		
-	if( self.StartTime + 0.25 >= CurTime() ) then return end
+	-- if( self.StartTime + 0.0125 >= CurTime() ) then return end
 	
 	if ( IsValid( data.HitEntity ) && data.HitEntity:GetOwner() == self:GetOwner() ) then // Plox gief support for SetOwner ( table )
 		
@@ -87,7 +90,7 @@ function ENT:PhysicsCollide( data, physobj )
 		
 	end
 	
-	if ( data.Speed > 55 && data.DeltaTime > 0.12 ) then 
+	if ( data.Speed > 1 && data.DeltaTime > 0.1 ) then 
 
 		self:Remove()
 		
@@ -98,23 +101,29 @@ end
 
 function ENT:PhysicsUpdate()
 		
-	self:GetPhysicsObject():ApplyForceCenter( self:GetForward() * 123456790 - Vector( 0,0,600 ) )
-
+	if( IsValid( self:GetPhysicsObject() ) ) then
+	
+		-- self:GetPhysicsObject():ApplyForceCenter( self:GetForward() * 12345 	 - Vector( 0,0,600 ) )
+		-- self:GetPhysicsObject():AddAngleVelocity( Vector( 99, 0, 0 ) )
+	
+	end
+	
 	if( self:WaterLevel() > 0 ) then
 		
 		self:Remove()
+		
+		return
 		
 	end
 		
 	-- if( self.TinyTrail ) then return end 
 	
-	self:GetPhysicsObject():AddAngleVelocity( Vector( 99, 0, 0 ) )
 	
 	if( self.MyPos ) then
 	
 		local tr, trace = {},{}
 		tr.start = self.MyPos
-		tr.endpos = tr.start + self:GetForward() * 128
+		tr.endpos = tr.start + self:GetForward() * 16
 		tr.filter = self
 		trace = util.TraceLine( tr )
 		
@@ -131,16 +140,20 @@ function ENT:PhysicsUpdate()
 			
 			for k,v in pairs( ents.GetAll() ) do
 				
-				local d = ( self.MyPos - v:GetPos() ):Length()
+				if( v != self && v != self.Owner ) then
+
+					local d = ( self.MyPos - v:GetPos() ):Length()
+					
+					if( d < self.Radius / 4 ) then
+						
+						self:Remove()
+						
+						return
+						
+					end
 				
-				if( d < self.Radius / 3 ) then
-					
-					self:Remove()
-					
-					return
-					
 				end
-			
+				
 			end
 		
 		end
@@ -171,6 +184,8 @@ function ENT:OnRemove()
 	impact:SetScale( 1.0 )
 	impact:SetNormal( self:GetForward()*-1 )
 	util.Effect("Explosion", impact)
+	ParticleEffect( "30cal_impact", self:GetPos(), Angle( 0,0,0 ), nil )
+	ParticleEffect( "Explosion", self:GetPos(), Angle( 0,0,0 ), nil )
 	
 	local dmg = 400
 	local radius = self.Radius or 50
