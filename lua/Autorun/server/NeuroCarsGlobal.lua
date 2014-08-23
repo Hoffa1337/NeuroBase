@@ -872,13 +872,13 @@ function Meta:Jet_FireMultiBarrel()
 
 	//for i=1,#self.Miniguns do
 	local i = self.MinigunIndex
-	
+		
 		local bullet = {} 
 		bullet.Num 		= 1
 		bullet.Src 		= self.Miniguns[i]:GetPos() + self.Miniguns[i]:GetForward() * 120
 		bullet.Dir 		= self.Miniguns[i]:GetAngles():Forward()
 		bullet.Spread 	= Vector( .051, .061, .071 )
-		bullet.Tracer	= math.random(1,4)
+		bullet.Tracer	= self.TracerCount or 1
 		bullet.Force	= 5
 		bullet.Damage	= math.random( 10, 75 )
 		bullet.AmmoType = "Ar2" 

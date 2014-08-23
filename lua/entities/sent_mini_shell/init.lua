@@ -103,8 +103,8 @@ function ENT:PhysicsUpdate()
 		
 	if( IsValid( self:GetPhysicsObject() ) ) then
 	
-		-- self:GetPhysicsObject():ApplyForceCenter( self:GetForward() * 12345 	 - Vector( 0,0,600 ) )
-		-- self:GetPhysicsObject():AddAngleVelocity( Vector( 99, 0, 0 ) )
+		self:GetPhysicsObject():ApplyForceCenter( self:GetForward() * 12345999 - Vector( 0,0,600 ) )
+		self:GetPhysicsObject():AddAngleVelocity( Vector( 99, 0, 0 ) )
 	
 	end
 	
