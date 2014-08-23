@@ -196,22 +196,22 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 			
 		end
 		
-		if( GetConVarNumber( "jet_bomberview" ) > 0 ) then
+		-- if( GetConVarNumber( "jet_bomberview" ) > 0 ) then
 			 
 
-				local a = plane:GetAngles()
-				pos = plane:GetPos() + plane:GetUp() * -75 + plane:GetForward() * -200
-				ang = pAng + Angle( 45, 0, 0 )
+				-- local a = plane:GetAngles()
+				-- pos = plane:GetPos() + plane:GetUp() * -75 + plane:GetForward() * -200
+				-- ang = pAng + Angle( 45, 0, 0 )
 		
 			
-		end
+		-- end
 
-		if ( isGuidingRocket ) then
+		-- if ( isGuidingRocket ) then
 
-			pos = plane:GetPos() + plane:GetUp() * -150
-			fov = 60
+			-- pos = plane:GetPos() + plane:GetUp() * -150
+			-- fov = 60
 			
-		end
+		-- end
 		
 		if ( plane.NoMgun == nil && ply:KeyDown( IN_ATTACK ) && GetConVarNumber( "jet_bomberview" ) < 1 ) then
 				
