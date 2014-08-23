@@ -25,11 +25,11 @@ function ENT:Initialize()
 		self.PhysObj:Wake()
 	
 	end
-	local TrailDelay = math.Rand( 0.15, 0.20 )
+	local TrailDelay = math.Rand( 0.15, 0.20 )/10
 	
 	if( self.TinyTrail ) then
 		
-		self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(225,235), math.random(245,255), math.random(225,235), math.random(245,255) ), false, 1,0, TrailDelay + 0.85, 1/(0+4)*0.55, "trails/smoke.vmt");  
+		self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(11,15), math.random(11,15), math.random(11,15), math.random(45,66) ), false, 4,0, TrailDelay + 0.85, 1/(0+4)*0.55, "trails/smoke.vmt");  
 
 	else
 	
@@ -67,8 +67,10 @@ function ENT:Initialize()
 	e:SetAngles( self:GetAngles() )
 	e:SetEntity( self )
 	e:SetScale( math.random(5,10) )
-	util.Effect( "A10_muzzlesmoke", e )
-
+	-- util.Effect( "mg_muzzleflash", e )
+	
+	ParticleEffect( "mg_muzzleflash", self:GetPos(), self:GetAngles(), nil )
+	
 	self:SetAngles( self:GetAngles() + Angle( math.Rand(-.05,.05 ), math.Rand(-.05,.05 ), math.Rand(-.05,.05 ) ) )
 	
 	self.StartTime = CurTime()
@@ -168,7 +170,7 @@ function ENT:OnRemove()
 	impact:SetStart( self:GetPos() )
 	impact:SetScale( 1.0 )
 	impact:SetNormal( self:GetForward()*-1 )
-	util.Effect("FlareSpark", impact)
+	util.Effect("Explosion", impact)
 	
 	local dmg = 400
 	local radius = self.Radius or 50
