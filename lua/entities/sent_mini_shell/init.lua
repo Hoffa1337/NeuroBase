@@ -63,20 +63,20 @@ function ENT:Initialize()
 		
 	end
 	
-	local e = EffectData()
-	e:SetStart( self:GetPos() )
-	e:SetOrigin( self:GetPos() )
-	e:SetNormal( self:GetForward() )
-	e:SetAngles( self:GetAngles() )
-	e:SetEntity( self )
-	e:SetScale( math.random(5,10) )
+	-- local e = EffectData()
+	-- e:SetStart( self:GetPos() )
+	-- e:SetOrigin( self:GetPos() )
+	-- e:SetNormal( self:GetForward() )
+	-- e:SetAngles( self:GetAngles() )
+	-- e:SetEntity( self )
+	-- e:SetScale( math.random(5,10) )
 	-- util.Effect( "mg_muzzleflash", e )
 	
 	ParticleEffect( "mg_muzzleflash", self:GetPos(), self:GetAngles(), nil )
 	
 	self:SetAngles( self:GetAngles() + Angle( math.Rand(-.05,.05 ), math.Rand(-.05,.05 ), math.Rand(-.05,.05 ) ) )
 	
-	self.StartTime = CurTime()
+	-- self.StartTime = CurTime()
 	
 end
 
@@ -99,7 +99,7 @@ function ENT:PhysicsCollide( data, physobj )
 	
 end
 
-function ENT:PhysicsUpdate()
+function ENT:Think()
 		
 	if( IsValid( self:GetPhysicsObject() ) ) then
 	
@@ -134,40 +134,10 @@ function ENT:PhysicsUpdate()
 			return
 			
 		end
-		
-		
-		if( self.StartTime + 1 <= CurTime() ) then
-			
-			for k,v in pairs( ents.GetAll() ) do
-				
-				if( v != self && v != self.Owner ) then
-
-					local d = ( self.MyPos - v:GetPos() ):Length()
-					
-					if( d < self.Radius / 4 ) then
-						
-						self:Remove()
-						
-						return
-						
-					end
-				
-				end
-				
-			end
-		
-		end
 	
 	end
 	
 end
-
-function ENT:Think()
-	
-	self.MyPos = self:GetPos() -- we dont need to call this each physics update tick so we run it here in stead.
-	
-
-end 
 
 function ENT:OnRemove()
 	

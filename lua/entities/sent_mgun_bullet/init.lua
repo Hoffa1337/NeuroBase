@@ -77,7 +77,7 @@ end
 
 function ENT:PhysicsCollide( data, physobj )
 		
-	if( self.StartTime + 0.25 >= CurTime() ) then return end
+	if( self.StartTime + 0.125 >= CurTime() ) then return end
 	
 	if ( IsValid( data.HitEntity ) && data.HitEntity:GetOwner() == self:GetOwner() ) then // Plox gief support for SetOwner ( table )
 		
@@ -85,7 +85,7 @@ function ENT:PhysicsCollide( data, physobj )
 		
 	end
 	
-	if ( data.Speed > 55 && data.DeltaTime > 0.12 ) then 
+	if ( data.Speed > 1 && data.DeltaTime > 0.1 ) then 
 
 		self:Remove()
 		
@@ -95,62 +95,24 @@ function ENT:PhysicsCollide( data, physobj )
 end
 
 function ENT:PhysicsUpdate()
+	
+	if( IsValid( self:GetPhysicsObject() ) ) then
+	
+		self:GetPhysicsObject():ApplyForceCenter( self:GetForward() * 123456790 - Vector( 0,0,600 ) )
+		self:GetPhysicsObject():AddAngleVelocity( Vector( 99, 0, 0 ) )
 		
-	self:GetPhysicsObject():ApplyForceCenter( self:GetForward() * 123456790 - Vector( 0,0,600 ) )
-
+	end
+	
 	if( self:WaterLevel() > 0 ) then
 		
 		self:Remove()
 		
 	end
 		
-	-- if( self.TinyTrail ) then return end 
-	
-	self:GetPhysicsObject():AddAngleVelocity( Vector( 99, 0, 0 ) )
-	
-	if( self.MyPos ) then
-	
-		local tr, trace = {},{}
-		tr.start = self.MyPos
-		tr.endpos = tr.start + self:GetForward() * 128
-		tr.filter = self
-		trace = util.TraceLine( tr )
-		
-		if ( trace.Hit && trace.HitSky ) then
-			
-			self:Remove()
-				
-			return
-			
-		end
-		
-		
-		if( self.StartTime + 1 <= CurTime() ) then
-			
-			for k,v in pairs( ents.GetAll() ) do
-				
-				local d = ( self.MyPos - v:GetPos() ):Length()
-				
-				if( d < self.Radius / 3 ) then
-					
-					self:Remove()
-					
-					return
-					
-				end
-			
-			end
-		
-		end
-	
-	end
-	
 end
 
 function ENT:Think()
-	
-	self.MyPos = self:GetPos() -- we dont need to call this each physics update tick so we run it here in stead.
-	
+
 
 end 
 
