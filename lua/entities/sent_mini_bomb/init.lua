@@ -26,7 +26,7 @@ function ENT:Initialize()
 		self.PhysObj:EnableGravity(true)
 		self.PhysObj:EnableDrag(false)
 		self.PhysObj:SetMass(1500)
-		self.PhysObj:SetDamping( 0.75,0.75 )
+		self.PhysObj:SetDamping( 0.975,0.975 )
 		
 	end
 	
@@ -34,7 +34,7 @@ function ENT:Initialize()
 	-- self:EmitSound("weapons/mortar/mortar_shell_incomming1.wav",25,110)
 	self:EmitSound("BF2/Weapons/Artillery_projectile_"..math.random(1,3)..".mp3")
 
-	-- util.SpriteTrail(self, 0, Color(255,255,255,math.random(20,40)), false, 3, math.random(0.5,1.1), 0, math.random(1,3), "trails/smoke.vmt");  
+	util.SpriteTrail(self, 0, Color(255,255,255,math.random(11,12)), false, 3, math.random(0.5,1.1), 0, math.random(1,3), "trails/smoke.vmt");  
 end
 
 function ENT:PhysicsUpdate()
