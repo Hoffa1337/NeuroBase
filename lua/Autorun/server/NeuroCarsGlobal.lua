@@ -2112,7 +2112,11 @@ function Meta:Jet_DefaultUseStuff( ply, caller )
 	
 	for k,v in pairs( ply:GetWeapons() ) do
 		
-		ply.Weapons[k] = v:GetClass()
+		if( IsValid( v ) ) then
+		
+			ply.Weapons[k] = v:GetClass()
+		
+		end
 		
 	end
 	
