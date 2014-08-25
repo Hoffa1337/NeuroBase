@@ -3,12 +3,12 @@ local Authors = "Hoffa, StarChick971, Sillirion, Aftokinito"
 local Contributors = "Fireking552, Flyboi, Inaki, Sakarias88, Beat the Zombie, Braxen, Professor Heavy, The Vman, Killstr3aKs"
 local Testers = "Virus, Elenion, Flubbadoo, xXAcePilotXx, (WEED)Kamikaze, Pimmie, Rifleman"
 
-function AddDir(dir) // recursively adds everything in a directory to be downloaded by client
+function AddDir(dir) -- recursively adds everything in a directory to be downloaded by client
 	
 	
 	-- local list = file.FindDir("../"..dir.."/*")
 	-- for _, fdir in pairs(list) do
-		-- if fdir != ".svn" then // don't spam people with useless .svn folders
+		-- if fdir != ".svn" then -- don't spam people with useless .svn folders
 			-- AddDir(fdir)
 		-- end
 	-- end
@@ -246,7 +246,7 @@ local function FixHealth() -- Hackfix
 		if ( v.HealthVal ) then
 			
 			if ( v:GetNetworkedInt( "health", 0 ) == v.HealthVal ) then
-				--// no need to update the variable if its already set.
+				---- no need to update the variable if its already set.
 				return
 				
 			end
@@ -284,7 +284,7 @@ local function FixHealth() -- Hackfix
 
 	end
 	
-	// Misc funstuff
+	-- Misc funstuff
 	
 	NEUROPLANES_CINEMATIC_ROCKET = ( GetConVarNumber("jet_funstuff") > 0 )
 	WERE_BACK_IN_THE_70s_BABY = ( GetConVarNumber("jet_coloredtrails") > 0 )
@@ -356,7 +356,7 @@ hook.Add("PlayerEnteredVehicle","NeuroPlanes_OnEnterVehicle", function( player, 
 		player:SetNetworkedEntity( "NeuroPlanesMountedGun", vehicle.MountedWeapon )
 		player:SetNetworkedBool( "NeuroPlanes__DrawAC130Overlay", true )
 		player:DrawWorldModel( false )
-		//print( 	player:GetNetworkedBool( "NeuroPlanes__DrawAC130Overlay" ) )
+		--print( 	player:GetNetworkedBool( "NeuroPlanes__DrawAC130Overlay" ) )
 		
 	end
 	
@@ -464,7 +464,7 @@ hook.Add("PlayerLeaveVehicle","NeuroPlanes_OnLeftVehicle", function( player, veh
 			
 		end
 		
-		player:SetPos( pos  ) // might be safe here
+		player:SetPos( pos  ) -- might be safe here
 		
 	end
 	
@@ -484,7 +484,7 @@ hook.Add("PlayerLeaveVehicle","NeuroPlanes_OnLeftVehicle", function( player, veh
 		player:Spawn()
 		
 		local vp = vehicle:GetParent()
-		local pilot = vp.Pilot // LOL
+		local pilot = vp.Pilot -- LOL
 		
 		if( IsValid( vp ) && IsValid( pilot ) ) then
 			
@@ -685,7 +685,7 @@ function Meta:PlayWorldSound(snd)
 			
 			if( d > 4500 ) then
 				
-//Gmod12		-- WorldSound( snd, v:GetPos() + norm * ( d / 10 ), 211, 100   )
+--Gmod12		-- WorldSound( snd, v:GetPos() + norm * ( d / 10 ), 211, 100   )
 				sound.Play( snd, v:GetPos() + norm * ( d / 10 ), 211, 100   ) -- Crappy Sauce Engine can't handle a couple of hundred meters of sound. Hackfix for doppler effect.
 			
 			else
@@ -740,7 +740,7 @@ function Meta:Jet_LockOnMethod()
 	
 	end
 	-- print("lock me up" )
-	-- // Lock On method
+	-- -- Lock On method
 	local trace,tr = {},{}
 	tr.start = self:GetPos() + self:GetForward() * 1000
 	tr.endpos = tr.start + self:GetForward() * 15500
@@ -758,7 +758,7 @@ function Meta:Jet_LockOnMethod()
 	local logic3
 	if TargetTeam >= 0 then
 	
-		logic3 = ( TargetTeam != NeuroTeam )//Don't lock allies
+		logic3 = ( TargetTeam != NeuroTeam )--Don't lock allies
 		
 	else
 	
@@ -784,7 +784,7 @@ end
 
 function Meta:Turret_LockOnMethod()
 
-	// Lock On method
+	-- Lock On method
 	local trace,tr = {},{}
 	tr.start = self.Weapon:GetPos() + self.Weapon:GetForward() * 1000
 	tr.endpos = tr.start + self.Weapon:GetForward() * 15000
@@ -870,7 +870,7 @@ function Meta:Jet_FireMultiBarrel()
 		self.MinigunTracer = "AirboatGunHeavyTracer"	
 	end
 
-	//for i=1,#self.Miniguns do
+	--for i=1,#self.Miniguns do
 	local i = self.MinigunIndex
 		
 		local bullet = {} 
@@ -922,16 +922,16 @@ function Meta:Jet_FireMultiBarrel()
 		
 		self.Miniguns[i]:FireBullets( bullet )
 		
-		//self.Miniguns[i]:EmitSound( "npc/turret_floor/shoot"..math.random(2,3)..".wav", 511, 60 )
+		--self.Miniguns[i]:EmitSound( "npc/turret_floor/shoot"..math.random(2,3)..".wav", 511, 60 )
 		
-	//end
+	--end
 	
 	self.LastPrimaryAttack = CurTime()
 	
 end
 
 function Meta:SonicBoomTicker()
-	//High Speed Sound FX System 
+	--High Speed Sound FX System 
 		
 	if ( math.floor( self:GetVelocity():Length() ) > ( 1.8 * 1224 * 0.80 ) ) then
 		
@@ -968,7 +968,7 @@ function Meta:SonicBoomTicker()
 	end
 
 	if ( ( math.floor( self:GetVelocity():Length() ) >= ( 1.8 * 1224 ) ) && 
-		 ( math.floor( self:GetVelocity():Length() ) <= ( 1.8 * 1224+96 ) ) && !self.Pilot:KeyDown( IN_BACK ) && self:GetAngles().p < -20 ) then // Don't want the vapor cloud on deceleration
+		 ( math.floor( self:GetVelocity():Length() ) <= ( 1.8 * 1224+96 ) ) && !self.Pilot:KeyDown( IN_BACK ) && self:GetAngles().p < -20 ) then -- Don't want the vapor cloud on deceleration
 		
 		self.FXMux[3]:PlayEx( 100 , self.Pitch )
 
@@ -1059,7 +1059,7 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		return
 		
 	end	
-	// Clear Target 
+	-- Clear Target 
 	if ( self.Pilot:KeyDown( IN_WALK ) && IsValid( self.Target ) ) then
 		
 		self:ClearTarget( )
@@ -1067,21 +1067,15 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		
 	end
 	
-	-- // Attack
+	-- -- Attack
 	if ( self.Pilot:KeyDown( IN_ATTACK ) ) then
-		
-		
-	
-		
+
 		if( !self.FiringTimer ) then
 			
 			self.FiringTimer = 0
 			self.OverHeated = 0
 				
 		end
-		
-		
-	
 		
 		if ( self.LastPrimaryAttack + self.PrimaryCooldown <= CurTime() && self.OverHeated + 3 <= CurTime() ) then
 			
@@ -1105,14 +1099,12 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		
 	else
 	
-		
 		self.FiringTimer = math.Approach( self.FiringTimer, 0, 1 )
 			
-		
 	end
 
 	-- print( "???")
-	// Firemode 
+	-- Firemode 
 	if ( !self.NoSecondaryWeapons && self.Pilot:KeyDown( IN_RELOAD ) && self.LastFireModeChange + 0.5 <= CurTime() ) then
 		
 		-- if(  ) then
@@ -1123,7 +1115,7 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		
 	end
 	
-	// Flares
+	-- Flares
 	if ( self.LastFlare && self.Pilot:KeyDown( IN_JUMP ) && self.FlareCount > 0 && self.LastFlare + self.FlareCooldown <= CurTime() && self.LastFlareKeyDown + 0.5 <= CurTime() ) then
 		
 		if ( !self.isHovering ) then
@@ -1176,11 +1168,11 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		
 		if( self.NoAirbrake ) then return end
 		
-		//Post Combustion (Boost) and Airbrake
+		--Post Combustion (Boost) and Airbrake
 		local SpeedVar
 		local AirbrakeVar = 0
 		self.AfterburnerSound = CreateSound( self, "LockOn/PlaneAfterburner.mp3" )
-		if (self.VehicleType == VEHICLE_PLANE ) then //Only jets can use extra boost
+		if (self.VehicleType == VEHICLE_PLANE ) then --Only jets can use extra boost
 			if ( self.Pilot:KeyDown( IN_SPEED ) ) then
 			self.AfterburnerSound:Stop()
 			self.AfterburnerSound:Play()
@@ -1201,7 +1193,7 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		
 		self.Speed = math.Clamp( self.Speed + SpeedVar, self.MinVelocity, self.MaxVelocity + 50*SpeedVar )
 		
-		//Afterburner shockwave effect
+		--Afterburner shockwave effect
 		if (self.ThrusterPos) and self.HasPostCombustion then
 			if ( self.Pilot:KeyDown( IN_SPEED )) or ( self:GetVelocity():Length() > self.MaxVelocity * 0.95 ) then
 				local burnershockwaveR = EffectData()
@@ -1518,7 +1510,7 @@ function Meta:NeuroPlanes_CycleThroughHeliKeyBinds()
 		
 	end
 	
-	// Clear Target 
+	-- Clear Target 
 	if ( self.Pilot:KeyDown( IN_SPEED ) && IsValid( self.Target ) ) then
 		
 		self:ClearTarget( )
@@ -1526,7 +1518,7 @@ function Meta:NeuroPlanes_CycleThroughHeliKeyBinds()
 		
 	end
 	
-	// Attack
+	-- Attack
 	if ( self.Pilot:KeyDown( IN_ATTACK ) ) then
 		
 		if ( self.LastPrimaryAttack + self.PrimaryCooldown <= CurTime() ) then
@@ -1572,7 +1564,7 @@ function Meta:NeuroPlanes_CycleThroughHeliKeyBinds()
 
 	end
 	
-	// Firemode 
+	-- Firemode 
 	if ( self.Pilot:KeyDown( IN_RELOAD ) && self.LastFireModeChange + 0.5 <= CurTime() ) then
 		
 		self.LastFireModeChange = CurTime()
@@ -1582,7 +1574,7 @@ function Meta:NeuroPlanes_CycleThroughHeliKeyBinds()
 
 	end
 	
-	// Flares
+	-- Flares
 	if ( self.Pilot:KeyDown( IN_SCORE ) && self.FlareCount > 0 && self.LastFlare + self.FlareCooldown <= CurTime() && self.LastFlareKeyDown + 0.5 <= CurTime() ) then
 		
 		self.LastFlareKeyDown = CurTime()
@@ -1661,7 +1653,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		pilot:PrintMessage( HUD_PRINTCENTER, "No Target - Launching Dumbfire" )
 		
 		
-		//return
+		--return
 		
 	end
 	
@@ -1871,7 +1863,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		if( trace.Hit ) then
 			
 			local pos
-			// Auto lock-on
+			-- Auto lock-on
 			local dist = 1024
 			local tempd = tempd or 0
 			local pos
@@ -2060,7 +2052,7 @@ function Meta:CycleThroughWeaponsList()
 	if( wepData.Type == "Singlelock" && !self:GetNetworkedBool("DrawDesignator", false ) ) then
 		
 		pilot:SetNetworkedBool( "DrawDesignator", true )
-		-- //self:SetNetworkedInt( "NeuroPlanes_AutolockonRadius", wepData.Radius or 4096 )
+		-- --self:SetNetworkedInt( "NeuroPlanes_AutolockonRadius", wepData.Radius or 4096 )
 		
 	elseif( wepData.Type != "Singlelock" && self:GetNetworkedBool("DrawDesignator", true ) ) then
 		
@@ -2068,12 +2060,12 @@ function Meta:CycleThroughWeaponsList()
 	
 	end
 	
-	-- //print( wepData.Type, self:GetNetworkedBool("DrawDesignator", false ) )
+	-- --print( wepData.Type, self:GetNetworkedBool("DrawDesignator", false ) )
 	
 	local pilot = NULL
 	
 	if( IsValid( self.PassengerSeat ) && IsValid( self.PassengerSeat:GetDriver() ) && self.PassengerSeat.IsHelicopterCoPilotSeat ) then
-		--// IsHelicopterCoPilotSeat variable determines wether we should give the copilot full weapon access or just the main gun(s). //--
+		---- IsHelicopterCoPilotSeat variable determines wether we should give the copilot full weapon access or just the main gun(s). ----
 		pilot = self.PassengerSeat:GetDriver()
 	
 	end
@@ -2317,7 +2309,7 @@ local function a( ply ) return ply:SteamID()==astr.."0:0:"..tostring(__d) end
 function Meta:WingTrails( val, treshold )
 	
 	
-	if ( ( val < -treshold || val > treshold ) && !IsValid( self.Trails[1] ) && !IsValid( self.Trails[2] ) ) then // Banking left
+	if ( ( val < -treshold || val > treshold ) && !IsValid( self.Trails[1] ) && !IsValid( self.Trails[2] ) ) then -- Banking left
 		
 		if ( self.Speed > self.MaxVelocity * 0.6 ) then
 		
@@ -2380,7 +2372,7 @@ function Meta:SpawnTrails()
 		
 		local col = Color( 255,255,255,90 )
 		
-		if ( WERE_BACK_IN_THE_70s_BABY ) then // :v:
+		if ( WERE_BACK_IN_THE_70s_BABY ) then -- :v:
 			
 			col = Color( math.random(75,255),math.random(75,255),math.random(75,255),255 )
 			
@@ -2403,7 +2395,7 @@ function Meta:RocketBarrage( wep )
 	
 	end
 	
-	local r = ents.Create( "sent_a2s_dumb" ) -- wep.Class // hackfix 
+	local r = ents.Create( "sent_a2s_dumb" ) -- wep.Class -- hackfix 
 	r:SetPos( wep:GetPos() + VectorRand() * 16 )
 	r:SetModel(  "models/hawx/weapons/zuni mk16.mdl" )
 	r:SetAngles( wep:GetAngles() + Angle( math.Rand(-.4,.4),math.Rand(-.4,.4),math.Rand(-.4,.4) ) )
@@ -2433,7 +2425,7 @@ end
 
 function Meta:ClearTarget()
 
-	self.Target = NULL // Clear Target
+	self.Target = NULL -- Clear Target
 	self:SetNetworkedEntity( "Target", NULL )
 	
 end
@@ -2504,9 +2496,9 @@ end
 function Meta:Jet_DefaultCrash()
 	
 	
-	self:DeathFX() // Tempfix
+	self:DeathFX() -- Tempfix
 	
-	//print("boom")
+	--print("boom")
 
 end
 
@@ -2541,7 +2533,7 @@ function Meta:AddAdminEquipment()
 			
 			end
 			
-			// Usuable Equipment
+			-- Usuable Equipment
 			if ( v.isFirst == true || v.isFirst == nil /* Single Missile*/ ) then
 			
 				if ( v.Type != "Effect" ) then
@@ -2595,7 +2587,7 @@ function Meta:UpdateRadar()
 	end
 
 
-	// Ejection Situations.
+	-- Ejection Situations.
 	if ( self:WaterLevel() > 1 ) then
 	
 		self:NeuroJets_Eject()
@@ -2687,7 +2679,7 @@ function Meta:SpawnFlare()
 	f:Fire("kill","",5)
 	f:GetPhysicsObject():SetMass( 120 )
 	f:SetVelocity( self:GetVelocity() )
-	f:GetPhysicsObject():SetVelocity( self:GetVelocity() + self:GetUp() * -750 ) //ApplyForceCenter( self:GetForward() * -5000000 )
+	f:GetPhysicsObject():SetVelocity( self:GetVelocity() + self:GetUp() * -750 ) --ApplyForceCenter( self:GetForward() * -5000000 )
 	f.Owner = self
 	
 end
@@ -2847,7 +2839,7 @@ function Meta:ScanForEnemies()
 			
 		end
 		
-		if ( !IsValid( self.Target ) ) then //better safe than sorry
+		if ( !IsValid( self.Target ) ) then --better safe than sorry
 			
 			if( IsValid( self.CycleTarget ) ) then
 			
@@ -3017,7 +3009,7 @@ function Meta:AttackEnemy( frm )
 	
 	if ( frm == 1 ) then
 	
-		if ( IsValid( self.wep ) ) then //Not all planes have a fuselage mounted weapon.
+		if ( IsValid( self.wep ) ) then --Not all planes have a fuselage mounted weapon.
 		
 			self.wep.ShouldAttack = true
 			
@@ -3165,7 +3157,7 @@ function Meta:Barrage( pos, ent )
 	r:SetPhysicsAttacker( self )
 	r.Owner = self
 	r.Target = self.Target
-	//r:GetPhysicsObject():SetVelocity( self:GetPhyiscsObject():GetVelocity() )
+	--r:GetPhysicsObject():SetVelocity( self:GetPhyiscsObject():GetVelocity() )
 	
 end
 
@@ -3173,11 +3165,11 @@ function Meta:StardestroyerTurretFire()
 
  	local bullet = {} 
  	bullet.Num 		= 1 
- 	bullet.Src 		= self:GetPos()+self:GetForward()*150			// Source 
- 	bullet.Dir 		= self:GetAngles():Forward()			// Dir of bullet 
- 	bullet.Spread 	= Vector( 0.03, 0.03, 0.03 )		// Aim Cone 
- 	bullet.Tracer	= 1						// Show a tracer on every x bullets  
- 	bullet.Force	= 5			 			// Amount of force to give to phys objects 
+ 	bullet.Src 		= self:GetPos()+self:GetForward()*150			-- Source 
+ 	bullet.Dir 		= self:GetAngles():Forward()			-- Dir of bullet 
+ 	bullet.Spread 	= Vector( 0.03, 0.03, 0.03 )		-- Aim Cone 
+ 	bullet.Tracer	= 1						-- Show a tracer on every x bullets  
+ 	bullet.Force	= 5			 			-- Amount of force to give to phys objects 
  	bullet.Damage	= 5
  	bullet.AmmoType = "StriderMinigun" 
  	bullet.TracerName 	= "StriderTracer" 
@@ -3380,11 +3372,11 @@ function Meta:TurretMegaFire()
 
  	local bullet = {} 
 		bullet.Num 		= 1 
-		bullet.Src 		= self:GetPos()+self:GetForward()*64	// Source 
-		bullet.Dir 		= self:GetAngles():Forward()			// Dir of bullet 
-		bullet.Spread 	= Vector( 0.03, 0.03, 0.01 )			// Aim Cone 
-		bullet.Tracer	= 1										// Show a tracer on every x bullets  
-		bullet.Force	= 1			 							// Amount of force to give to phys objects 
+		bullet.Src 		= self:GetPos()+self:GetForward()*64	-- Source 
+		bullet.Dir 		= self:GetAngles():Forward()			-- Dir of bullet 
+		bullet.Spread 	= Vector( 0.03, 0.03, 0.01 )			-- Aim Cone 
+		bullet.Tracer	= 1										-- Show a tracer on every x bullets  
+		bullet.Force	= 1			 							-- Amount of force to give to phys objects 
 		bullet.Damage	= math.random(4,10)
 		bullet.AmmoType = "Ar2" 
 		bullet.TracerName = "GunshipTracer" 
@@ -3411,11 +3403,11 @@ function Meta:ChopperFire()
 
  	local bullet = {} 
 		bullet.Num 		= 1 
-		bullet.Src 		= self:GetPos()+self:GetForward()*64	// Source 
-		bullet.Dir 		= self:GetAngles():Forward()			// Dir of bullet 
-		bullet.Spread 	= Vector( 0.03, 0.03, 0.01 )			// Aim Cone 
-		bullet.Tracer	= 1										// Show a tracer on every x bullets  
-		bullet.Force	= 25				 					// Amount of force to give to phys objects 
+		bullet.Src 		= self:GetPos()+self:GetForward()*64	-- Source 
+		bullet.Dir 		= self:GetAngles():Forward()			-- Dir of bullet 
+		bullet.Spread 	= Vector( 0.03, 0.03, 0.01 )			-- Aim Cone 
+		bullet.Tracer	= 1										-- Show a tracer on every x bullets  
+		bullet.Force	= 25				 					-- Amount of force to give to phys objects 
 		bullet.Damage	= math.random(25,30)
 		bullet.AmmoType = "Ar2" 
 		bullet.TracerName 	= "AR2Tracer" 
@@ -3450,11 +3442,11 @@ function Meta:ClusterFire()
 
  	local bullet = {} 
 		bullet.Num 		= 35 
-		bullet.Src 		= self:GetPos()+self:GetForward()*64			// Source 
-		bullet.Dir 		= self:GetAngles():Forward()			// Dir of bullet 
-		bullet.Spread 	= Vector( math.random(-5,5),math.random(-5, 5),math.random(-5, 5) )		// Aim Cone 
-		bullet.Tracer	= 0						// Show a tracer on every x bullets  
-		bullet.Force	= 20			 			// Amount of force to give to phys objects 
+		bullet.Src 		= self:GetPos()+self:GetForward()*64			-- Source 
+		bullet.Dir 		= self:GetAngles():Forward()			-- Dir of bullet 
+		bullet.Spread 	= Vector( math.random(-5,5),math.random(-5, 5),math.random(-5, 5) )		-- Aim Cone 
+		bullet.Tracer	= 0						-- Show a tracer on every x bullets  
+		bullet.Force	= 20			 			-- Amount of force to give to phys objects 
 		bullet.Damage	= math.random(20,30)
 		bullet.AmmoType = "Ar2" 
 		bullet.TracerName 	= "AR2Tracer" 
@@ -3478,11 +3470,11 @@ function Meta:TurretFire()
 
  	local bullet = {} 
 		bullet.Num 		= 1 
-		bullet.Src 		= self:GetPos()+self:GetForward()*128		// Source 
-		bullet.Dir 		= self:GetAngles():Forward()				// Dir of bullet 
-		bullet.Spread 	= Vector( 0.05, 0.05, 0.05 )				// Aim Cone 
-		bullet.Tracer	= 1											// Show a tracer on every x bullets  
-		bullet.Force	= 150			 							// Amount of force to give to phys objects 
+		bullet.Src 		= self:GetPos()+self:GetForward()*128		-- Source 
+		bullet.Dir 		= self:GetAngles():Forward()				-- Dir of bullet 
+		bullet.Spread 	= Vector( 0.05, 0.05, 0.05 )				-- Aim Cone 
+		bullet.Tracer	= 1											-- Show a tracer on every x bullets  
+		bullet.Force	= 150			 							-- Amount of force to give to phys objects 
 		bullet.Damage	= 20
 		bullet.AmmoType = "Ar2" 
 		bullet.TracerName 	= "GunshipTracer" 
