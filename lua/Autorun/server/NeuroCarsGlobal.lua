@@ -906,9 +906,9 @@ function Meta:Jet_FireMultiBarrel()
 			local sm = EffectData()
 			sm:SetStart( self.Miniguns[i]:GetPos() + self.Miniguns[i]:GetForward() * self.MuzzleOffset or 105)
 			sm:SetOrigin( self.Miniguns[i]:GetPos() + self.Miniguns[i]:GetForward() * self.MuzzleOffset or 105)
+			sm:SetEntity( self.Miniguns[i] )		
 			sm:SetAttachment(1)
-			sm:SetEntity( self.Miniguns[i] )
-			sm:SetScale( 1.5 )
+			sm:SetScale( 0.5 )
 			util.Effect( self.Muzzle, sm )
 
 		else
@@ -1067,16 +1067,15 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		
 	end
 	
+	if( !self.FiringTimer ) then
+			
+		self.FiringTimer = 0
+		self.OverHeated = 0
+			
+	end
 	-- -- Attack
 	if ( self.Pilot:KeyDown( IN_ATTACK ) ) then
 
-		if( !self.FiringTimer ) then
-			
-			self.FiringTimer = 0
-			self.OverHeated = 0
-				
-		end
-		
 		if ( self.LastPrimaryAttack + self.PrimaryCooldown <= CurTime() && self.OverHeated + 3 <= CurTime() ) then
 			
 			self:PrimaryAttack()
@@ -1087,12 +1086,14 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		
 			end
 			
-			if( self.FiringTimer >= self.PrimaryMaxShots or 50 ) then
+			if( self.FiringTimer >= ( self.PrimaryMaxShots or 25 ) ) then
 				
 				self.OverHeated = CurTime()
 				self.FiringTimer = 0
-				self.Pilot:PrintMessage( HUD_PRINTTALK, "Calm down Skippy, your gun is glowing." )
-			
+				self.Pilot:PrintMessage( HUD_PRINTTALK, "Calm down Skippy, your guns are glowing!" )
+				self:EmitSound( "npc/dog/dog_pneumatic2.wav",511, 75 )
+				
+				
 			end
 			
 		end
