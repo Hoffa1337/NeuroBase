@@ -692,6 +692,7 @@ function JetFighter.MarkEnemies()
 					else
 					
 						draw.SimpleText( v.PrintName, "ChatFont", x, y - 30, Color( 255, 102, 0, 240 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+						surface.DrawCircle( x, y, 8, Color( 255, 0, 0, 255) ) 
 					end
 					
 				
@@ -853,14 +854,22 @@ function JetFighter.DrawCrosshair( )
 		
 		surface.SetMaterial(  ch_green )
 		surface.DrawTexturedRect( pos.x - size / 2, pos.y - size / 2, size, size )
+		
 	else
+	
 		local X,Y = x,y
 		surface.SetDrawColor( 0, 255, 0, 100 )
 		surface.DrawCircle( X, Y, 8, Color( 0, 255, 0, 100) ) --horizon circle
 		-- if( GetConVarNumber("jet_cockpitview",0) >  0 ) then
 		
-			surface.DrawCircle( ScrW()/2, ScrH()/2, 12, Color( 0, 255, 0, 100) ) --horizon circle
+		if( JetFighter.Plane.WingModels ) then
+		
+			local tpos = ( JetFighter.Plane:GetPos() + LocalPlayer():EyeAngles():Forward() * 3500 + JetFighter.Plane:GetUp() * 512 ):ToScreen()
 			
+			surface.DrawCircle( tpos.x, tpos.y, 16, Color( 0, 255, 0, 100) ) --horizon circle
+			
+		end
+		
 		-- end
 		
 		surface.DrawLine( X+8*sinr, Y-8*cosr, X+20*sinr, Y-20*cosr ) --up
