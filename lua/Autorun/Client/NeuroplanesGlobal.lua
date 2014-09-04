@@ -213,13 +213,18 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 			
 		-- end
 		
-		if ( plane.NoMgun == nil && ply:KeyDown( IN_ATTACK ) && GetConVarNumber( "jet_bomberview" ) < 1 ) then
+		-- if ( plane.NoMgun == nil && ply:KeyDown( IN_ATTACK ) && GetConVarNumber( "jet_bomberview" ) < 1 ) then
 				
-				ang.p = ang.p + math.Rand(-.2,.2)
-				ang.y = ang.y + math.Rand(-.2,.2)
 					
-		end
+		-- end
 		
+		if( ply:GetNetworkedInt("LastImpact",0)+0.5 >= CurTime() ) then
+				
+			ang.p = ang.p + math.Rand(-1.52,1.52)
+			ang.y = ang.y + math.Rand(-1.52,1.52)
+		
+		end
+			
 
 		if( plane.MinClimb && plane.MaxClimb ) then
 

@@ -1078,6 +1078,19 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 
 		if ( self.LastPrimaryAttack + self.PrimaryCooldown <= CurTime() && self.OverHeated + 3 <= CurTime() ) then
 			
+			if( self.ContigiousFiringLoop ) then
+				
+				-- if( !self.IsShootSoundPlaying ) then
+					
+					-- self.IsShootSoundPlaying = true
+					
+					self.PrimarySound:PlayEx(100,100)
+					
+				-- end
+				
+			
+			end
+			
 			self:PrimaryAttack()
 			
 			if( self.PrimaryCooldown < .5 ) then
@@ -1092,14 +1105,24 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 				self.FiringTimer = 0
 				self.Pilot:PrintMessage( HUD_PRINTTALK, "Calm down Skippy, your guns are glowing!" )
 				self:EmitSound( "npc/dog/dog_pneumatic2.wav",511, 75 )
-				
+				if( self.ContigiousFiringLoop ) then
+			
+					self.PrimarySound:Stop()
+	
+				end
 				
 			end
-			
+
 		end
 		
 	else
 	
+		if( self.ContigiousFiringLoop ) then
+			
+			self.PrimarySound:Stop()
+	
+		end
+			
 		self.FiringTimer = math.Approach( self.FiringTimer, 0, 1 )
 			
 	end
