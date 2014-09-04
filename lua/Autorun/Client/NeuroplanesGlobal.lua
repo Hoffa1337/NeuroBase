@@ -218,10 +218,14 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 					
 		-- end
 		
-		if( ply:GetNetworkedInt("LastImpact",0)+0.5 >= CurTime() ) then
+		local imptime = ply:GetNetworkedInt("LastImpact",0)
+		local impdamage = math.Clamp( ply:GetNetworkedInt("LastDamage",0), 0, 500 )
+		local dmgscale = impdamage * 1.55 / 500 
+		
+		if( imptime + 0.22 >= CurTime() ) then
 				
-			ang.p = ang.p + math.Rand(-1.52,1.52)
-			ang.y = ang.y + math.Rand(-1.52,1.52)
+			ang.p = ang.p + math.Rand(-dmgscale,dmgscale)
+			ang.y = ang.y + math.Rand(-dmgscale,dmgscale)
 		
 		end
 			
