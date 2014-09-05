@@ -1828,11 +1828,12 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	r:GetPhysicsObject():EnableDrag( false )
 	r:GetPhysicsObject():EnableGravity( true )
 	r:Spawn()
+	r:Activate()
 	r:Fire( "Kill", "", 30 )
 	r:SetAngles( wep:GetAngles() )
 	r.Owner = pilot
 	r:SetPhysicsAttacker( pilot )
-	r:GetPhysicsObject():SetVelocity( self:GetVelocity() )
+	-- r:GetPhysicsObject():SetVelocity( self:GetVelocity() )
 	
 	-- r:GetPhysicsObject():SetVelocity( self:GetVelocity() )
 	--print( wep.SubType )
@@ -1850,12 +1851,16 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 
 	end
 
-	if ( r:GetPhysicsObject() != nil ) then
+	timer.Simple(0,function()
 		
-		r:GetPhysicsObject():SetVelocity( wep:GetVelocity() )
+		if ( IsValid( r ) && r:GetPhysicsObject() != nil ) then
+			
+			r:SetPos( wep:GetPos() )
+			r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity() )
+			
+		end
 		
-	end
-	
+	end )
 
 	
 	if( wep.LaunchSound ) then
