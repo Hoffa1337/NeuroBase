@@ -1855,7 +1855,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		
 		if ( IsValid( r ) && r:GetPhysicsObject() != nil ) then
 			
-			r:SetPos( wep:GetPos() )
+			r:SetPos( wep:GetPos() - self:GetVelocity() )
 			r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity() )
 			
 		end
@@ -1980,7 +1980,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 					r:PhysicsInit( SOLID_VPHYSICS )
 					r:SetMoveType( MOVETYPE_VPHYSICS )
 					r:SetSolid( SOLID_VPHYSICS )
-					r:GetPhysicsObject():SetVelocity( self:GetVelocity() )
+					-- r:GetPhysicsObject():SetVelocity( self:GetVelocity() )
 					r:GetPhysicsObject():EnableDrag( false )
 					r:GetPhysicsObject():EnableGravity( true )
 					r:Spawn()
@@ -1990,7 +1990,16 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 					r:GetPhysicsObject():SetVelocity( wep:GetVelocity() )
 					r.Owner = pilot
 					r:SetPhysicsAttacker( pilot )
-					
+					timer.Simple(0,function()
+		
+						if ( IsValid( r ) && r:GetPhysicsObject() != nil ) then
+							
+							r:SetPos( wep:GetPos() - self:GetVelocity() )
+							r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity() )
+							
+						end
+						
+					end )
 				end
 			
 			end )
