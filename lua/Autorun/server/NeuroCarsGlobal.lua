@@ -1780,7 +1780,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	end
 	
 	-- Make the newly fired weapon invisible so it looks like we're actually dropping something.
-	if( wep.Cooldown > 2= ) then
+	if( wep.Cooldown >= 2 ) then
 		
 		wep:SetRenderMode( RENDERMODE_TRANSALPHA )
 		wep:SetColor( Color( 0,0,0,0 ) )
