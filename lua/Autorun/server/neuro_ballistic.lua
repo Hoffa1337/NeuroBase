@@ -173,13 +173,13 @@ end
 
 function Meta:BombingImpact(v0,pitch)
 
-	local pos = self:GetPos()
+	local pos = self:GetPos()+Vector(0,0,-50)
 	local ang = self:GetAngles()
 
 	local trace,tr = {},{}
 	tr.start = pos
 	tr.endpos = tr.start + self:GetUp()*-1000000
-	tr.filter = { self.Pilot, self, self.Weapon }
+	tr.filter = { self.Pilot, self, self.Weapon, self.Wings, self.Tail }
 	tr.mask = MASK_SOLID
 	trace = util.TraceEntity( tr, self )
 
