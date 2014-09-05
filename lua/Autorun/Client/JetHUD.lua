@@ -807,7 +807,26 @@ function JetFighter.MarkEnemies()
 	end
 	
 end
+local function BombingImpact( ent, v0,pitch)
 
+	local pos = ent:GetPos()+Vector(0,0,-50)
+	local ang = ent:GetAngles()
+
+	local trace,tr = {},{}
+	tr.start = pos
+	tr.endpos = tr.start + Vector( 0,0, -1000000 )
+	tr.filter = { ent.Pilot, ent, ent.Weapon, ent.Wings, ent.Tail }
+	tr.mask = MASK_SOLID
+	trace = util.TraceEntity( tr, ent )
+
+	local h = pos.z - trace.HitPos.z
+	local R = v0*math.abs( math.sin(math.rad(-ang.p))* math.sqrt( 2*h/600 ) )
+	
+
+	local ImpactPos = pos + ent:GetForward()*R + Vector(0,0,-h)
+	return ImpactPos
+	
+end
 function JetFighter.DrawCrosshair( )
 	
 	JetFighter.Target = JetFighter.Plane:GetNetworkedEntity( "Target", NULL )
@@ -863,7 +882,16 @@ function JetFighter.DrawCrosshair( )
 		-- if( GetConVarNumber("jet_cockpitview",0) >  0 ) then
 		
 		if( JetFighter.Plane.WingModels ) then
-		
+			
+			JetFighter.Pilot.ImpactPos =  BombingImpact( JetFighter.Plane, JetFighter.Plane:GetVelocity():Length()*1.8, JetFighter.Plane:GetAngles().p ) --JetFighter.Plane:GetNWVector("ImpactPos", Vector(0,0,0) )
+			
+			if( JetFighter.Pilot.ImpactPos != Vector(0,0,0) ) then
+				
+				local IP = JetFighter.Pilot.ImpactPos:ToScreen()
+				surface.DrawCircle( IP.x, IP.y, 32, Color( 167, 167, 255, 180) ) 
+			
+			end
+				
 			local tpos = ( JetFighter.Plane:GetPos() + LocalPlayer():EyeAngles():Forward() * 3500 + JetFighter.Plane:GetUp() * 512 ):ToScreen()
 			
 			surface.DrawCircle( tpos.x, tpos.y, 16, Color( 0, 255, 0, 100) ) --horizon circle
@@ -878,6 +906,7 @@ function JetFighter.DrawCrosshair( )
 	end
 
 end
+
 
 function DrawHelicopterOuterCrosshair()
 	

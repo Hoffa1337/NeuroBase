@@ -1661,8 +1661,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		
 	end
 	
-	local pos = wep:GetPos()
-	
+
 	local pilot = self.Pilot
 	
 	if( IsValid( self.PassengerSeat ) && IsValid( self.PassengerSeat:GetDriver() ) && self.PassengerSeat.IsHelicopterCoPilotSeat ) then -- Dayum
@@ -1670,12 +1669,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		pilot = self.PassengerSeat:GetDriver()
 		
 	end
-	
-	if ( wep.isFirst == true ) then
-		
-		pos = self.RocketVisuals[ id + math.random( 0, 1 ) ]:GetPos()
-		
-	end
+
 	
 	if ( wep.Type == "Homing" && !self.Target ) then
 		
@@ -1814,7 +1808,13 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	end
 	
 	if( wep.Class == nil ) then error("NeuroTec: Tried to call NeuroPlanes_FireRobot with"..tostring(wep).." as argument!" ) return end
-
+	local pos = wep:GetPos()
+	
+	if ( wep.isFirst == true ) then
+		
+		pos = self.RocketVisuals[ id + math.random( 0, 1 ) ]:GetPos()
+		
+	end
 	local r = ents.Create( wep.Class )
 	r:SetPos( pos )
 	r:SetOwner( self )
@@ -1827,16 +1827,15 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	r:SetSolid( SOLID_VPHYSICS )
 	r:GetPhysicsObject():EnableDrag( true )
 	r:GetPhysicsObject():EnableGravity( true )
+	r:SetRenderMode( RENDERMODE_TRANSALPHA )
+	r:SetColor( Color(0,0,0,0) )
 	r:Spawn()
 	r:Activate()
 	r:Fire( "Kill", "", 30 )
 	r:SetAngles( wep:GetAngles() )
 	r.Owner = pilot
 	r:SetPhysicsAttacker( pilot )
-	-- r:GetPhysicsObject():SetVelocity( self:GetVelocity() )
-	
-	-- r:GetPhysicsObject():SetVelocity( self:GetVelocity() )
-	--print( wep.SubType )
+	r:SetCollisionGroup( COLLISION_GROUP_DEBRIS )
 	
 	if( wep.SubType && wep.SubType == "Cluster" ) then
 		
@@ -1855,13 +1854,23 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		
 		if ( IsValid( r ) && r:GetPhysicsObject() != nil ) then
 			
+			r:SetColor( Color( 255,255,255,255 ) )
 			r:SetPos( wep:GetPos() )
-			r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity() )
+			r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity() * .8 )
 			
 		end
 		
 	end )
-
+	
+	timer.Simple( 1, function() 
+		
+		if( IsValid( r ) ) then
+			
+			r:SetCollisionGroup( COLLISION_GROUP_INTERACTIVE )
+		end
+		
+	end )
+		
 	
 	if( wep.LaunchSound ) then
 		
@@ -1971,7 +1980,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 				if( IsValid( wep ) && IsValid( pilot ) ) then
 					
 					local r = ents.Create( wep.Class )
-					r:SetPos( wep:GetPos() + Vector( 0,0,-5 ) )
+					r:SetPos( wep:GetPos() )
 					r:SetOwner( self )
 					r:SetPhysicsAttacker( pilot )
 					r.Target = self.Target
@@ -1987,7 +1996,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 					r:GetPhysicsObject():SetMass( 500 )
 					r:Fire( "Kill", "", 40 )
 					r:SetAngles( wep:GetAngles() + Angle() * math.Rand(-4,4) )
-					r:GetPhysicsObject():SetVelocity( wep:GetVelocity() )
+					-- r:GetPhysicsObject():SetVelocity( wep:GetVelocity() )
 					r.Owner = pilot
 					r:SetPhysicsAttacker( pilot )
 					timer.Simple(0,function()
@@ -1995,7 +2004,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 						if ( IsValid( r ) && r:GetPhysicsObject() != nil ) then
 							
 							r:SetPos( wep:GetPos() )
-							r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity() )
+							r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity() * .8 )
 							
 						end
 						
