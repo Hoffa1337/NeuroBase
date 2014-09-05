@@ -23,8 +23,8 @@ function ENT:Initialize()
 	if ( self.PhysObj ) then
 		
 		self.PhysObj:Wake()
-		self.PhysObj:EnableGravity(true)
-		self.PhysObj:EnableDrag(false)
+		-- self.PhysObj:EnableGravity(true)
+		-- self.PhysObj:EnableDrag(false)
 		-- self.PhysObj:SetMass(250)
 
 	end
