@@ -26,7 +26,7 @@ function ENT:Initialize()
 		self.PhysObj:EnableGravity(true)
 		self.PhysObj:EnableDrag(false)
 		self.PhysObj:SetMass(1500)
-		self.PhysObj:SetDamping( 0.975,0.975 )
+		-- self.PhysObj:SetDamping( 0.975,0.975 )
 		
 	end
 	
