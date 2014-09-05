@@ -26,13 +26,12 @@ AddCSLuaFile("autorun/client/NeuroTecMenu.lua")
 AddCSLuaFile("autorun/special_effects.lua")
 AddCSLuaFile("autorun/np_enum.lua")
 
-AddDir("Models/AC-130")
-AddDir("Materials/models/AC-130")
-resource.AddFile("particles")
-resource.AddFile("materials/particles/fatsmoke.vtf")
-resource.AddFile("materials/effects/GAU-8_MuzzleSmoke.vtf")
-resource.AddFile("sound/ah64fire.wav")
-resource.AddFile("models/h500_gatling.mdl")
+resource.AddFile("particles/")
+
+-- resource.AddFile("materials/particles/fatsmoke.vtf")
+-- resource.AddFile("materials/effects/GAU-8_MuzzleSmoke.vtf")
+-- resource.AddFile("sound/ah64fire.wav")
+-- resource.AddFile("models/h500_gatling.mdl")
 CreateConVar("neurotec_disablemenu", 0, FCVAR_ARCHIVE )
 CreateConVar("warthunder_controls", 1, FCVAR_ARCHIVE )
 
@@ -311,6 +310,12 @@ hook.Add( "PlayerSpawnedSENT", "FixGhostCollisionModels", function( ply, e )
 	if( e.InitialHealth && table.HasValue( mats, "___error" ) ) then
 		
 		e:SetSkin( 0 )
+		
+	end
+	
+	if( e.VehicleType ) then
+	
+		e.UpdateTransmitState = function() return TRANSMIT_ALWAYS  end
 		
 	end
 	
