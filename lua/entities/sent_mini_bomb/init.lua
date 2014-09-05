@@ -10,31 +10,30 @@ function ENT:Initialize()
 		
 	else
 	
-		self.Entity:SetModel( "models/hawx/weapons/gbu-32 jdam.mdl" )
+		self:SetModel( "models/hawx/weapons/gbu-32 jdam.mdl" )
 	
 	end
 	
-	self.Entity:PhysicsInit( SOLID_VPHYSICS )
-	self.Entity:SetMoveType( MOVETYPE_VPHYSICS )	
-	self.Entity:SetSolid( SOLID_VPHYSICS )
+	self:PhysicsInit( SOLID_VPHYSICS )
+	self:SetMoveType( MOVETYPE_VPHYSICS )	
+	self:SetSolid( SOLID_VPHYSICS )
 
-	self.PhysObj = self.Entity:GetPhysicsObject()
+	self.PhysObj = self:GetPhysicsObject()
 	
-	if (self.PhysObj:IsValid()) then
+	if ( self.PhysObj ) then
 		
 		self.PhysObj:Wake()
 		self.PhysObj:EnableGravity(true)
 		self.PhysObj:EnableDrag(false)
-		self.PhysObj:SetMass(1500)
-		-- self.PhysObj:SetDamping( 0.975,0.975 )
-		
+		-- self.PhysObj:SetMass(250)
+
 	end
 	
 	self.SpawnTime = CurTime()
 	-- self:EmitSound("weapons/mortar/mortar_shell_incomming1.wav",25,110)
 	self:EmitSound("BF2/Weapons/Artillery_projectile_"..math.random(1,3)..".mp3")
 
-	util.SpriteTrail(self, 0, Color(255,255,255,math.random(11,12)), false, 3, math.random(0.5,1.1), 0, math.random(1,3), "trails/smoke.vmt");  
+	util.SpriteTrail(self, 0, Color(255,255,255,math.random(11,12)), false, 3, math.random(0.5,1.1), 1, math.random(1,3), "trails/smoke.vmt");  
 end
 
 function ENT:PhysicsUpdate()
