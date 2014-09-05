@@ -1825,7 +1825,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	r:PhysicsInit( SOLID_VPHYSICS )
 	r:SetMoveType( MOVETYPE_VPHYSICS )
 	r:SetSolid( SOLID_VPHYSICS )
-	r:GetPhysicsObject():EnableDrag( false )
+	r:GetPhysicsObject():EnableDrag( true )
 	r:GetPhysicsObject():EnableGravity( true )
 	r:Spawn()
 	r:Activate()
@@ -1855,7 +1855,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		
 		if ( IsValid( r ) && r:GetPhysicsObject() != nil ) then
 			
-			r:SetPos( wep:GetPos() - self:GetVelocity() )
+			r:SetPos( wep:GetPos() )
 			r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity() )
 			
 		end
@@ -1981,7 +1981,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 					r:SetMoveType( MOVETYPE_VPHYSICS )
 					r:SetSolid( SOLID_VPHYSICS )
 					-- r:GetPhysicsObject():SetVelocity( self:GetVelocity() )
-					r:GetPhysicsObject():EnableDrag( false )
+					r:GetPhysicsObject():EnableDrag( true )
 					r:GetPhysicsObject():EnableGravity( true )
 					r:Spawn()
 					r:GetPhysicsObject():SetMass( 500 )
@@ -1994,7 +1994,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		
 						if ( IsValid( r ) && r:GetPhysicsObject() != nil ) then
 							
-							r:SetPos( wep:GetPos() - self:GetVelocity() )
+							r:SetPos( wep:GetPos() )
 							r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity() )
 							
 						end
