@@ -1780,7 +1780,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	end
 	
 	-- Make the newly fired weapon invisible so it looks like we're actually dropping something.
-	if( wep.Cooldown > 2 ) then
+	if( wep.Cooldown > 2= ) then
 		
 		wep:SetRenderMode( RENDERMODE_TRANSALPHA )
 		wep:SetColor( Color( 0,0,0,0 ) )
@@ -1822,6 +1822,12 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	r.Target = self.Target
 	r.Pointer = pilot
 	r:SetModel( wep:GetModel() )
+	r:PhysicsInit( SOLID_VPHYSICS )
+	r:SetMoveType( MOVETYPE_VPHYSICS )
+	r:SetSolid( SOLID_VPHYSICS )
+	r:GetPhysicsObject():SetVelocity( self:GetVelocity() )
+	r:GetPhysicsObject():EnableDrag( false )
+	r:GetPhysicsObject():EnableGravity( true )
 	r:Spawn()
 	r:Fire( "Kill", "", 40 )
 	r:SetAngles( wep:GetAngles() )
@@ -1960,15 +1966,22 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 				if( IsValid( wep ) && IsValid( pilot ) ) then
 					
 					local r = ents.Create( wep.Class )
-					r:SetPos( wep:GetPos() + Vector( 0,0,-32 ) + VectorRand() * 16 )
+					r:SetPos( wep:GetPos() + Vector( 0,0,-5 ) )
 					r:SetOwner( self )
 					r:SetPhysicsAttacker( pilot )
 					r.Target = self.Target
 					r.Pointer = pilot
 					r:SetModel( wep:GetModel() )
+					r:PhysicsInit( SOLID_VPHYSICS )
+					r:SetMoveType( MOVETYPE_VPHYSICS )
+					r:SetSolid( SOLID_VPHYSICS )
+					r:GetPhysicsObject():SetVelocity( self:GetVelocity() )
+					r:GetPhysicsObject():EnableDrag( false )
+					r:GetPhysicsObject():EnableGravity( true )
 					r:Spawn()
+					r:GetPhysicsObject():SetMass( 500 )
 					r:Fire( "Kill", "", 40 )
-					r:SetAngles( wep:GetAngles() + Angle() * math.Rand(-1,1) )
+					r:SetAngles( wep:GetAngles() + Angle() * math.Rand(-4,4) )
 					r:GetPhysicsObject():SetVelocity( wep:GetVelocity() )
 					r.Owner = pilot
 					r:SetPhysicsAttacker( pilot )
