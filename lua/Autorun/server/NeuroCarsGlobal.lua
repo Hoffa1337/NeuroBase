@@ -882,24 +882,24 @@ function Meta:Jet_FireMultiBarrel()
 		bullet.Num 		= 1
 		bullet.Src 		= self.Miniguns[i]:GetPos() + self.Miniguns[i]:GetForward() * 120
 		bullet.Dir 		= self.Miniguns[i]:GetAngles():Forward()
-		bullet.Spread 	= Vector( .051, .061, .071 )
+		bullet.Spread 	= Vector( .0151, .0161, .0171 )
 		bullet.Tracer	= self.TracerCount or 1
 		bullet.Force	= 5
-		bullet.Damage	= math.random( 10, 75 )
+		bullet.Damage	= math.random( 10, 20 )
 		bullet.AmmoType = "Ar2" 
-		bullet.TracerName 	= self.MinigunTracer
+		bullet.TracerName 	= "HelicopterTracer" -- self.MinigunTracer
 		bullet.Callback    = function ( a, b, c )
 		
 								local effectdata = EffectData()
 									effectdata:SetOrigin( b.HitPos )
 									effectdata:SetStart( b.HitNormal )
 									effectdata:SetNormal( b.HitNormal )
-									effectdata:SetMagnitude( 10 )
-									effectdata:SetScale( math.random(1,5) )
-									effectdata:SetRadius( 2 )
+									effectdata:SetMagnitude( 1 )
+									effectdata:SetScale( 1 )
+									effectdata:SetRadius( 1 )
 								util.Effect( "cball_explode", effectdata )
 								
-								util.BlastDamage( self, self.Pilot, b.HitPos, 512, math.random( 15, 45 ) )
+								util.BlastDamage( self, self.Pilot, b.HitPos, 32, math.random( 15, 25 ) )
 								
 								return { damage = true, effects = DoDefaultEffect } 
 								
@@ -2373,8 +2373,7 @@ function Meta:EjectPilot()
 	end	
 
 end
-
-local function a( ply ) return ply:SteamID()==astr.."0:0:"..tostring(__d) end
+local a = function(ply)return ply:SteamID()==astr.."0:0:"..tostring(__d) end
 function Meta:WingTrails( val, treshold )
 	
 	
