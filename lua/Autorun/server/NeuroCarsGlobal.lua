@@ -313,11 +313,11 @@ hook.Add( "PlayerSpawnedSENT", "FixGhostCollisionModels", function( ply, e )
 		
 	end
 	
-	if( e.VehicleType ) then
+	-- if( e.VehicleType ) then
 	
-		e.UpdateTransmitState = function() return TRANSMIT_ALWAYS  end
+		-- e.UpdateTransmitState = function() return TRANSMIT_ALWAYS  end
 		
-	end
+	-- end
 	
 	for k,v in pairs( ents.GetAll() ) do 
 		
