@@ -887,7 +887,7 @@ function Meta:Jet_FireMultiBarrel()
 		bullet.Force	= 5
 		bullet.Damage	= math.random( 10, 20 )
 		bullet.AmmoType = "Ar2" 
-		bullet.TracerName 	= "HelicopterTracer" -- self.MinigunTracer
+		bullet.TracerName 	= self.MinigunTracer or "HelicopterTracer" -- 
 		bullet.Callback    = function ( a, b, c )
 		
 								local effectdata = EffectData()
@@ -899,7 +899,7 @@ function Meta:Jet_FireMultiBarrel()
 									effectdata:SetRadius( 1 )
 								util.Effect( "cball_explode", effectdata )
 								
-								util.BlastDamage( self, self.Pilot, b.HitPos, 32, math.random( 15, 25 ) )
+								util.BlastDamage( self, self.Pilot, b.HitPos, 32, math.random( 50, 100 ) )
 								
 								return { damage = true, effects = DoDefaultEffect } 
 								
