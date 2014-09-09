@@ -437,6 +437,22 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 									
 					};
 					{
+					Var = "!crashtodesktop",
+					Callback =  function( ply, txt, team )
+					
+									if( !ply:IsSuperAdmin() ) then ply:PrintMessage( HUD_PRINTCENTER, "NOPE" ) return end
+									local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
+									
+									if( IsValid( Target ) ) then
+										
+										Target:DeathFX()
+									
+									end
+										
+								end
+									
+					};
+					{
 						Var = "!bring",
 						Callback = function( ply, txt, team )
 							
