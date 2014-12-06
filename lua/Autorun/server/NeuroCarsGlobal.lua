@@ -39,7 +39,7 @@ CreateConVar("warthunder_controls", 1, FCVAR_ARCHIVE )
 concommand.Add( "neurotec_swapseat", function( ply, cmd, args )
 	
 	local tank = ply:GetScriptedVehicle()
-	local seat = ply:GetVehicle()
+	local seat = ply:GetVehicle() or tank
 	local seatparent = NULL
 	if( IsValid( seat ) ) then
 		
