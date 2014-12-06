@@ -220,9 +220,9 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 		
 		local imptime = ply:GetNetworkedInt("LastImpact",0)
 		local impdamage = math.Clamp( ply:GetNetworkedInt("LastDamage",0), 0, 500 )
-		local dmgscale = impdamage * 1.55 / 500 
+		local dmgscale = impdamage * 2.55 / 500 
 		
-		if( imptime + 0.22 >= CurTime() ) then
+		if( imptime + 0.3 >= CurTime() ) then
 				
 			ang.p = ang.p + math.Rand(-dmgscale,dmgscale)
 			ang.y = ang.y + math.Rand(-dmgscale,dmgscale)
@@ -233,15 +233,34 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 		if( plane.MinClimb && plane.MaxClimb ) then
 
 			-- if( ply:GetNetworkedBool("MouseAim",false) ) then
-			
-			
+				if( GetConVarNumber("jet_cockpitview") > 0 ) then
+				
+					ang = plane:GetAngles()
+					
+					-- if( plane.PropellerPos ) then
+						
+						-- pos = plane:GetPos() + plane:GetForward() * 100
+						
+						if( ply:KeyDown( IN_FORWARD ) || ply:KeyDown( IN_BACK ) || ply:KeyDown( IN_MOVELEFT ) || ply:KeyDown( IN_MOVERIGHT ) ) then
+						
+							ply:SetEyeAngles( plane:GetAngles() )
+						
+						end
+					
+					-- end
+				
+				else
+					
+					ang.r = 0
+					
+				end
 				-- pos = plane:GetPos() + plane:GetForward() * -plane.CameraDistance + plane:GetUp() * 15
 				-- ang = LerpAngle( 0.125, plane.LastAng or Angles, plane:GetAngles() )
 				
 			-- else
 				
 				
-				ang.r = 0
+				
 			
 			-- end
 			
@@ -250,8 +269,9 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 		plane.LastAng = ang
 		plane.LastPos = pos
 		
+		
 		view = {
-			origin = pos,
+			origin = LerpVector( 0.001, plane.LastPos or Origin, pos),
 			angles = ang,-- / 2.2 ),
 			fov = fov
 			}
