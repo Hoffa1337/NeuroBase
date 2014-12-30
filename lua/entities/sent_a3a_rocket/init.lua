@@ -49,6 +49,9 @@ function ENT:Initialize()
 		
 	end
 	
+
+	-- ParticleEffect(  "scud_launch", self:GetPos() + self:GetForward()*-200, self:GetAngles()*-1, self )
+	
 	util.SpriteTrail(self, 0, Color(255,255,255,math.random(130,170)), false, 8, math.random(1,2), 2, math.sin(CurTime()) / math.pi * 0.5, "trails/smoke.vmt");  
 
 end
