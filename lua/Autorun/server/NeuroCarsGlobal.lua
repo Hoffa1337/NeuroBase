@@ -2462,8 +2462,10 @@ function Meta:RocketBarrage( wep )
 		return
 	
 	end
+	local class = wep.Class
+	if( class == "sent_a2a_missile" || !class ) then class = "sent_a2s_dumb" end
 	
-	local r = ents.Create( "sent_a2s_dumb" ) -- wep.Class -- hackfix 
+	local r = ents.Create( class ) 
 	r:SetPos( wep:GetPos() + VectorRand() * 16 )
 	r:SetModel(  "models/hawx/weapons/zuni mk16.mdl" )
 	r:SetAngles( wep:GetAngles() + Angle( math.Rand(-.4,.4),math.Rand(-.4,.4),math.Rand(-.4,.4) ) )
