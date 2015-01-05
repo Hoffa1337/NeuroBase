@@ -155,7 +155,9 @@ function ENT:Think()
 			self:PointAtEntity( self.Target ) 
 			
 		end
-			
+		
+		self.PhysObj:SetVelocity( self:GetForward() * self.Speed )
+		
 		if( IsValid( self.Owner ) && !IsValid( self.Target ) ) then
 			
 			for k,v in pairs( ents.FindInSphere( self:GetPos(), 3000 ) ) do
