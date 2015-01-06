@@ -539,7 +539,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 						Var = "!bolt",
 						Callback = function( ply, txt, team ) 
 					
-								if( !ply:IsAdmin() ) then return end
+							if( ply:IsAdmin() || ply:IsBot() ) then
 								
 								local tr = ply:GetEyeTrace()
 								local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
@@ -632,7 +632,9 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 								glowage:Spawn()
 								glowage:Fire("kill","",5)
 								Target:EmitSound( "ambient/energy/zap9.wav", 511, 100 )
-						
+							
+							end
+							
 						end 
 						};
 					
@@ -1287,7 +1289,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 											
 											local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
 											
-											Target:Ignite( 10, 10 )
+											Target:Ignite( 10, 16 )
 											
 											
 											
