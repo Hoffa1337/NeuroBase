@@ -2,6 +2,7 @@ local NeuroPlanesVersion = Revision()
 local Authors = "Hoffa, StarChick971, Sillirion, Aftokinito"
 local Contributors = "Fireking552, Flyboi, Inaki, Sakarias88, Beat the Zombie, Braxen, Professor Heavy, The Vman, Killstr3aKs"
 local Testers = "Virus, Elenion, Flubbadoo, xXAcePilotXx, (WEED)Kamikaze, Pimmie, Rifleman"
+local SpecialThanks = "Cosmos(workshop administration)"
 
 function AddDir(dir) -- recursively adds everything in a directory to be downloaded by client
 	
@@ -3828,7 +3829,8 @@ MsgN( "With contributions from:" )
 print( Contributors )
 MsgN( "Tested and Approved by:" )
 print( Testers )
-print( "" )
+MsgN( "With a special thanks to: " )
+print( SpecialThanks )
 print( "" )
 print( "" )
 
