@@ -11,7 +11,7 @@ function EFFECT:Init( data )
 	
 	local Pos = self.Position
 	local Norm = Vector(0,0,1)
-	
+	local scale = data:GetScale() or 1
 	Pos = Pos + Norm * 6
 
 	local emitter = ParticleEmitter( Pos )
@@ -19,19 +19,19 @@ function EFFECT:Init( data )
 	--firecloud
 		for i=1, 6 do
 		
-			local particle = emitter:Add( "particles/flamelet"..math.random( 1, 5 ), Pos + Vector(math.random(-12,12),math.random(-12,12),math.random(-2,2)))
+			local particle = emitter:Add( "particles/flamelet"..math.random( 1, 5 ), Pos + Vector(math.random(-12,12),math.random(-12,12),math.random(-2,2)) * scale)
 				
 				if( particle ) then
 				
-					particle:SetVelocity( Vector(math.random(-30,30),math.random(-30,30),math.random( -50,290 ) ) )
-					particle:SetDieTime( math.Rand( 0.5, 0.9 ) )
-					particle:SetStartAlpha( math.random( 233, 255 ) )
-					particle:SetStartSize( math.random(  15, 31 ) )
-					particle:SetEndSize( math.random( 1, 2 ) )
-					particle:SetRoll( math.random( 360, 480 ) )
-					particle:SetRollDelta( math.Rand( -1, 1 ) )
+					particle:SetVelocity( Vector(math.random(-15,15),math.random(-15,15),math.random( 5,290 ) ) * scale )
+					particle:SetDieTime( math.Rand( 0.5, 0.9 ) * scale/4 )
+					particle:SetStartAlpha( math.random( 233, 255 ) * scale )
+					particle:SetStartSize( math.random(  10, 15 ) * scale )
+					particle:SetEndSize( math.random( 1, 2 ) * scale)
+					particle:SetRoll( math.random( 360, 480 ) * scale)
+					particle:SetRollDelta( math.Rand( -1, 1 ) * scale)
 					particle:SetColor( math.random( 150, 255 ), math.random( 100, 150 ), 100 )
-					particle:VelocityDecay( false )
+					particle:VelocityDecay( true )
 					
 				end
 				
@@ -44,12 +44,12 @@ function EFFECT:Init( data )
 			
 			if( particle ) then
 					
-				particle:SetVelocity( Vector(math.random(-25,25),math.random(-25,25),math.random(55,200)) )
-				particle:SetDieTime( math.Rand( 2, 7 ) )
-				particle:SetStartAlpha( math.random( 135, 155 ) )
-				particle:SetEndAlpha( math.random( 0, 1 ) )
-				particle:SetStartSize( math.random( 5,20 ) )
-				particle:SetEndSize( math.random( 60, 150 ) )
+				particle:SetVelocity( Vector(math.random(-25,25),math.random(-25,25),math.random(55,200)) * scale )
+				particle:SetDieTime( math.Rand( 2, 7 ) * scale )
+				particle:SetStartAlpha( math.random( 135, 155 ) * scale )
+				particle:SetEndAlpha( math.random( 0, 1 ) * scale)
+				particle:SetStartSize( math.random( 5,20 ) * scale )
+				particle:SetEndSize( math.random( 60, 150 ) * scale)
 				particle:SetRoll( math.random( 1, 480 ) )
 				particle:SetRollDelta( math.Rand( -1, 1 ) )
 				particle:SetColor( 20, 20, 20 )
