@@ -1083,8 +1083,11 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 	end
 	-- -- Attack
 	if ( self.Pilot:KeyDown( IN_ATTACK ) ) then
-
+		
+		if( self.Destroyed ) then return end
+			
 		if ( self.LastPrimaryAttack + self.PrimaryCooldown <= CurTime() && self.OverHeated + 3 <= CurTime() ) then
+			
 			
 			if( self.ContigiousFiringLoop ) then
 				
@@ -1262,6 +1265,8 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 	
 	if ( #self.EquipmentNames > 0 && self.Pilot:KeyDown( IN_ATTACK2 ) && self.LastAttackKeyDown + 0.5 < CurTime() ) then
 		
+		if( self.Destroyed ) then return end
+			
 		local id = self.EquipmentNames[ self.FireMode ].Identity
 		local wep = self.RocketVisuals[ id ]
 		
@@ -1552,7 +1557,8 @@ function Meta:NeuroPlanes_CycleThroughHeliKeyBinds()
 	
 	-- Attack
 	if ( self.Pilot:KeyDown( IN_ATTACK ) ) then
-		
+		if( self.Destroyed ) then return end
+			
 		if ( self.LastPrimaryAttack + self.PrimaryCooldown <= CurTime() ) then
 			
 			self:PrimaryAttack()
@@ -1562,7 +1568,9 @@ function Meta:NeuroPlanes_CycleThroughHeliKeyBinds()
 	end
 	
 	if ( self.Pilot:KeyDown( IN_ATTACK2 ) && self.LastAttackKeyDown + 0.8 < CurTime() ) then
-	
+		
+		if( self.Destroyed ) then return end
+			
 		local id = self.EquipmentNames[ self.FireMode ].Identity
 		local wep = self.RocketVisuals[ id ]
 			
