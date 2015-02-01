@@ -12,6 +12,7 @@ function EFFECT:Init( data )
 	local Pos = self.Position
 	local Norm = Vector(0,0,1)
 	local scale = data:GetScale() or 1
+	scale = math.Clamp( scale, 0, 1 )
 	Pos = Pos + Norm * 6
 
 	local emitter = ParticleEmitter( Pos )
