@@ -12,7 +12,33 @@ local Color = Color
 
 
 local AverageHeight = 0
+function FixCalcView( ply, Origin, Angles, Fov, NearZ, FarZ ) 
+	
+	
+	local vehicle = ply:GetScriptedVehicle()
+	
+	if( !IsValid( vehicle ) ) then
+		
+		vehicle = ply:GetNetworkedEntity("Plane", NULL )
+		
+	end
+	
+	if ( IsValid( vehicle ) ) then
+		
+		if( vehicle.AdvancedCommando ) then return end
+		
+		if ( vehicle.CalcView != nil ) then
+		
+			local view = vehicle:CalcView(  ply, Origin, Angles, Fov )
 
+			return view
+		
+		end
+		
+	end
+	
+end
+hook.Add("CalcView", "HackFixSentView", FixCalcView )
 hook.Add("InitPostEntity", "NeuroPlanes_DetectGroundLevelAverage", function()
 	
 	local AverageZ = 0

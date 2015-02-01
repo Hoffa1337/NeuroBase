@@ -165,9 +165,10 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 		if( GetConVarNumber("jet_cockpitview") > 0 ) then
 			
 
-			pos = plane:LocalToWorld( plane.CockpitPosition ) //Origin//
+			-- pos = plane:LocalToWorld( plane.CockpitPosition ) //Origin//
 			-- ang = pAng
-			
+			pos = LerpVector( 0.5, plane.LastPos or Origin, plane:GetPos() + plane:GetForward() * -plane.CameraDistance + plane:GetUp() * plane.CamUp )
+			ang = LerpAngle( 0.1, plane.LastAng or Angles, plane:GetAngles() )
 			if( IsValid( pilotmodel ) ) then
 				
 				pilotmodel:SetColor( Color ( 0,0,0,0 ) )
