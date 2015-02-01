@@ -167,8 +167,21 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 
 			-- pos = plane:LocalToWorld( plane.CockpitPosition ) //Origin//
 			-- ang = pAng
-			pos = LerpVector( 0.5, plane.LastPos or Origin, plane:GetPos() + plane:GetForward() * -plane.CameraDistance + plane:GetUp() * plane.CamUp )
-			ang = LerpAngle( 0.1, plane.LastAng or Angles, plane:GetAngles() )
+			
+			local a = plane:GetAngles()
+			if( !plane.rollcount ) then
+				
+				plane.rollcount = 0
+				plane.yawcount = 0
+				
+			end
+			plane.yawcount = math.Approach( plane.yawcount, a.p/4, .1333 )
+			plane.rollcount = math.Approach( plane.rollcount, a.r/10, .13333 )
+			
+			pos =  plane:GetPos() + plane:GetForward() * -plane.CameraDistance + plane:GetUp() * ( plane.CamUp + plane.yawcount ) + plane:GetRight() * plane.rollcount
+			a.r = a.r / 1.4
+			
+			ang = LerpAngle( 0.01, plane.LastAng or Angles,  a)
 			if( IsValid( pilotmodel ) ) then
 				
 				pilotmodel:SetColor( Color ( 0,0,0,0 ) )
