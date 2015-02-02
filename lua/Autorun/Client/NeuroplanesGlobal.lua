@@ -175,13 +175,14 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 				plane.yawcount = 0
 				
 			end
+			
 			plane.yawcount = math.Approach( plane.yawcount, a.p/4, .1333 )
-			plane.rollcount = math.Approach( plane.rollcount, a.r/10, .13333 )
+			plane.rollcount = math.Approach( plane.rollcount, a.r/8, .13333 )
 			
 			pos =  plane:GetPos() + plane:GetForward() * -plane.CameraDistance + plane:GetUp() * ( plane.CamUp + plane.yawcount ) + plane:GetRight() * plane.rollcount
 			a.r = a.r / 1.4
 			
-			ang = LerpAngle( 0.01, plane.LastAng or Angles,  a)
+			ang = LerpAngle( 0.01, plane.LastAng or Angles,  a )
 			if( IsValid( pilotmodel ) ) then
 				
 				pilotmodel:SetColor( Color ( 0,0,0,0 ) )
