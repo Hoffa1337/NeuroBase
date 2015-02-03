@@ -16,7 +16,7 @@ function ENT:Initialize()
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )	
 	self:SetSolid( SOLID_VPHYSICS )
-	self.Radius = 72
+	self.Radius = self.Radius or 72
 	
 	self.PhysObj = self:GetPhysicsObject()
 	
@@ -29,20 +29,22 @@ function ENT:Initialize()
 	
 	end
 	local TrailDelay = math.Rand( 0.15, 0.20 )/10
+	local TraceScale1 = self.TracerScale1 or 0.05
+	local TraceScale2 = self.TracerScale2 or 0.1
 	
 	if( self.TinyTrail ) then
 		
-		-- self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(11,15), math.random(11,15), math.random(11,15), math.random(145,166) ), false, 2,0, TrailDelay + 0.85, 1/(0+4)*0.55, "trails/smoke.vmt");  
-		Glow = ents.Create("env_sprite")				
+		self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(111,115), math.random(111,115), math.random(111,115), math.random(5,33) ), false, 2,0, TrailDelay + 0.85, 1/(0+4)*0.55, "trails/smoke.vmt");  
+		local Glow = ents.Create("env_sprite")				
 		Glow:SetKeyValue("model","orangecore2.vmt")
 		Glow:SetKeyValue("rendercolor","255 150 100")
-		Glow:SetKeyValue("scale","0.05")
+		Glow:SetKeyValue("scale",tostring(TraceScale1))
 		Glow:SetPos(self:GetPos())
 		Glow:SetParent(self)
 		Glow:Spawn()
 		Glow:Activate()
 
-		Shine = ents.Create("env_sprite")
+		local Shine = ents.Create("env_sprite")
 		Shine:SetPos(self:GetPos())
 		Shine:SetKeyValue("renderfx", "0")
 		Shine:SetKeyValue("rendermode", "5")
@@ -50,7 +52,7 @@ function ENT:Initialize()
 		Shine:SetKeyValue("rendercolor", "255 130 100")
 		Shine:SetKeyValue("framerate12", "20")
 		Shine:SetKeyValue("model", "light_glow03.spr")
-		Shine:SetKeyValue("scale", "0.1")
+		Shine:SetKeyValue("scale", tostring( TraceScale2 ) )
 		Shine:SetKeyValue("GlowProxySize", "1")
 		Shine:SetParent(self)
 		Shine:Spawn()
@@ -106,15 +108,21 @@ function ENT:PhysicsCollide( data, physobj )
 		
 	-- if( self.StartTime + 0.0125 >= CurTime() ) then return end
 	
-	if ( IsValid( data.HitEntity ) && data.HitEntity:GetOwner() == self:GetOwner() ) then // Plox gief support for SetOwner ( table )
+	if ( IsValid( data.HitEntity ) && data.HitEntity:GetOwner() == self:GetOwner() ) then --// Plox gief support for SetOwner ( table )
 		
 		return
 		
 	end
 	
 	if ( data.Speed > 1 && data.DeltaTime > 0.1 ) then 
-
+		
+		self.HitNormal =   data.HitNormal*-1
 		self:Remove()
+		if( IsValid( data.HitEntity ) && data.HitEntity.HealthVal != nil ) then
+			
+			self.HitObject = true
+		
+		end
 		
 		
 	end
@@ -173,11 +181,25 @@ function ENT:OnRemove()
 	local impact = EffectData()
 	impact:SetOrigin( self:GetPos() )
 	impact:SetStart( self:GetPos() )
-	impact:SetScale( 1.0 )
-	impact:SetNormal( self:GetForward()*-1 )
-	util.Effect("Explosion", impact)
-	ParticleEffect( "30cal_impact", self:GetPos(), Angle( 0,0,0 ), nil )
-	ParticleEffect( "Explosion", self:GetPos(), Angle( 0,0,0 ), nil )
+	impact:SetScale( 1.5 )
+	impact:SetNormal( self.HitNormal or self:GetForward()*-1 )
+	if( self.HitObject ) then
+	
+		util.Effect("micro_he_impact_plane", impact)
+	
+	else
+		
+		util.Effect("micro_he_impact", impact)
+	
+	end
+	-- local impact = EffectData()
+	-- impact:SetOrigin( self:GetPos() )
+	-- impact:SetStart( self:GetPos() )
+	-- impact:SetScale( 1.0 )
+	-- impact:SetNormal( self:GetForward()*-1 )
+	-- util.Effect("Explosion", impact)
+	-- ParticleEffect( "30cal_impact", self:GetPos(), Angle( 0,0,0 ), nil )
+	-- ParticleEffect( "Explosion", self:GetPos(), Angle( 0,0,0 ), nil )
 	
 	local dmg = 400
 	local radius = self.Radius or 50
