@@ -149,7 +149,8 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 		}
 
 	if( IsValid( plane ) && ply:GetNetworkedBool( "InFlight", false )  ) then
-
+		
+		
 		local pos	
 		local isGuidingRocket = plane:GetNetworkedBool( "DrawTracker", false )
 		local fov = GetConVarNumber("fov_desired")
@@ -176,8 +177,8 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 				
 			end
 			
-			plane.yawcount = math.Approach( plane.yawcount, a.p/4, .1333 )
-			plane.rollcount = math.Approach( plane.rollcount, a.r/8, .13333 )
+			plane.yawcount = Lerp( 0.01, plane.yawcount, a.p/4 )
+			plane.rollcount = Lerp(0.01, plane.rollcount, a.r/4 )
 			
 			pos =  plane:GetPos() + plane:GetForward() * -plane.CameraDistance + plane:GetUp() * ( plane.CamUp + plane.yawcount ) + plane:GetRight() * plane.rollcount
 			a.r = a.r / 1.4
@@ -284,6 +285,7 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 		plane.LastAng = ang
 		plane.LastPos = pos
 		
+		if( plane:GetNetworkedBool("Destroyed",false) ) then pos = Origin end 
 		
 		view = {
 			origin = LerpVector( 0.001, plane.LastPos or Origin, pos),
