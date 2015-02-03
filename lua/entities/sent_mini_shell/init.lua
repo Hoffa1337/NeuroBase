@@ -32,8 +32,30 @@ function ENT:Initialize()
 	
 	if( self.TinyTrail ) then
 		
-		self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(11,15), math.random(11,15), math.random(11,15), math.random(145,166) ), false, 2,0, TrailDelay + 0.85, 1/(0+4)*0.55, "trails/smoke.vmt");  
+		-- self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(11,15), math.random(11,15), math.random(11,15), math.random(145,166) ), false, 2,0, TrailDelay + 0.85, 1/(0+4)*0.55, "trails/smoke.vmt");  
+		Glow = ents.Create("env_sprite")				
+		Glow:SetKeyValue("model","orangecore2.vmt")
+		Glow:SetKeyValue("rendercolor","255 150 100")
+		Glow:SetKeyValue("scale","0.05")
+		Glow:SetPos(self:GetPos())
+		Glow:SetParent(self)
+		Glow:Spawn()
+		Glow:Activate()
 
+		Shine = ents.Create("env_sprite")
+		Shine:SetPos(self:GetPos())
+		Shine:SetKeyValue("renderfx", "0")
+		Shine:SetKeyValue("rendermode", "5")
+		Shine:SetKeyValue("renderamt", "255")
+		Shine:SetKeyValue("rendercolor", "255 130 100")
+		Shine:SetKeyValue("framerate12", "20")
+		Shine:SetKeyValue("model", "light_glow03.spr")
+		Shine:SetKeyValue("scale", "0.1")
+		Shine:SetKeyValue("GlowProxySize", "1")
+		Shine:SetParent(self)
+		Shine:Spawn()
+		Shine:Activate()
+		
 	else
 	
 		-- //Flyby sound	util.PrecacheSound("")
