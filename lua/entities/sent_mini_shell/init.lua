@@ -16,7 +16,7 @@ function ENT:Initialize()
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )	
 	self:SetSolid( SOLID_VPHYSICS )
-	self.Radius = self.Radius or 72
+	self.Radius = self.Radius or 32
 	
 	self.PhysObj = self:GetPhysicsObject()
 	
@@ -29,12 +29,12 @@ function ENT:Initialize()
 	
 	end
 	local TrailDelay = math.Rand( 0.15, 0.20 )/10
-	local TraceScale1 = self.TracerScale1 or 0.05
+	local TraceScale1 = self.TracerScale1 or 0.1
 	local TraceScale2 = self.TracerScale2 or 0.1
 	
 	if( self.TinyTrail ) then
 		
-		self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(111,115), math.random(111,115), math.random(111,115), math.random(5,33) ), false, 2,0, TrailDelay + 0.85, 1/(0+4)*0.55, "trails/smoke.vmt");  
+		self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(111,115), math.random(111,115), math.random(111,115), math.random(5,15) ), false, 8,0, TrailDelay + 0.85, 1/(0+4)*0.55, "trails/smoke.vmt");  
 		local Glow = ents.Create("env_sprite")				
 		Glow:SetKeyValue("model","orangecore2.vmt")
 		Glow:SetKeyValue("rendercolor","255 150 100")
@@ -93,8 +93,9 @@ function ENT:Initialize()
 	-- e:SetNormal( self:GetForward() )
 	-- e:SetAngles( self:GetAngles() )
 	-- e:SetEntity( self )
-	-- e:SetScale( math.random(5,10) )
-	-- util.Effect( "mg_muzzleflash", e )
+	-- e:SetAttachment( 0 )
+	-- e:SetScale( 1.35 )
+	-- util.Effect( "MuzzleEffect", e )
 	
 	ParticleEffect( "mg_muzzleflash", self:GetPos(), self:GetAngles(), nil )
 	
@@ -121,7 +122,12 @@ function ENT:PhysicsCollide( data, physobj )
 		if( IsValid( data.HitEntity ) && data.HitEntity.HealthVal != nil ) then
 			
 			self.HitObject = true
-		
+			if( data.HitEntity:IsNPC() || data.HitEntity:IsPlayer() ) then
+				
+				self.HitSquishy = true
+			
+			end
+			
 		end
 		
 		
@@ -183,14 +189,31 @@ function ENT:OnRemove()
 	impact:SetStart( self:GetPos() )
 	impact:SetScale( 1.5 )
 	impact:SetNormal( self.HitNormal or self:GetForward()*-1 )
-	if( self.HitObject ) then
 	
-		util.Effect("micro_he_impact_plane", impact)
+	if( self:WaterLevel() == 0 ) then
 	
+		if( self.HitSquishy ) then
+			
+			util.Effect("micro_he_blood", impact)
+		
+		else
+		
+			if( self.HitObject ) then
+			
+				util.Effect("micro_he_impact_plane", impact)
+			
+			else
+				
+				util.Effect("micro_he_impact", impact)
+			
+			end
+			
+		end
+		
 	else
 		
-		util.Effect("micro_he_impact", impact)
-	
+		util.Effect("WaterSurfaceExplosion", impact)
+		
 	end
 	-- local impact = EffectData()
 	-- impact:SetOrigin( self:GetPos() )
