@@ -1001,7 +1001,7 @@ function Meta:Jet_FireMultiBarrel()
 		bullet.AmmoType = "Ar2" 
 		bullet.TracerName 	= self.MinigunTracer or "HelicopterTracer" -- 
 		bullet.Callback    = function ( a, b, c )
-		
+								
 								local effectdata = EffectData()
 									effectdata:SetOrigin( b.HitPos )
 									effectdata:SetStart( b.HitNormal )
@@ -1011,7 +1011,7 @@ function Meta:Jet_FireMultiBarrel()
 									effectdata:SetRadius( 1 )
 								util.Effect( "cball_explode", effectdata )
 								
-								util.BlastDamage( self, self.Pilot or self, b.HitPos, 32, math.random( self.MinDamage or 50, self.MaxDamage or 100 ) )
+								util.BlastDamage( self, a, b.HitPos, 32, math.random( self.MinDamage or 50, self.MaxDamage or 100 ) )
 								
 								return { damage = true, effects = DoDefaultEffect } 
 								
@@ -1114,7 +1114,7 @@ end
 function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 	
 	-- print( "Walla" )
-	self:NextThink( CurTime() )
+	-- self:NextThink( CurTime() )
 	if ( !self.Pilot || !self.IsFlying ) then
 		
 		return
