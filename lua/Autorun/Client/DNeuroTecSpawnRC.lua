@@ -183,6 +183,11 @@ function PANEL:SpawnMicroPlane(ent)
 		for _,v in pairs(ent.ControlSurfaces.Ailerons) do
 			self.threeD:AddModel(v.Mdl, v.Pos*scale, v.Ang, scale, false)
 		end
+		if(ent.ControlSurfaces.Flaps != nil) then
+			for _,v in pairs(ent.ControlSurfaces.Flaps) do
+				self.threeD:AddModel(v.Mdl, v.Pos*scale, v.Ang, scale, false)
+			end
+		end
 	end
 	if(ent.PropellerPos != nil) then
 		if(type(ent.PropellerPos) == "table") then
@@ -199,6 +204,17 @@ function PANEL:SpawnMicroPlane(ent)
 		for i=1, #ent.WheelModels do
 			self.threeD:AddModel(ent.WheelModels[i], ent.WheelPos[i]*scale, Angle(0,0,0), scale, false)
 		end
+	end
+	local visuals = {}
+	if(ent.VisualModels != nil) then
+		for _,v in pairs(ent.VisualModels) do
+			local visual = self.threeD:AddModel(v.Mdl, v.Pos*scale, v.Ang, scale, false)
+			table.insert(visuals, visual)
+		end
+	end
+	for k,v in pairs(visuals) do
+		v:SetColor(0,0,0,255)
+		print(v:GetPos())
 	end
 end
 

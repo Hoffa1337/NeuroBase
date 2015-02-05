@@ -261,7 +261,9 @@ end
 
 function PANEL:AddModel(mdl, pos, ang, scale, selectable)
 	if(mdl) then
-		local ent = ClientsideModel(mdl,RENDERGROUP_OPAQUE )
+		-- local ent = ClientsideModel(mdl,RENDERGROUP_OPAQUE )
+		local ent = ents.CreateClientProp()
+		ent:SetModel(mdl)
 		ent:SetNoDraw(true)
 		ent:Spawn()
 		ent:Activate()
