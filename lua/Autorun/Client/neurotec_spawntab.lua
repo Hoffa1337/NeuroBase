@@ -7,6 +7,7 @@
 NP_ents_list = {}
 NP_ents_helicopters_list = {}
 NP_ents_warbirds_list = {}
+NP_ents_micro_list = {}
 NT_ents_list = {}
 NT_ents_ground_list = {}
 NT_ents_cars_list = {}
@@ -33,9 +34,12 @@ hook.Add("InitPostEntity", "NeuroTecBuildSpawnMenu", function()
 			
 			//aviation
 			local cat = string.lower( v.Category )
-			if( (v.VehicleType == VEHICLE_PLANE) || string.find( cat, "neurotec aviation" ) || string.find( cat, "neurotec civil" ) ) then
+			if( ((v.VehicleType == VEHICLE_PLANE) || string.find( cat, "neurotec aviation" ) || string.find( cat, "neurotec civil" )) && !string.find( cat, "neurotec micro" ) ) then
 				table.insert( NP_ents_list, v )
 			end
+			if( (v.VehicleType == VEHICLE_PLANE) && string.find( cat, "neurotec micro" ) ) then
+				table.insert( NP_ents_micro_list, v )
+			end			
 			if( (v.VehicleType == VEHICLE_WARBIRD) && string.find( cat, "neurotec warbirds" ) ) then
 				table.insert( NP_ents_warbirds_list, v )
 			end
@@ -213,7 +217,7 @@ NeuroTecSheet:SetSize( 340, 315 )
 						end
 				end
 
-NeuroTecSheet:AddSheet( "NeuroBase", NB_Scroll, "icon16/control_repeat_blue.png", false, false, "NeuroTec SWEPs" )
+NeuroTecSheet:AddSheet( "Neuro Base", NB_Scroll, "icon16/control_repeat_blue.png", false, false, "NeuroTec SWEPs" )
 
 //NeuroPlanes
 local Aviation = { {Category = "Aircraft",
@@ -227,7 +231,15 @@ local Aviation = { {Category = "Aircraft",
 				}
 			}	
 local NeuroPlaneTab = NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(Aviation,w,icon_size)
-NeuroTecSheet:AddSheet( "NeuroPlanes", NeuroPlaneTab, "vgui/plane.png", false, false, "Test" )
+NeuroTecSheet:AddSheet( "Neuro Planes", NeuroPlaneTab, "vgui/plane.png", false, false, "Test" )
+
+//NeuroPlanes Micro
+local MicroPlanes = { {Category = "Micro Planes",
+				CategoryEntities = NP_ents_micro_list
+				}
+			}	
+local MicroPlanesTab = NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(MicroPlanes,w,icon_size)
+NeuroTecSheet:AddSheet( "Neuro Planes Micro", MicroPlanesTab, "vgui/plane.png", false, false, "Test" )
 
 //NeuroTanks
 local Tanks = { {Category ="Tanks",
@@ -289,7 +301,7 @@ local Tanks = { {Category ="Tanks",
 			}
 
 local NeuroTanksTab = NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(Tanks,w,icon_size)
-NeuroTecSheet:AddSheet( "NeuroTanks", NeuroTanksTab, "vgui/tank.png", false, false, "Armored Ground Units" )
+NeuroTecSheet:AddSheet( "Neuro Tanks", NeuroTanksTab, "vgui/tank.png", false, false, "Armored Ground Units" )
 
 //NeuroNaval
 local Naval = { {Category = "Battleships",
@@ -300,7 +312,7 @@ local Naval = { {Category = "Battleships",
 				}
 			}
 local NeuroNavalTab = NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(Naval,w,icon_size)
-NeuroTecSheet:AddSheet( "NeuroNaval", NeuroNavalTab, "vgui/anchor.png", false, false, "Avast Ye Matey!" )
+NeuroTecSheet:AddSheet( "Neuro Naval", NeuroNavalTab, "vgui/anchor.png", false, false, "Avast Ye Matey!" )
 
 //NeuroWeapons
 local Weapons = { {Category = "Weapons",
@@ -320,7 +332,7 @@ local Weapons = { {Category = "Weapons",
 				}
 			}
 local NeuroWeaponsTab = NeuroTecCreateContentTab_CollapsibleCatergoriesSpawnicons(Weapons,w,icon_size)
-NeuroTecSheet:AddSheet( "NeuroWeapons", NeuroWeaponsTab, "vgui/weps.png", false, false, "Weapons of Mass Mingebagging" )
+NeuroTecSheet:AddSheet( "Neuro Weapons", NeuroWeaponsTab, "vgui/weps.png", false, false, "Weapons of Mass Mingebagging" )
 
 //Miscellaneous
 local Miscellaneous = { {Category = "Accessories",
@@ -492,212 +504,15 @@ end
 
 function NeuroTecCreateContentTab_StatsPanel(frame,parent,ent)
 
-	local w,h = ScrW(),ScrH()
-	local _f = "DefaultFixed"
-	local blk = Color(0,0,0,255)
-	local text
-	
-	if (frame!=nil) then frame:Close() end
-	-- frame = vgui.Create( "DFrame", parent )
-	frame = vgui.Create( "DFrame" )
-	frame:SetPos( w*0.03, h*0.15 )
-	frame:SetSize( h, h*0.8 )
-	frame:SetTitle( ent.PrintName )
-	frame:SetDraggable( true )
-	frame:SetSizable( false )
-	frame:ShowCloseButton( true )
-	frame:MakePopup()
-	
-	local panel = vgui.Create( "DPanel", frame )
-	-- panel:SetParent( frame )
-	panel:SetPos( 4, 25 )
-	panel:SetSize( h-8, h*0.8-28 )
-	panel:SetBackgroundColor(Color(255,255,255,100))
-	
-	if ent.Model then
-		local View = vgui.Create( "DAdjustableModelPanel", panel )
-		View:SetModel( ent.Model )
-		View:SetPos( 0, 2 )
-		View:SetSize( h*0.6-6, h*0.4 )
-		View:SetCamPos( Vector( 512, 512, 512 ) )
-		View:SetLookAt( Vector( 0, 0, 0 ) )
-	else
-		local lb = vgui.Create("DLabel", panel )
-		lb:SetText( "Interactive view of the entity" )
-		-- lb:SetTextColor( Color( 0, 0, 0, 150 ) ) -- 
-		-- lb:SetFont( _font )
-		lb:SetPos( h*0.2, h*0.2 )
-		lb:SizeToContents()
-	end
-	
-	local InfoPanel = vgui.Create( "DPanel", panel  )
-	InfoPanel:SetPos( 8, h*0.4 )
-	InfoPanel:SetSize( h-16, h*0.4-6 )
-	InfoPanel:SetBackgroundColor(Color(255,255,255,100))
-	
-		if (ent.PrintName) then text=ent.PrintName else text= "Unknown" end
-		Name = SimpleLabel(text,InfoPanel,5,5,blk,_f)
-		Name:SetExpensiveShadow( 1, Color( 255, 255, 255, 190 ) )
-				
-	local InfoSubPanel = {}
-	for i=1,15,2 do
-		InfoSubPanel[i]=SimplePanel(InfoPanel, 2,10+26*i/2, InfoPanel:GetSize()/2-4,25, Color(255,255,255,255))
-		InfoSubPanel[i+1]=SimplePanel(InfoPanel, InfoPanel:GetSize()/2,10+26*i/2, InfoPanel:GetSize()/2-4,25, Color(255,255,255,255))
-	end
-
-		SimpleLabel("Type",InfoSubPanel[1],5,5,blk)
-		if (ent.Description) then text=ent.Description else text= "Unknown" end
-		SimpleLabel(text,InfoSubPanel[2],5,5,blk)
-
-		SimpleLabel("Country",InfoSubPanel[3],5,5,blk)
-		if (ent.Country) then text=ent.Country else text= "N/A" end
-		SimpleLabel(text,InfoSubPanel[4],5,5,blk)
-		
-		SimpleLabel("Date",InfoSubPanel[5],5,5,blk)
-		if (ent.Date) then text=ent.Country else text= "N/A" end
-		SimpleLabel(text,InfoSubPanel[6],5,5,blk)
-
-		SimpleLabel("Crew",InfoSubPanel[7],5,5,blk)
-		if (ent.CrewPositions) then text=#ent.CrewPositions else text= "N/A" end
-		SimpleLabel(text,InfoSubPanel[8],5,5,blk)
-
-		SimpleLabel("Speed",InfoSubPanel[9],5,5,blk)
-		if (ent.MaxVelocity) then text=ent.MaxVelocity .." units/s" else text= "N/A" end
-		SimpleLabel(text,InfoSubPanel[10],5,5,blk)
-
-		SimpleLabel("Armor (HP)",InfoSubPanel[11],5,5,blk)
-		if (ent.InitialHealth) then text=ent.InitialHealth else text= "N/A" end
-		SimpleLabel(text,InfoSubPanel[12],5,5,blk)
-
-		SimpleLabel("Maximum Range",InfoSubPanel[13],5,5,blk)
-		if (ent.MaxRange) then text= ent.MaxRange else text="oo" end
-		SimpleLabel(text,InfoSubPanel[14],5,5,blk)
-		
-	
-		//Armament
-		AmmoCat=SimpleLabel("Armament",InfoPanel,5,15+26*(#InfoSubPanel+1)/2,Color(255,200,0,255),_f)
-		AmmoCat:SetExpensiveShadow( 1, Color( 0, 0, 0, 190 ) )
-	
-	-- if (ent.AmmoTypes) then
-		-- local AmmoSubPanel = {}
-		-- for i=1,#AmmoTypes do
-			-- AmmoSubPanel[i]=SimplePanel(InfoPanel, 2,15+26*(i+#InfoSubPanel+1)/2, InfoPanel:GetSize()/2-4,25, Color(255,255,255,255))
-			-- //AmmoSubPanel[i]=SimplePanel(InfoPanel, InfoPanel:GetSize()/2,10+26*#InfoSubPanel/2, InfoPanel:GetSize()/2-4,25, Color(255,255,255,255))
-			-- SimpleLabel( AmmoTypes[i].PrintName ,AmmoSubPanel[i],5,5,blk)
-		-- end
-	-- end
-	
-		-- if (ent.Armament) then
-			-- local AmmoSubPanel={}
-			-- for i=1,#ent.Armament do
-				-- if (ent.Armament[i].Type != "Effect") or !(ent.Armament[i].Type != "Flarepod") then
-					-- AmmoSubPanel[i]=SimplePanel(InfoPanel, 2,15+26*(i+#InfoSubPanel+1)/2, InfoPanel:GetSize()/2-4,25, Color(255,255,255,255))
-				-- //AmmoSubPanel[i]=SimplePanel(InfoPanel, InfoPanel:GetSize()/2,10+26*#InfoSubPanel/2, InfoPanel:GetSize()/2-4,25, Color(255,255,255,255))
-				-- SimpleLabel( Armament[i].PrintName ,AmmoSubPanel[i],5,5,blk)
-				-- end
-			-- end
-		-- end
-	
-		local SpawnModeCheckbox = vgui.Create( "DCheckBoxLabel",panel )
-		SpawnModeCheckbox:SetText( "Spawn and enter the vehicle?" )
-		-- SpawnModeCheckbox:SetPos( InfoPanel:GetSize()/2, 5 )
-		SpawnModeCheckbox:SetPos( 8, h*0.4-20 )
-		SpawnModeCheckbox:SetConVar( "neurotec_spawn_n_drive" ) //For example
-		SpawnModeCheckbox:SetValue( 1 )
-		-- SpawnModeCheckbox.DoClick = function ()
-				-- SpawnModeCheckbox:Toggle()		
-				-- RunConsoleCommand( "neurotec_spawn_n_drive", 1 )
-				-- print("Toggled spawning inside the vehicle. (no code yet)") 
-				-- end		
-		SpawnModeCheckbox:SetTextColor(blk)            
-		SpawnModeCheckbox:SizeToContents()   
-
-		local NeuroProperties = vgui.Create( "DProperties",panel )
-	NeuroProperties:SetPos( 2, h*0.4 )
-	-- NeuroProperties:SetSize( h-10, h*0.8-h*0.4-2 )
-	NeuroProperties:SetSize( h-10, h*0.4-32 )
-	
-/*	
-
-	//Description (Wiki?)
-
-
-
-	if (ent.Description) then
-		local Name = NeuroProperties:CreateRow( ent.PrintName, "Type" )
-		Name:Setup( "Generic" )
-		Name:SetValue( ent.Description )
-		Name.DataChanged = function( _, val ) print( val ) end
-	end
-	if (ent.Category) then
-		local Name = NeuroProperties:CreateRow( ent.PrintName, "Category" )
-		Name:Setup( "Generic" )
-		Name:SetValue( ent.Category )
-		Name.DataChanged = function( _, val ) print( val ) end
-	end
-	local Country = NeuroProperties:CreateRow( ent.PrintName, "Country" )
-	Country:Setup( "Generic" )
-	Country:SetValue( "N/A" )
-	Country.DataChanged = function( _, val ) print( val ) end
-
-	if (ent.MaxVelocity) then
-		local Speed = NeuroProperties:CreateRow( ent.PrintName, "Speed" )
-		Speed:Setup( "Generic" )
-		Speed:SetValue( "".. ent.MaxVelocity .." units/s" )
-		Speed.DataChanged = function( _, val ) print( val ) end
-	end
-	//Armament
-	if (ent.InitialHealth) then
-		local Speed = NeuroProperties:CreateRow( ent.PrintName, "Armor (HP)" )
-		Speed:Setup( "Generic" )
-		Speed:SetValue( ent.InitialHealth )
-		Speed.DataChanged = function( _, val ) print( val ) end
-	end
-	if (ent.AmmoTypes) then
-		local Ammo={}
-		for i=1,#ent.AmmoTypes do
-			Ammo[i] = NeuroProperties:CreateRow( "Armament", "Ammo" )
-			Ammo[i]:Setup( "Generic" )
-			Ammo[i]:SetValue( AmmoTypes[i].PrintName )
-			Ammo[i].DataChanged = function( _, val ) print( val ) end
-		end
-	end
-		if (ent.Armament) then
-		local Ammo={}
-		for i=1,#ent.Armament do
-			if (ent.Armament[i].Type != "Effect") or !(ent.Armament[i].Type != "Flarepod") then
-				Ammo[i] = NeuroProperties:CreateRow( "Armament", "Ammo "..i )
-				Ammo[i]:Setup( "Generic" )
-				Ammo[i]:SetValue( ent.Armament[i].PrintName )
-				Ammo[i].DataChanged = function( _, val ) print( val ) end
-			end
-		end
-	end
-	if (ent.MaxRange) then
-		local MaxRange = NeuroProperties:CreateRow( ent.PrintName, "Maximum Range" )
-		MaxRange:Setup( "Generic" )
-		MaxRange:SetValue( ent.MaxRange )
-		MaxRange.DataChanged = function( _, val ) print( val ) end
-	end
-	
-	//Customize
-	local Lock = NeuroProperties:CreateRow( "Custom", "Lock? (Unavailable)" )
-	Lock:Setup( "Boolean" )
-	Lock:SetValue( true )
-	local Skin = NeuroProperties:CreateRow( "Custom", "Skin (Unavailable)" )
-	Skin:Setup( "Int", {min = 0, max = 5} )
-	Skin:SetValue( 0 )
-	local color = NeuroProperties:CreateRow( "Custom", "Color (Unavailable)" )
-	color:Setup( "VectorColor" )
-	color:SetValue( Vector( 1, 0, 0 ) )
-*/	
-	local summary = vgui.Create( "DPanel", frame )
-	-- summary:SetParent( frame )
-	summary:SetPos( h+2-h*0.4, 27 )
-	summary:SetSize( h*0.4-8, h*0.4-4 )
-	summary:SetBackgroundColor(Color(255,255,255,100))
-
-	// return panel
+	local statsPanel = vgui.Create("DNeuroSpawnRC")
+	statsPanel:SetEnt(ent)
+	statsPanel:SetPos(0,0)
+	statsPanel:SetSize(ScrW(),ScrH())
+	statsPanel:SetTitle( ent.PrintName )
+	statsPanel:SetDraggable( false )
+	statsPanel:SetSizable( false )
+	statsPanel:ShowCloseButton( true )
+	statsPanel:MakePopup()
 	
 end
 
