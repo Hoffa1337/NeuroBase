@@ -820,10 +820,8 @@ end
 function Meta:Micro_FireCannons()
 	
 	if( type(self.Miniguns) != "table" ) then return end
-	
-	self.MinigunIndex = self.MinigunIndex + 1
-	
-	if( self.MinigunIndex > self.MinigunMaxIndex ) then self.MinigunIndex = 1 end
+	-- print( "This index:", self.MinigunIndex )
+	self:UpdateMultigunAmmoType()
 	
 	if( !self.MinigunTracer ) then	
 	-- else		
@@ -834,6 +832,40 @@ function Meta:Micro_FireCannons()
 	-- ENT.TracerScale1 = 0.02
 -- ENT.TracerScale2 = 0.02
 -- ENT.ImpactScale = 0.5
+	
+	if( self.MinigunIndex && self.MinigunData && self.MinigunData[self.MinigunIndex] ) then	
+		
+		if( !self.MinigunData[self.MinigunIndex].LastAttack ) then
+		
+			self.MinigunData[self.MinigunIndex].LastAttack = 0
+			
+		else
+			
+			if( self.MinigunData[self.MinigunIndex].LastAttack + self.MinigunData[self.MinigunIndex].CoolDown >= CurTime() ) then
+				
+				-- print("cooldown reached", self.MinigunIndex )
+				self:UpdateMultigunAmmoType()
+				-- self.MinigunIndex = self.MinigunIndex + 1
+				-- if( self.MinigunIndex > self.MinigunMaxIndex ) then self.MinigunIndex = 1 end
+	
+				return
+				
+			else
+			
+				self.MinigunData[self.MinigunIndex].LastAttack = CurTime()
+			
+			end
+			
+		end
+
+	else
+	
+		
+		if( self.LastPrimaryAttack + self.PrimaryCooldown >= CurTime() ) then return end
+	
+	
+	end
+	-- if( self.LastPrimaryAttack + self.PrimaryCooldown >= CurTime() ) then return end
 	
 	local i = self.MinigunIndex
 	local g = self.Miniguns[i]
@@ -853,7 +885,7 @@ function Meta:Micro_FireCannons()
 		bullet:GetPhysicsObject():SetMass( 5 )
 		bullet:GetPhysicsObject():SetDamping( 0,0 )
 		bullet:SetNoDraw( true )
-		
+	
 		if( self.TracerScale1 && self.TracerScale2 && self.ImpactScale ) then
 		
 			bullet.TracerScale1 = self.TracerScale1
@@ -868,24 +900,90 @@ function Meta:Micro_FireCannons()
 	end
 		
 	
+	
+	-- self.MinigunIndex = self.MinigunIndex + 1
+	-- if( self.MinigunIndex > self.MinigunMaxIndex ) then self.MinigunIndex = 1 end
+	-- print( self.MinigunIndex )
+	
+
 	-- end
 	
-	self.LastPrimaryAttack = CurTime()
+	-- self.LastPrimaryAttack = CurTime()
+
+end
+
+function Meta:UpdateMultigunAmmoType()
+	
+	self.MinigunIndex = self.MinigunIndex + 1
+	if( self.MinigunIndex > self.MinigunMaxIndex ) then self.MinigunIndex = 1 end
+
+	-- print( self.MinigunIndex )
+	
+	if( self.Miniguns && self.MinigunData && self.MinigunIndex && self.MinigunIndex <= #self.MinigunData ) then
+		
+		if( #self.MinigunData != #self.Miniguns ) then error("Your ENT.MinigunData and ENT.MinigunPos tables does not match!!") return end
+		
+		self.MinDamage = self.MinigunData[ self.MinigunIndex ].MinDmg
+		self.MaxDamage = self.MinigunData[ self.MinigunIndex ].MaxDmg
+		self.Radius = self.MinigunData[ self.MinigunIndex ].Radius
+		self.PhysicalAmmo = self.MinigunData[ self.MinigunIndex ].Physical
+		self.ShootSound = self.MinigunData[ self.MinigunIndex ].ShootSound
+		self.AmmoType = self.MinigunData[ self.MinigunIndex ].AmmoType
+		-- print( "Updated Ammo:", self.MinigunIndex )
+		-- print( self.MinigunData[ self.MinigunIndex ].LastAttack, self.MinigunIndex )
+		-- self.PrimaryCooldown = self.MinigunData[ self.MinigunIndex ].CoolDown
+		-- print( self.PhysicalAmmo, self.AmmoType )
+		
+	end
+
+	-- print( self.MinigunIndex )
 
 end
 
 function Meta:Jet_FireMultiBarrel()
 	
 	if( type(self.Miniguns) != "table" ) then return end
-	
-	self.MinigunIndex = self.MinigunIndex + 1
-	
-	if( self.MinigunIndex > self.MinigunMaxIndex ) then self.MinigunIndex = 1 end
-	
+
+	self:UpdateMultigunAmmoType()
 	if( self.MinigunTracer ) then	
 	else		
 		self.MinigunTracer = "AirboatGunHeavyTracer"	
 	end
+	
+	if( self.MinigunIndex && self.MinigunData && self.MinigunData[self.MinigunIndex] ) then	
+		
+		if( !self.MinigunData[self.MinigunIndex].LastAttack ) then
+		
+			self.MinigunData[self.MinigunIndex].LastAttack = 0
+			
+		else
+			
+			if( self.MinigunData[self.MinigunIndex].LastAttack + self.MinigunData[self.MinigunIndex].CoolDown >= CurTime() ) then
+				-- skip this gun
+				-- print("Skipping fire this time:", self.MinigunIndex )
+				self:UpdateMultigunAmmoType()
+				-- self.MinigunIndex = self.MinigunIndex + 1
+				-- if( self.MinigunIndex > self.MinigunMaxIndex ) then self.MinigunIndex = 1 end
+	
+				return
+				
+			else
+			
+				self.MinigunData[self.MinigunIndex].LastAttack = CurTime()
+			
+			end
+			
+		end
+
+	else
+	
+		
+		if( self.LastPrimaryAttack + self.PrimaryCooldown >= CurTime() ) then return end
+	
+	
+	end
+	
+	
 
 	--for i=1,#self.Miniguns do
 	local i = self.MinigunIndex
@@ -944,9 +1042,15 @@ function Meta:Jet_FireMultiBarrel()
 		--self.Miniguns[i]:EmitSound( "npc/turret_floor/shoot"..math.random(2,3)..".wav", 511, 60 )
 		
 	--end
-	
-	self.LastPrimaryAttack = CurTime()
-	
+	-- print("INDEX", self.MinigunIndex )
+
+	-- self.LastPrimaryAttack = CurTime()
+
+		
+
+	-- print( self.MinigunIndex )
+
+
 end
 
 function Meta:SonicBoomTicker()
