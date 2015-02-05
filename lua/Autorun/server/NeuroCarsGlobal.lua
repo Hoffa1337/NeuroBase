@@ -831,7 +831,9 @@ function Meta:Micro_FireCannons()
 	end
 
 	-- for i=1,#self.Miniguns do
-	
+	-- ENT.TracerScale1 = 0.02
+-- ENT.TracerScale2 = 0.02
+-- ENT.ImpactScale = 0.5
 	
 	local i = self.MinigunIndex
 	local g = self.Miniguns[i]
@@ -851,6 +853,15 @@ function Meta:Micro_FireCannons()
 		bullet:GetPhysicsObject():SetMass( 5 )
 		bullet:GetPhysicsObject():SetDamping( 0,0 )
 		bullet:SetNoDraw( true )
+		
+		if( self.TracerScale1 && self.TracerScale2 && self.ImpactScale ) then
+		
+			bullet.TracerScale1 = self.TracerScale1
+			bullet.TracerScale2 = self.TracerScale2
+			bullet.ImpactScale = self.ImpactScale
+			
+		
+		end
 		
 		bullet:GetPhysicsObject():SetVelocity( self:GetForward() * 500000 )
 		

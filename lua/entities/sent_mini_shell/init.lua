@@ -187,7 +187,7 @@ function ENT:OnRemove()
 	local impact = EffectData()
 	impact:SetOrigin( self:GetPos() )
 	impact:SetStart( self:GetPos() )
-	impact:SetScale( 1.5 )
+	impact:SetScale( self.ImpactScale or 1.5 )
 	impact:SetNormal( self.HitNormal or self:GetForward()*-1 )
 	
 	if( self:WaterLevel() == 0 ) then
@@ -212,7 +212,16 @@ function ENT:OnRemove()
 		
 	else
 		
-		util.Effect("WaterSurfaceExplosion", impact)
+		if( self.ImpactScale && self.ImpactScale < 1 ) then
+			
+			util.Effect("watersplash", impact)
+		
+			
+		else
+		
+			util.Effect("WaterSurfaceExplosion", impact)
+		
+		end
 		
 	end
 	-- local impact = EffectData()
