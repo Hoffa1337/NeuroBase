@@ -2444,9 +2444,9 @@ function Meta:EjectPilot()
 	-- timer.Simple( 0, function() 
 		-- if( IsValid( pilot ) && IsValid( plane ) ) then
 			
-	self.Pilot:SetPos( plane:GetPos() + Vector(0,0,175) )
-	self.Pilot:SetAngles( Angle( 0, plane:GetAngles().y or 0,0 ) )
-	self.Pilot:SetEyeAngles( Angle( 0, plane:GetAngles().y or 0,0 ) )
+	self.Pilot:SetPos( self:GetPos() + Vector(0,0,175) )
+	self.Pilot:SetAngles( Angle( 0, self:GetAngles().y or 0,0 ) )
+	self.Pilot:SetEyeAngles( Angle( 0, self:GetAngles().y or 0,0 ) )
 
 		-- end
 		
