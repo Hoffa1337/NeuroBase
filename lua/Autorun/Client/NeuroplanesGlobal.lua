@@ -140,6 +140,20 @@ JetFighter.Plane = NULL
 JetFighter.Pilot = NULL
 JetFighter.LaserGuided = NULL
 
+local LastShakeReceived = 0
+local ShakeMagnitude = 0
+local ShakeDuration = 0
+
+
+function NetworkedScreenRumble( magnitude, duration )
+	
+	LastShakeReceived = CurTime()
+	ShakeMagnitude = magnitude
+	ShakeDuration = duration
+	
+	
+end
+
 function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 
 	local plane = ply:GetScriptedVehicle()
@@ -286,6 +300,18 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 		plane.LastPos = pos
 		
 		if( plane:GetNetworkedBool("Destroyed",false) ) then pos = Origin end 
+	
+		-- LastShakeReceived = CurTime()
+		-- ShakeMagnitude = magnitude
+		-- ShakeDuration = duration
+		if( LastShakeReceived + ShakeDuration >= CurTime() ) then
+			local op = ang
+			
+			ang.p = Lerp( 0.1, ang.p, ang.p - ShakeMagnitude )
+			-- ang.r = op.r
+			
+		
+		end
 		
 		view = {
 			origin = LerpVector( 0.001, plane.LastPos or Origin, pos),
