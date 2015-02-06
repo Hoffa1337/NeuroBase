@@ -2437,16 +2437,16 @@ function Meta:EjectPilot()
 	self:SetNetworkedEntity("Pilot", NULL )
 	self.Pilot:SetNetworkedBool( "isGunner", false )
 	self.Pilot:Spawn()
-	local pilot = self.Pilot
-	local plane = self
+	-- local pilot = self.Pilot
+	-- local plane = self
 	
 	-- move to next frame
 	-- timer.Simple( 0, function() 
 		-- if( IsValid( pilot ) && IsValid( plane ) ) then
 			
 	self.Pilot:SetPos( plane:GetPos() + Vector(0,0,175) )
-	self.Pilot:SetAngles( Angle( 0, plane:GetAngles().y,0 ) )
-	self.Pilot:SetEyeAngles( Angle( 0, plane:GetAngles().y,0 ) )
+	self.Pilot:SetAngles( Angle( 0, plane:GetAngles().y or 0,0 ) )
+	self.Pilot:SetEyeAngles( Angle( 0, plane:GetAngles().y or 0,0 ) )
 
 		-- end
 		
