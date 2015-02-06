@@ -610,7 +610,7 @@ function Meta:NA_RPG_damagehook(dmginfo)
 		
 		if( IsValid( self.Owner ) ) then
 			
-			inertjunk:SetPhysicsAttacker( self.Owner )
+			inertjunk:SetPhysicsAttacker( self.Owner, 999999 )
 			inertjunk:SetOwner( self.Owner )
 		
 		end
@@ -886,7 +886,7 @@ function Meta:Micro_FireCannons()
 		bullet.MinDamage = self.MinDamage
 		bullet.MaxDamage = self.MaxDamage
 		bullet.Radius = self.Radius
-		bullet:SetPhysicsAttacker( self.Pilot )
+		bullet:SetPhysicsAttacker( self.Pilot, 99999999 )
 		bullet:SetOwner( self.Pilot )
 		bullet.Owner = self.Pilot
 		bullet:GetPhysicsObject():SetMass( 5 )
@@ -1951,7 +1951,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	local r = ents.Create( wep.Class )
 	r:SetPos( pos )
 	r:SetOwner( self )
-	r:SetPhysicsAttacker( pilot )
+	r:SetPhysicsAttacker( pilot, 999999999999 )
 	r.Target = self.Target
 	r.Pointer = pilot
 	r:SetModel( wep:GetModel() )
@@ -1967,7 +1967,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	r:Fire( "Kill", "", 30 )
 	r:SetAngles( wep:GetAngles() )
 	r.Owner = pilot
-	r:SetPhysicsAttacker( pilot )
+	r:SetPhysicsAttacker( pilot, 99999999 )
 	r:SetCollisionGroup( COLLISION_GROUP_DEBRIS )
 	
 	if( wep.SubType && wep.SubType == "Cluster" ) then
@@ -2115,7 +2115,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 					local r = ents.Create( wep.Class )
 					r:SetPos( wep:GetPos() )
 					r:SetOwner( self )
-					r:SetPhysicsAttacker( pilot )
+					r:SetPhysicsAttacker( pilot, 9999999 )
 					r.Target = self.Target
 					r.Pointer = pilot
 					r:SetModel( wep:GetModel() )
@@ -2131,7 +2131,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 					r:SetAngles( wep:GetAngles() + Angle() * math.Rand(-4,4) )
 					-- r:GetPhysicsObject():SetVelocity( wep:GetVelocity() )
 					r.Owner = pilot
-					r:SetPhysicsAttacker( pilot )
+					r:SetPhysicsAttacker( pilot, 90000000 )
 					timer.Simple(0,function()
 		
 						if ( IsValid( r ) && r:GetPhysicsObject() != nil ) then
@@ -2163,7 +2163,7 @@ function Meta:NeuroPlanes_MissileStorm( wep )
 	s:SetAngles( wep:GetAngles() )
 	s.Target = self.Target
 	s.Pointer = self.Pointer
-	s:SetPhysicsAttacker( self.Pilot )
+	s:SetPhysicsAttacker( self.Pilot, 99999999 )
 	s:Spawn()
 	s:GetPhysicsObject():SetVelocity( wep:GetVelocity() )
 	s:EmitSound( "weapons/rpg/rocketfire1.wav", 511, 80 )
@@ -2602,7 +2602,7 @@ function Meta:RocketBarrage( wep )
 	r:SetPos( wep:GetPos() + VectorRand() * 16 )
 	r:SetModel(  "models/hawx/weapons/zuni mk16.mdl" )
 	r:SetAngles( wep:GetAngles() + Angle( math.Rand(-.4,.4),math.Rand(-.4,.4),math.Rand(-.4,.4) ) )
-	r:SetPhysicsAttacker( self.Pilot )
+	r:SetPhysicsAttacker( self.Pilot, 999999 )
 	r:Spawn()
 	r:Fire("Kill","",15)
 	r:SetOwner( self )
@@ -3357,7 +3357,7 @@ function Meta:Barrage( pos, ent )
 	r:SetAngles( self:GetAngles() )
 	r:Spawn()
 	r:SetOwner( self )
-	r:SetPhysicsAttacker( self )
+	r:SetPhysicsAttacker( self, 9999999999 )
 	r.Owner = self
 	r.Target = self.Target
 	--r:GetPhysicsObject():SetVelocity( self:GetPhyiscsObject():GetVelocity() )
@@ -3854,7 +3854,7 @@ function Meta:JavelinRain(X,owner)
 	rocket:GunAim(X)
 	rocket:SetOwner(owner)
 	rocket.Target = X
-	rocket:SetPhysicsAttacker(owner)
+	rocket:SetPhysicsAttacker(owner, 999999)
 	rocket:Spawn()
 	self:GetPhysicsObject():ApplyForceCenter(self:GetForward()*-1700000 + self:GetUp()*-70002)
 	
@@ -3866,7 +3866,7 @@ function Meta:DumbFireRain(obj2,owner)
 	local rocket = ents.Create("sent_missile_dumb")
 	rocket:SetPos(self:GetPos()+self:GetUp()*64 + self:GetForward()*128)
 	rocket:SetAngles(self:GetAngles())
-	rocket:SetPhysicsAttacker(owner)
+	rocket:SetPhysicsAttacker(owner, 999999)
 	rocket:SetOwner(owner)
 	rocket:Spawn()
 	obj2:GetPhysicsObject():ApplyForceCenter(self:GetForward()*-110000 + self:GetUp()*-7002)
