@@ -830,15 +830,14 @@ function Meta:Micro_FireCannons()
 	
 	if( self.FatRecoil ) then
 		
-		self.Pilot:SendLua([[NetworkedScreenRumble( 10.05, .045 )]])
-		self:GetPhysicsObject():ApplyForceCenter( self:GetForward() * -500000 )
+		local AngForce = self.RecoilAngle or 10.05
+		local Duration = self.RecoilDuraiton or 0.045
+
+		self.Pilot:SendLua([[NetworkedScreenRumble( ]]..AngForce..[[, ]]..Duration..[[ )]])
+		self:GetPhysicsObject():ApplyForceCenter( self:GetForward() * ( self.RecoilForce or -500000 ) )
 		
 	end
 	
-	-- for i=1,#self.Miniguns do
-	-- ENT.TracerScale1 = 0.02
--- ENT.TracerScale2 = 0.02
--- ENT.ImpactScale = 0.5
 	
 	if( self.MinigunIndex && self.MinigunData && self.MinigunData[self.MinigunIndex] ) then	
 		
