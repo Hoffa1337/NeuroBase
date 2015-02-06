@@ -31,7 +31,8 @@ function ENT:Initialize()
 	local TrailDelay = math.Rand( 0.15, 0.20 )/10
 	local TraceScale1 = self.TracerScale1 or 0.1
 	local TraceScale2 = self.TracerScale2 or 0.1
-	
+	local GlowProxy = self.TracerGlowProxy or 1
+	print( "GlowProxy: ", GlowProxy, self.TracerGlowProxy )
 	if( self.TinyTrail ) then
 		
 		self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(111,115), math.random(111,115), math.random(111,115), math.random(5,15) ), false, 8,0, TrailDelay + 0.85, 1/(0+4)*0.55, "trails/smoke.vmt");  
@@ -53,7 +54,7 @@ function ENT:Initialize()
 		Shine:SetKeyValue("framerate12", "20")
 		Shine:SetKeyValue("model", "light_glow03.spr")
 		Shine:SetKeyValue("scale", tostring( TraceScale2 ) )
-		Shine:SetKeyValue("GlowProxySize", "1")
+		Shine:SetKeyValue("GlowProxySize", tostring( GlowProxy ))
 		Shine:SetParent(self)
 		Shine:Spawn()
 		Shine:Activate()

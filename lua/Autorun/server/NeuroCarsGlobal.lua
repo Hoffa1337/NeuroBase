@@ -882,6 +882,21 @@ function Meta:Micro_FireCannons()
 		bullet:SetPos( g:GetPos() + g:GetForward() * 90 )
 		bullet:SetAngles( self:GetAngles() )
 		bullet.TinyTrail = true
+		
+		if( self.TracerScale1 && self.TracerScale2 && self.ImpactScale ) then
+		
+			bullet.TracerScale1 = self.TracerScale1
+			bullet.TracerScale2 = self.TracerScale2
+			bullet.ImpactScale = self.ImpactScale
+		
+			if( self.TracerGlowProxy ) then
+				
+				bullet.TracerGlowProxy = self.TracerGlowProxy 
+					-- print( bullet.TracerGlowProxy )
+			end
+		
+		end
+		
 		bullet:Spawn()
 		bullet.MinDamage = self.MinDamage
 		bullet.MaxDamage = self.MaxDamage
@@ -893,14 +908,7 @@ function Meta:Micro_FireCannons()
 		bullet:GetPhysicsObject():SetDamping( 0,0 )
 		bullet:SetNoDraw( true )
 	
-		if( self.TracerScale1 && self.TracerScale2 && self.ImpactScale ) then
-		
-			bullet.TracerScale1 = self.TracerScale1
-			bullet.TracerScale2 = self.TracerScale2
-			bullet.ImpactScale = self.ImpactScale
-			
-		
-		end
+
 		
 		bullet:GetPhysicsObject():SetVelocity( self:GetForward() * 500000 )
 		
@@ -2429,9 +2437,20 @@ function Meta:EjectPilot()
 	self:SetNetworkedEntity("Pilot", NULL )
 	self.Pilot:SetNetworkedBool( "isGunner", false )
 	self.Pilot:Spawn()
-	self.Pilot:SetPos( self:GetPos() + Vector(0,0,175) )
-	self.Pilot:SetAngles( Angle( 0, self:GetAngles().y,0 ) )
-	self.Pilot:SetEyeAngles( Angle( 0, self:GetAngles().y,0 ) )
+	local pilot = self.Pilot
+	local plane = self
+	
+	-- move to next frame
+	-- timer.Simple( 0, function() 
+		-- if( IsValid( pilot ) && IsValid( plane ) ) then
+			
+	self.Pilot:SetPos( plane:GetPos() + Vector(0,0,175) )
+	self.Pilot:SetAngles( Angle( 0, plane:GetAngles().y,0 ) )
+	self.Pilot:SetEyeAngles( Angle( 0, plane:GetAngles().y,0 ) )
+
+		-- end
+		
+	 -- end )
 	self.Owner = NULL
 	self.Pilot:SetScriptedVehicle( NULL ) ---------------------------------<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 	
@@ -2453,7 +2472,7 @@ function Meta:EjectPilot()
 			-- self.Pilot:PrintMessage( HUD_PRINTTALK, v:GetClass() )
 			self.Pilot:Give(tostring(v))
 			
-		end
+		end 
 	
 	end
 	
