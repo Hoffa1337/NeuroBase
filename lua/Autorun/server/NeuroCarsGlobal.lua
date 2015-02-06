@@ -832,9 +832,10 @@ function Meta:Micro_FireCannons()
 		
 		local AngForce = self.RecoilAngle or 10.05
 		local Duration = self.RecoilDuraiton or 0.045
-
+		local KickBack = self.RecoilForce or -500000
+		
 		self.Pilot:SendLua([[NetworkedScreenRumble( ]]..AngForce..[[, ]]..Duration..[[ )]])
-		self:GetPhysicsObject():ApplyForceCenter( self:GetForward() * ( self.RecoilForce or -500000 ) )
+		self:GetPhysicsObject():ApplyForceCenter( self:GetForward() * KickBack )
 		
 	end
 	
