@@ -827,7 +827,14 @@ function Meta:Micro_FireCannons()
 	-- else		
 		self.MinigunTracer = "AirboatGunHeavyTracer"	
 	end
-
+	
+	if( self.FatRecoil ) then
+		
+		self.Pilot:SendLua([[NetworkedScreenRumble( 10.05, .045 )]])
+		self:GetPhysicsObject():ApplyForceCenter( self:GetForward() * -500000 )
+		
+	end
+	
 	-- for i=1,#self.Miniguns do
 	-- ENT.TracerScale1 = 0.02
 -- ENT.TracerScale2 = 0.02
