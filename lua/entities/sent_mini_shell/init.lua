@@ -185,46 +185,70 @@ function ENT:OnRemove()
 	end
 	
 	self:EmitSound( "IL-2/air_can_03.mp3", 511, math.random( 100, 110 ) )
-	local impact = EffectData()
-	impact:SetOrigin( self:GetPos() )
-	impact:SetStart( self:GetPos() )
-	impact:SetScale( self.ImpactScale or 1.5 )
-	impact:SetNormal( self.HitNormal or self:GetForward()*-1 )
 	
-	if( self:WaterLevel() == 0 ) then
+	if( self.ImpactScale && self.ImpactScale >= 2 ) then
 	
-		if( self.HitSquishy ) then
-			
-			util.Effect("micro_he_blood", impact)
+		local impact = EffectData()
+		impact:SetOrigin( self:GetPos() )
+		impact:SetStart( self:GetPos() )
+		impact:SetScale( 1.0 )
+		impact:SetNormal( self:GetForward()*-1 )
+		util.Effect("Explosion", impact)
 		
-		else
-		
-			if( self.HitObject ) then
+		ParticleEffect( "30cal_impact", self:GetPos(), Angle( 0,0,0 ), nil )
+		ParticleEffect( "Explosion", self:GetPos(), Angle( 0,0,0 ), nil )
+
+		if( self:WaterLevel() > 0 ) then
 			
-				util.Effect("micro_he_impact_plane", impact)
+			util.Effect("WaterSurfaceExplosion", impact)
+			
+		end
+		
+	else
+	
+		local impact = EffectData()
+		impact:SetOrigin( self:GetPos() )
+		impact:SetStart( self:GetPos() )
+		impact:SetScale( self.ImpactScale or 1.5 )
+		impact:SetNormal( self.HitNormal or self:GetForward()*-1 )
+		
+		if( self:WaterLevel() == 0 ) then
+		
+			if( self.HitSquishy ) then
+				
+				util.Effect("micro_he_blood", impact)
 			
 			else
+			
+				if( self.HitObject ) then
 				
-				util.Effect("micro_he_impact", impact)
+					util.Effect("micro_he_impact_plane", impact)
+				
+				else
+					
+					util.Effect("micro_he_impact", impact)
+				
+				end
+				
+			end 
+			
+		else
+			
+			if( self.ImpactScale && self.ImpactScale < 1 ) then
+				
+				util.Effect("watersplash", impact)
+			
+				
+			else
+			
+				util.Effect("WaterSurfaceExplosion", impact)
 			
 			end
 			
 		end
 		
-	else
-		
-		if( self.ImpactScale && self.ImpactScale < 1 ) then
-			
-			util.Effect("watersplash", impact)
-		
-			
-		else
-		
-			util.Effect("WaterSurfaceExplosion", impact)
-		
-		end
-		
 	end
+	
 	-- local impact = EffectData()
 	-- impact:SetOrigin( self:GetPos() )
 	-- impact:SetStart( self:GetPos() )
