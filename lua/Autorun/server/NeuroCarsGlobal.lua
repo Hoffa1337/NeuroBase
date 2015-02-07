@@ -3040,11 +3040,11 @@ function Meta:ScanForEnemies()
 		
 			if ( v:IsPlayer() || v:IsNPC() || ( v:IsVehicle() && v:GetVelocity():Length() > 1 ) || string.find( v:GetClass(), "npc_" ) || v.HealthVal != nil )  then
 			
-				if( v.Destroyed ) then 
+				-- if( v.Destroyed ) then 
 				
-					return 
+					-- return 
 				
-				end
+				-- end
 				
 				tempd = self:GetPos():Distance( v:GetPos() )
 				

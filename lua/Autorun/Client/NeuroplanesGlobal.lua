@@ -191,10 +191,10 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 				
 			end
 			
-			plane.yawcount = Lerp( 0.01, plane.yawcount, a.p/4 )
-			plane.rollcount = Lerp(0.01, plane.rollcount, a.r/4 )
+			plane.yawcount = Lerp( 0.01, plane.yawcount, a.p/6 )
+			plane.rollcount = Lerp(0.01, plane.rollcount, a.r/6 )
 			
-			pos =  plane:GetPos() + plane:GetForward() * -plane.CameraDistance + plane:GetUp() * ( plane.CamUp + plane.yawcount ) + plane:GetRight() * plane.rollcount
+			pos =  plane:GetPos() + plane:GetForward() * (plane.CameraDistance/2) + plane:GetUp() * ( plane.CamUp + plane.yawcount ) + plane:GetRight() * plane.rollcount
 			a.r = a.r / 1.4
 			
 			ang = LerpAngle( 0.01, plane.LastAng or Angles,  a )
