@@ -313,6 +313,14 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 		
 		end
 		
+		if( plane.HasPilotSeat ) then
+			
+			pos = Origin
+			ang = Angles
+		
+			
+		end
+		
 		view = {
 			origin = LerpVector( 0.001, plane.LastPos or Origin, pos),
 			angles = ang,-- / 2.2 ),
