@@ -153,6 +153,10 @@ function NetworkedScreenRumble( magnitude, duration )
 	
 	
 end
+local ShouldZoom = false
+hook.Add( "Think", "BM_Clients_Key", function()
+	ShouldZoom = input.IsKeyDown( KEY_X )
+end )
 
 function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 
@@ -161,7 +165,11 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 		origin = Origin,
 		angles = Angles
 		}
-
+	if( !ply.LinearFOV ) then
+		
+		ply.LinearFOV = Fov
+	
+	end
 	if( IsValid( plane ) && ply:GetNetworkedBool( "InFlight", false )  ) then
 		
 		
@@ -320,6 +328,18 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 		
 			
 		end
+		if( ShouldZoom ) then
+			
+			ply.LinearFOV = Lerp( 0.1, ply.LinearFOV, 30 )
+			
+		else
+			
+			ply.LinearFOV = Lerp( 0.1, ply.LinearFOV, 90 )
+			
+			
+		end
+		
+		fov = ply.LinearFOV
 		
 		view = {
 			origin = LerpVector( 0.001, plane.LastPos or Origin, pos),
