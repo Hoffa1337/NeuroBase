@@ -10,6 +10,27 @@ local matPlasma			= Material( "effects/strider_muzzle" )
 local matSprite 		= Material( "sprites/gmdm_pickups/light"  )
 
 
+ function ReceiveDamageVector( len )
+	 -- print( "RECV: vec = " .. tostring( net.ReadVector() ) .. "\n" )
+	 local damage = net.ReadInt(32)
+	 local pos = net.ReadVector()
+	 local ent = net.ReadEntity()
+	 
+	 if( !ent.DamagePositions ) then
+		
+		ent.DamagePositions = {}
+		ent.DamagePositions[1] = { pos, damage or 0 }
+		
+	else
+		
+		table.insert( ent.DamagePositions, { pos, damage } )
+		
+	end
+	
+	 
+ end
+ net.Receive( "DamageVector", ReceiveDamageVector )
+ 
 function Meta:JetAir_DrawJetFlames( pos )
 
 	local vOffset = pos + self:GetForward() * -1
