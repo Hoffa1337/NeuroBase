@@ -252,6 +252,6 @@ function ENT:OnRemove()
 		
 	end
 	
-	util.BlastDamage( self.Owner, self.Owner, self:GetPos() + Vector( 0,0,2 ), dmg, radius )
+	util.BlastDamage( self.Owner, self.Owner, self:GetPos() + Vector( 0,0,2 ), radius, dmg )
 	util.Decal( "scorch", self:GetPos(), self.HitNormal && self.HitNormal * -32 or self:GetPos() + self:GetUp() * -32 )
 end
