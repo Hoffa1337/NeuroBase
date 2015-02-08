@@ -187,16 +187,16 @@ function ENT:OnRemove()
 	self:EmitSound( "IL-2/air_can_03.mp3", 511, math.random( 100, 110 ) )
 	
 	if( self.ImpactScale && self.ImpactScale >= 2 ) then
-	
+		
 		local impact = EffectData()
 		impact:SetOrigin( self:GetPos() )
 		impact:SetStart( self:GetPos() )
 		impact:SetScale( 1.0 )
-		impact:SetNormal( self:GetForward()*-1 )
+		impact:SetNormal( self.HitNormal or self:GetForward()*-1 )
 		util.Effect("Explosion", impact)
 		
-		ParticleEffect( "30cal_impact", self:GetPos(), Angle( 0,0,0 ), nil )
-		ParticleEffect( "Explosion", self:GetPos(), Angle( 0,0,0 ), nil )
+		ParticleEffect( "30cal_impact", self:GetPos(),self.HitNormal:Angle() or Angle( 0,0,0 ), nil )
+		ParticleEffect( "Explosion", self:GetPos(),self.HitNormal:Angle() or Angle( 0,0,0 ), nil )
 
 		if( self:WaterLevel() > 0 ) then
 			
