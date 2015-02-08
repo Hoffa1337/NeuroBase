@@ -1966,10 +1966,9 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	r:PhysicsInit( SOLID_VPHYSICS )
 	r:SetMoveType( MOVETYPE_VPHYSICS )
 	r:SetSolid( SOLID_VPHYSICS )
-	r:GetPhysicsObject():EnableDrag( true )
-	r:GetPhysicsObject():EnableGravity( true )
+
 	r:SetRenderMode( RENDERMODE_TRANSALPHA )
-	r:SetColor( Color(0,0,0,0) )
+	-- r:SetColor( Color(0,0,0,0) )
 	r:Spawn()
 	r:Activate()
 	r:Fire( "Kill", "", 30 )
@@ -1977,7 +1976,10 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	r.Owner = pilot
 	r:SetPhysicsAttacker( pilot, 99999999 )
 	r:SetCollisionGroup( COLLISION_GROUP_DEBRIS )
-	
+	-- r:SetPos( wep:GetPos() )
+	r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity()  * 0.7 )
+	r:GetPhysicsObject():EnableDrag( true )
+	r:GetPhysicsObject():EnableGravity( true )	
 	if( wep.SubType && wep.SubType == "Cluster" ) then
 		
 		-- print("Clusterbomb" )
@@ -1991,17 +1993,15 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 
 	end
 
-	timer.Simple(0,function()
+	-- timer.Simple(0,function()
 		
-		if ( IsValid( r ) && r:GetPhysicsObject() != nil ) then
+		-- if ( IsValid( r ) && r:GetPhysicsObject() != nil ) then
 			
-			r:SetColor( Color( 255,255,255,255 ) )
-			r:SetPos( wep:GetPos() )
-			r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity() * .8 )
-			
-		end
+			-- r:SetColor( Color( 255,255,255,255 ) )
+			-- 
+		-- end
 		
-	end )
+	-- end )
 	
 	timer.Simple( 1, function() 
 		
