@@ -16,7 +16,7 @@ function EFFECT:ImpactGround(data)
 		
 	for i=0, 15*scale do
 	
-		local Smoke = emitter:Add( "particle/smokesprites_000"..math.random(1,9), pos )
+		local Smoke = emitter:Add( "effects/fleck_cement2", pos )
 		
 		if (Smoke) then
 		

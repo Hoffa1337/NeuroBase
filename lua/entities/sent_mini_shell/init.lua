@@ -109,6 +109,7 @@ end
 function ENT:PhysicsCollide( data, physobj )
 		
 	-- if( self.StartTime + 0.0125 >= CurTime() ) then return end
+	self.HitNormal =  data.HitNormal*-1
 	
 	if ( IsValid( data.HitEntity ) && data.HitEntity:GetOwner() == self:GetOwner() ) then --// Plox gief support for SetOwner ( table )
 		
@@ -116,10 +117,8 @@ function ENT:PhysicsCollide( data, physobj )
 		
 	end
 	
-	if ( data.Speed > 1 && data.DeltaTime > 0.1 ) then 
+	-- if ( data.Speed > 1 && data.DeltaTime > 0.1 ) then 
 		
-		self.HitNormal =   data.HitNormal*-1
-		self:Remove()
 		if( IsValid( data.HitEntity ) && data.HitEntity.HealthVal != nil ) then
 			
 			self.HitObject = true
@@ -131,8 +130,9 @@ function ENT:PhysicsCollide( data, physobj )
 			
 		end
 		
+		self:Remove()
 		
-	end
+	-- end
 	
 end
 
@@ -153,26 +153,6 @@ function ENT:Think()
 		
 	end
 		
-	-- if( self.TinyTrail ) then return end 
-	
-	
-	if( self.MyPos ) then
-	
-		local tr, trace = {},{}
-		tr.start = self.MyPos
-		tr.endpos = tr.start + self:GetForward() * 16
-		tr.filter = self
-		trace = util.TraceLine( tr )
-		
-		if ( trace.Hit && trace.HitSky ) then
-			
-			self:Remove()
-				
-			return
-			
-		end
-	
-	end
 	
 end
 
@@ -189,15 +169,21 @@ function ENT:OnRemove()
 	if( self.ImpactScale && self.ImpactScale >= 2 ) then
 		
 		local impact = EffectData()
-		impact:SetOrigin( self:GetPos() )
-		impact:SetStart( self:GetPos() )
+		impact:SetOrigin( self:GetPos() + Vector( 0,0,2) )
+		impact:SetStart( self:GetPos()  + Vector( 0,0,2))
 		impact:SetScale( 1.0 )
 		impact:SetNormal( self.HitNormal or self:GetForward()*-1 )
 		util.Effect("Explosion", impact)
 		
-		ParticleEffect( "30cal_impact", self:GetPos(),self.HitNormal:Angle() or Angle( 0,0,0 ), nil )
-		ParticleEffect( "Explosion", self:GetPos(),self.HitNormal:Angle() or Angle( 0,0,0 ), nil )
+		-- ParticleEffect( "30cal_impact", self:GetPos(),self.HitNormal:Angle() or Angle( 0,0,0 ), nil )
+		-- ParticleEffect( "Explosion", self:GetPos() + Vector( 0,0,2), Angle( 0,0,0 ), nil )
 
+		local impact = EffectData()
+		impact:SetOrigin( self:GetPos() + Vector( 0,0,2))
+		impact:SetStart( self:GetPos()  + Vector( 0,0,2))
+		impact:SetScale( self.ImpactScale*1.5 or 2 )
+		impact:SetNormal( self.HitNormal or self:GetForward()*-1 )
+		util.Effect("micro_he_impact", impact)
 		if( self:WaterLevel() > 0 ) then
 			
 			util.Effect("WaterSurfaceExplosion", impact)
@@ -267,5 +253,5 @@ function ENT:OnRemove()
 	end
 	
 	util.BlastDamage( self.Owner, self.Owner, self:GetPos() + Vector( 0,0,2 ), dmg, radius )
-	
+	util.Decal( "scorch", self:GetPos(), self.HitNormal && self.HitNormal * -32 or self:GetPos() + self:GetUp() * -32 )
 end
