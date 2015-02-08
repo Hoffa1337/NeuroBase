@@ -16,12 +16,12 @@ local matSprite 		= Material( "sprites/gmdm_pickups/light"  )
 	 local pos = net.ReadVector()
 	 local ent = net.ReadEntity()
 	 
-	 if( !ent.DamagePositions ) then
+	 if( IsValid( ent ) && !ent.DamagePositions ) then
 		
 		ent.DamagePositions = {}
-		ent.DamagePositions[1] = { pos, damage or 0 }
+		table.insert( ent.DamagePositions, { pos, damage or 0 } )
 		
-	else
+	elseif( IsValid( ent ) && ent.DamagePositions ) then
 		
 		table.insert( ent.DamagePositions, { pos, damage } )
 		
