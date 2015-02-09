@@ -175,8 +175,18 @@ function NetworkedScreenRumble( magnitude, duration )
 	
 end
 local ShouldZoom = false
+local PressedGear = 0
+
 hook.Add( "Think", "BM_Clients_Key", function()
 	ShouldZoom = input.IsKeyDown( KEY_X )
+	
+	if( input.IsKeyDown( KEY_G ) && PressedGear + 1 <= CurTime() && IsValid( LocalPlayer():GetScriptedVehicle() ) ) then
+		
+		LocalPlayer():ConCommand("jet_toggle_landing_gear")
+		PressedGear = CurTime()
+		
+	end
+	
 end )
 
 function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
