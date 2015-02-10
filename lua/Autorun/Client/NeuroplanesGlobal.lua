@@ -180,7 +180,7 @@ local PressedGear = 0
 hook.Add( "Think", "BM_Clients_Key", function()
 	ShouldZoom = input.IsKeyDown( KEY_X )
 	
-	if( input.IsKeyDown( KEY_G ) && PressedGear + 0.25 <= CurTime() && IsValid( LocalPlayer():GetScriptedVehicle() ) ) then
+	if( input.IsKeyDown( KEY_G ) && PressedGear + 1.98 <= CurTime() && IsValid( LocalPlayer():GetScriptedVehicle() ) ) then
 		
 		LocalPlayer():ConCommand("jet_toggle_landing_gear")
 		PressedGear = CurTime()
