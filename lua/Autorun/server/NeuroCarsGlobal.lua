@@ -3,6 +3,7 @@ local Authors = "Hoffa, StarChick971, Sillirion, Aftokinito"
 local Contributors = "Fireking552, Flyboi, Inaki, Sakarias88, Beat the Zombie, Braxen, Professor Heavy, The Vman, Killstr3aKs"
 local Testers = "Virus, Elenion, Flubbadoo, xXAcePilotXx, (WEED)Kamikaze, Pimmie, Rifleman"
 local SpecialThanks = "Cosmos(workshop administration)"
+local inlovingmemory = "In loving memory of Dragoneel1000. Rest In Peace as you will be forever missed."
 
 function AddDir(dir) -- recursively adds everything in a directory to be downloaded by client
 	
@@ -3980,6 +3981,5 @@ MsgN( "Tested and Approved by:" )
 print( Testers )
 MsgN( "With a special thanks to: " )
 print( SpecialThanks )
-print( "" )
-print( "" )
+MsgN( inlovingmemory )
 
