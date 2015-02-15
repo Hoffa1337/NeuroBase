@@ -486,7 +486,7 @@ function NeuroTecCreateContentTab_Label(parent,ent,icon_size)
 
 	if (ent.Spawnable) and (ent.AdminSpawnable) then //Need to check if the entity only Admin spawnable.
 		local AdminIcon = vgui.Create( "DImage", parent )
-		AdminIcon:SetImage( "gui/silkicons/shield.png" )
+		AdminIcon:SetImage( "icon16/shield.png" )
 		AdminIcon:SetPos( icon_size-21, 5 )
 		AdminIcon:SizeToContents()   
 	end
