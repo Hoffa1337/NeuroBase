@@ -31,7 +31,7 @@ function ENT:Initialize()
 	
 	self.SpawnTime = CurTime()
 	-- self:EmitSound("weapons/mortar/mortar_shell_incomming1.wav",25,110)
-	self:EmitSound("BF2/Weapons/Artillery_projectile_"..math.random(1,3)..".mp3")
+	self:EmitSound("WT/Misc/bomb_whistle.wav")
 
 	util.SpriteTrail(self, 0, Color(255,255,255,math.random(11,12)), false, 3, math.random(0.5,1.1), 1, math.random(1,3), "trails/smoke.vmt");  
 end
@@ -50,7 +50,7 @@ function ENT:PhysicsUpdate()
 			
 			ParticleEffect( "water_impact_big", self:GetPos(), Angle( 0,0,0 ), nil )
 			util.BlastDamage( self, self.Owner, self:GetPos() + Vector(0,0,32), 270, math.random( 1500,2500 ) )
-			self:EmitSound(  "ambient/explosions/exp"..math.random(1,4)..".wav", 511, 100 )
+			self:EmitSound(  "WT/Misc/bomb_explosion_"..math.random(1,6)..".wav", 511, 100 )
 		
 		end
 		
@@ -75,7 +75,7 @@ function ENT:PhysicsCollide( data, physobj )
 
 		ParticleEffect( "rocket_impact_dirt", self:GetPos(), Angle( 0,0,0 ), nil )
 		-- 
-		self:EmitSound(  "ambient/explosions/exp"..math.random(1,4)..".wav", 511, 100 )
+		self:EmitSound(  "WT/Misc/bomb_explosion_"..math.random(1,6)..".wav", 511, 100 )
 		
 		util.BlastDamage( self, self.Owner, data.HitPos, 270, math.random( 1500,2500 ) )
 		
