@@ -1,7 +1,17 @@
 -- Global client stuff
 local ScrW = ScrW
 local ScrH = ScrH
+hook.Add("OnEntityCreated", "NeuroTanks_AssignName", function( ent )
+	
+	if( string.find( ent:GetClass(), "sent_" ) != nil && string.find( ent:GetClass(), "_p" ) != nil && language.GetPhrase( ent:GetClass() ) == ent:GetClass() ) then
+		
+		timer.Simple( 1, function() if( IsValid( ent ) ) then language.Add( ent:GetClass(), ent.PrintName ) end  end )
+		timer.Simple( 1, function() if( IsValid( ent ) && ent.TankType ) then killicon.Add( ent:GetClass(), ent.KillIcon or "TankKillIcon",Color( 255,255,255, 255 ) ) end end )
+		-- timer.Simple( 1, function() print( "Translated "..ent:GetClass().." to "..ent.PrintName ) end )
+		
+	end
 
+end )
 local KeyCommands = { KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9, KEY_0 }
 
 hook.Add("SetupMove", "NeuroTec_KeybindCallback", function( ply, mv, cmd )
