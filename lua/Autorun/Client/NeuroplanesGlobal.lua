@@ -234,7 +234,7 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 			plane.rollcount = Lerp(0.01, plane.rollcount, a.r/6 )
 			local tr,trace = {},{}
 			tr.start = ply:GetPos()
-			tr.endpos = plane:GetPos() + plane:GetForward() * (-plane.CameraDistance) + plane:GetUp() * ( plane.CamUp + plane.yawcount ) + plane:GetRight() * plane.rollcount
+			tr.endpos = plane:GetPos() + plane:GetForward() * (0.5*plane.CameraDistance) + plane:GetUp() * ( plane.CamUp + plane.yawcount ) + plane:GetRight() * plane.rollcount
 			tr.mask = MASK_NPCWORLDSTATIC
 			tr.filter = { ply, plane }
 			trace = util.TraceLine( tr )
