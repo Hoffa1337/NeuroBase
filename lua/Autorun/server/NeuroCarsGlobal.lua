@@ -899,7 +899,7 @@ function Meta:Micro_FireCannons()
 	if( IsValid( g ) ) then
 		
 		local bullet = ents.Create( self.AmmoType )
-		bullet:SetPos( g:GetPos() + g:GetForward() * 90 )
+		bullet:SetPos( g:GetPos() + g:GetForward() * self.MuzzleOffset or 90 )
 		bullet:SetAngles( self:GetAngles() )
 		bullet.TinyTrail = true
 		
@@ -927,9 +927,15 @@ function Meta:Micro_FireCannons()
 		bullet:GetPhysicsObject():SetMass( 5 )
 		bullet:GetPhysicsObject():SetDamping( 0,0 )
 		bullet:SetNoDraw( true )
-	
-
 		
+
+		local sm = EffectData()
+		sm:SetStart( g:GetPos() + g:GetForward() * self.MuzzleOffset or 105)
+		sm:SetOrigin( g:GetPos() + g:GetForward() * self.MuzzleOffset or 105)
+		sm:SetEntity( g )		
+		sm:SetAttachment(1)
+		sm:SetScale( 0.5 )
+		util.Effect( self.Muzzle or "ChopperMuzzleFlash", sm )
 		bullet:GetPhysicsObject():SetVelocity( self:GetForward() * 500000 )
 		
 	end
