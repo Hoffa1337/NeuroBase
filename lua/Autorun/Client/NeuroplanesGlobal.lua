@@ -178,7 +178,8 @@ local ShouldZoom = false
 local PressedGear = 0
 
 hook.Add( "Think", "BM_Clients_Key", function()
-	ShouldZoom = input.IsKeyDown( KEY_X )
+
+	ShouldZoom = input.IsKeyDown( KEY_V ) && IsValid( LocalPlayer():GetScriptedVehicle() ) && !LocalPlayer():IsTyping()
 	
 	if( input.IsKeyDown( KEY_G ) && PressedGear + 2 <= CurTime() && IsValid( LocalPlayer():GetScriptedVehicle() ) ) then
 		
@@ -233,14 +234,34 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 			
 			plane.yawcount = Lerp( 0.0051, plane.yawcount, a.p/6 )
 			plane.rollcount = Lerp(0.0051, plane.rollcount, a.r/6 )
-			local tr,trace = {},{}
-			tr.start = ply:GetPos()
-			tr.endpos = plane:GetPos() + plane:GetForward() * (0.5*plane.CameraDistance) + plane:GetUp() * ( plane.CamUp + plane.yawcount ) + plane:GetRight() * plane.rollcount
-			tr.mask = MASK_NPCWORLDSTATIC
-			tr.filter = { ply, plane }
-			trace = util.TraceLine( tr )
 			
-			pos =   trace.HitPos + trace.HitNormal * 2
+			if( plane.MinigunPos && plane.MuzzleOffset ) then
+			
+				local tr,trace = {},{}
+				tr.start = plane:LocalToWorld( plane.MinigunPos[1] ) + plane:GetForward() * plane.MuzzleOffset / 2 + plane:GetUp() * 2
+				tr.endpos = tr.start + plane:GetUp() * 15
+				-- tr.mask = MASK_SOLID
+				tr.filter = { ply }
+				trace = util.TraceLine( tr )
+				pos = trace.HitPos + plane:GetUp() * 10 + plane:GetForward()*10
+				-- debugoverlay.Line( tr.start, tr.endpos, Color( 255,0,0,255 ) )
+				
+			
+			else
+			
+				local tr,trace = {},{}
+				tr.start = ply:GetPos()
+				tr.endpos = plane:GetPos() + plane:GetForward() * (0.5*plane.CameraDistance) + plane:GetUp() * ( plane.CamUp + plane.yawcount ) + plane:GetRight() * plane.rollcount
+				tr.mask = MASK_NPCWORLDSTATIC
+				tr.filter = { ply, plane }
+				trace = util.TraceLine( tr )
+				
+				pos =   trace.HitPos + trace.HitNormal * 2
+				
+		
+			end
+			
+			
 			a.r = a.r / 1.4
 			
 			ang = LerpAngle( 0.01, plane.LastAng or Angles,  a )

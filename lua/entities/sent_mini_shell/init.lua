@@ -35,7 +35,7 @@ function ENT:Initialize()
 	-- print( "GlowProxy: ", GlowProxy, self.TracerGlowProxy )
 	if( self.TinyTrail ) then
 		
-		self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(111,115), math.random(111,115), math.random(111,115), math.random(5,15) ), false, 8,0, TrailDelay + 0.85, 1/(0+4)*0.55, "trails/smoke.vmt");  
+		self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(245,255), math.random(245,255), math.random(245,255), math.random(5,15) ), false, 4,0, TrailDelay + 0.85, 1/(0+4)*0.55, "trails/smoke.vmt");  
 		local Glow = ents.Create("env_sprite")				
 		Glow:SetKeyValue("model","orangecore2.vmt")
 		Glow:SetKeyValue("rendercolor","255 150 100")
@@ -98,7 +98,7 @@ function ENT:Initialize()
 	-- e:SetScale( 1.35 )
 	-- util.Effect( "MuzzleEffect", e )
 	
-	ParticleEffect( "mg_muzzleflash", self:GetPos(), self:GetAngles(), nil )
+	-- ParticleEffect( "mg_muzzleflash", self:GetPos(), self:GetAngles(), nil )
 	
 	self:SetAngles( self:GetAngles() + Angle( math.Rand(-.05,.05 ), math.Rand(-.05,.05 ), math.Rand(-.05,.05 ) ) )
 	
@@ -253,5 +253,10 @@ function ENT:OnRemove()
 	end
 	
 	util.BlastDamage( self.Owner, self.Owner, self:GetPos() + Vector( 0,0,2 ), radius, dmg )
-	util.Decal( "scorch", self:GetPos(), self.HitNormal && self.HitNormal * -32 or self:GetPos() + self:GetUp() * -32 )
+	if( self.TracerScale1 && self.TracerScale1 >= 1 ) then
+	
+		util.Decal( "scorch", self:GetPos(), self.HitNormal && self.HitNormal * -32 or self:GetPos() + self:GetForward() * 32 )
+		
+	end
+	
 end
