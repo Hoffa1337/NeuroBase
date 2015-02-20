@@ -190,7 +190,7 @@ hook.Add( "Think", "BM_Clients_Key", function()
 end )
 
 function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
-
+	
 	local plane = ply:GetScriptedVehicle()
 	local view = {
 		origin = Origin,
@@ -203,6 +203,7 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 	end
 	if( IsValid( plane ) && ply:GetNetworkedBool( "InFlight", false )  ) then
 		
+		if( !plane.CameraLerpPos ) then plane.CameraLerpPos = plane:GetPos() end
 		
 		local pos	
 		local isGuidingRocket = plane:GetNetworkedBool( "DrawTracker", false )
@@ -307,9 +308,13 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 		if( plane.MinClimb && plane.MaxClimb ) then
 
 			-- if( ply:GetNetworkedBool("MouseAim",false) ) then
-				if( GetConVarNumber("jet_cockpitview") > 0 ) then
-				
-					ang = plane:GetAngles()
+				if( GetConVarNumber("jet_cockpitview") > 0 || ply:GetNetworkedBool("MouseAim") ) then
+					
+					if( GetConVarNumber("jet_cockpitview") > 0 ) then
+						
+						ang = plane:GetAngles()
+					
+					end
 					-- local mins,maxs = ang,ang
 					
 					-- if( plane.PropellerPos ) then
@@ -381,10 +386,27 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 		
 		fov = ply.LinearFOV
 				
-			-- ang = Angles
+		local pos = LerpVector( 0.0001, plane.LastPos or Origin, pos)
+		local newpos =  plane:GetPos() + plane:GetUp() * plane.CamUp + ply:GetAimVector() * -15 
+		
+		if( plane:GetVelocity():Length() < 200 ) then	
 			
+			newpos = plane:GetPos() + plane:GetForward() * -200
+			
+		end
+		plane.CameraLerpPos = LerpVector( 0.043551, plane.CameraLerpPos, newpos )
+		
+		-- print( math.floor(( pos - plane.CameraLerpPos ):Length() ))
+		
+		if( GetConVarNumber("jet_cockpitview")==0 && ply:GetNetworkedBool("MouseAim") ) then
+		
+			pos = plane.CameraLerpPos
+			ang = plane:GetAngles()
+			
+		end
+		
 		view = {
-			origin = LerpVector( 0.001, plane.LastPos or Origin, pos),
+			origin = pos, --,
 			angles = ang,-- / 2.2 ),
 			fov = fov
 			}

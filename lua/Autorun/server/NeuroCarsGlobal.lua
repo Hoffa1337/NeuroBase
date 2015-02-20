@@ -5,6 +5,20 @@ local Testers = "Virus, Elenion, Flubbadoo, xXAcePilotXx, (WEED)Kamikaze, Pimmie
 local SpecialThanks = "Cosmos(workshop administration)"
 local inlovingmemory = "In loving memory of Dragoneel1000. Rest In Peace as you will be forever missed."
 
+local physEnvironment = physenv.GetPerformanceSettings() 
+physEnvironment.MaxVelocity = 20000 
+physenv.SetPerformanceSettings(physEnvironment)
+
+-- PrintTable( physEnvironment )
+-- MaxCollisionChecksPerTimestep	=	50000
+-- MaxCollisionsPerObjectPerTimestep	=	10
+-- LookAheadTimeObjectsVsObject	=	0.5
+-- MaxVelocity	=	4000
+-- MinFrictionMass	=	10
+-- MaxFrictionMass	=	2500
+-- LookAheadTimeObjectsVsWorld	=	1
+
+
 function AddDir(dir) -- recursively adds everything in a directory to be downloaded by client
 	
 	
