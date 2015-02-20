@@ -398,12 +398,12 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 		
 		-- print( math.floor(( pos - plane.CameraLerpPos ):Length() ))
 		
-		if( GetConVarNumber("jet_cockpitview")==0 && ply:GetNetworkedBool("MouseAim") ) then
+		-- if( GetConVarNumber("jet_cockpitview")==0 && ply:GetNetworkedBool("MouseAim") ) then
 		
-			pos = plane.CameraLerpPos
-			ang = plane:GetAngles()
+			-- pos = plane.CameraLerpPos
+			-- ang = plane:GetAngles()
 			
-		end
+		-- end
 		
 		view = {
 			origin = pos, --,
