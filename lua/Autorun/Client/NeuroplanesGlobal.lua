@@ -312,7 +312,7 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 					
 					-- if( GetConVarNumber("jet_cockpitview") > 0 ) then
 						
-						-- ang = plane:GetAngles()
+						ang = plane:GetAngles()
 					
 					-- end
 					-- local mins,maxs = ang,ang
