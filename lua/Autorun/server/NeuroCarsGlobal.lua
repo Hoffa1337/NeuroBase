@@ -5,10 +5,6 @@ local Testers = "Virus, Elenion, Flubbadoo, xXAcePilotXx, (WEED)Kamikaze, Pimmie
 local SpecialThanks = "Cosmos(workshop administration)"
 local inlovingmemory = "In loving memory of Dragoneel1000. Rest In Peace as you will be forever missed."
 
-local physEnvironment = physenv.GetPerformanceSettings() 
-physEnvironment.MaxVelocity = 20000 
-physenv.SetPerformanceSettings(physEnvironment)
-
 -- PrintTable( physEnvironment )
 -- MaxCollisionChecksPerTimestep	=	50000
 -- MaxCollisionsPerObjectPerTimestep	=	10
@@ -320,7 +316,16 @@ if( table.HasValue( hook.GetTable(), "FixGhostCollisionModels" ) ) then
 end
 	
 hook.Add( "PlayerSpawnedSENT", "FixGhostCollisionModels", function( ply, e )
+
+	if( !GLOBAL_HACKFIX_FOR_PHYSICS_INITIALIZED ) then
 	
+		local physEnvironment = physenv.GetPerformanceSettings() 
+		physEnvironment.MaxVelocity = 20000 
+		physenv.SetPerformanceSettings(physEnvironment)
+		GLOBAL_HACKFIX_FOR_PHYSICS_INITIALIZED = "fucking batman"
+		
+	end
+
 	local mats = e:GetMaterials()
 	
 	if( e.InitialHealth && table.HasValue( mats, "___error" ) ) then
