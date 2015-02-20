@@ -308,13 +308,13 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 		if( plane.MinClimb && plane.MaxClimb ) then
 
 			-- if( ply:GetNetworkedBool("MouseAim",false) ) then
-				if( GetConVarNumber("jet_cockpitview") > 0 || ply:GetNetworkedBool("MouseAim") ) then
+				if( GetConVarNumber("jet_cockpitview") > 0 ) then
 					
-					if( GetConVarNumber("jet_cockpitview") > 0 ) then
+					-- if( GetConVarNumber("jet_cockpitview") > 0 ) then
 						
-						ang = plane:GetAngles()
+						-- ang = plane:GetAngles()
 					
-					end
+					-- end
 					-- local mins,maxs = ang,ang
 					
 					-- if( plane.PropellerPos ) then
