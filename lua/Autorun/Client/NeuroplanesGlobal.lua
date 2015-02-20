@@ -230,8 +230,8 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 				
 			end
 			
-			plane.yawcount = Lerp( 0.01, plane.yawcount, a.p/6 )
-			plane.rollcount = Lerp(0.01, plane.rollcount, a.r/6 )
+			plane.yawcount = Lerp( 0.0051, plane.yawcount, a.p/6 )
+			plane.rollcount = Lerp(0.0051, plane.rollcount, a.r/6 )
 			local tr,trace = {},{}
 			tr.start = ply:GetPos()
 			tr.endpos = plane:GetPos() + plane:GetForward() * (0.5*plane.CameraDistance) + plane:GetUp() * ( plane.CamUp + plane.yawcount ) + plane:GetRight() * plane.rollcount
@@ -249,8 +249,7 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 				pilotmodel:SetRenderMode( RENDERMODE_TRANSALPHA )
 				
 			end
-			
-			
+	
 		else
 			
 			local p = plane:GetPos() + plane:GetUp() * plane.CamUp + ply:GetAimVector() * -plane.CamDist
@@ -311,14 +310,17 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 				if( GetConVarNumber("jet_cockpitview") > 0 ) then
 				
 					ang = plane:GetAngles()
+					-- local mins,maxs = ang,ang
 					
 					-- if( plane.PropellerPos ) then
 						
 						-- pos = plane:GetPos() + plane:GetForward() * 100
 						
 						if( ply:KeyDown( IN_FORWARD ) || ply:KeyDown( IN_BACK ) || ply:KeyDown( IN_MOVELEFT ) || ply:KeyDown( IN_MOVERIGHT ) ) then
-						
-							ply:SetEyeAngles( plane:GetAngles() )
+							
+							local a = plane:GetAngles()
+							a:RotateAroundAxis( plane:GetRight(), -7.5 )
+							ply:SetEyeAngles( a )
 						
 						end
 					
@@ -329,6 +331,7 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 					ang.r = 0
 					
 				end
+				
 				-- pos = plane:GetPos() + plane:GetForward() * -plane.CameraDistance + plane:GetUp() * 15
 				-- ang = LerpAngle( 0.125, plane.LastAng or Angles, plane:GetAngles() )
 				
@@ -377,7 +380,9 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 		end
 		
 		fov = ply.LinearFOV
-		
+				
+			-- ang = Angles
+			
 		view = {
 			origin = LerpVector( 0.001, plane.LastPos or Origin, pos),
 			angles = ang,-- / 2.2 ),
