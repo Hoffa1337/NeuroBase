@@ -246,8 +246,9 @@ function ENT:OnRemove()
 		dmg = math.random( self.MinDamage, self.MaxDamage )
 		
 	end
-	
+	-- print("Radius:", radius, dmg  )
 	util.BlastDamage( self.Owner, self.Owner, self:GetPos() + Vector( 0,0,2 ), radius, dmg )
+	
 	if( self.TracerScale1 && self.TracerScale1 >= 1 ) then
 	
 		util.Decal( "scorch", self:GetPos(), self.HitNormal && self.HitNormal * -32 or self:GetPos() + self:GetForward() * 32 )

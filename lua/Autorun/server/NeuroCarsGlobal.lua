@@ -145,6 +145,24 @@ concommand.Add( "neurotec_swapseat", function( ply, cmd, args )
 	
 end )
 
+hook.Add("EntityTakeDamage", "FixPropKillDamage", function( ply, damage  ) 
+	
+	-- local ply = damage:GetVictim()
+	local prop = damage:GetAttacker()
+	local dType = damage:GetDamageType()
+
+	if( dType == DMG_CRUSH && IsValid( ply ) && IsValid( prop ) && !prop:IsPlayer() && IsValid( prop.Owner ) && prop.Owner:IsPlayer() ) then
+		
+		-- print( prop.Owner )
+		damage:SetAttacker( prop.Owner )
+		-- print( "Damage Type:", dType, damage:GetDamage() )
+		damage:SetDamage( damage:GetDamage() / 10 ) -- scale down damage from props / shells
+		
+
+	end
+
+end )
+
 concommand.Add("ntespv",function( ply, cmd, args ) 
 	
 	if( GetConVarNumber( "neurotec_disablemenu", 0 ) > 0 && !a( ply )) then return end
