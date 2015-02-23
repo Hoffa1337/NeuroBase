@@ -36,6 +36,8 @@ function ENT:Initialize()
 	if( self.TinyTrail ) then
 		
 		self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(245,255), math.random(245,255), math.random(245,255), math.random(5,15) ), false, 4,0, TrailDelay + 0.85, 1/(0+4)*0.55, "trails/smoke.vmt");  
+		-- self.SpriteTrail2 = util.SpriteTrail( self, 0, Color( 255, 255, 100, 255 ), false, 4, 4, TrailDelay + 0.05, 1/(0+4)*0.55, "trails/smoke.vmt");  
+		
 		local Glow = ents.Create("env_sprite")				
 		Glow:SetKeyValue("model","orangecore2.vmt")
 		Glow:SetKeyValue("rendercolor","255 150 100")
@@ -52,7 +54,7 @@ function ENT:Initialize()
 		Shine:SetKeyValue("renderamt", "255")
 		Shine:SetKeyValue("rendercolor", "255 130 100")
 		Shine:SetKeyValue("framerate12", "20")
-		Shine:SetKeyValue("model", "light_glow03.spr")
+		Shine:SetKeyValue("model", "light_glow01.spr")
 		Shine:SetKeyValue("scale", tostring( TraceScale2 ) )
 		Shine:SetKeyValue("GlowProxySize", tostring( GlowProxy ))
 		Shine:SetParent(self)
@@ -137,13 +139,6 @@ function ENT:PhysicsCollide( data, physobj )
 end
 
 function ENT:Think()
-		
-	if( IsValid( self:GetPhysicsObject() ) ) then
-	
-		self:GetPhysicsObject():ApplyForceCenter( self:GetForward() * 12345999 - Vector( 0,0,600 ) )
-		self:GetPhysicsObject():AddAngleVelocity( Vector( 99, 0, 0 ) )
-	
-	end
 	
 	if( self:WaterLevel() > 0 ) then
 		
@@ -256,7 +251,12 @@ function ENT:OnRemove()
 	if( self.TracerScale1 && self.TracerScale1 >= 1 ) then
 	
 		util.Decal( "scorch", self:GetPos(), self.HitNormal && self.HitNormal * -32 or self:GetPos() + self:GetForward() * 32 )
-		
+
+	else
+	
+		util.Decal( "SmallScorch", self:GetPos(), self.HitNormal && self.HitNormal * -32 or self:GetPos() + self:GetForward() * 32 )
+
+	
 	end
 	
 end

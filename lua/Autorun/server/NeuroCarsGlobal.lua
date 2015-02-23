@@ -3087,7 +3087,7 @@ function Meta:ScanForEnemies()
 			
 		end
 		
-		if ( !IsValid( self.Target ) ) then --better safe than sorry
+		if ( self && !IsValid( self.Target ) ) then --better safe than sorry
 			
 			if( IsValid( self.CycleTarget ) ) then
 			

@@ -12,7 +12,7 @@ function EFFECT:ImpactGround(data)
 	local scale 		= data:GetScale()			
 	local emitter 		= ParticleEmitter( pos )	
 
-	emitter = ParticleEmitter( pos )
+	self.Emitter = ParticleEmitter( pos )
 	
 	sound.Play( "Bullet.Flesh", pos)
 	
@@ -78,27 +78,6 @@ function EFFECT:ImpactGround(data)
 			Chunks:SetGravity( Vector( 0, 0, -600) ) 
 			Chunks:SetCollide( true )
 			Chunks:SetBounce( 0.01 )	
-			
-		end
-		
-	end
-
-	for i=0, math.ceil( 8*scale) do
-	
-		local Smoke = self.Emitter:Add( "particle/smokesprites_000"..math.random(1,9), pos )
-		
-		if ( Smoke ) then
-		
-			Smoke:SetVelocity( self.DirVec*math.random( 10,30*scale) + VectorRand():GetNormalized()*120*scale )
-			Smoke:SetDieTime( math.Rand( 0.5 , 3 )*scale )
-			Smoke:SetStartAlpha( math.Rand( 40, 50 ) )
-			Smoke:SetEndAlpha( 0 )
-			Smoke:SetStartSize( 20*scale )
-			Smoke:SetEndSize( 30*scale )
-			Smoke:SetRoll( math.Rand(150, 360) )
-			Smoke:SetRollDelta( math.Rand(-1, 1) )			
-			Smoke:SetAirResistance( 200 ) 			 
-			Smoke:SetColor( 100,100,100 )
 			
 		end
 		
