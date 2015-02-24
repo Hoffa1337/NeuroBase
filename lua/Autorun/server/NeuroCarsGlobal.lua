@@ -156,8 +156,11 @@ hook.Add("EntityTakeDamage", "FixPropKillDamage", function( ply, damage  )
 		-- print( prop.Owner )
 		damage:SetAttacker( prop.Owner )
 		-- print( "Damage Type:", dType, damage:GetDamage() )
-		damage:SetDamage( damage:GetDamage() / 10 ) -- scale down damage from props / shells
+		-- if( damage:GetDamage() > 100 ) then
 		
+			-- damage:SetDamage( damage:GetDamage() / 10 ) -- scale down damage from props / shells
+		
+		-- end
 
 	end
 
