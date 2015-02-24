@@ -1308,9 +1308,16 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		if( self.ContigiousFiringLoop ) then
 			
 			self.PrimarySound:Stop()
-			if( self.PrimaryStopSound && IsValid( self.Miniguns[1]) ) then
-			
-				self:EmitSound( self.PrimaryStopSound, 511, math.random(99,101) )
+			if( self.PrimaryStopSound && self.LastPrimaryAttack + self.PrimaryCooldown >= CurTime() ) then
+				-- timer.Simple(0, function() 
+				
+					if( IsValid( self.Miniguns[1] ) ) then
+					
+						self.Miniguns[1]:EmitSound( self.PrimaryStopSound, 511, math.random(99,101) )
+				
+					end
+				
+				-- end )
 				
 			end
 			
