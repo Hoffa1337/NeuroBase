@@ -59,14 +59,14 @@ function EFFECT:ImpactPlane(data)
  
 	for i=0, 20*scale do 
 	
-		local particle = emitter:Add( "effects/spark", pos) 
+		local particle = emitter:Add( "particles/Fire7", pos) 
 		
 		if (particle) then 
 		
 			particle:SetVelocity( ((normal*0.75)+VectorRand()) * math.Rand(50, 300)*scale ) 
 			particle:SetDieTime( math.Rand(0.3, 0.5) ) 				 
 			particle:SetStartAlpha( 255 )  				 
-			particle:SetStartSize( math.Rand(4, 6)*scale ) 
+			particle:SetStartSize( math.Rand(1, 2)*scale ) 
 			particle:SetEndSize( 0 ) 				 
 			particle:SetRoll( math.Rand(0, 360) ) 
 			particle:SetRollDelta( math.Rand(-5, 5) ) 				 
