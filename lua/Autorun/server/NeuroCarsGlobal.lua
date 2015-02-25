@@ -163,7 +163,12 @@ hook.Add("EntityTakeDamage", "FixPropKillDamage", function( ply, damage  )
 		-- end
 
 	end
-
+	-- if( dType == DMG_CRUSH && ply.HealthVal ) then
+		
+	
+	-- end
+		-- print( dType, damage:GetDamage(), damage:GetDamageForce():Length(), ply:GetClass(), prop:GetClass() )
+	
 end )
 
 concommand.Add("ntespv",function( ply, cmd, args ) 
