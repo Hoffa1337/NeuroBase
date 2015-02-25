@@ -2480,6 +2480,7 @@ hook.Add("PlayerSpawn", "NeuroPlanes_ViewhackFix",function( ply )
 
 	ply:SendLua("RunConsoleCommand([[cl_pitchdown]], [[89]])") --bypassing FVAR_SERVER_CAN_EXECUTE like a boss
 	ply:SendLua("RunConsoleCommand([[cl_pitchup]], [[89]])")
+	ply:SetNetworkedBool("PilotKilled", false )
 	
 end )
 

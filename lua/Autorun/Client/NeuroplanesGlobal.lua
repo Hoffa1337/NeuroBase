@@ -279,10 +279,10 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 			tr.start = plane:GetPos() + plane:GetUp() * 100
 			tr.endpos = p
 			tr.filter = { plane, ply }
-			tr.mask = MASK_WORLD
+			tr.mask = MASK_WORLDSOLID
 			trace = util.TraceLine( tr )
 			
-			pos = p-- trace.HitPos
+			pos = trace.HitPos + trace.HitNormal * 2
 			
 			if( IsValid( pilotmodel ) ) then
 				
