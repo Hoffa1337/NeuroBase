@@ -1,24 +1,25 @@
+function EFFECT:Init( data )
 
-function EFFECT:Init(data)
+	self.SprayTexture = "particle/particle_composite"
+	self.MistTexture = "particle/smokesprites_000"..math.random(1,9)
+	self.ChunksTexture = "effects/fleck_cement"..math.random(1,2)
 	
-	self:ImpactGround(data)
+	self:ImpactBody( data )
+
 	
 end
  
-function EFFECT:ImpactGround(data)
+function EFFECT:ImpactBody( data )
  
 	local pos		= data:GetOrigin()			
 	local normal 	= data:GetNormal()			
 	local scale 		= data:GetScale()			
 	local emitter 		= ParticleEmitter( pos )	
-
 	self.Emitter = ParticleEmitter( pos )
-	
-	sound.Play( "Bullet.Flesh", pos)
 	
 	for i=0, math.ceil( (10)*scale ) do
 
-		local Spray = self.Emitter:Add( "particle/particle_composite", pos )
+		local Spray = self.Emitter:Add( self.SprayTexture, pos )
 		
 		if ( Spray ) then
 			
@@ -39,7 +40,7 @@ function EFFECT:ImpactGround(data)
 
 	for i=0, math.ceil( (15)*scale) do
 	
-		local Mist = self.Emitter:Add( "particle/smokesprites_000"..math.random(1,9), pos )
+		local Mist = self.Emitter:Add( self.MistTexture, pos )
 		
 		if ( Mist ) then
 		
@@ -49,8 +50,8 @@ function EFFECT:ImpactGround(data)
 			Mist:SetEndAlpha( 0 )
 			Mist:SetStartSize( 10*scale )
 			Mist:SetEndSize( 30*scale )
-			Mist:SetRoll( math.Rand(150, 360) )
-			Mist:SetRollDelta( math.Rand(-2, 2) )			
+			Mist:SetRoll( math.Rand( 150, 360 ) )
+			Mist:SetRollDelta( math.Rand( -2, 2 ) )			
 			Mist:SetAirResistance( 300 ) 			 
 			Mist:SetGravity( Vector( math.Rand(-50, 50) * scale, math.Rand(-50, 50) * scale, math.Rand(-100, -400) ) ) 			
 			Mist:SetColor( 70,35,35 )

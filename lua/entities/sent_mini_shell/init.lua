@@ -124,7 +124,7 @@ function ENT:PhysicsCollide( data, physobj )
 		if( IsValid( data.HitEntity ) && data.HitEntity.HealthVal != nil ) then
 			
 			self.HitObject = true
-			if( data.HitEntity:IsNPC() || data.HitEntity:IsPlayer() ) then
+			if( data.HitEntity:IsNPC() || data.HitEntity:IsPlayer() || data.HitEntity:IsNextBot() ) then
 				
 				self.HitSquishy = true
 			
@@ -198,7 +198,8 @@ function ENT:OnRemove()
 			if( self.HitSquishy ) then
 				
 				util.Effect("micro_he_blood", impact)
-			
+				self:EmitSound( "Bullet.Flesh", 511, 100 )
+				
 			else
 			
 				if( self.HitObject ) then
