@@ -168,6 +168,7 @@ CreateClientConVar( "jet_HUD", "1", true, false )
 CreateClientConVar( "jet_HQhud", "0", true, false )
 CreateClientConVar( "jet_arcadeview", "0", true, false )
 CreateClientConVar( "jet_arcademode", "0", true, false )
+CreateClientConVar( "jet_radar", "0", true, false )
 surface.CreateFont ("Neuroplanes_Warning_Big",
 				{	font = "Helvetica",
 					size = 24,
@@ -593,27 +594,28 @@ function JetFighter.HUD() --Real Head-Up Display by StarChick. ;)
 	end
 	
 	//Radar
-	local RadarSize = ScrW()/6
-	surface.SetDrawColor( lockwarning, 255-lockwarning, 0, 25)
-	surface.DrawRect(16, ScrH()-RadarSize-10, RadarSize, RadarSize )
-	surface.SetDrawColor( lockwarning, 255-lockwarning, 0, 150)
-	surface.DrawLine( 16, ScrH()-RadarSize-10, RadarSize+16, ScrH()-10 )
-	surface.DrawLine( 16, ScrH()-10, RadarSize+16, ScrH()-RadarSize-10 )
-	surface.DrawLine( 16, ScrH()-RadarSize-10, 16, ScrH()-10 )
-	surface.DrawLine( RadarSize+16, ScrH()-RadarSize-10, RadarSize+16, ScrH()-10 )
-	surface.DrawLine( 16, ScrH()-RadarSize-10, RadarSize+16, ScrH()-RadarSize-10 )
-	surface.DrawLine( 16, ScrH()-10, RadarSize+16, ScrH()-10 )
+	if( GetConVarNumber("jet_radar") > 0 ) then				
+		local RadarSize = ScrW()/6
+		surface.SetDrawColor( lockwarning, 255-lockwarning, 0, 25)
+		surface.DrawRect(16, ScrH()-RadarSize-10, RadarSize, RadarSize )
+		surface.SetDrawColor( lockwarning, 255-lockwarning, 0, 150)
+		surface.DrawLine( 16, ScrH()-RadarSize-10, RadarSize+16, ScrH()-10 )
+		surface.DrawLine( 16, ScrH()-10, RadarSize+16, ScrH()-RadarSize-10 )
+		surface.DrawLine( 16, ScrH()-RadarSize-10, 16, ScrH()-10 )
+		surface.DrawLine( RadarSize+16, ScrH()-RadarSize-10, RadarSize+16, ScrH()-10 )
+		surface.DrawLine( 16, ScrH()-RadarSize-10, RadarSize+16, ScrH()-RadarSize-10 )
+		surface.DrawLine( 16, ScrH()-10, RadarSize+16, ScrH()-10 )
 
-	local yaw = math.rad( JetFighter.Plane:GetAngles().y+90)
-	local cosy = math.cos(yaw)
-	local siny = math.sin(yaw)
-	
-	surface.DrawCircle( 16 + RadarSize/2, ScrH()-RadarSize/2-10, RadarSize/2, Color( lockwarning, 255-lockwarning, 0,255 ))
- 	draw.SimpleText( "S", "BudgetLabel", 16 + RadarSize/2 + cosy*RadarSize*7/15, ScrH()-RadarSize/2-10 + siny*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-	draw.SimpleText( "E", "BudgetLabel", 16 + RadarSize/2 - siny*RadarSize*7/15, ScrH()-RadarSize/2-10 + cosy*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-	draw.SimpleText( "N", "BudgetLabel", 16 + RadarSize/2 - cosy*RadarSize*7/15, ScrH()-RadarSize/2-10 - siny*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-	draw.SimpleText( "W", "BudgetLabel", 16 + RadarSize/2 + siny*RadarSize*7/15, ScrH()-RadarSize/2-10 - cosy*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-	
+		local yaw = math.rad( JetFighter.Plane:GetAngles().y+90)
+		local cosy = math.cos(yaw)
+		local siny = math.sin(yaw)
+		
+		surface.DrawCircle( 16 + RadarSize/2, ScrH()-RadarSize/2-10, RadarSize/2, Color( lockwarning, 255-lockwarning, 0,255 ))
+		draw.SimpleText( "S", "BudgetLabel", 16 + RadarSize/2 + cosy*RadarSize*7/15, ScrH()-RadarSize/2-10 + siny*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		draw.SimpleText( "E", "BudgetLabel", 16 + RadarSize/2 - siny*RadarSize*7/15, ScrH()-RadarSize/2-10 + cosy*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		draw.SimpleText( "N", "BudgetLabel", 16 + RadarSize/2 - cosy*RadarSize*7/15, ScrH()-RadarSize/2-10 - siny*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		draw.SimpleText( "W", "BudgetLabel", 16 + RadarSize/2 + siny*RadarSize*7/15, ScrH()-RadarSize/2-10 - cosy*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+	end	
 	//Health indicator
 	draw.SimpleText( "Armor: "..math.floor(100*h).."%", "TargetID", ScrW()*5/6-48, ScrH()*4/5-40, Color(255*(1-h),255*h,0,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )		
 
