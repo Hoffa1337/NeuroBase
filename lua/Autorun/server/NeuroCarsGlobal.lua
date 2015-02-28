@@ -1074,7 +1074,7 @@ function Meta:Jet_FireMultiBarrel()
 									effectdata:SetStart( b.HitNormal )
 									effectdata:SetNormal( b.HitNormal )
 									effectdata:SetMagnitude( 1 )
-									effectdata:SetScale( 0.65 )
+									effectdata:SetScale( 0.75 )
 									effectdata:SetRadius( 1 )
 								util.Effect( "micro_he_impact_plane", effectdata )
 								
