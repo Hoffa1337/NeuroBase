@@ -1074,9 +1074,9 @@ function Meta:Jet_FireMultiBarrel()
 									effectdata:SetStart( b.HitNormal )
 									effectdata:SetNormal( b.HitNormal )
 									effectdata:SetMagnitude( 1 )
-									effectdata:SetScale( 1 )
+									effectdata:SetScale( 0.65 )
 									effectdata:SetRadius( 1 )
-								util.Effect( "cball_explode", effectdata )
+								util.Effect( "micro_he_impact_plane", effectdata )
 								
 								util.BlastDamage( self, a, b.HitPos, 32, math.random( self.MinDamage or 50, self.MaxDamage or 100 ) )
 								
