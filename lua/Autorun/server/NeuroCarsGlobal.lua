@@ -2501,6 +2501,8 @@ function Meta:EjectPilot()
 	self.Pilot:SetNetworkedEntity( "Plane", NULL ) 
 	self:SetNetworkedEntity("Pilot", NULL )
 	self.Pilot:SetNetworkedBool( "isGunner", false )
+	self.Pilot:SetNetworkedBool("PilotKilled", false )
+				
 	self.Pilot:Spawn()
 	-- local pilot = self.Pilot
 	-- local plane = self

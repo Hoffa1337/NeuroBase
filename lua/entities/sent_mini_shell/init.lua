@@ -103,7 +103,7 @@ function ENT:Initialize()
 	-- ParticleEffect( "mg_muzzleflash", self:GetPos(), self:GetAngles(), nil )
 	
 	self:SetAngles( self:GetAngles() + Angle( math.Rand(-.05,.05 ), math.Rand(-.05,.05 ), math.Rand(-.05,.05 ) ) )
-	
+	self:GetPhysicsObject():SetVelocity( self:GetForward() * 200000 )
 	-- self.StartTime = CurTime()
 	
 end
@@ -124,7 +124,7 @@ function ENT:PhysicsCollide( data, physobj )
 		if( IsValid( data.HitEntity ) && data.HitEntity.HealthVal != nil ) then
 			
 			self.HitObject = true
-			if( data.HitEntity:IsNPC() || data.HitEntity:IsPlayer() || data.HitEntity:IsNextBot() ) then
+			if( data.HitEntity:IsNPC() || data.HitEntity:IsPlayer() ) then
 				
 				self.HitSquishy = true
 			

@@ -245,7 +245,7 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 				trace = util.TraceLine( tr )
 				pos = trace.HitPos + plane:GetUp() * 10 + plane:GetForward()*10
 				-- debugoverlay.Line( tr.start, tr.endpos, Color( 255,0,0,255 ) )
-				
+				-- pos = plane:LocalToWorld( plane.CockpitPosition )
 			
 			else
 			
@@ -400,7 +400,7 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 			
 		else
 			
-			ply.LinearFOV = Lerp( 0.1, ply.LinearFOV, 90 )
+			ply.LinearFOV = Lerp( 0.1, ply.LinearFOV, 80 )
 			
 			
 		end
