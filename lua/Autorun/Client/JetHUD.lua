@@ -508,8 +508,6 @@ function JetFighter.HUD() --Real Head-Up Display by StarChick. ;)
 		surface.DrawRect( ScrW()*3/4+2, ScrH()/2-250 + 500*(1-h), 5, h*500 )
 		end
 
-	end
-	
 	//Speed
 	surface.DrawOutlinedRect(ScrW()/6, ScrH()/2-25, 50, 17 )
 	draw.SimpleText("SPEED", "TargetID", ScrW()/6+2, ScrH()/2-28, Color( lockwarning, 255-lockwarning, 0, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )
@@ -524,6 +522,18 @@ function JetFighter.HUD() --Real Head-Up Display by StarChick. ;)
 	//Cap
 	surface.DrawOutlinedRect( ScrW()/2- 17 , 100, 35, 17 )
 	draw.SimpleText( math.floor(Yaw), "TargetID", ScrW()/2, 108, Color( lockwarning, 255-lockwarning, 0, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+
+	else
+
+		if (JetFighter.Plane.VehicleType == VEHICLE_PLANE ) or 	(JetFighter.Plane.VehicleType == VEHICLE_HELICOPTER ) then
+			JetFighter.HUDindicators()
+			-- JetFighter.Panels()	
+		end
+	end
+	
+
+	//Health indicator
+	draw.SimpleText( "Armor: "..math.floor(100*h).."%", "TargetID", ScrW()*5/6-48, ScrH()*4/5-40, Color(255*(1-h),255*h,0,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )		
 	
 	//Equipment
 	draw.SimpleText("Countermeasures:"..flares, "TargetID", ScrW()*5/6-48, ScrH()*4/5+25, Color( flarestatus, 255-flarestatus, 0, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )
@@ -593,32 +603,6 @@ function JetFighter.HUD() --Real Head-Up Display by StarChick. ;)
 
 	end
 	
-	//Radar
-	if( GetConVarNumber("jet_radar") > 0 ) then				
-		local RadarSize = ScrW()/6
-		surface.SetDrawColor( lockwarning, 255-lockwarning, 0, 25)
-		surface.DrawRect(16, ScrH()-RadarSize-10, RadarSize, RadarSize )
-		surface.SetDrawColor( lockwarning, 255-lockwarning, 0, 150)
-		surface.DrawLine( 16, ScrH()-RadarSize-10, RadarSize+16, ScrH()-10 )
-		surface.DrawLine( 16, ScrH()-10, RadarSize+16, ScrH()-RadarSize-10 )
-		surface.DrawLine( 16, ScrH()-RadarSize-10, 16, ScrH()-10 )
-		surface.DrawLine( RadarSize+16, ScrH()-RadarSize-10, RadarSize+16, ScrH()-10 )
-		surface.DrawLine( 16, ScrH()-RadarSize-10, RadarSize+16, ScrH()-RadarSize-10 )
-		surface.DrawLine( 16, ScrH()-10, RadarSize+16, ScrH()-10 )
-
-		local yaw = math.rad( JetFighter.Plane:GetAngles().y+90)
-		local cosy = math.cos(yaw)
-		local siny = math.sin(yaw)
-		
-		surface.DrawCircle( 16 + RadarSize/2, ScrH()-RadarSize/2-10, RadarSize/2, Color( lockwarning, 255-lockwarning, 0,255 ))
-		draw.SimpleText( "S", "BudgetLabel", 16 + RadarSize/2 + cosy*RadarSize*7/15, ScrH()-RadarSize/2-10 + siny*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-		draw.SimpleText( "E", "BudgetLabel", 16 + RadarSize/2 - siny*RadarSize*7/15, ScrH()-RadarSize/2-10 + cosy*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-		draw.SimpleText( "N", "BudgetLabel", 16 + RadarSize/2 - cosy*RadarSize*7/15, ScrH()-RadarSize/2-10 - siny*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-		draw.SimpleText( "W", "BudgetLabel", 16 + RadarSize/2 + siny*RadarSize*7/15, ScrH()-RadarSize/2-10 - cosy*RadarSize*7/15, Color( lockwarning, 255-lockwarning, 0, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-	end	
-	//Health indicator
-	draw.SimpleText( "Armor: "..math.floor(100*h).."%", "TargetID", ScrW()*5/6-48, ScrH()*4/5-40, Color(255*(1-h),255*h,0,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )		
-
 /*	//Bombing Impact Prediction (this lag so much...)
 	local bpos = JetFighter.Plane:GetNetworkedVector("BombingImpactPos", JetFighter.Plane:GetPos() )
 	local ang = JetFighter.Plane:GetAngles()
@@ -630,6 +614,9 @@ function JetFighter.HUD() --Real Head-Up Display by StarChick. ;)
 */
 	//
 	surface.SetDrawColor( 0, 255, 0, 200)
+
+-- JetFighter.HUDhealth()
+JetFighter.HUDradar()
 
 end
 
@@ -855,6 +842,7 @@ local function BombingImpact( ent, v0,pitch)
 	return ImpactPos
 	
 end
+
 function JetFighter.DrawCrosshair( )
 	
 	JetFighter.Target = JetFighter.Plane:GetNetworkedEntity( "Target", NULL )
@@ -905,8 +893,20 @@ function JetFighter.DrawCrosshair( )
 	else
 	
 		local X,Y = x,y
-		surface.SetDrawColor( 0, 255, 0, 100 )
-		surface.DrawCircle( X, Y, 8, Color( 0, 255, 0, 100) ) --horizon circle
+		if( GetConVarNumber("jet_cockpitview",0) == 0 ) then
+			surface.SetDrawColor( 200, 200, 200, 100 )
+			surface.DrawCircle( X, Y, 8, Color( 200, 200, 200, 100) ) --grey horizon circle
+			surface.DrawCircle( X, Y, 1, Color( 200, 200, 200, 100) ) --aiming dot
+		else
+			surface.SetDrawColor( 0, 255, 0, 100 )
+			surface.DrawCircle( X, Y, 8, Color( 0, 255, 0, 100) ) --horizon circle
+					
+			surface.DrawLine( X+8*sinr, Y-8*cosr, X+20*sinr, Y-20*cosr ) --up
+			surface.DrawLine( X-8*cosr, Y-8*sinr, X-20*cosr, Y-20*sinr ) --left
+			surface.DrawLine( X+8*cosr, Y+8*sinr, X+20*cosr, Y+20*sinr ) --right
+							
+		end
+		
 		-- if( GetConVarNumber("jet_cockpitview",0) >  0 ) then
 		
 		if( JetFighter.Plane.WingModels ) then
@@ -927,14 +927,100 @@ function JetFighter.DrawCrosshair( )
 		end
 		
 		-- end
-		
-		surface.DrawLine( X+8*sinr, Y-8*cosr, X+20*sinr, Y-20*cosr ) --up
-		surface.DrawLine( X-8*cosr, Y-8*sinr, X-20*cosr, Y-20*sinr ) --left
-		surface.DrawLine( X+8*cosr, Y+8*sinr, X+20*cosr, Y+20*sinr ) --right
+
 	end
 
 end
 
+function JetFighter.HUDindicators()
+
+//throttle indicator
+	local spd = math.floor( JetFighter.Plane:GetVelocity():Length() / 1.8 )
+	local maxspd = math.floor( JetFighter.Plane:GetNetworkedInt( "MaxSpeed", 0 ) )
+	local thr = JetFighter.Plane:GetNetworkedInt( "Throttle", nil )
+	local ratio = 100*(JetFighter.Plane:GetNetworkedInt( "Throttle", (( JetFighter.Plane:GetVelocity():Length() )) ) )/maxspd
+	local size = 32
+	surface.SetDrawColor( 255, 255, 255, 200)
+	surface.DrawOutlinedRect( size, ScrH()-size*4, size, size*3) //box
+	surface.DrawOutlinedRect( size-1, ScrH()-size*4-1, size+2, size*3+2)
+	
+	surface.DrawOutlinedRect( size-5, ScrH()-size, size+10, 16 ) //speed textbox
+	draw.SimpleText( math.floor(spd), "TargetID", size+35, ScrH()-size, Color(255, 255, 255, 200), TEXT_ALIGN_RIGHT, TEXT_ALIGN_LEFT )		
+
+	surface.SetDrawColor( 100, 100, 100, 200)
+	surface.DrawRect( size+1 , ScrH()-size*4+1, size-2, size*3-2 ) //lever_background
+	surface.SetDrawColor( 55, 55, 55, 255)
+	-- surface.DrawRect( size-1 , ScrH()-5-size*(1+3*thr/100)+(6*thr/100), size+2, 4 ) //throttle lever
+	surface.DrawRect( size-1 , ScrH()-5-size*(1+3*ratio/100)+(6*ratio/100), size+2, 4 ) //throttle lever
+
+
+
+
+end
+
+function JetFighter.HUDhealth()
+
+	local hp = math.floor( JetFighter.Plane:GetNetworkedInt( "Health", 0 ) )
+	local maxhp = math.floor( JetFighter.Plane:GetNetworkedInt( "MaxHealth", 0 ) )
+	local h = hp / maxhp
+
+	local posX,posY = ScrW()*0.9, ScrH()*0.4
+	local length,diam,span,cord = 64,16,48,16
+	surface.SetDrawColor( 255, 255*h, 255*h, 100)
+	
+	surface.DrawRect(posX, posY, diam, length ) //body
+	surface.DrawRect(posX-span, posY+diam, span, cord ) //left wing
+	surface.DrawRect(posX+diam, posY+diam, span, cord ) //right wing
+	surface.DrawRect(posX-diam, posY+length, span, cord*0.9 ) //tail
+	surface.DrawRect(posX+6, posY+length, 4, cord ) //rudder
+	/*
+	local nb_engines = 1
+	for i = 1,nb_engines,2 do
+	surface.DrawRect( posX-span+(i-1)*span/2/nb_engines -nb_engines*2, posY+diam-4, 8, cord*1.5 )
+	-- surface.DrawRect(posX-span/2*i, posY+diam-4, 8, cord*1.5 )
+	-- surface.DrawRect(posX+diam+span/2*i-4, posY+diam-4, 8, cord*1.5 )
+	end
+	for i = 2,nb_engines,2 do
+	-- surface.DrawRect( posX+diam+(i-1)*span/2/nb_engines -nb_engines*2, posY+diam-4, 8, cord*1.5 )
+	-- surface.DrawRect(posX-span/2*i, posY+diam-4, 8, cord*1.5 )
+	-- surface.DrawRect(posX+diam+span/2*i-4, posY+diam-4, 8, cord*1.5 )
+	end
+	*/
+end
+
+function JetFighter.HUDradar()
+
+	local lockwarning
+	if JetFighter.DrawWarning then lockwarning = 255 else lockwarning = 0 end
+
+	//Radar
+	if( GetConVarNumber("jet_radar") > 0 ) then				
+		local RadarSize = ScrW()/6
+		local offsetX,offsetY = ScrW()*0.8,-16*6-RadarSize-10  -ScrH()*0.5
+		-- surface.SetDrawColor( lockwarning, 255-lockwarning, 0, 25)
+		surface.SetDrawColor( 255, 255-lockwarning, 255-lockwarning, 25)
+		surface.DrawRect(offsetX, ScrH()+offsetY, RadarSize, RadarSize )
+		-- surface.SetDrawColor( lockwarning, 255-lockwarning, 0, 150)
+		surface.SetDrawColor( 255, 255-lockwarning, 255-lockwarning, 150)
+		surface.DrawLine( offsetX, ScrH()+offsetY, RadarSize+offsetX, ScrH()+offsetY+RadarSize )
+		surface.DrawLine( offsetX, ScrH()+offsetY+RadarSize, RadarSize+offsetX, ScrH()+offsetY )
+		surface.DrawLine( offsetX, ScrH()+offsetY, offsetX, ScrH()+offsetY+RadarSize )
+		surface.DrawLine( RadarSize+offsetX, ScrH()+offsetY, RadarSize+offsetX, ScrH()+offsetY+RadarSize )
+		surface.DrawLine( offsetX, ScrH()+offsetY, RadarSize+offsetX, ScrH()+offsetY )
+		surface.DrawLine( offsetX, ScrH()+offsetY+RadarSize, RadarSize+offsetX, ScrH()+offsetY+RadarSize )
+
+		local yaw = math.rad( JetFighter.Plane:GetAngles().y+90)
+		local cosy = math.cos(yaw)
+		local siny = math.sin(yaw)
+		
+		surface.DrawCircle( offsetX + RadarSize/2, ScrH()+offsetY+RadarSize/2, RadarSize/2, Color( 255, 255-lockwarning, 255-lockwarning,255 ))
+		draw.SimpleText( "S", "BudgetLabel", offsetX + RadarSize/2 + cosy*RadarSize*7/15, ScrH()+offsetY+RadarSize/2 + siny*RadarSize*7/15, Color( 255, 255-lockwarning, 255-lockwarning, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		draw.SimpleText( "E", "BudgetLabel", offsetX + RadarSize/2 - siny*RadarSize*7/15, ScrH()+offsetY+RadarSize/2 + cosy*RadarSize*7/15, Color( 255, 255-lockwarning, 255-lockwarning, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		draw.SimpleText( "N", "BudgetLabel", offsetX + RadarSize/2 - cosy*RadarSize*7/15, ScrH()+offsetY+RadarSize/2 - siny*RadarSize*7/15, Color( 255, 255-lockwarning, 255-lockwarning, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+		draw.SimpleText( "W", "BudgetLabel", offsetX + RadarSize/2 + siny*RadarSize*7/15, ScrH()+offsetY+RadarSize/2 - cosy*RadarSize*7/15, Color( 255, 255-lockwarning, 255-lockwarning, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+	end	
+
+end
 
 function DrawHelicopterOuterCrosshair()
 	
@@ -1023,7 +1109,6 @@ local function DrawThermal()
 
 end
 
-
 function DrawHitpointCrosshair( gun )
 
 	local pos = gun:GetPos() 
@@ -1087,7 +1172,6 @@ local function Draw3DWeaponCrosshair( gun )
 	end
 	
 end
-
 
 local function DrawLaserguidanceCrosshair( sizex, sizey )
 
