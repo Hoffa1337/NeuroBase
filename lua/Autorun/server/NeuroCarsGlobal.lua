@@ -2041,6 +2041,8 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		r.TracerScale2 = self.TracerScale2 or 0.1
 		r.TracerGlowProxy = self.TracerGlowProxy or 1
 		r:GetPhysicsObject():SetMass( 1 )
+		r.MinDamage = self.MinDamage or 20
+		r.MaxDamage = self.MaxDamage or 35
 		ParticleEffectAttach( "mg_muzzleflash", PATTACH_ABSORIGIN_FOLLOW, wep, 0 )
 		timer.Simple( 0.15, 
 			function()  	
