@@ -22,7 +22,7 @@ function ENT:Initialize()
 	
 	if ( self.PhysObj:IsValid() ) then
 	
-		self.PhysObj:SetMass( 5000000 )
+		self.PhysObj:SetMass( 5 )
 		self.PhysObj:EnableGravity( true )
 		self.PhysObj:EnableDrag( true )
 		self.PhysObj:Wake()
