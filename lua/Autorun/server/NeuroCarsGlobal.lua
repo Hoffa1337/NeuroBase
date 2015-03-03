@@ -2040,17 +2040,14 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		r.TracerScale1 = self.TracerScale1 or 0.1
 		r.TracerScale2 = self.TracerScale2 or 0.1
 		r.TracerGlowProxy = self.TracerGlowProxy or 1
-	
+		r:GetPhysicsObject():SetMass( 1 )
 		ParticleEffectAttach( "mg_muzzleflash", PATTACH_ABSORIGIN_FOLLOW, wep, 0 )
-		timer.Simple( 0.5, function()  
-			
-			if (IsValid( wep ) ) then 
-			
-				wep:StopParticles()
-				
-			end
-		
-		end )
+		timer.Simple( 0.15, 
+			function()  	
+				if (IsValid( wep ) ) then 
+					wep:StopParticles()
+				end
+			end )
 		
 	end
 	r:SetRenderMode( RENDERMODE_TRANSALPHA )
