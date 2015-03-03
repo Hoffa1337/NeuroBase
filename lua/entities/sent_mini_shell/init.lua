@@ -109,7 +109,8 @@ function ENT:Initialize()
 end
 
 function ENT:PhysicsCollide( data, physobj )
-		
+	
+	-- print( physobj:GetMass() )
 	-- if( self.StartTime + 0.0125 >= CurTime() ) then return end
 	self.HitNormal =  data.HitNormal*-1
 	
@@ -120,20 +121,21 @@ function ENT:PhysicsCollide( data, physobj )
 	end
 	
 	-- if ( data.Speed > 1 && data.DeltaTime > 0.1 ) then 
+	
+	if( IsValid( data.HitEntity ) && data.HitEntity.HealthVal != nil ) then
 		
-		if( IsValid( data.HitEntity ) && data.HitEntity.HealthVal != nil ) then
+		self.HitObject = true
+		if( data.HitEntity:IsNPC() || data.HitEntity:IsPlayer() ) then
 			
-			self.HitObject = true
-			if( data.HitEntity:IsNPC() || data.HitEntity:IsPlayer() ) then
-				
-				self.HitSquishy = true
-			
-			end
-			
+			self.HitSquishy = true
+		
 		end
 		
-		self:Remove()
-		
+	end
+	
+	self:Remove()
+	
+	return
 	-- end
 	
 end
@@ -150,6 +152,26 @@ function ENT:Think()
 		
 	
 end
+
+-- function ENT:PhysicsUpdate()
+	
+	-- local tr,trace ={},{}
+	-- tr.start = self:GetPos()
+	-- tr.endpos = tr.start + self:GetForward() * 20
+	-- tr.filter = { self, self.Owner }
+	-- tr.mask = MASK_SHOT_HULL
+	-- trace = util.TraceLine( tr )
+	-- self:DrawLaserTracer( tr.start, tr.endpos )
+	-- if( trace.Hit ) then
+		
+		-- self:GetPhysicsObject():Sleep()
+		-- self:Remove()
+		
+		-- return
+		
+	-- end
+	
+-- end
 
 function ENT:OnRemove()
 	
