@@ -1981,35 +1981,39 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	-- Make the newly fired weapon invisible so it looks like we're actually dropping something.
 	if( wep.Cooldown >= 2 ) then
 		
-		wep:SetRenderMode( RENDERMODE_TRANSALPHA )
-		wep:SetColor( Color( 0,0,0,0 ) )
-		self:SetNetworkedInt( "IdCoolingDown", wep.Identity)
-		self:SetNetworkedBool( "IsCoolingDown", true)
-		self:SetNetworkedInt( "CoolDown", wep.Cooldown-0.5)
+		if( ( wep.Color && wep.Color.a != 0 ) || !wep.Color ) then
+		
+			wep:SetRenderMode( RENDERMODE_TRANSALPHA )
+			wep:SetColor( Color( 0,0,0,0 ) )
+			self:SetNetworkedInt( "IdCoolingDown", wep.Identity)
+			self:SetNetworkedBool( "IsCoolingDown", true)
+			self:SetNetworkedInt( "CoolDown", wep.Cooldown-0.5)
 
-		timer.Simple( wep.Cooldown-0.5, 
-			function() -- Make the missile re-appear when the cooldown is off.
-			
-				if( IsValid( wep ) ) then 
+			timer.Simple( wep.Cooldown-0.5, 
+				function() -- Make the missile re-appear when the cooldown is off.
 				
-					wep:SetColor( Color( 255,255,255,255) ) 
-					-- self:SetNetworkedInt( "IdCoolingDown", 0 )
-					self:SetNetworkedBool( "IsCoolingDown", 0 )
-					local effectdata = EffectData()
-					effectdata:SetOrigin( wep:GetPos()  )
-					effectdata:SetEntity( wep )
-					util.Effect( "propspawn", effectdata )
+					if( IsValid( wep ) ) then 
 					
-					if( IsValid( self.Pilot ) ) then
-					
-						self.Pilot:PrintMessage( HUD_PRINTTALK, self.PrintName..": "..wep.PrintName.." is armed and ready!" )
+						wep:SetColor( Color( 255,255,255,255) ) 
+						-- self:SetNetworkedInt( "IdCoolingDown", 0 )
+						self:SetNetworkedBool( "IsCoolingDown", 0 )
+						local effectdata = EffectData()
+						effectdata:SetOrigin( wep:GetPos()  )
+						effectdata:SetEntity( wep )
+						util.Effect( "propspawn", effectdata )
 						
-					end
-					-- wep:EmitSound( "
-				end 
+						if( IsValid( self.Pilot ) ) then
+						
+							self.Pilot:PrintMessage( HUD_PRINTTALK, self.PrintName..": "..wep.PrintName.." is armed and ready!" )
+							
+						end
+						-- wep:EmitSound( "
+					end 
+				
+				end )
 			
-			end )
-	
+		end
+		
 	end
 	
 	if( wep.Class == nil ) then error("NeuroTec: Tried to call NeuroPlanes_FireRobot with"..tostring(wep).." as argument!" ) return end
@@ -2030,7 +2034,22 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	r:PhysicsInit( SOLID_VPHYSICS )
 	r:SetMoveType( MOVETYPE_VPHYSICS )
 	r:SetSolid( SOLID_VPHYSICS )
-
+	if( wep.Type == "Shell" ) then
+		
+		r.TinyTrail = true
+		
+		ParticleEffectAttach( "mg_muzzleflash", PATTACH_ABSORIGIN_FOLLOW, wep, 0 )
+		timer.Simple( 0.5, function()  
+			
+			if (IsValid( wep ) ) then 
+			
+				wep:StopParticles()
+				
+			end
+		
+		end )
+		
+	end
 	r:SetRenderMode( RENDERMODE_TRANSALPHA )
 	-- r:SetColor( Color(0,0,0,0) )
 	r:Spawn()
@@ -2041,7 +2060,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	r:SetPhysicsAttacker( pilot, 99999999 )
 	r:SetCollisionGroup( COLLISION_GROUP_DEBRIS )
 	-- r:SetPos( wep:GetPos() )
-	r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity()  * 0.7 )
+	r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity() )
 	r:GetPhysicsObject():EnableDrag( true )
 	r:GetPhysicsObject():EnableGravity( true )	
 	if( wep.SubType && wep.SubType == "Cluster" ) then
@@ -2221,6 +2240,13 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		end
 		
 	end
+	
+	if( wep.Type == "Shell" ) then
+		
+		r:GetPhysicsObject():SetVelocity( r:GetForward() * 500000000 )
+
+	end
+	
 	wep.LastAttack = CurTime()
 	
 	-- wep:Remove()
