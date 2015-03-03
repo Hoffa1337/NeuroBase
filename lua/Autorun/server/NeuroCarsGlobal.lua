@@ -1457,7 +1457,7 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		
 	end
 	
-	if ( #self.EquipmentNames > 0 && self.Pilot:KeyDown( IN_ATTACK2 ) && self.LastAttackKeyDown + 0.5 < CurTime() ) then
+	if ( #self.EquipmentNames > 0 && self.Pilot:KeyDown( IN_ATTACK2 ) && self.LastAttackKeyDown + ( self._2ndCD or 0.5 ) < CurTime() ) then
 		
 		if( self.Destroyed ) then return end
 			
@@ -2037,7 +2037,10 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	if( wep.Type == "Shell" ) then
 		
 		r.TinyTrail = true
-		
+		r.TracerScale1 = self.TracerScale1 or 0.1
+		r.TracerScale2 = self.TracerScale2 or 0.1
+		r.TracerGlowProxy = self.TracerGlowProxy or 1
+	
 		ParticleEffectAttach( "mg_muzzleflash", PATTACH_ABSORIGIN_FOLLOW, wep, 0 )
 		timer.Simple( 0.5, function()  
 			
