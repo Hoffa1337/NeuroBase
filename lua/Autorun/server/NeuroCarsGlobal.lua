@@ -2044,7 +2044,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		r.MinDamage = self.MinDamage or 20
 		r.MaxDamage = self.MaxDamage or 35
 		ParticleEffectAttach( "mg_muzzleflash", PATTACH_ABSORIGIN_FOLLOW, wep, 0 )
-		timer.Simple( 0.15, 
+		timer.Simple( 0.75, 
 			function()  	
 				if (IsValid( wep ) ) then 
 					wep:StopParticles()
@@ -2059,10 +2059,11 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	r:Fire( "Kill", "", 30 )
 	r:SetAngles( wep:GetAngles() )
 	r.Owner = pilot
+	
 	r:SetPhysicsAttacker( pilot, 99999999 )
-	r:SetCollisionGroup( COLLISION_GROUP_DEBRIS )
-	-- r:SetPos( wep:GetPos() )
-	r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity() )
+	r:SetCollisionGroup( COLLISION_GROUP_WORLD )
+	r:SetPos( wep:GetPos() )
+	r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity() * .5)
 	r:GetPhysicsObject():EnableDrag( true )
 	r:GetPhysicsObject():EnableGravity( true )	
 	if( wep.SubType && wep.SubType == "Cluster" ) then
@@ -2088,11 +2089,13 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		
 	-- end )
 	
-	timer.Simple( 1, function() 
+	timer.Simple( .15, function() 
 		
 		if( IsValid( r ) ) then
 			
 			r:SetCollisionGroup( COLLISION_GROUP_INTERACTIVE )
+			-- r:SetColor( Color( 255,255,255,255 ) )
+			-- r:SetPos( wep:GetPos() )
 		end
 		
 	end )
@@ -2206,7 +2209,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 				if( IsValid( wep ) && IsValid( pilot ) ) then
 					
 					local r = ents.Create( wep.Class )
-					r:SetPos( wep:GetPos() )
+					-- r:SetPos( wep:GetPos() )
 					r:SetOwner( self )
 					r:SetPhysicsAttacker( pilot, 9999999 )
 					r.Target = self.Target
@@ -2230,7 +2233,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 						if ( IsValid( r ) && r:GetPhysicsObject() != nil ) then
 							
 							r:SetPos( wep:GetPos() )
-							r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity() * .8 )
+							r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity() * .75 )
 							
 						end
 						
@@ -2251,6 +2254,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	
 	wep.LastAttack = CurTime()
 	
+	-- r:SetPos( wep:GetPos() - wep:GetVelocity())
 	-- wep:Remove()
 	-- self:CycleThroughWeaponsList()
 	
