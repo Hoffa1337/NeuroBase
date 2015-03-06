@@ -2,7 +2,7 @@ local NeuroPlanesVersion = Revision()
 local Authors = "Hoffa, StarChick971, Sillirion, Aftokinito"
 local Contributors = "Fireking552, Flyboi, Inaki, Sakarias88, Beat the Zombie, Braxen, Professor Heavy, The Vman, Killstr3aKs"
 local Testers = "Virus, Elenion, Flubbadoo, xXAcePilotXx, (WEED)Kamikaze, Pimmie, Rifleman"
-local SpecialThanks = "Cosmos(workshop administration)"
+local SpecialThanks = "Cosmos(workshop administration), Handsome Matt (Hosting)"
 local inlovingmemory = "In loving memory of Dragoneel1000. Rest In Peace as you will be forever missed."
 
 -- PrintTable( physEnvironment )
@@ -942,7 +942,7 @@ function Meta:Micro_FireCannons()
 			end
 		
 		end
-		
+		bullet:GetPhysicsObject():SetMass( 5 )
 		bullet:Spawn()
 		bullet.MinDamage = self.MinDamage
 		bullet.MaxDamage = self.MaxDamage
@@ -950,7 +950,7 @@ function Meta:Micro_FireCannons()
 		bullet:SetPhysicsAttacker( self.Pilot, 99999999 )
 		bullet:SetOwner( self.Pilot )
 		bullet.Owner = self.Pilot
-		bullet:GetPhysicsObject():SetMass( 5 )
+		
 		bullet:GetPhysicsObject():SetDamping( 0,0 )
 		bullet:SetNoDraw( true )
 		
