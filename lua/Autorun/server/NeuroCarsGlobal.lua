@@ -1935,7 +1935,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		return
 		
 	end
-	
+
 	if ( wep.Type == "Lasercannon" ) then
 
 		/*for i = 1, 36 do
@@ -2248,8 +2248,13 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	
 	if( wep.Type == "Shell" ) then
 		
-		r:GetPhysicsObject():SetVelocity( r:GetForward() * 500000000 )
-
+		r:GetPhysicsObject():SetVelocity( r:GetForward() * 50000000 )
+		local AngForce = self.2ndRecoilAngle or 10.05
+		local Duration = self.2ndRecoilDuraiton or 0.07
+		local KickBack = self.2ndRecoilForce or -500000
+		
+		self.Pilot:SendLua([[NetworkedScreenRumble( ]]..AngForce..[[, ]]..Duration..[[ )]])
+		
 	end
 	
 	wep.LastAttack = CurTime()
