@@ -942,7 +942,7 @@ function Meta:Micro_FireCannons()
 			end
 		
 		end
-		bullet:GetPhysicsObject():SetMass( 5 )
+		
 		bullet:Spawn()
 		bullet.MinDamage = self.MinDamage
 		bullet.MaxDamage = self.MaxDamage
@@ -950,7 +950,7 @@ function Meta:Micro_FireCannons()
 		bullet:SetPhysicsAttacker( self.Pilot, 99999999 )
 		bullet:SetOwner( self.Pilot )
 		bullet.Owner = self.Pilot
-		
+		bullet:GetPhysicsObject():SetMass( 5 )
 		bullet:GetPhysicsObject():SetDamping( 0,0 )
 		bullet:SetNoDraw( true )
 		

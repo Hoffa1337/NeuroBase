@@ -30,7 +30,7 @@ function FixCalcView( ply, Origin, Angles, Fov, NearZ, FarZ )
 		if ( vehicle.CalcView != nil ) then
 		
 			local view = vehicle:CalcView(  ply, Origin, Angles, Fov )
-
+			view.znear = 1
 			return view
 		
 		end
