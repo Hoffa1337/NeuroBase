@@ -2249,12 +2249,12 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	if( wep.Type == "Shell" ) then
 		
 		r:GetPhysicsObject():SetVelocity( r:GetForward() * 50000000 )
-		local AngForce = self.2ndRecoilAngle or 10.05
-		local Duration = self.2ndRecoilDuraiton or 0.07
-		local KickBack = self.2ndRecoilForce or -500000
+		local AngForce = self._2ndRecoilAngle or 10.05
+		local Duration = self._2ndRecoilDuraiton or 0.07
+		local KickBack = self._2ndRecoilForce or -500000
 		
 		self.Pilot:SendLua([[NetworkedScreenRumble( ]]..AngForce..[[, ]]..Duration..[[ )]])
-		
+		 
 	end
 	
 	wep.LastAttack = CurTime()
