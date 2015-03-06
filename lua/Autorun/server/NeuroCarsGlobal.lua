@@ -2251,7 +2251,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		r:GetPhysicsObject():SetVelocity( r:GetForward() * 50000000 )
 		local AngForce = self._2ndRecoilAngle or 10.05
 		local Duration = self._2ndRecoilDuraiton or 0.07
-		local KickBack = self._2ndRecoilForce or -500000
+		local KickBack = self._2ndRecoilForce or -50000
 		
 		self.Pilot:SendLua([[NetworkedScreenRumble( ]]..AngForce..[[, ]]..Duration..[[ )]])
 		 

@@ -385,7 +385,13 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 		if( LastShakeReceived + ShakeDuration >= CurTime() ) then
 			local op = ang
 			
-			ang.p = Lerp( 0.1, ang.p, ang.p - ShakeMagnitude )
+			-- while ShakeMagnitude != 0 do 
+			
+				-- ShakeMagnitude = ShakeMagnitude * math.random(-1,1)
+			
+			
+			ang = LerpAngle( 0.1, ang, Angle( ang.p -  ShakeMagnitude, ang.y - ShakeMagnitude, ang.r  )  )
+			pos = pos + VectorRand()
 			-- ang.r = op.r
 			
 		
