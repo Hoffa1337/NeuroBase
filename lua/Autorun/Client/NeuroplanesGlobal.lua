@@ -225,7 +225,7 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 			-- view.zfar = 999999
 			
 			pos = plane:LocalToWorld( plane.CockpitPosition ) //Origin//
-			ang = pAng
+			-- ang = pAng
 			/*
 			local a = plane:GetAngles()
 			if( !plane.rollcount ) then
@@ -336,7 +336,8 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 					
 					-- if( GetConVarNumber("jet_cockpitview") > 0 ) then
 						
-						ang = plane:GetAngles()
+						ang.r = plane:GetAngles().r
+						
 					
 					-- end
 					-- local mins,maxs = ang,ang
@@ -349,7 +350,7 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 							
 							local a = plane:GetAngles()
 							a:RotateAroundAxis( plane:GetRight(), -7.5 )
-							ply:SetEyeAngles( a )
+							ply:SetEyeAngles( LerpAngle( 0.051, ply:EyeAngles(), a ) )
 						
 						end
 					
