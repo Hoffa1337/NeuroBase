@@ -195,7 +195,8 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 	local plane = ply:GetScriptedVehicle()
 	local view = {
 		origin = Origin,
-		angles = Angles
+		angles = Angles,
+		znear = 0
 		}
 	if( !ply.LinearFOV ) then
 		
@@ -220,10 +221,12 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 		
 		if( GetConVarNumber("jet_cockpitview") > 0 ) then
 			
-
-			-- pos = plane:LocalToWorld( plane.CockpitPosition ) //Origin//
-			-- ang = pAng
+			-- view.znear = 32
+			-- view.zfar = 999999
 			
+			pos = plane:LocalToWorld( plane.CockpitPosition ) //Origin//
+			ang = pAng
+			/*
 			local a = plane:GetAngles()
 			if( !plane.rollcount ) then
 				
@@ -260,10 +263,10 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 				
 		
 			end
-			
+		
 			
 			a.r = a.r / 1.4
-			
+				
 			ang = LerpAngle( 0.01, plane.LastAng or Angles,  a )
 			if( IsValid( pilotmodel ) ) then
 				
@@ -271,7 +274,7 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 				pilotmodel:SetRenderMode( RENDERMODE_TRANSALPHA )
 				
 			end
-	
+	*/
 		else
 			
 			local p = plane:GetPos() + plane:GetUp() * plane.CamUp + ply:GetAimVector() * -plane.CamDist
