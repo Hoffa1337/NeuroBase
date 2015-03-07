@@ -416,6 +416,9 @@ function JetFighter.Panels()
 end
 
 function JetFighter.HUD() --Real Head-Up Display by StarChick. ;)
+
+	local spd = JetFighter.Plane:GetVelocity():Length()
+	local maxspd = math.floor( JetFighter.Plane:GetNetworkedInt( "MaxSpeed", 1000*1.8 ) )
 	
 	local lockwarning
 	if JetFighter.DrawWarning then 
@@ -427,7 +430,7 @@ function JetFighter.HUD() --Real Head-Up Display by StarChick. ;)
 	end
 	
 	local dangerzone
-	if( JetFighter.Plane:GetVelocity():Length() > JetFighter.Plane.MaxVelocity * 1.2 ) then dangerzone = 255 else dangerzone = 0 end
+	if( spd > maxspd * 1.2 ) then dangerzone = 255 else dangerzone = 0 end
 	
 	if ( IsValid( JetFighter.Target ) && JetFighter.Target != JetFighter.Plane && v == JetFighter.Target ) then
 		draw.SimpleText( "Locked On", "ChatFont", x, y, Color( 255, 0, 0, 240 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
