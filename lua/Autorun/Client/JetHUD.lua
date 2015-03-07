@@ -9,7 +9,9 @@ local math = math
 local ScrW = ScrW
 local ScrH = ScrH
 local Color = Color
-
+local compass = surface.GetTextureID("hud/ntec_compass") 
+local compass_letters = surface.GetTextureID("hud/ntec_compass_letters") 
+local plyHUDcolor = Color(255,200,50)
 
 local AverageHeight = 0
 function FixCalcView( ply, Origin, Angles, Fov, NearZ, FarZ ) 
@@ -414,25 +416,6 @@ function JetFighter.Panels()
 end
 
 function JetFighter.HUD() --Real Head-Up Display by StarChick. ;)
-
-	local Yaw = math.floor( JetFighter.Plane:GetAngles().y ) + 180
-	local maxspd = math.floor( JetFighter.Plane:GetNetworkedInt( "MaxSpeed", 0 ) )
-//	local throttle =  ( JetFighter.Plane:GetVelocity():Length() * 100) / maxspd
-	local throttle = 100*(JetFighter.Plane:GetNetworkedInt( "Throttle", (( JetFighter.Plane:GetVelocity():Length() )) ) )/maxspd
-	local throttle2 = math.floor( JetFighter.Plane:GetNetworkedInt( "Throttle", nil ) )
-	local spd = math.floor( JetFighter.Plane:GetVelocity():Length() / 1.8 )
-	local hp = math.floor( JetFighter.Plane:GetNetworkedInt( "Health", 0 ) )
-	local maxhp = math.floor( JetFighter.Plane:GetNetworkedInt( "MaxHealth", 0 ) )
-	local h = hp / maxhp
-	local wep = JetFighter.Plane:GetNetworkedString("NeuroPlanes_ActiveWeapon",tostring("NONE_AVAILABLE")) -- should this really be necessary?
-	local NTeam = JetFighter.Plane:GetNetworkedInt( "NeuroTeam", 1 )
-
-	local flares = 	JetFighter.Plane:GetNetworkedInt( "FlareCount", 0 )
-	local flarestatus
-	if flares < 1 then flarestatus = 255 else flarestatus = 0 end
-
-	local locking
-	if ( IsValid( JetFighter.Target ) ) then locking = 255 else locking = 0 end
 	
 	local lockwarning
 	if JetFighter.DrawWarning then 
@@ -442,6 +425,9 @@ function JetFighter.HUD() --Real Head-Up Display by StarChick. ;)
 	lockwarning = 0
 --	JetFighter.Pilot:StopSound( "LockOn/Launch.mp3" )
 	end
+	
+	local dangerzone
+	if( JetFighter.Plane:GetVelocity():Length() > JetFighter.Plane.MaxVelocity * 1.2 ) then dangerzone = 255 else dangerzone = 0 end
 	
 	if ( IsValid( JetFighter.Target ) && JetFighter.Target != JetFighter.Plane && v == JetFighter.Target ) then
 		draw.SimpleText( "Locked On", "ChatFont", x, y, Color( 255, 0, 0, 240 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
@@ -453,93 +439,20 @@ function JetFighter.HUD() --Real Head-Up Display by StarChick. ;)
 	surface.SetDrawColor( lockwarning, 255-lockwarning, 0, 200)
 	if( GetConVarNumber("jet_cockpitview") > 0 ) then
 	
-	
-	//Artificial horizon that must work only for planes
-
-	if (JetFighter.Plane.VehicleType == VEHICLE_PLANE ) then --Only jets can use extra boost
-		
-		JetFighter.Target = JetFighter.Plane:GetNetworkedEntity( "Target", NULL )
-		local offs = JetFighter.Plane:GetNetworkedInt( "HudOffset", 0 )
-		local pos =  ( JetFighter.Plane:GetPos( ) + JetFighter.Plane:GetUp( ) * offs + JetFighter.Plane:GetForward( ) * 3000 ):ToScreen()
-		local x,y = pos.x, pos.y
-		local HorizonPoint = (JetFighter.Plane:GetPos() + JetFighter.Plane:GetUp( ) * offs +JetFighter.Plane:GetForward()*10000):ToScreen( )
-		local X,Y = HorizonPoint.x, HorizonPoint.y
-		-- local r = math.rad( 100*JetFighter.Plane:GetAngles().r-60)/180
-		local r = math.rad( JetFighter.Plane:GetAngles().r) + math.rad( JetFighter.Pilot:EyeAngles().r)
-		local cosr = math.cos(r)
-		local sinr = math.sin(r)
-		local p = math.rad(JetFighter.Plane:GetAngles().p)
-		local Pi = math.pi
-		
-		surface.DrawLine( x, y, x-16*math.cos(-r+Pi/3), y+16*math.sin(-r+Pi/3) )
-		surface.DrawLine( x-16*math.cos(-r+Pi/3), y+16*math.sin(-r+Pi/3), x-16*cosr, y-16*sinr )
-		surface.DrawLine( x-16*cosr, y-16*sinr, x-32*cosr, y-32*sinr )
-		
-		surface.DrawLine( x, y, x+16*math.cos(r+Pi/3), y+16*math.sin(r+Pi/3) )
-		surface.DrawLine( x+16*math.cos(r+Pi/3), y+16*math.sin(r+Pi/3), x+16*cosr, y+16*sinr )
-		surface.DrawLine( x+16*cosr, y+16*sinr, x+32*cosr, y+32*sinr )
-
-		local HorizonBar = ScrW()/12
-		surface.DrawLine( x-48*cosr, y-48*sinr, x-HorizonBar*cosr, y-HorizonBar*sinr )
-		surface.DrawLine( x+48*cosr, y+48*sinr, x+HorizonBar*cosr, y+HorizonBar*sinr )
-		
-/*	//Moved to JetFight.DrawCrosshair	
-		surface.DrawCircle( X, Y, 8, Color( lockwarning, 255-lockwarning, 0, 200) ) --horizon circle
-		surface.DrawLine( X+8*sinr, Y-8*cosr, X+20*sinr, Y-20*cosr ) --up
-		surface.DrawLine( X-8*cosr, Y-8*sinr, X-20*cosr, Y-20*sinr ) --left
-		surface.DrawLine( X+8*cosr, Y+8*sinr, X+20*cosr, Y+20*sinr ) --right
-*/
-	end
-	
---		if VEHICLE_PLANE or VEHICLE_HELICOPTER then
-	if (JetFighter.Plane.VehicleType == VEHICLE_PLANE ) or 	(JetFighter.Plane.VehicleType == VEHICLE_HELICOPTER ) then
-	//Brackets
-		--Left
-		surface.DrawOutlinedRect( ScrW()/4-2 , ScrH()/2-250, 5, 500 )
-		surface.DrawLine( ScrW()/4-2 , ScrH()/2-250, ScrW()/4+8, ScrH()/2-250 )
-		surface.DrawLine( ScrW()/4-2 , ScrH()/2+250, ScrW()/4+8, ScrH()/2+250 )
-		local bracketadjust
-		if ( JetFighter.Plane:GetNetworkedInt( "Throttle", false) ) then bracketadjust = 97 else bracketadjust = 0 end
-		surface.DrawRect( ScrW()/4-2 , ScrH()/2+250 - throttle*(340+bracketadjust)/100, 5, throttle*(340+bracketadjust)/100 )
-		--Right
-		surface.DrawOutlinedRect( ScrW()*3/4+2, ScrH()/2-250, 5, 500 )
-		surface.DrawLine( ScrW()*3/4+2, ScrH()/2-250, ScrW()*3/4-8, ScrH()/2-250 )
-		surface.DrawLine( ScrW()*3/4+2, ScrH()/2+250, ScrW()*3/4-8, ScrH()/2+250 )
-		surface.DrawRect( ScrW()*3/4+2, ScrH()/2-250 + 500*(1-h), 5, h*500 )
+		if JetFighter.Plane.Category == "NeuroTec Micro" then
+			JetFighter.HUDinstruments(dangerzone)
+		else 
+			JetFighter.ModernHUD(lockwarning)
 		end
-
-	//Speed
-	surface.DrawOutlinedRect(ScrW()/6, ScrH()/2-25, 50, 17 )
-	draw.SimpleText("SPEED", "TargetID", ScrW()/6+2, ScrH()/2-28, Color( lockwarning, 255-lockwarning, 0, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )
-	draw.SimpleText(math.floor(spd), "TargetID", ScrW()/6+48, ScrH()/2-5, Color( lockwarning, 255-lockwarning, 0, 200 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_RIGHT )
-
-	draw.SimpleText( "Throttle: "..math.floor(throttle).."%", "TargetID", ScrW()/4-30, ScrH()/2+260, Color(lockwarning, 255-lockwarning, 0, 200), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )		
-	//Altitude
-	surface.DrawOutlinedRect(ScrW()*5/6-50, ScrH()/2-25, 35, 17 )
-	draw.SimpleText("ALT", "TargetID", ScrW()*5/6-48, ScrH()/2-28, Color( lockwarning, 255-lockwarning, 0, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )
-	draw.SimpleText( math.floor(JetFighter.Plane:GetPos().z - AverageHeight), "TargetID", ScrW()*5/6-48, ScrH()/2-5, Color( lockwarning, 255-lockwarning, 0, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )
-
-	//Cap
-	surface.DrawOutlinedRect( ScrW()/2- 17 , 100, 35, 17 )
-	draw.SimpleText( math.floor(Yaw), "TargetID", ScrW()/2, 108, Color( lockwarning, 255-lockwarning, 0, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-
+		
 	else
 
 		if (JetFighter.Plane.VehicleType == VEHICLE_PLANE ) or 	(JetFighter.Plane.VehicleType == VEHICLE_HELICOPTER ) then
-			JetFighter.HUDindicators()
+			JetFighter.HUDindicators(dangerzone)
 			-- JetFighter.Panels()	
 		end
 	end
-	
 
-	//Health indicator
-	draw.SimpleText( "Armor: "..math.floor(100*h).."%", "TargetID", ScrW()*5/6-48, ScrH()*4/5-40, Color(255*(1-h),255*h,0,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )		
-	
-	//Equipment
-	draw.SimpleText("Countermeasures:"..flares, "TargetID", ScrW()*5/6-48, ScrH()*4/5+25, Color( flarestatus, 255-flarestatus, 0, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )
-	if ( wep != "NONE_AVAILABLE" ) then
-		draw.SimpleText( wep, "TargetID", ScrW()*5/6-48, ScrH()*4/5+40, Color( 0, 255, 0, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )		
-	end
 
 	//Targets
 	for k,v in pairs( ents.FindByClass( "sent*" ) ) do
@@ -613,7 +526,6 @@ function JetFighter.HUD() --Real Head-Up Display by StarChick. ;)
 	DrawHUDEllipse(bpos:ToScreen(),Vector(w,h,0),Color(255,255,0,255) )
 */
 	//
-	surface.SetDrawColor( 0, 255, 0, 200)
 
 -- JetFighter.HUDhealth()
 JetFighter.HUDradar()
@@ -919,10 +831,8 @@ function JetFighter.DrawCrosshair( )
 				surface.DrawCircle( IP.x, IP.y, 32, Color( 167, 167, 255, 180) ) 
 			
 			end
-				
-			local tpos = ( JetFighter.Plane:GetPos() + LocalPlayer():EyeAngles():Forward() * 3500 + JetFighter.Plane:GetUp() * 512 ):ToScreen()
-			
-			surface.DrawCircle( tpos.x, tpos.y, 16, Color( 0, 255, 0, 100) ) --horizon circle
+					
+			JetFighter.OldSchoolCrosshair()
 			
 		end
 		
@@ -932,7 +842,49 @@ function JetFighter.DrawCrosshair( )
 
 end
 
-function JetFighter.HUDindicators()
+function JetFighter.OldSchoolCrosshair()
+
+	local tpos = ( JetFighter.Plane:GetPos() + LocalPlayer():EyeAngles():Forward() * 3500 + JetFighter.Plane:GetUp() * 512 ):ToScreen()
+	local size,l = 16, 8
+	surface.DrawCircle( tpos.x, tpos.y, 16, Color(255,200,50,100) )
+	surface.SetDrawColor(255,200,50,255)
+	surface.DrawLine( tpos.x-size, tpos.y, tpos.x-l, tpos.y )
+	surface.DrawLine( tpos.x+size, tpos.y, tpos.x+l, tpos.y )
+	surface.DrawLine( tpos.x, tpos.y-size, tpos.x, tpos.y-l )
+	surface.DrawLine( tpos.x, tpos.y+size, tpos.x, tpos.y+l )
+	
+end
+
+function JetFighter.HUDinstruments(dangerzone)
+
+	local spd = JetFighter.Plane:GetVelocity():Length()
+	local maxspd = math.floor( JetFighter.Plane:GetNetworkedInt( "MaxSpeed", 0 ) )
+	
+	//Compass (From NNaval)
+	local yaw =(-JetFighter.Plane:GetAngles().y/360)
+	local width,height = 256, 16
+	local x,y = ScrW()/2-width/2, 5
+	surface.SetTexture(compass) //Top bars
+	surface.SetDrawColor( plyHUDcolor ,255 )
+	surface.DrawTexturedRectUV( x, y, width, height, yaw , 0, yaw+0.4, 1 )
+	surface.SetTexture(compass_letters) ////top letters
+	surface.SetDrawColor( plyHUDcolor ,200 )
+	surface.DrawTexturedRectUV( x, y+height, width, height, yaw, 0, yaw+0.4,1 )
+	DrawHUDOutlineRect(Vector(x,y,0),width,2*height,plyHUDcolor)
+
+	
+	//Airspeed
+	local size = 100
+	local sposX, sposY = size*1.1, ScrH()-size*1.1
+	local spdmod = 2*math.pi*spd/maxspd
+	DrawHUDEllipse(Vector(sposX,sposY,0) ,Vector(size,size,0),Color(100,100,100,200))
+	surface.DrawCircle( sposX, sposY, size*0.2, Color(100,100,100,200) )
+	draw.SimpleText( math.floor(spd/1.8), "TargetID", sposX, sposY-8, Color(255, 255-dangerzone, 255-dangerzone, 200), TEXT_ALIGN_CENTER, TEXT_ALIGN_LEFT )		
+	DrawHUDLine( Vector(sposX+size*0.2*math.cos(spdmod),sposY+size*0.2*math.sin(spdmod),0), Vector(sposX+size*math.cos(spdmod), sposY+size*math.sin(spdmod)), Color(255,0,0,200) )
+	
+end
+
+function JetFighter.HUDindicators(dangerzone)
 
 //throttle indicator
 	local spd = math.floor( JetFighter.Plane:GetVelocity():Length() / 1.8 )
@@ -943,9 +895,9 @@ function JetFighter.HUDindicators()
 	surface.SetDrawColor( 255, 255, 255, 200)
 	surface.DrawOutlinedRect( size, ScrH()-size*4, size, size*3) //box
 	surface.DrawOutlinedRect( size-1, ScrH()-size*4-1, size+2, size*3+2)
-	
+
 	surface.DrawOutlinedRect( size-5, ScrH()-size, size+10, 16 ) //speed textbox
-	draw.SimpleText( math.floor(spd), "TargetID", size+35, ScrH()-size, Color(255, 255, 255, 200), TEXT_ALIGN_RIGHT, TEXT_ALIGN_LEFT )		
+	draw.SimpleText( math.floor(spd), "TargetID", size+35, ScrH()-size, Color(255, 255-dangerzone, 255-dangerzone, 200), TEXT_ALIGN_RIGHT, TEXT_ALIGN_LEFT )		
 
 	surface.SetDrawColor( 100, 100, 100, 200)
 	surface.DrawRect( size+1 , ScrH()-size*4+1, size-2, size*3-2 ) //lever_background
@@ -1019,6 +971,96 @@ function JetFighter.HUDradar()
 		draw.SimpleText( "N", "BudgetLabel", offsetX + RadarSize/2 - cosy*RadarSize*7/15, ScrH()+offsetY+RadarSize/2 - siny*RadarSize*7/15, Color( 255, 255-lockwarning, 255-lockwarning, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 		draw.SimpleText( "W", "BudgetLabel", offsetX + RadarSize/2 + siny*RadarSize*7/15, ScrH()+offsetY+RadarSize/2 - cosy*RadarSize*7/15, Color( 255, 255-lockwarning, 255-lockwarning, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 	end	
+
+end
+
+function JetFighter.ModernHUD(lockwarning)
+
+	local Yaw = math.floor( JetFighter.Plane:GetAngles().y ) + 180
+	local maxspd = math.floor( JetFighter.Plane:GetNetworkedInt( "MaxSpeed", 0 ) )
+//	local throttle =  ( JetFighter.Plane:GetVelocity():Length() * 100) / maxspd
+	local throttle = 100*(JetFighter.Plane:GetNetworkedInt( "Throttle", (( JetFighter.Plane:GetVelocity():Length() )) ) )/maxspd
+	local throttle2 = math.floor( JetFighter.Plane:GetNetworkedInt( "Throttle", nil ) )
+	local spd = math.floor( JetFighter.Plane:GetVelocity():Length() / 1.8 )
+	local hp = math.floor( JetFighter.Plane:GetNetworkedInt( "Health", 0 ) )
+	local maxhp = math.floor( JetFighter.Plane:GetNetworkedInt( "MaxHealth", 0 ) )
+	local h = hp / maxhp
+	local wep = JetFighter.Plane:GetNetworkedString("NeuroPlanes_ActiveWeapon",tostring("NONE_AVAILABLE")) -- should this really be necessary?
+	local NTeam = JetFighter.Plane:GetNetworkedInt( "NeuroTeam", 1 )
+	local flares = 	JetFighter.Plane:GetNetworkedInt( "FlareCount", 0 )
+	local flarestatus
+	if flares < 1 then flarestatus = 255 else flarestatus = 0 end
+	local locking
+	if ( IsValid( JetFighter.Target ) ) then locking = 255 else locking = 0 end
+
+	surface.SetDrawColor( lockwarning, 255-lockwarning, 0, 200)
+	//Artificial horizon that must work only for planes
+	if (JetFighter.Plane.VehicleType == VEHICLE_PLANE ) then --Only jets can use extra boost		
+		JetFighter.Target = JetFighter.Plane:GetNetworkedEntity( "Target", NULL )
+		local offs = JetFighter.Plane:GetNetworkedInt( "HudOffset", 0 )
+		local pos =  ( JetFighter.Plane:GetPos( ) + JetFighter.Plane:GetUp( ) * offs + JetFighter.Plane:GetForward( ) * 3000 ):ToScreen()
+		local x,y = pos.x, pos.y
+		local HorizonPoint = (JetFighter.Plane:GetPos() + JetFighter.Plane:GetUp( ) * offs +JetFighter.Plane:GetForward()*10000):ToScreen( )
+		local X,Y = HorizonPoint.x, HorizonPoint.y
+		-- local r = math.rad( 100*JetFighter.Plane:GetAngles().r-60)/180
+		local r = math.rad( JetFighter.Plane:GetAngles().r) + math.rad( JetFighter.Pilot:EyeAngles().r)
+		local cosr = math.cos(r)
+		local sinr = math.sin(r)
+		local p = math.rad(JetFighter.Plane:GetAngles().p)
+		local Pi = math.pi
+		
+		surface.DrawLine( x, y, x-16*math.cos(-r+Pi/3), y+16*math.sin(-r+Pi/3) )
+		surface.DrawLine( x-16*math.cos(-r+Pi/3), y+16*math.sin(-r+Pi/3), x-16*cosr, y-16*sinr )
+		surface.DrawLine( x-16*cosr, y-16*sinr, x-32*cosr, y-32*sinr )
+		
+		surface.DrawLine( x, y, x+16*math.cos(r+Pi/3), y+16*math.sin(r+Pi/3) )
+		surface.DrawLine( x+16*math.cos(r+Pi/3), y+16*math.sin(r+Pi/3), x+16*cosr, y+16*sinr )
+		surface.DrawLine( x+16*cosr, y+16*sinr, x+32*cosr, y+32*sinr )
+
+		local HorizonBar = ScrW()/12
+		surface.DrawLine( x-48*cosr, y-48*sinr, x-HorizonBar*cosr, y-HorizonBar*sinr )
+		surface.DrawLine( x+48*cosr, y+48*sinr, x+HorizonBar*cosr, y+HorizonBar*sinr )		
+	end
+
+	//Brackets
+	if (JetFighter.Plane.VehicleType == VEHICLE_PLANE ) or 	(JetFighter.Plane.VehicleType == VEHICLE_HELICOPTER ) then	
+		--Left
+		surface.DrawOutlinedRect( ScrW()/4-2 , ScrH()/2-250, 5, 500 )
+		surface.DrawLine( ScrW()/4-2 , ScrH()/2-250, ScrW()/4+8, ScrH()/2-250 )
+		surface.DrawLine( ScrW()/4-2 , ScrH()/2+250, ScrW()/4+8, ScrH()/2+250 )
+		local bracketadjust
+		if ( JetFighter.Plane:GetNetworkedInt( "Throttle", false) ) then bracketadjust = 97 else bracketadjust = 0 end
+		surface.DrawRect( ScrW()/4-2 , ScrH()/2+250 - throttle*(340+bracketadjust)/100, 5, throttle*(340+bracketadjust)/100 )
+		--Right
+		surface.DrawOutlinedRect( ScrW()*3/4+2, ScrH()/2-250, 5, 500 )
+		surface.DrawLine( ScrW()*3/4+2, ScrH()/2-250, ScrW()*3/4-8, ScrH()/2-250 )
+		surface.DrawLine( ScrW()*3/4+2, ScrH()/2+250, ScrW()*3/4-8, ScrH()/2+250 )
+		surface.DrawRect( ScrW()*3/4+2, ScrH()/2-250 + 500*(1-h), 5, h*500 )
+	end
+	
+	//Health indicator
+	draw.SimpleText( "Armor: "..math.floor(100*h).."%", "TargetID", ScrW()*5/6-48, ScrH()*4/5-40, Color(255*(1-h),255*h,0,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )		
+	
+	//Equipment
+	draw.SimpleText("Countermeasures:"..flares, "TargetID", ScrW()*5/6-48, ScrH()*4/5+25, Color( flarestatus, 255-flarestatus, 0, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )
+	if ( wep != "NONE_AVAILABLE" ) then
+		draw.SimpleText( wep, "TargetID", ScrW()*5/6-48, ScrH()*4/5+40, Color( 0, 255, 0, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )		
+	end
+
+	//Speed
+	surface.DrawOutlinedRect(ScrW()/6, ScrH()/2-25, 50, 17 )
+	draw.SimpleText("SPEED", "TargetID", ScrW()/6+2, ScrH()/2-28, Color( lockwarning, 255-lockwarning, 0, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )
+	draw.SimpleText(math.floor(spd), "TargetID", ScrW()/6+48, ScrH()/2-5, Color( lockwarning, 255-lockwarning, 0, 200 ), TEXT_ALIGN_RIGHT, TEXT_ALIGN_RIGHT )
+
+	draw.SimpleText( "Throttle: "..math.floor(throttle).."%", "TargetID", ScrW()/4-30, ScrH()/2+260, Color(lockwarning, 255-lockwarning, 0, 200), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )		
+	//Altitude
+	surface.DrawOutlinedRect(ScrW()*5/6-50, ScrH()/2-25, 35, 17 )
+	draw.SimpleText("ALT", "TargetID", ScrW()*5/6-48, ScrH()/2-28, Color( lockwarning, 255-lockwarning, 0, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )
+	draw.SimpleText( math.floor(JetFighter.Plane:GetPos().z - AverageHeight), "TargetID", ScrW()*5/6-48, ScrH()/2-5, Color( lockwarning, 255-lockwarning, 0, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )
+
+	//Cap
+	surface.DrawOutlinedRect( ScrW()/2- 17 , 100, 35, 17 )
+	draw.SimpleText( math.floor(Yaw), "TargetID", ScrW()/2, 108, Color( lockwarning, 255-lockwarning, 0, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 
 end
 
