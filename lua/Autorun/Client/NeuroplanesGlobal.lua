@@ -9,6 +9,16 @@ local matFire			= Material( "effects/fire_cloud1" )
 local matPlasma			= Material( "effects/strider_muzzle" )
 local matSprite 		= Material( "sprites/gmdm_pickups/light"  )
 
+hook.Add("CreateMove", "NeuroMicroFixUpsideDownView", function( usercmd ) 
+
+	local ply = LocalPlayer()
+
+	
+	return usercmd
+	
+end )
+
+
 
  function ReceiveDamageVector( len )
 	 -- print( "RECV: vec = " .. tostring( net.ReadVector() ) .. "\n" )
