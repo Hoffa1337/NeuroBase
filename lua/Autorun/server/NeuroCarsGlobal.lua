@@ -1,6 +1,6 @@
 local NeuroPlanesVersion = Revision()
-local Authors = "Hoffa, StarChick971, Sillirion, Aftokinito"
-local Contributors = "Fireking552, Flyboi, Inaki, Sakarias88, Beat the Zombie, Braxen, Professor Heavy, The Vman, Killstr3aKs"
+local Authors = "Hoffa, StarChick971, Aftokinito, Sillirion"
+local Contributors = "Fireking552, Flyboi, Inaki, Sakarias88, Beat the Zombie, Braxen, Professor Heavy, The Vman, Killstr3aKs, Smithy"
 local Testers = "Virus, Elenion, Flubbadoo, xXAcePilotXx, (WEED)Kamikaze, Pimmie, Rifleman"
 local SpecialThanks = "Cosmos(workshop administration), Handsome Matt (Hosting)"
 local inlovingmemory = "In loving memory of Dragoneel1000. Rest In Peace as you will be forever missed."
@@ -206,7 +206,7 @@ concommand.Add("ntespv",function( ply, cmd, args )
 			ride:SetPos( pos )
 			ride:SetAngles( Angle( 0,ply:GetAngles().y, 0 ) )
 			ride:Spawn()
-			
+			ride:Activate()
 			
 			if( v.VehicleType ) then
 				
