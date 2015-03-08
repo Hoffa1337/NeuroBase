@@ -360,7 +360,7 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 							
 							local a = plane:GetAngles()
 							a:RotateAroundAxis( plane:GetRight(), -7.5 )
-							ply:SetEyeAngles( LerpAngle( 0.051, ply:EyeAngles(), a ) )
+							ply:SetEyeAngles( LerpAngle( 0.0951, ply:EyeAngles(), a ) )
 						
 						end
 					
@@ -399,8 +399,8 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 			
 				-- ShakeMagnitude = ShakeMagnitude * math.random(-1,1)
 			
-			
-			ang = LerpAngle( 0.1, ang, Angle( ang.p -  ShakeMagnitude, ang.y - ShakeMagnitude, ang.r  )  )
+			print( ShakeMagnitude )
+			ang = LerpAngle( 0.1, ang, ang + AngleRand() * (ShakeMagnitude/100)  )
 			pos = pos + VectorRand()
 			-- ang.r = op.r
 			
