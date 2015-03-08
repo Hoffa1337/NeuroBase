@@ -222,7 +222,7 @@ planeicon_materials["planeicon_1engine_tail"] = Material("hud/planeicons/planeic
 planeicon_materials["planeicon_1engine_engine1"] = Material("hud/planeicons/planeicon_1engine_engine1.png")
 planeicon_materials["planeicon_1engine_rightwing"] = Material("hud/planeicons/planeicon_1engine_rightwing.png")
 planeicon_materials["planeicon_1engine_leftwing"] = Material("hud/planeicons/planeicon_1engine_leftwing.png")
-planeicon_materials["planeicon_1engine_righttaileron"] = Material("hud/planeicons/planeicon_1engine_rightaileron.png")
+planeicon_materials["planeicon_1engine_rightaileron"] = Material("hud/planeicons/planeicon_1engine_rightaileron.png")
 planeicon_materials["planeicon_1engine_leftaileron"] = Material("hud/planeicons/planeicon_1engine_leftaileron.png")
 planeicon_materials["planeicon_1engine_elevator"] = Material("hud/planeicons/planeicon_1engine_elevator.png")
 planeicon_materials["planeicon_1engine_rudder"] = Material("hud/planeicons/planeicon_1engine_rudder.png")
@@ -233,7 +233,7 @@ planeicon_materials["planeicon_2engine_engine1"] = Material("hud/planeicons/plan
 planeicon_materials["planeicon_2engine_engine2"] = Material("hud/planeicons/planeicon_2engine_engine2.png")
 planeicon_materials["planeicon_2engine_rightwing"] = Material("hud/planeicons/planeicon_2engine_rightwing.png")
 planeicon_materials["planeicon_2engine_leftwing"] = Material("hud/planeicons/planeicon_2engine_leftwing.png")
-planeicon_materials["planeicon_2engine_righttaileron"] = Material("hud/planeicons/planeicon_2engine_rightaileron.png")
+planeicon_materials["planeicon_2engine_rightaileron"] = Material("hud/planeicons/planeicon_2engine_rightaileron.png")
 planeicon_materials["planeicon_2engine_leftaileron"] = Material("hud/planeicons/planeicon_2engine_leftaileron.png")
 planeicon_materials["planeicon_2engine_elevator"] = Material("hud/planeicons/planeicon_2engine_elevator.png")
 planeicon_materials["planeicon_2engine_rudder"] = Material("hud/planeicons/planeicon_2engine_rudder.png")
@@ -246,7 +246,7 @@ planeicon_materials["planeicon_4engine_engine3"] = Material("hud/planeicons/plan
 planeicon_materials["planeicon_4engine_engine4"] = Material("hud/planeicons/planeicon_4engine_engine4.png")
 planeicon_materials["planeicon_4engine_rightwing"] = Material("hud/planeicons/planeicon_4engine_rightwing.png")
 planeicon_materials["planeicon_4engine_leftwing"] = Material("hud/planeicons/planeicon_4engine_leftwing.png")
-planeicon_materials["planeicon_4engine_righttaileron"] = Material("hud/planeicons/planeicon_4engine_rightaileron.png")
+planeicon_materials["planeicon_4engine_rightaileron"] = Material("hud/planeicons/planeicon_4engine_rightaileron.png")
 planeicon_materials["planeicon_4engine_leftaileron"] = Material("hud/planeicons/planeicon_4engine_leftaileron.png")
 planeicon_materials["planeicon_4engine_elevator"] = Material("hud/planeicons/planeicon_4engine_elevator.png")
 planeicon_materials["planeicon_4engine_rudder"] = Material("hud/planeicons/planeicon_4engine_rudder.png")
@@ -975,58 +975,58 @@ plane.Rudder 			10
 		
 		if( IsValid( JetFighter.Pilot.PlaneParts[1] ) ) then
 			surface.SetDrawColor( parts_color[1] )
-			surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_fuselage.png") )		surface.DrawTexturedRect( posX, posY, size, size )
+			surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_fuselage"])		surface.DrawTexturedRect( posX, posY, size, size )
 		end	
 		if( IsValid( JetFighter.Pilot.PlaneParts[2] ) ) then
 			surface.SetDrawColor( parts_color[2] )
-			surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_tail.png") )		surface.DrawTexturedRect( posX, posY, size, size )			
+			surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_tail"])		surface.DrawTexturedRect( posX, posY, size, size )			
 		end	
 		if( IsValid( JetFighter.Pilot.PlaneParts[3] ) ) then
 			surface.SetDrawColor( parts_color[3] )
-			surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_leftwing.png") )	surface.DrawTexturedRect( posX, posY, size, size )
+			surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_leftwing"])	surface.DrawTexturedRect( posX, posY, size, size )
 		end	
 		if( IsValid( JetFighter.Pilot.PlaneParts[4] ) ) then		
 			surface.SetDrawColor( parts_color[4] )
-			surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_rightwing.png") )		surface.DrawTexturedRect( posX, posY, size, size )
+			surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_rightwing"])		surface.DrawTexturedRect( posX, posY, size, size )
 		end	
 		if( IsValid( JetFighter.Pilot.PlaneParts[5] ) ) then	
 			surface.SetDrawColor( parts_color[5] )
-			surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_leftaileron.png") )		surface.DrawTexturedRect( posX, posY, size, size )
+			surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_leftaileron"])		surface.DrawTexturedRect( posX, posY, size, size )
 		end	
 		if( IsValid( JetFighter.Pilot.PlaneParts[6] ) ) then	
 			surface.SetDrawColor( parts_color[6] )
-			surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_rightaileron.png") )		surface.DrawTexturedRect( posX, posY, size, size )
+			surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_rightaileron"])		surface.DrawTexturedRect( posX, posY, size, size )
 		end	
 		/*
 		if( IsValid( JetFighter.Pilot.PlaneParts[7] ) ) then			
 			surface.SetDrawColor( parts_color[7] )
-			surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_leftflap.png") )	surface.DrawTexturedRect( posX, posY, size, size )
+			surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_leftflap"])	surface.DrawTexturedRect( posX, posY, size, size )
 		end	
 		if( IsValid( JetFighter.Pilot.PlaneParts[8] ) ) then						
 			surface.SetDrawColor( parts_color[8] )
-			surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_rightflap.png") )	surface.DrawTexturedRect( posX, posY, size, size )
+			surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_rightflap"])	surface.DrawTexturedRect( posX, posY, size, size )
 		end	
 		*/
 		if( IsValid( JetFighter.Pilot.PlaneParts[9] ) ) then						
 			surface.SetDrawColor( parts_color[9] )
-			surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_elevator.png") )		surface.DrawTexturedRect( posX, posY, size, size )
+			surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_elevator"])		surface.DrawTexturedRect( posX, posY, size, size )
 		end	
 		if( IsValid( JetFighter.Pilot.PlaneParts[10] ) ) then						
 			surface.SetDrawColor( parts_color[10] )
-			surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_rudder.png") )		surface.DrawTexturedRect( posX, posY, size, size )
+			surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_rudder"])		surface.DrawTexturedRect( posX, posY, size, size )
 		end	
 
 			if type(JetFighter.Pilot.PlaneParts[1].PropellerPos)  == "Vector" then			
 			engines_hp[1] = JetFighter.Pilot.PlaneParts[1]:GetNetworkedInt("EngineHealth_1")/JetFighter.Pilot.PlaneParts[1]:GetNetworkedInt("EngineMaxHealth_1")
 				if engines_hp[1] <= 0.1 then engines_color[1] = destroyed	elseif (engines_hp[1] < 0.5) then engines_color[1] = critical else engines_color[1] = normal end
 				surface.SetDrawColor( engines_color[1] )
-				surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_engine1.png") )		surface.DrawTexturedRect( posX, posY, size, size )
+				surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_engine1"])		surface.DrawTexturedRect( posX, posY, size, size )
 			end
 			if JetFighter.Pilot.PlaneParts[1].NoPropeller and type(JetFighter.Pilot.PlaneParts[1].ExhaustPos)  == "Vector" then			
 			engines_hp[1] = JetFighter.Pilot.PlaneParts[1]:GetNetworkedInt("EngineHealth_1")/JetFighter.Pilot.PlaneParts[1]:GetNetworkedInt("EngineMaxHealth_1")
 				if engines_hp[1] <= 0.1 then engines_color[1] = destroyed	elseif (engines_hp[1] < 0.5) then engines_color[1] = critical else engines_color[1] = normal end
 				surface.SetDrawColor( engines_color[1] )
-				surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_engine1.png") )		surface.DrawTexturedRect( posX, posY, size, size )
+				surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_engine1"])		surface.DrawTexturedRect( posX, posY, size, size )
 			end
 			
 		if type( JetFighter.Pilot.PlaneParts[1].PropellerPos ) == "table"	then		
@@ -1034,7 +1034,7 @@ plane.Rudder 			10
 				engines_hp[j] = JetFighter.Pilot.PlaneParts[1]:GetNetworkedInt("EngineHealth_"..j)/JetFighter.Pilot.PlaneParts[1]:GetNetworkedInt("EngineMaxHealth_"..j)
 				if engines_hp[j] <= 0.1 then engines_color[j] = destroyed	elseif (engines_hp[j] < 0.5) then engines_color[j] = critical else engines_color[j] = normal end
 					surface.SetDrawColor( engines_color[j] )
-					surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_engine"..j..".png") )		surface.DrawTexturedRect( posX, posY, size, size )
+					surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_engine"..j..""])		surface.DrawTexturedRect( posX, posY, size, size )
 			end
 		end
 		if type( JetFighter.Pilot.PlaneParts[1].ExhaustPos ) == "table" and JetFighter.Pilot.PlaneParts[1].NoPropeller then		
@@ -1042,7 +1042,7 @@ plane.Rudder 			10
 				engines_hp[j] = JetFighter.Pilot.PlaneParts[1]:GetNetworkedInt("EngineHealth_"..j)/JetFighter.Pilot.PlaneParts[1]:GetNetworkedInt("EngineMaxHealth_"..j)
 				if engines_hp[j] <= 0.1 then engines_color[j] = destroyed	elseif (engines_hp[j] < 0.5) then engines_color[j] = critical else engines_color[j] = normal end
 					surface.SetDrawColor( engines_color[j] )
-					surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_engine"..j..".png") )		surface.DrawTexturedRect( posX, posY, size, size )
+					surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_engine"..j..""])		surface.DrawTexturedRect( posX, posY, size, size )
 			end
 		end	
 		
