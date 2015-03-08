@@ -2047,11 +2047,16 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		r:GetPhysicsObject():SetMass( 1 )
 		r.MinDamage = self.MinDamage or 20
 		r.MaxDamage = self.MaxDamage or 35
-		ParticleEffectAttach( "mg_muzzleflash", PATTACH_ABSORIGIN_FOLLOW, wep, 0 )
+		local muzzlepos = wep 
+		if( wep.FlipVal == 1 ) then	
+			muzzlepos = self.RocketVisuals[ id + AddPos ]
+		end
+		
+		ParticleEffectAttach( "mg_muzzleflash", PATTACH_ABSORIGIN_FOLLOW, muzzlepos, 0 )
 		timer.Simple( 0.75, 
 			function()  	
-				if (IsValid( wep ) ) then 
-					wep:StopParticles()
+				if (IsValid( muzzlepos ) ) then 
+					muzzlepos:StopParticles()
 				end
 			end )
 		
