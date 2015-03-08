@@ -1059,7 +1059,7 @@ function Meta:Jet_FireMultiBarrel()
 		bullet.Num 		= 1
 		bullet.Src 		= self.Miniguns[i]:GetPos() + self.Miniguns[i]:GetForward() * 120
 		bullet.Dir 		= self.Miniguns[i]:GetAngles():Forward()
-		bullet.Spread 	= Vector( .0151, .0161, .0171 )
+		bullet.Spread 	= Vector( .01151, .01161, .01171 ) * .5
 		bullet.Tracer	= self.TracerCount or 1
 		bullet.Force	= 5
 		bullet.Attacker = self.Pilot or self
