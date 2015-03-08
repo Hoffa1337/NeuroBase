@@ -29,7 +29,7 @@ function ReadPlaneParts( len )
 	
 	for k,v in pairs( ply.PlaneParts ) do	
 		if( !v.MaxHealth ) then	
-			v.MaxHealth = v:GetNetworkedBool("Health")
+			v.MaxHealth = v:GetNetworkedInt("Health")
 		end
 	end
 	-- PrintTable( ply.PlaneParts )
