@@ -2,7 +2,7 @@ AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
 include( 'shared.lua' )
 
-ENT.Sauce = 100
+ENT.Sauce = 50
 ENT.Delay = 0
 ENT.Speed = 1250
 function ENT:OnTakeDamage(dmginfo)
@@ -29,8 +29,29 @@ function ENT:Initialize()
 	end
 	
 	util.PrecacheSound("Missile.Accelerate")
-	
-	self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(200,235), math.random(200,235), math.random(200,235), math.random(200,255) ), false, 0, 32, math.Rand( 0.15, 0.25 ), 1/(0+128)*0.5, "trails/smoke.vmt");  
+	local Glow = ents.Create("env_sprite")				
+	Glow:SetKeyValue("model","orangecore2.vmt")
+	Glow:SetKeyValue("rendercolor","255 150 100")
+	Glow:SetKeyValue("scale",tostring(0.11))
+	Glow:SetPos(self:GetPos())
+	Glow:SetParent(self)
+	Glow:Spawn()
+	Glow:Activate()
+
+	local Shine = ents.Create("env_sprite")
+	Shine:SetPos(self:GetPos())
+	Shine:SetKeyValue("renderfx", "0")
+	Shine:SetKeyValue("rendermode", "5")
+	Shine:SetKeyValue("renderamt", "255")
+	Shine:SetKeyValue("rendercolor", "255 130 100")
+	Shine:SetKeyValue("framerate12", "20")
+	Shine:SetKeyValue("model", "light_glow01.spr")
+	Shine:SetKeyValue("scale", tostring( 0.1 ) )
+	Shine:SetKeyValue("GlowProxySize", tostring( 0.1 ))
+	Shine:SetParent(self)
+	Shine:Spawn()
+	Shine:Activate()
+	self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(5,15), math.random(5,15), math.random(5,15), math.random(200,255) ), false, 0, 32, math.Rand( 0.3, 0.5 ), 1/(0+128)*0.5, "trails/smoke.vmt");  
 	
 end
 
@@ -41,15 +62,9 @@ function ENT:PhysicsCollide( data, physobj )
 		return
 		
 	end
-	
-	if (data.Speed > 5 && data.DeltaTime > 0.12 ) then 
-	
-		util.BlastDamage( self, self.Owner, data.HitPos, 128, 500 )
-		self:ExplosionImproved()
-		self:Remove()
-		
-		
-	end
+
+	self:Remove()
+
 	
 end
 
@@ -82,15 +97,15 @@ function ENT:PhysicsUpdate()
 		
 		if self.Sauce > 1 then
 			
-			self.Speed = self.Speed + 100
+			self.Speed = self.Speed + 200
 			self.PhysObj:SetVelocity( self:GetForward() * self.Speed )
 			self.Sauce = self.Sauce - 1
 			self.Lastvelocity = self:GetVelocity():Length()
 			
 			local a = self.PhysObj:GetAngles()
 			// Alcohol Induced Rockets aka Drunk Fire
-			self.PhysObj:SetAngles( Angle( a.p + math.sin( CurTime() - self.seed ) * .05, 
-										  a.y + math.cos( CurTime() - self.seed ) * .05,
+			self.PhysObj:SetAngles( ( AngleRand() * .006 )+ Angle( a.p + math.sin( CurTime() - self.seed ) * .015, 
+										  a.y + math.cos( CurTime() - self.seed ) * .015,
 										  a.r + .1 ) )
 										  
 		else
@@ -118,38 +133,26 @@ function ENT:Think()
 		self.Delay = 0
 	end
 	
-	local effectdata = EffectData()
-	effectdata:SetStart( self:GetPos() )
-	effectdata:SetOrigin( self:GetPos() )
-	effectdata:SetEntity( self )
-	effectdata:SetScale( 10 )
-	effectdata:SetNormal( self:GetForward() )
-	util.Effect( "A10_muzzlesmoke", effectdata )
-	
+
 	self:EmitSound("Missile.Accelerate")
 	
 end 
 
 function ENT:OnRemove()
 	
-	self.SpriteTrail:SetParent( )
-	self.SpriteTrail:SetMoveType( MOVETYPE_NONE )
-	self.SpriteTrail:Fire("kill","",4)
+	self.SpriteTrail:Remove()
+	self:EmitSound("BF2/Weapons/Type85_fire.mp3",511,30)
 	
 	self:StopSound( "Missile.Accelerate" )
 	
 	local explo1 = EffectData()
-	explo1:SetOrigin( self:GetPos() )
-	explo1:SetScale( 0.25 )
-	util.Effect( "Explosion", explo1 )
-	
-	for i = 1, 5 do
-	
-		local explo1 = EffectData()
-		explo1:SetOrigin( self:GetPos() + Vector( math.random(-128,128), math.random(-105,105), 0 ) )
-		explo1:SetScale( 0.25 )
-		util.Effect("HelicopterMegaBomb", explo1)
-		
-	end
-	
+	explo1:SetOrigin( self:GetPos() + Vector( 0,0,8 ) )
+	explo1:SetNormal( self:GetUp() )
+	explo1:SetEntity( self )
+	explo1:SetScale( 2.25 )
+	util.Effect( "micro_he_impact_plane", explo1 )
+	-- util.Effect( "Explosion", explo1 )
+	ParticleEffect( "Explosion", self:GetPos()+Vector(0,0,8), Angle(0,0,0), nil )
+	util.BlastDamage( self, self.Owner, self:GetPos(), 128, 500 )
+
 end
