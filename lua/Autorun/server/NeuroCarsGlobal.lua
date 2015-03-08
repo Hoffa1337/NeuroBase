@@ -2047,6 +2047,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		r:GetPhysicsObject():SetMass( 1 )
 		r.MinDamage = self.MinDamage or 20
 		r.MaxDamage = self.MaxDamage or 35
+		-- r:Fire("kill","",3)
 		local muzzlepos = wep 
 		
 		if( wep.FlipVal == true ) then	
