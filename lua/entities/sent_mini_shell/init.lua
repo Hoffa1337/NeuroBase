@@ -100,10 +100,10 @@ function ENT:Initialize()
 	-- e:SetScale( 1.35 )
 	-- util.Effect( "MuzzleEffect", e )
 	
-	-- ParticleEffect( "mg_muzzleflash", self:GetPos(), self:GetAngles(), nil )
+	-- )
 	
 	self:SetAngles( self:GetAngles() + Angle( math.Rand(-.05,.05 ), math.Rand(-.05,.05 ), math.Rand(-.05,.05 ) ) )
-	self:GetPhysicsObject():SetVelocity( self:GetForward() * 200000 )
+	self:GetPhysicsObject():SetVelocity( self:GetForward() * 2000 )
 	-- self.StartTime = CurTime()
 	
 end

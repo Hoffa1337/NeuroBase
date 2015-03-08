@@ -1,5 +1,7 @@
-
 include('shared.lua')
+
+ENT.RenderGroup		= RENDERGROUP_TRANSLUCENT
+
 local matHeatWave		= Material( "sprites/heatwave" )
 local matFire			= Material( "effects/fire_cloud1" )
 function ENT:Initialize()
@@ -7,7 +9,9 @@ function ENT:Initialize()
 end
 
 function ENT:Draw()
+	
 	self.Entity:DrawModel()
+	
 	self.OnStart = self.OnStart or CurTime()
 	self:EffectDraw_fire()
 	
