@@ -2020,10 +2020,14 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	local pos = wep:GetPos()
 	
 	if ( wep.isFirst == true ) then
-		
-		pos = self.RocketVisuals[ id + math.random( 0, 1 ) ]:GetPos()
+	
+		wep.FlipVal = !wep.FlipVal 
+		local AddPos = wep.FlipVal && 0 or 1 
+		-- print( AddPos )
+		pos = self.RocketVisuals[ id + AddPos ]:GetPos()
 		
 	end
+	
 	local r = ents.Create( wep.Class )
 	r:SetPos( pos )
 	r:SetOwner( self )
@@ -2062,7 +2066,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	
 	r:SetPhysicsAttacker( pilot, 99999999 )
 	r:SetCollisionGroup( COLLISION_GROUP_WORLD )
-	r:SetPos( wep:GetPos() )
+	-- r:SetPos( pos )
 	r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity() * .5)
 	r:GetPhysicsObject():EnableDrag( true )
 	r:GetPhysicsObject():EnableGravity( true )	
