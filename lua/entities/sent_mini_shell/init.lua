@@ -28,14 +28,14 @@ function ENT:Initialize()
 		self.PhysObj:Wake()
 	
 	end
-	local TrailDelay = math.Rand( 0.15, 0.20 )/10
+	local TrailDelay = math.Rand( 1.15, 2.20 )/10
 	local TraceScale1 = self.TracerScale1 or 0.1
 	local TraceScale2 = self.TracerScale2 or 0.1
 	local GlowProxy = self.TracerGlowProxy or 1
 	-- print( "GlowProxy: ", GlowProxy, self.TracerGlowProxy )
 	if( self.TinyTrail ) then
 		
-		self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(245,255), math.random(245,255), math.random(245,255), math.random(5,15) ), false, 4,0, TrailDelay + 0.85, 1/(0+4)*0.55, "trails/smoke.vmt");  
+		self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(245,255), math.random(245,255), math.random(245,255), math.random(45,65) ), false, 14,0, TrailDelay + 0.85, 1/(1)*0.55, "trails/smoke.vmt");  
 		-- self.SpriteTrail2 = util.SpriteTrail( self, 0, Color( 255, 255, 100, 255 ), false, 4, 4, TrailDelay + 0.05, 1/(0+4)*0.55, "trails/smoke.vmt");  
 		
 		local Glow = ents.Create("env_sprite")				

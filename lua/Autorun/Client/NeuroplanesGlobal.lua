@@ -399,7 +399,7 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 			
 				-- ShakeMagnitude = ShakeMagnitude * math.random(-1,1)
 			
-			print( ShakeMagnitude )
+			-- print( ShakeMagnitude )
 			ang = LerpAngle( 0.1, ang, ang + AngleRand() * (ShakeMagnitude/100)  )
 			pos = pos + VectorRand()
 			-- ang.r = op.r

@@ -2257,7 +2257,9 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	
 	if( wep.Type == "Shell" ) then
 		
-		r:GetPhysicsObject():SetVelocity( r:GetForward() * 50000000 )
+		r:GetPhysicsObject():SetVelocity( r:GetForward() * 25000 )
+		r:GetPhysicsObject():EnableDrag( true )
+		r:SetColor( Color( 255,255,255,1 ) )
 		local AngForce = self._2ndRecoilAngle or 10.05
 		local Duration = self._2ndRecoilDuraiton or 0.07
 		local KickBack = self._2ndRecoilForce or -50000
