@@ -26,6 +26,12 @@ function ReadPlaneParts( len )
 	local size = net.ReadInt(32)	
 	for i=1,size do parts[i] = net.ReadEntity() end
 	ply.PlaneParts = parts 
+	
+	for k,v in pairs( ply.PlaneParts ) do	
+		if( !v.MaxHealth ) then	
+			v.MaxHealth = v:GetNetworkedBool("Health")
+		end
+	end
 	-- PrintTable( ply.PlaneParts )
 	-- print( ply.PlaneParts[1]:GetClass() )
 end
