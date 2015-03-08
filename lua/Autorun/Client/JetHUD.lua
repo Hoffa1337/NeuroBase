@@ -9,9 +9,6 @@ local math = math
 local ScrW = ScrW
 local ScrH = ScrH
 local Color = Color
-local compass = surface.GetTextureID("hud/ntec_compass") 
-local compass_letters = surface.GetTextureID("hud/ntec_compass_letters") 
-local plyHUDcolor = Color(255,200,50)
 
 local AverageHeight = 0
 function FixCalcView( ply, Origin, Angles, Fov, NearZ, FarZ ) 
@@ -212,6 +209,72 @@ local brackets = Material("JetCH/CH_brackets")
 local altpanel = surface.GetTextureID("JetCH/Alt")
 local altbar = surface.GetTextureID("JetCH/AltBar")
 local blackhp = surface.GetTextureID("vgui/black")
+local compass = surface.GetTextureID("hud/ntec_compass") 
+local compass_letters = surface.GetTextureID("hud/ntec_compass_letters") 
+local plyHUDcolor = Color(255,200,50)
+local planeicon_1engine = {}
+local planeicon_2engine = {}
+local planeicon_4engine = {}
+
+planeicon_1engine.fuselage = Material("hud/planeicons/planeicon_1engine_fuselage.png")
+planeicon_1engine.tail = Material("hud/planeicons/planeicon_1engine_tail.png")
+planeicon_1engine.engine1 = Material("hud/planeicons/planeicon_1engine_engine1.png")
+planeicon_1engine.rightwing = Material("hud/planeicons/planeicon_1engine_rightwing.png")
+planeicon_1engine.leftwing = Material("hud/planeicons/planeicon_1engine_leftwing.png")
+planeicon_1engine.righttaileron = Material("hud/planeicons/planeicon_1engine_rightaileron.png")
+planeicon_1engine.leftaileron = Material("hud/planeicons/planeicon_1engine_leftaileron.png")
+planeicon_1engine.elevator = Material("hud/planeicons/planeicon_1engine_elevator.png")
+planeicon_1engine.rudder = Material("hud/planeicons/planeicon_1engine_rudder.png")
+
+planeicon_2engine.fuselage = Material("hud/planeicons/planeicon_2engine_fuselage.png")
+planeicon_2engine.tail = Material("hud/planeicons/planeicon_2engine_tail.png")
+planeicon_2engine.engine1 = Material("hud/planeicons/planeicon_2engine_engine1.png")
+planeicon_2engine.engine2 = Material("hud/planeicons/planeicon_2engine_engine2.png")
+planeicon_2engine.rightwing = Material("hud/planeicons/planeicon_2engine_rightwing.png")
+planeicon_2engine.leftwing = Material("hud/planeicons/planeicon_2engine_leftwing.png")
+planeicon_2engine.righttaileron = Material("hud/planeicons/planeicon_2engine_rightaileron.png")
+planeicon_2engine.leftaileron = Material("hud/planeicons/planeicon_2engine_leftaileron.png")
+planeicon_2engine.elevator = Material("hud/planeicons/planeicon_2engine_elevator.png")
+planeicon_2engine.rudder = Material("hud/planeicons/planeicon_2engine_rudder.png")
+
+planeicon_4engine.fuselage = Material("hud/planeicons/planeicon_4engine_fuselage.png")
+planeicon_4engine.tail = Material("hud/planeicons/planeicon_4engine_tail.png")
+planeicon_4engine.engine1 = Material("hud/planeicons/planeicon_4engine_engine1.png")
+planeicon_4engine.engine2 = Material("hud/planeicons/planeicon_4engine_engine2.png")
+planeicon_4engine.engine3 = Material("hud/planeicons/planeicon_4engine_engine3.png")
+planeicon_4engine.engine4 = Material("hud/planeicons/planeicon_4engine_engine4.png")
+planeicon_4engine.rightwing = Material("hud/planeicons/planeicon_4engine_rightwing.png")
+planeicon_4engine.leftwing = Material("hud/planeicons/planeicon_4engine_leftwing.png")
+planeicon_4engine.righttaileron = Material("hud/planeicons/planeicon_4engine_rightaileron.png")
+planeicon_4engine.leftaileron = Material("hud/planeicons/planeicon_4engine_leftaileron.png")
+planeicon_4engine.elevator = Material("hud/planeicons/planeicon_4engine_elevator.png")
+planeicon_4engine.rudder = Material("hud/planeicons/planeicon_4engine_rudder.png")
+
+local function GetPlaneParts( ply )
+local vehicle = ply:GetScriptedVehicle()
+local parts = {}
+if( IsValid( vehicle ) ) then
+parts.Ailerons = {}
+parts.Flaps = {}
+parts.Wings = {}
+parts.Rudder = NULL
+parts.Elevator = NULL
+parts.Plane = vehicle
+for k,v in pairs( ents.FindInSphere( vehicle:GetPos(), 1024 ) ) do
+if ( v:GetOwner() == vehicle && v:GetClass() == "plane_part") then
+local mdl = string.lower( v:GetModel() )
+if( string.find( mdl, "aileron") ) then table.insert( parts.Ailerons, v ) end
+if( string.find( mdl, "wing") ) then table.insert( parts.Wings, v ) end
+if( string.find( mdl, "flap") ) then table.insert( parts.Flaps, v ) end
+if( string.find( mdl, "elevator") ) then parts.Elevator = v end
+if( string.find( mdl, "rudder") ) then parts.Rudder = v end
+end
+end
+end
+return parts 
+end
+
+
 
 /*
 hook.Add("HUDPaint", "Laserguidance_Minicam", function()
@@ -456,63 +519,6 @@ function JetFighter.HUD() --Real Head-Up Display by StarChick. ;)
 		end
 	end
 
-
-	//Targets
-	for k,v in pairs( ents.FindByClass( "sent*" ) ) do
-		if ( IsValid( v ) && inLOS( v ) && v.PrintName && v != JetFighter.Plane && ( v.Type == "vehicle" || ( v.PrintName == "Missile" ) ) ) then
-			
-			local pos = v:GetPos():ToScreen( )
-			local x,y = pos.x, pos.y
-			local TargetTeam = v:GetNetworkedInt( "NeuroTeam", 0 )
-			if( inLOS( JetFighter.Plane, v ) ) then
-				if ( TargetTeam == NTeam ) and ( TargetTeam > 0 ) then	
-					if ( v:GetModel() == JetFighter.Plane:GetModel() ) then
-						surface.SetDrawColor( 0, 255, 255, 255)
-						surface.DrawOutlinedRect( x-16, y-16, 32, 32 )
-						surface.DrawLine( x-16, y-16, x+16, y+16 )
-						surface.DrawLine( x-16, y+16, x+16, y-16 )
-					else
-						surface.SetDrawColor( 0, 150, 255, 255)
-						surface.DrawOutlinedRect( x-16, y-16, 32, 32 )
-						surface.DrawLine( x-16, y-16, x+16, y+16 )
-						surface.DrawLine( x-16, y+16, x+16, y-16 )
-					end
-				else	
-				surface.SetDrawColor( 0, 255, 0, 255)
-				surface.DrawOutlinedRect( x-16, y-16, 32, 32 )
-				end
---				if ( IsValid( JetFighter.Target ) && JetFighter.Target != JetFighter.Plane && v == JetFighter.Target ) then
-				if ( IsValid( JetFighter.Target ) ) then
-					local targetpos = JetFighter.Target:GetPos():ToScreen( )
-					local x,y = targetpos.x, targetpos.y
-					draw.SimpleText("Target", "TargetID", 10, 10, Color( lockwarning, 255-lockwarning, 0, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )
-						if JetFighter.Target.PrintName then
-							draw.SimpleText( JetFighter.Target.PrintName, "TargetID", 10, 32, Color( lockwarning, 255-lockwarning, 0, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )
-						else
-							draw.SimpleText( "Unknown", "TargetID", 10, 32, Color( lockwarning, 255-lockwarning, 0, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )				
-						end
-					draw.SimpleText( "Locked On", "TargetID", ScrW() / 2, 175, Color( 255, 0, 0, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-					surface.SetDrawColor( 255, 0, 0, 200)
-					surface.DrawOutlinedRect( x-16, y-16, 32, 32 )
-					surface.DrawLine( x-16, y, x, y+16 )
-					surface.DrawLine( x-16, y, x, y-16 )
-					surface.DrawLine( x, y+16, x+16, y )
-					surface.DrawLine( x, y-16, x+16, y )
-				end
-			end
-		end
-	end
-
-	for k,v in pairs( ents.FindByClass( "npc*" ) ) do
-		
-		local pos = ( v:GetPos() + Vector(0,0,72 ) ):ToScreen( )
-		local x,y = pos.x, pos.y
-			if( inLOS( JetFighter.Plane, v ) ) then
-			--surface.SetDrawColor( 0, 255, 0, 255)
-			surface.DrawOutlinedRect( x-16, y-16, 32, 32 )
-			end
-	end
-	
 	//Alerts
 	if ( JetFighter.DrawWarning && JetFighter.Plane && JetFighter.Pilot:GetNetworkedBool("InFlight") ) then
 --		draw.SimpleText("LOCK-ON ALERT", "LockonAlert", ScrW() / 2, 150, Color( 255, 35, 35, 200 + (math.sin(CurTime())*50) ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
@@ -530,8 +536,9 @@ function JetFighter.HUD() --Real Head-Up Display by StarChick. ;)
 */
 	//
 
--- JetFighter.HUDhealth()
-JetFighter.HUDradar()
+	JetFighter.HUDTargetting()
+	JetFighter.HUDhealth()
+	JetFighter.HUDradar()
 
 end
 
@@ -893,8 +900,9 @@ function JetFighter.HUDindicators(dangerzone)
 	local spd = math.floor( JetFighter.Plane:GetVelocity():Length() / 1.8 )
 	local maxspd = math.floor( JetFighter.Plane:GetNetworkedInt( "MaxSpeed", 0 ) )
 	local thr = JetFighter.Plane:GetNetworkedInt( "Throttle", nil )
-	local ratio = 100*(JetFighter.Plane:GetNetworkedInt( "Throttle", (( JetFighter.Plane:GetVelocity():Length() )) ) )/maxspd
+	local ratio = math.Clamp( 100*(JetFighter.Plane:GetNetworkedInt( "Throttle", (( JetFighter.Plane:GetVelocity():Length() )) ) )/maxspd, 0, 100) 
 	local size = 32
+	
 	surface.SetDrawColor( 255, 255, 255, 200)
 	surface.DrawOutlinedRect( size, ScrH()-size*4, size, size*3) //box
 	surface.DrawOutlinedRect( size-1, ScrH()-size*4-1, size+2, size*3+2)
@@ -915,32 +923,133 @@ end
 
 function JetFighter.HUDhealth()
 
-	local hp = math.floor( JetFighter.Plane:GetNetworkedInt( "Health", 0 ) )
-	local maxhp = math.floor( JetFighter.Plane:GetNetworkedInt( "MaxHealth", 0 ) )
-	local h = hp / maxhp
+	if JetFighter.Plane.Category == "NeuroTec Micro" then
+	-- print(JetFighter.Pilot.PlaneParts[1].PropellerPos)
+	-- print(JetFighter.Pilot.PlaneParts[1].ExhaustPos)
+	-- PrintTable(JetFighter.Pilot.PlaneParts[1].PropellerPos)
+	-- PrintTable(JetFighter.Pilot.PlaneParts[1].ExhaustPos)
+			
+		local hp = math.floor( JetFighter.Plane:GetNetworkedInt( "Health", 0 ) )
+		local maxhp = math.floor( JetFighter.Plane:GetNetworkedInt( "MaxHealth", 0 ) )
+		local h = hp / maxhp
 
-	local posX,posY = ScrW()*0.9, ScrH()*0.4
-	local length,diam,span,cord = 64,16,48,16
-	surface.SetDrawColor( 255, 255*h, 255*h, 100)
-	
-	surface.DrawRect(posX, posY, diam, length ) //body
-	surface.DrawRect(posX-span, posY+diam, span, cord ) //left wing
-	surface.DrawRect(posX+diam, posY+diam, span, cord ) //right wing
-	surface.DrawRect(posX-diam, posY+length, span, cord*0.9 ) //tail
-	surface.DrawRect(posX+6, posY+length, 4, cord ) //rudder
-	/*
-	local nb_engines = 1
-	for i = 1,nb_engines,2 do
-	surface.DrawRect( posX-span+(i-1)*span/2/nb_engines -nb_engines*2, posY+diam-4, 8, cord*1.5 )
-	-- surface.DrawRect(posX-span/2*i, posY+diam-4, 8, cord*1.5 )
-	-- surface.DrawRect(posX+diam+span/2*i-4, posY+diam-4, 8, cord*1.5 )
+		local posX,posY,size = ScrW()*0.85, ScrH()*0.4, 128
+
+		local parts_hp = {}
+		local engines_hp = {}
+		local parts_color={}
+		local engines_color={}
+		local normal,critical,destroyed = Color(255, 255, 255, 100), Color(255, 0, 0, 100), Color(0, 0, 0, 255)
+/*		
+: local parts = { 
+plane, 					1
+plane.Tail, 			2
+plane.Wings[1], 		3
+plane.Wings[2], 		4
+plane.Ailerons[1], 		5
+plane.Ailerons[2], 		6
+plane.Flaps[1], 		7
+plane.Flaps[2],			8
+plane.Elevator, 		9
+plane.Rudder 			10
+}
+*/	
+		for i = 1, #JetFighter.Pilot.PlaneParts do
+			 if( !JetFighter.Pilot.PlaneParts[i].MaxHealth ) then JetFighter.Pilot.PlaneParts[i].MaxHealth =  JetFighter.Pilot.PlaneParts[i]:GetNetworkedInt("MaxHealth",400) end
+			parts_hp[i] = JetFighter.Pilot.PlaneParts[i]:GetNetworkedInt("Health")/JetFighter.Pilot.PlaneParts[i]:GetNetworkedInt("MaxHealth")
+
+			if parts_hp[i] <= 0.1 then parts_color[i] = destroyed
+			elseif (parts_hp[i] > 0.1) and (parts_hp[i] < 0.8) then parts_color[i] = critical
+			else parts_color[i] = normal		
+			end
+			
+		end
+		
+		local k = 1
+		
+		if type( JetFighter.Pilot.PlaneParts[1].PropellerPos ) == "table" then k = #JetFighter.Pilot.PlaneParts[1].PropellerPos end	
+		if type( JetFighter.Pilot.PlaneParts[1].ExhaustPos ) == "table" and JetFighter.Pilot.PlaneParts[1].NoPropeller then k = #JetFighter.Pilot.PlaneParts[1].ExhaustPos end	
+		if k == 2 then posX,posY,size = ScrW()*0.85-32, ScrH()*0.4-32, size*1.5 end
+		if k == 4 then posX,posY,size = ScrW()*0.85-64, ScrH()*0.4-64, size*2 end
+		
+		if( IsValid( JetFighter.Pilot.PlaneParts[1] ) ) then
+			surface.SetDrawColor( parts_color[1] )
+			-- surface.SetDrawColor( 255, 255*parts_hp[1], 255*parts_hp[1], 100)
+			surface.SetMaterial(  Material("hud/planeicons/planeicon_"..k.."engine_fuselage.png") )		surface.DrawTexturedRect( posX, posY, size, size )
+		end	
+		if( IsValid( JetFighter.Pilot.PlaneParts[2] ) ) then
+			surface.SetDrawColor( parts_color[2] )
+			-- surface.SetDrawColor( 255, 255*parts_hp[2], 255*parts_hp[2], 100)
+			surface.SetMaterial(   Material("hud/planeicons/planeicon_"..k.."engine_tail.png") )		surface.DrawTexturedRect( posX, posY, size, size )			
+		end	
+		if( IsValid( JetFighter.Pilot.PlaneParts[3] ) ) then
+			surface.SetDrawColor( parts_color[3] )
+			-- surface.SetDrawColor( 255, 255*parts_hp[3], 255*parts_hp[3], 100)
+			surface.SetMaterial(   Material("hud/planeicons/planeicon_"..k.."engine_leftwing.png") )	surface.DrawTexturedRect( posX, posY, size, size )
+		end	
+		if( IsValid( JetFighter.Pilot.PlaneParts[4] ) ) then		
+			surface.SetDrawColor( parts_color[4] )
+			-- surface.SetDrawColor( 255, 255*parts_hp[4], 255*parts_hp[4], 100)
+			surface.SetMaterial(  Material("hud/planeicons/planeicon_"..k.."engine_rightwing.png") )		surface.DrawTexturedRect( posX, posY, size, size )
+		end	
+		if( IsValid( JetFighter.Pilot.PlaneParts[5] ) ) then	
+			surface.SetDrawColor( parts_color[5] )
+			surface.SetMaterial(  Material("hud/planeicons/planeicon_"..k.."engine_leftaileron.png") )		surface.DrawTexturedRect( posX, posY, size, size )
+		end	
+		if( IsValid( JetFighter.Pilot.PlaneParts[6] ) ) then	
+			surface.SetDrawColor( parts_color[6] )
+			surface.SetMaterial(  Material("hud/planeicons/planeicon_"..k.."engine_rightaileron.png") )		surface.DrawTexturedRect( posX, posY, size, size )
+		end	
+		/*
+		if( IsValid( JetFighter.Pilot.PlaneParts[7] ) ) then			
+			surface.SetDrawColor( parts_color[7] )
+			surface.SetMaterial(  Material("hud/planeicons/planeicon_"..k.."engine_leftflap.png") )	surface.DrawTexturedRect( posX, posY, size, size )
+		end	
+		if( IsValid( JetFighter.Pilot.PlaneParts[8] ) ) then						
+			surface.SetDrawColor( parts_color[8] )
+			surface.SetMaterial(  Material("hud/planeicons/planeicon_"..k.."engine_rightflap.png") )	surface.DrawTexturedRect( posX, posY, size, size )
+		end	
+		*/
+		if( IsValid( JetFighter.Pilot.PlaneParts[9] ) ) then						
+			surface.SetDrawColor( parts_color[9] )
+			surface.SetMaterial(  Material("hud/planeicons/planeicon_"..k.."engine_elevator.png") )		surface.DrawTexturedRect( posX, posY, size, size )
+		end	
+		if( IsValid( JetFighter.Pilot.PlaneParts[10] ) ) then						
+			surface.SetDrawColor( parts_color[10] )
+			surface.SetMaterial(  Material("hud/planeicons/planeicon_"..k.."engine_rudder.png") )		surface.DrawTexturedRect( posX, posY, size, size )
+		end	
+
+			if type(JetFighter.Pilot.PlaneParts[1].PropellerPos)  == "Vector" then			
+			engines_hp[1] = JetFighter.Pilot.PlaneParts[1]:GetNetworkedInt("EngineHealth_1")/JetFighter.Pilot.PlaneParts[1]:GetNetworkedInt("EngineMaxHealth_1")
+				if engines_hp[1] <= 0.1 then engines_color[1] = destroyed	elseif (engines_hp[1] < 0.5) then engines_color[1] = critical else engines_color[1] = normal end
+				surface.SetDrawColor( engines_color[1] )
+				surface.SetMaterial(  Material("hud/planeicons/planeicon_"..k.."engine_engine1.png") )		surface.DrawTexturedRect( posX, posY, size, size )
+			end
+			if JetFighter.Pilot.PlaneParts[1].NoPropeller and type(JetFighter.Pilot.PlaneParts[1].ExhaustPos)  == "Vector" then			
+			engines_hp[1] = JetFighter.Pilot.PlaneParts[1]:GetNetworkedInt("EngineHealth_1")/JetFighter.Pilot.PlaneParts[1]:GetNetworkedInt("EngineMaxHealth_1")
+				if engines_hp[1] <= 0.1 then engines_color[1] = destroyed	elseif (engines_hp[1] < 0.5) then engines_color[1] = critical else engines_color[1] = normal end
+				surface.SetDrawColor( engines_color[1] )
+				surface.SetMaterial(  Material("hud/planeicons/planeicon_"..k.."engine_engine1.png") )		surface.DrawTexturedRect( posX, posY, size, size )
+			end
+			
+		if type( JetFighter.Pilot.PlaneParts[1].PropellerPos ) == "table"	then		
+			for j=1,#JetFighter.Pilot.PlaneParts[1].PropellerPos do		
+				engines_hp[j] = JetFighter.Pilot.PlaneParts[1]:GetNetworkedInt("EngineHealth_"..j)/JetFighter.Pilot.PlaneParts[1]:GetNetworkedInt("EngineMaxHealth_"..j)
+				if engines_hp[j] <= 0.1 then engines_color[j] = destroyed	elseif (engines_hp[j] < 0.5) then engines_color[j] = critical else engines_color[j] = normal end
+					surface.SetDrawColor( engines_color[j] )
+					surface.SetMaterial(  Material("hud/planeicons/planeicon_"..k.."engine_engine"..j..".png") )		surface.DrawTexturedRect( posX, posY, size, size )
+			end
+		end
+		if type( JetFighter.Pilot.PlaneParts[1].ExhaustPos ) == "table" and JetFighter.Pilot.PlaneParts[1].NoPropeller then		
+			for j=1,#JetFighter.Pilot.PlaneParts[1].ExhaustPos do		
+				engines_hp[j] = JetFighter.Pilot.PlaneParts[1]:GetNetworkedInt("EngineHealth_"..j)/JetFighter.Pilot.PlaneParts[1]:GetNetworkedInt("EngineMaxHealth_"..j)
+				if engines_hp[j] <= 0.1 then engines_color[j] = destroyed	elseif (engines_hp[j] < 0.5) then engines_color[j] = critical else engines_color[j] = normal end
+					surface.SetDrawColor( engines_color[j] )
+					surface.SetMaterial(  Material("hud/planeicons/planeicon_"..k.."engine_engine"..j..".png") )		surface.DrawTexturedRect( posX, posY, size, size )
+			end
+		end	
+		
 	end
-	for i = 2,nb_engines,2 do
-	-- surface.DrawRect( posX+diam+(i-1)*span/2/nb_engines -nb_engines*2, posY+diam-4, 8, cord*1.5 )
-	-- surface.DrawRect(posX-span/2*i, posY+diam-4, 8, cord*1.5 )
-	-- surface.DrawRect(posX+diam+span/2*i-4, posY+diam-4, 8, cord*1.5 )
-	end
-	*/
 end
 
 function JetFighter.HUDradar()
@@ -1065,6 +1174,65 @@ function JetFighter.ModernHUD(lockwarning)
 	surface.DrawOutlinedRect( ScrW()/2- 17 , 100, 35, 17 )
 	draw.SimpleText( math.floor(Yaw), "TargetID", ScrW()/2, 108, Color( lockwarning, 255-lockwarning, 0, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 
+end
+
+function JetFighter.HUDTargetting()
+
+	for k,v in pairs( ents.FindByClass( "sent*" ) ) do
+		if ( IsValid( v ) && inLOS( v ) && v.PrintName && v != JetFighter.Plane && ( v.Type == "vehicle" || ( v.PrintName == "Missile" ) ) ) then
+			
+			local pos = v:GetPos():ToScreen( )
+			local x,y = pos.x, pos.y
+			local TargetTeam = v:GetNetworkedInt( "NeuroTeam", 0 )
+			if( inLOS( JetFighter.Plane, v ) ) then
+				if ( TargetTeam == NTeam ) and ( TargetTeam > 0 ) then	
+					if ( v:GetModel() == JetFighter.Plane:GetModel() ) then
+						surface.SetDrawColor( 0, 255, 255, 255)
+						surface.DrawOutlinedRect( x-16, y-16, 32, 32 )
+						surface.DrawLine( x-16, y-16, x+16, y+16 )
+						surface.DrawLine( x-16, y+16, x+16, y-16 )
+					else
+						surface.SetDrawColor( 0, 150, 255, 255)
+						surface.DrawOutlinedRect( x-16, y-16, 32, 32 )
+						surface.DrawLine( x-16, y-16, x+16, y+16 )
+						surface.DrawLine( x-16, y+16, x+16, y-16 )
+					end
+				else	
+				surface.SetDrawColor( 0, 255, 0, 255)
+				surface.DrawOutlinedRect( x-16, y-16, 32, 32 )
+				end
+--				if ( IsValid( JetFighter.Target ) && JetFighter.Target != JetFighter.Plane && v == JetFighter.Target ) then
+				if ( IsValid( JetFighter.Target ) ) then
+					local targetpos = JetFighter.Target:GetPos():ToScreen( )
+					local x,y = targetpos.x, targetpos.y
+					draw.SimpleText("Target", "TargetID", 10, 10, Color( lockwarning, 255-lockwarning, 0, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )
+						if JetFighter.Target.PrintName then
+							draw.SimpleText( JetFighter.Target.PrintName, "TargetID", 10, 32, Color( lockwarning, 255-lockwarning, 0, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )
+						else
+							draw.SimpleText( "Unknown", "TargetID", 10, 32, Color( lockwarning, 255-lockwarning, 0, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )				
+						end
+					draw.SimpleText( "Locked On", "TargetID", ScrW() / 2, 175, Color( 255, 0, 0, 200 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+					surface.SetDrawColor( 255, 0, 0, 200)
+					surface.DrawOutlinedRect( x-16, y-16, 32, 32 )
+					surface.DrawLine( x-16, y, x, y+16 )
+					surface.DrawLine( x-16, y, x, y-16 )
+					surface.DrawLine( x, y+16, x+16, y )
+					surface.DrawLine( x, y-16, x+16, y )
+				end
+			end
+		end
+	end
+
+	for k,v in pairs( ents.FindByClass( "npc*" ) ) do
+		
+		local pos = ( v:GetPos() + Vector(0,0,72 ) ):ToScreen( )
+		local x,y = pos.x, pos.y
+			if( inLOS( JetFighter.Plane, v ) ) then
+			--surface.SetDrawColor( 0, 255, 0, 255)
+			surface.DrawOutlinedRect( x-16, y-16, 32, 32 )
+			end
+	end
+	
 end
 
 function DrawHelicopterOuterCrosshair()
