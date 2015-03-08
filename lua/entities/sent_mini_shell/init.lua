@@ -35,9 +35,11 @@ function ENT:Initialize()
 	-- print( "GlowProxy: ", GlowProxy, self.TracerGlowProxy )
 	if( self.TinyTrail ) then
 		
-		self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(245,255), math.random(245,255), math.random(245,255), math.random(45,65) ), false, 14,0, TrailDelay + 0.85, 1/(1)*0.55, "trails/smoke.vmt");  
-		-- self.SpriteTrail2 = util.SpriteTrail( self, 0, Color( 255, 255, 100, 255 ), false, 4, 4, TrailDelay + 0.05, 1/(0+4)*0.55, "trails/smoke.vmt");  
+		-- self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(245,255), math.random(245,255), math.random(245,255), math.random(25,45) ), false, 4,0, TrailDelay + 0.85, 1/(1)*0.55, "trails/smoke.vmt");  
+		-- self.SpriteTrail2 = util.SpriteTrail( self, 0, Color( 255, 255, 100, 255 ), false, 4, 4, TrailDelay + 0.05, 1/(0+4)*0.55, "sprites/smokez");  
 		
+		self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(245,255), math.random(245,255), math.random(244,255), math.random(21,22) ), false, 2, 0, TrailDelay + 1.85, 1/(0+4)*0.5, "trails/smoke.vmt");  
+
 		local Glow = ents.Create("env_sprite")				
 		Glow:SetKeyValue("model","orangecore2.vmt")
 		Glow:SetKeyValue("rendercolor","255 150 100")
@@ -272,15 +274,21 @@ function ENT:OnRemove()
 	-- print("Radius:", radius, dmg  )
 	util.BlastDamage( self.Owner, self.Owner, self:GetPos() + Vector( 0,0,2 ), radius, dmg )
 	
-	if( self.TracerScale1 && self.TracerScale1 >= 1 ) then
+	if( self:WaterLevel() == 0 ) then
 	
-		util.Decal( "scorch", self:GetPos(), self.HitNormal && self.HitNormal * -32 or self:GetPos() + self:GetForward() * 32 )
+		if( self.TracerScale1 && self.TracerScale1 >= 1 ) then
+		
+			util.Decal( "scorch", self:GetPos(), self.HitNormal && self.HitNormal * -32 or self:GetPos() + self:GetForward() *16 )
 
-	else
-	
-		util.Decal( "SmallScorch", self:GetPos(), self.HitNormal && self.HitNormal * -32 or self:GetPos() + self:GetForward() * 32 )
+		else
+		
+			util.Decal( "SmallScorch", self:GetPos(), self.HitNormal && self:GetPos() + self.HitNormal * -32 or self:GetPos() + self:GetForward() * 16 )
 
-	
+		
+		end
+		
 	end
+	
+	-- self:Remove()
 	
 end
