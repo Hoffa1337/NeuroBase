@@ -2018,16 +2018,16 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	
 	if( wep.Class == nil ) then error("NeuroTec: Tried to call NeuroPlanes_FireRobot with"..tostring(wep).." as argument!" ) return end
 	local pos = wep:GetPos()
-	
+	local AddPos = 0 
 	if ( wep.isFirst == true ) then
 	
 		wep.FlipVal = !wep.FlipVal 
-		local AddPos = wep.FlipVal && 0 or 1 
+		AddPos = wep.FlipVal && 1 or 0
 		-- print( AddPos )
 		pos = self.RocketVisuals[ id + AddPos ]:GetPos()
 		
 	end
-	
+	-- print( AddPos )
 	local r = ents.Create( wep.Class )
 	r:SetPos( pos )
 	r:SetOwner( self )
@@ -2048,10 +2048,12 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		r.MinDamage = self.MinDamage or 20
 		r.MaxDamage = self.MaxDamage or 35
 		local muzzlepos = wep 
-		if( wep.FlipVal == 1 ) then	
-			muzzlepos = self.RocketVisuals[ id + AddPos ]
-		end
 		
+		if( wep.FlipVal == true ) then	
+			muzzlepos = self.RocketVisuals[ id + AddPos ]
+	
+		end
+	
 		ParticleEffectAttach( "mg_muzzleflash", PATTACH_ABSORIGIN_FOLLOW, muzzlepos, 0 )
 		timer.Simple( 0.75, 
 			function()  	
