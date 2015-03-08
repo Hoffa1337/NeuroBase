@@ -18,6 +18,18 @@ hook.Add("CreateMove", "NeuroMicroFixUpsideDownView", function( usercmd )
 	
 end )
 
+function ReadPlaneParts( len )
+-- print(len)
+	local ply = LocalPlayer()
+	ply.PlaneParts = {}
+	local parts = {}
+	local size = net.ReadInt(32)	
+	for i=1,size do parts[i] = net.ReadEntity() end
+	ply.PlaneParts = parts 
+	-- PrintTable( ply.PlaneParts )
+	-- print( ply.PlaneParts[1]:GetClass() )
+end
+net.Receive( "NeuroPlaneParts", ReadPlaneParts )
 
 
  function ReceiveDamageVector( len )
