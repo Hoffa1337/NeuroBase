@@ -20,7 +20,7 @@ function EFFECT:Init( data )
 			particle:SetRoll( math.Rand( -1, 1 ) )
 			particle:SetRollDelta( math.Rand( -1, 1 ) )
 			particle:SetColor( 150, math.Rand( 90, 134 ), math.Rand( 220, 255 ) )
-			particle:VelocityDecay( true )
+			--particle:VelocityDecay( true )
 			
 			local eparticle = emitter:Add( "particles/flamelet"..math.Rand( 1, 5 ), pos - rVec * 6 * j )
 			eparticle:SetVelocity( rVec*math.Rand( 2, 3 ) )
@@ -31,7 +31,7 @@ function EFFECT:Init( data )
 			eparticle:SetRoll( math.Rand( -1, 1 ) )
 			eparticle:SetRollDelta( math.Rand( -1, 1 ) )
 			eparticle:SetColor( 90, math.Rand( 64, 108 ), math.Rand( 130, 255 ) )
-			eparticle:VelocityDecay( true )
+			--particle:VelocityDecay( true )
 			
 		end
 		

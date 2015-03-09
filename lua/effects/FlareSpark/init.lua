@@ -19,7 +19,7 @@ function EFFECT:Init( data )
 			particle:SetRoll( math.Rand( 280, 350 ) )
 			particle:SetRollDelta( math.Rand( -1, 1 ) )
 			particle:SetColor( 255, 255, 255 )
-			particle:VelocityDecay( true )
+			--particle:VelocityDecay( true )
 			particle:SetAirResistance( 20 )
 			
 			particle:SetGravity( Vector( math.random(-37,37), math.random(-37,37), math.random( -255, 20 ) ) )

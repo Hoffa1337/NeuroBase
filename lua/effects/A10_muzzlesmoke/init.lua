@@ -31,7 +31,6 @@ function EFFECT:Init( data )
 		particle:SetRoll( math.Rand( -1,1 ) )
 		particle:SetRollDelta( math.Rand( -1, 1 ) )
 		particle:SetColor( 255, 255, 255 )
-		particle:VelocityDecay( true )
 		particle:SetAirResistance( 10 )
 		particle:SetGravity( Vector( math.sin(CurTime()) * 25, math.cos(CurTime()) * 25, math.random(1,100) ) * ( scale / 2 ) )
 		
