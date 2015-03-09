@@ -806,7 +806,8 @@ function Meta:Jet_LockOnMethod()
 	local logic2 = ( e != self.Pilot )
 	
 	local NeuroTeam = self:GetNetworkedInt( "NeuroTeam", 0 )
-	local TargetTeam = e:GetNetworkedInt( "NeuroTeam", -1 )
+	local TargetTeam = IsValid( e ) && e:GetNetworkedInt( "NeuroTeam", -1 ) or -1
+	
 	local logic3
 	if TargetTeam >= 0 then
 	
