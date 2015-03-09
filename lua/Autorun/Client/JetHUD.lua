@@ -296,7 +296,13 @@ end )
  */
 
 function HideHL2HUD( name )	-- Hide the default HL2 HUD which appears while using the entities.
+	
 	local ply = LocalPlayer()
+	-- print( ply )
+	
+	-- if true then return end 
+	if( !IsValid( ply ) ) then return end 
+	
 	local tank = ply:GetNetworkedEntity( "Tank", NULL )
 	local plane = ply:GetNetworkedEntity( "Plane", NULL )
 
@@ -653,7 +659,7 @@ function JetFighter.MarkEnemies()
 		local pos = ( v:GetPos() + Vector(0,0,72 ) ):ToScreen( )
 		local x,y = pos.x, pos.y
 		
-		if( inLOS( JetFighter.Plane, v ) ) then
+		if( IsValid( v ) && inLOS( JetFighter.Plane, v ) ) then
 			
 			if ( v:OnGround() ) then
 			
@@ -927,7 +933,7 @@ function JetFighter.HUDhealth()
 	if( !JetFighter.FadeValue ) then JetFighter.FadeValue = 0 end 
 	
 	
-	if JetFighter.Pilot && JetFighter.Pilot.PlaneParts && JetFighter.Plane.Category == "NeuroTec Micro" then
+	if IsValid( JetFighter.Pilot ) && IsValid( JetFighter.Plane ) && JetFighter.Pilot && JetFighter.Pilot.PlaneParts && JetFighter.Plane.Category == "NeuroTec Micro" then
 	-- print(JetFighter.Pilot.PlaneParts[1].PropellerPos)
 	-- print(JetFighter.Pilot.PlaneParts[1].ExhaustPos)
 	-- PrintTable(JetFighter.Pilot.PlaneParts[1].PropellerPos)
@@ -959,12 +965,16 @@ plane.Rudder 			10
 }
 */	
 		for i = 1, #JetFighter.Pilot.PlaneParts do
-			 if( !JetFighter.Pilot.PlaneParts[i].MaxHealth ) then JetFighter.Pilot.PlaneParts[i].MaxHealth =  JetFighter.Pilot.PlaneParts[i]:GetNetworkedInt("MaxHealth",400) end
-			parts_hp[i] = JetFighter.Pilot.PlaneParts[i]:GetNetworkedInt("Health")/JetFighter.Pilot.PlaneParts[i]:GetNetworkedInt("MaxHealth")
+			if( IsValid(JetFighter.Pilot.PlaneParts[i] ) ) then 
+				
+				 if( !JetFighter.Pilot.PlaneParts[i].MaxHealth ) then JetFighter.Pilot.PlaneParts[i].MaxHealth =  JetFighter.Pilot.PlaneParts[i]:GetNetworkedInt("MaxHealth",400) end
+				parts_hp[i] = JetFighter.Pilot.PlaneParts[i]:GetNetworkedInt("Health")/JetFighter.Pilot.PlaneParts[i]:GetNetworkedInt("MaxHealth")
 
-			if parts_hp[i] <= 0.1 then parts_color[i] = destroyed
-			elseif (parts_hp[i] > 0.1) and (parts_hp[i] < 0.8) then parts_color[i] = critical
-			else parts_color[i] = normal		
+				if parts_hp[i] <= 0.1 then parts_color[i] = destroyed
+				elseif (parts_hp[i] > 0.1) and (parts_hp[i] < 0.8) then parts_color[i] = critical
+				else parts_color[i] = normal		
+				end
+			
 			end
 			
 		end
@@ -1554,7 +1564,7 @@ function JetFighter.LaserguidanceScreenspace()
 	local plr = LocalPlayer()
 	local plane = plr:GetScriptedVehicle()
 	local drawoverlay = ( ( IsValid( plane ) && plane:GetNetworkedBool( "DrawTracker", false ) ) )
-	
+	if( !IsValid( plane ) ) then return end 
 	local copilot = plane:GetNetworkedEntity("CoPilot", NULL )
 
 	if( IsValid( copilot ) && plane:GetNetworkedBool("DrawTracker", false ) && LocalPlayer() == copilot ) then
