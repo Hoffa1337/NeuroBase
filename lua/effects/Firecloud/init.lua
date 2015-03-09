@@ -22,7 +22,7 @@ function EFFECT:Think( )
 			particle:SetEndSize( Size )
 			particle:SetAirResistance( 200 )
 			particle:SetRoll( 10 )
-			particle:VelocityDecay( true )
+			--particle:VelocityDecay( true )
 			
 			local particle2 = self.Emitter:Add( "modulus/particles/Fire"..math.random(1,8), Pos ) 
 			particle2:SetVelocity( VectorRand() * Size * 10 ) 		

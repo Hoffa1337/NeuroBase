@@ -51,7 +51,7 @@ function EFFECT:Init( data )
 		particle:SetRoll(math.Rand(360,480))
 		particle:SetRollDelta(math.Rand(-1,1))
 		particle:SetColor(math.Rand(150,255),math.Rand(100,150),100)
-		particle:VelocityDecay(true)	
+		--particle:VelocityDecay(true)	
 	end
 
 	--smoke puff
@@ -65,7 +65,7 @@ function EFFECT:Init( data )
 		particle:SetRoll(math.Rand(360,480))
 		particle:SetRollDelta(math.Rand(-1,1))
 		particle:SetColor(170,160,160)
-		particle:VelocityDecay(true)
+		--particle:VelocityDecay(true)
 		particle:SetGravity(Vector(0,0,math.random(-30,-10)))
 	end
 
@@ -80,7 +80,7 @@ function EFFECT:Init( data )
 		particle:SetRoll(math.Rand(480,540))
 		particle:SetRollDelta(math.Rand(-1,1))
 		particle:SetColor(170,170,170)
-		particle:VelocityDecay(true)
+		--particle:VelocityDecay(true)
 		particle:SetGravity(Vector(0,0,math.random(-30,-10)))
 	end
 

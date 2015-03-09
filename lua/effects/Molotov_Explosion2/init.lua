@@ -29,7 +29,7 @@ function EFFECT:Init( data )
 				particle:SetRoll( math.random( -360, 360 ) )			-- Wie schnell sich der Effekt "drehen" soll ( wie z.B. eine Rauchwolke)
 				particle:SetRollDelta( math.random( -0.6, 0.6 ) ) 			-- <<Leider keine Ahungn>>
 				particle:SetColor( 255, 255, 255 ) 			-- Farbe des Effektes ( Rot, Grün, Blau )
-				particle:VelocityDecay( true )			 -- Ob die Geschwindigeit ( siehe oben ) "zerfallen" kann. Also, ob sich der Effekt langsamer bewegen darf
+				--particle:VelocityDecay( true )			 -- Ob die Geschwindigeit ( siehe oben ) "zerfallen" kann. Also, ob sich der Effekt langsamer bewegen darf
 		end
 			
 		
@@ -45,7 +45,7 @@ function EFFECT:Init( data )
 				particle:SetRoll( math.random( -360, 360 ) )			-- Wie schnell sich der Effekt "drehen" soll ( wie z.B. eine Rauchwolke)
 				particle:SetRollDelta( math.random( -0.8, 0.8 ) ) 			-- <<Leider keine Ahungn>>
 				particle:SetColor( 255, 255, 255 ) 			-- Farbe des Effektes ( Rot, Grün, Blau )
-				particle:VelocityDecay( true )			 -- Ob die Geschwindigeit ( siehe oben ) "zerfallen" kann. Also, ob sich der Effekt langsamer bewegen darf
+				--particle:VelocityDecay( true )			 -- Ob die Geschwindigeit ( siehe oben ) "zerfallen" kann. Also, ob sich der Effekt langsamer bewegen darf
 		end
 		
 	-- Ende des Effekts	

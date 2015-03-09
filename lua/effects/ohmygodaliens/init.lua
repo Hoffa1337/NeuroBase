@@ -18,7 +18,7 @@ function EFFECT:Init( data )
 	particle:SetRoll( math.Rand( -1, 1 ) )
 	particle:SetRollDelta( math.Rand( -3, 3 ) )
 	particle:SetColor( 1,1,1,255 )
-	particle:VelocityDecay( false )
+	--particle:VelocityDecay(false)
 	
 	emitter:Finish()
 	

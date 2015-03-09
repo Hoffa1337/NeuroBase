@@ -31,7 +31,7 @@ function EFFECT:Init( data )
 				particle:SetRoll( math.Rand( 0, 360 ) )
 				particle:SetRollDelta( math.Rand( -1, 1 ) )
 				particle:SetColor( math.Rand( 130, 230 ), math.Rand( 100, 160 ), 120 )
-				particle:VelocityDecay( false )
+				--particle:VelocityDecay(false)
 			
 			end
 			
@@ -51,7 +51,7 @@ function EFFECT:Init( data )
 				particle:SetRoll( math.Rand( 0, 360 ) )
 				particle:SetRollDelta( math.Rand( -0.5, 0.5 ) )
 				particle:SetColor( 30, 15, math.Rand( 190, 225 ) )
-				particle:VelocityDecay( false )
+				--particle:VelocityDecay(false)
 			
 			end
 			
@@ -73,7 +73,7 @@ function EFFECT:Init( data )
 				particle:SetRoll( math.Rand( 0, 360 ) )
 				particle:SetRollDelta( math.Rand( -1, 1 ) )
 				particle:SetColor( 145, math.Rand( 160, 200 ), 70 )
-				particle:VelocityDecay( false )
+				--particle:VelocityDecay(false)
 			
 			end
 			
@@ -94,7 +94,7 @@ function EFFECT:Init( data )
 				particle:SetRoll( math.Rand( 0, 360 ) )
 				particle:SetRollDelta( math.Rand( -0.5, 0.5 ) )
 				particle:SetColor( 135, math.Rand( 120, 140 ), 60 )
-				particle:VelocityDecay( false )
+				--particle:VelocityDecay(false)
 			end
 			
 		end
