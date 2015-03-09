@@ -924,12 +924,15 @@ end
 
 function JetFighter.HUDhealth()
 
-	if JetFighter.Plane.Category == "NeuroTec Micro" then
+	if( !JetFighter.FadeValue ) then JetFighter.FadeValue = 0 end 
+	
+	
+	if JetFighter.Pilot && JetFighter.Pilot.PlaneParts && JetFighter.Plane.Category == "NeuroTec Micro" then
 	-- print(JetFighter.Pilot.PlaneParts[1].PropellerPos)
 	-- print(JetFighter.Pilot.PlaneParts[1].ExhaustPos)
 	-- PrintTable(JetFighter.Pilot.PlaneParts[1].PropellerPos)
 	-- PrintTable(JetFighter.Pilot.PlaneParts[1].ExhaustPos)
-			
+		 JetFighter.FadeValue = math.Approach(  JetFighter.FadeValue, 155, 0.5 )
 		local hp = math.floor( JetFighter.Plane:GetNetworkedInt( "Health", 0 ) )
 		local maxhp = math.floor( JetFighter.Plane:GetNetworkedInt( "MaxHealth", 0 ) )
 		local h = hp / maxhp
@@ -940,7 +943,7 @@ function JetFighter.HUDhealth()
 		local engines_hp = {}
 		local parts_color={}
 		local engines_color={}
-		local normal,critical,destroyed = Color(255, 255, 255, 100), Color(255, 0, 0, 100), Color(0, 0, 0, 255)
+		local normal,critical,destroyed = Color(255, 255, 255, JetFighter.FadeValue ), Color(255, 0, 0, JetFighter.FadeValue ), Color(0, 0, 0, 255)
 /*		
 : local parts = { 
 plane, 					1

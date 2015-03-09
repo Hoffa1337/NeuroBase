@@ -144,7 +144,7 @@ end
 
 function ENT:Think()
 	
-	if( self:WaterLevel() > 0 ) then
+	if( IsValid( self ) && self:WaterLevel() > 0 ) then
 		
 		self:Remove()
 		
