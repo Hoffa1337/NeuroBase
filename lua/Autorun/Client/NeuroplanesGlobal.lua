@@ -477,8 +477,15 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 end
 
 function DrawWeaponHUD()
+	
+
 	JetFighter.Pilot = LocalPlayer()
+	
+	if( !IsValid( JetFighter.Pilot) ) then return end 
+	-- print( JetFighter.Pilot )
 	JetFighter.Plane = JetFighter.Pilot:GetNetworkedEntity( "Plane", NULL )
+	if( !IsValid( JetFighter.Plane ) ) then return end 
+	
 	JetFighter.Target = JetFighter.Plane:GetNetworkedEntity( "Target", NULL )
 		JetFighter.Plane:GetNetworkedEntity("NeuroPlanes_LaserGuided", r )
 		local hp = math.floor( JetFighter.Plane:GetNetworkedInt( "Health", 0 ) )
