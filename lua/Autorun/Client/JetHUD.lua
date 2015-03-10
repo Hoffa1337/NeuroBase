@@ -934,11 +934,8 @@ function JetFighter.HUDhealth()
 	
 	
 	if IsValid( JetFighter.Pilot ) && IsValid( JetFighter.Plane ) && JetFighter.Pilot && JetFighter.Pilot.PlaneParts && JetFighter.Plane.Category == "NeuroTec Micro" then
-	-- print(JetFighter.Pilot.PlaneParts[1].PropellerPos)
-	-- print(JetFighter.Pilot.PlaneParts[1].ExhaustPos)
-	-- PrintTable(JetFighter.Pilot.PlaneParts[1].PropellerPos)
-	-- PrintTable(JetFighter.Pilot.PlaneParts[1].ExhaustPos)
-		 JetFighter.FadeValue = math.Approach(  JetFighter.FadeValue, 155, 0.5 )
+
+		JetFighter.FadeValue = math.Approach(  JetFighter.FadeValue, 155, 0.5 )
 		local hp = math.floor( JetFighter.Plane:GetNetworkedInt( "Health", 0 ) )
 		local maxhp = math.floor( JetFighter.Plane:GetNetworkedInt( "MaxHealth", 0 ) )
 		local h = hp / maxhp
@@ -965,16 +962,17 @@ plane.Rudder 			10
 }
 */	
 		for i = 1, #JetFighter.Pilot.PlaneParts do
-			if( IsValid(JetFighter.Pilot.PlaneParts[i] ) ) then 
-				
+			if( IsValid(JetFighter.Pilot.PlaneParts[i] ) ) then 				
 				 if( !JetFighter.Pilot.PlaneParts[i].MaxHealth ) then JetFighter.Pilot.PlaneParts[i].MaxHealth =  JetFighter.Pilot.PlaneParts[i]:GetNetworkedInt("MaxHealth",400) end
 				parts_hp[i] = JetFighter.Pilot.PlaneParts[i]:GetNetworkedInt("Health")/JetFighter.Pilot.PlaneParts[i]:GetNetworkedInt("MaxHealth")
 
-				if parts_hp[i] <= 0.1 then parts_color[i] = destroyed
+				if (parts_hp[i] <= 0.1) then parts_color[i] = destroyed
 				elseif (parts_hp[i] > 0.1) and (parts_hp[i] < 0.8) then parts_color[i] = critical
 				else parts_color[i] = normal		
+				end				
+				if( IsValid(JetFighter.Pilot.PlaneParts[1] ) ) then 				
+					if (JetFighter.Pilot.PlaneParts[i]:GetPos()-JetFighter.Pilot.PlaneParts[1]:GetPos()):Length()>150 then parts_color[i] = destroyed end  //Any better idea?
 				end
-			
 			end
 			
 		end
