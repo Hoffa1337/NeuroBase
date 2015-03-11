@@ -206,7 +206,7 @@ concommand.Add("ntespv",function( ply, cmd, args )
 			ride:SetPos( pos )
 			ride:SetAngles( Angle( 0,ply:GetAngles().y, 0 ) )
 			ride:Spawn()
-			ride:Activate()
+		
 			
 			if( v.VehicleType ) then
 				
@@ -1290,7 +1290,8 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 			if( self.PrimaryCooldown < .5 ) then
 		
 				self.FiringTimer = self.FiringTimer + 1
-		
+				self:SetNetworkedInt("FiringTimer", self.FiringTimer )
+				
 			end
 			
 			if( self.FiringTimer >= ( self.PrimaryMaxShots or 25 ) ) then
