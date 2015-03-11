@@ -870,17 +870,28 @@ function JetFighter.OldSchoolCrosshair()
 	surface.DrawLine( tpos.x, tpos.y-size, tpos.x, tpos.y-l )
 	surface.DrawLine( tpos.x, tpos.y+size, tpos.x, tpos.y+l )
 	
+	//Primary cooldown indicator
 	local shots = JetFighter.Plane:GetNetworkedInt("FiringTimer")
 	local maxshots = JetFighter.Plane.PrimaryMaxShots or 25
 	local ratio = shots/maxshots
-	
 	if (shots != nil) then
-		surface.DrawOutlinedRect( tpos.x +32, tpos.y-size, 4, size*2)
-		surface.DrawOutlinedRect( tpos.x +32-1, tpos.y-size-1, 6, size*2+2)
-		
+		surface.DrawOutlinedRect( tpos.x -36, tpos.y-size, 4, size*2)		
 		surface.SetDrawColor( 255, 50, 0, 200)
-		surface.DrawRect( tpos.x +32, tpos.y-size*(2*ratio-1), 4, size*2*ratio ) 
+		surface.DrawRect( tpos.x -36, tpos.y-size*(2*ratio-1), 4, size*2*ratio ) 
 	end
+
+	//Secondary cooldown indicator
+	local index = JetFighter.Plane:GetNetworkedInt("FireMode")
+	local cd = JetFighter.Plane.Armament[index+1].Cooldown
+	local lsa = JetFighter.Plane:GetNetworkedFloat("LastSecondaryAttack") -CurTime() + cd	
+	if (lsa != nil) then
+		if lsa <0 then lsa = 0 end
+		surface.SetDrawColor(255,200,50,255)		
+		surface.DrawOutlinedRect( tpos.x +32, tpos.y-size, 4, size*2)		
+		surface.SetDrawColor( 255, 50, 0, 200)
+		surface.DrawRect( tpos.x +32, tpos.y-size*(2*lsa/cd-1), 4, size*2*lsa/cd ) 
+	end
+		
 end
 
 function JetFighter.HUDinstruments(dangerzone)
