@@ -1269,7 +1269,7 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		
 		if( self.Destroyed ) then return end
 			
-		if ( self.LastPrimaryAttack + self.PrimaryCooldown <= CurTime() && self.OverHeated + 3 <= CurTime() ) then
+		if ( self.LastPrimaryAttack + self.PrimaryCooldown <= CurTime() && self.OverHeated + 5 <= CurTime() ) then
 			
 			
 			if( self.ContigiousFiringLoop ) then
@@ -1297,7 +1297,7 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 			if( self.FiringTimer >= ( self.PrimaryMaxShots or 25 ) ) then
 				
 				self.OverHeated = CurTime()
-				self.FiringTimer = 0
+				
 				self.Pilot:PrintMessage( HUD_PRINTTALK, "Calm down Skippy, your guns are glowing!" )
 				self:EmitSound( "npc/dog/dog_pneumatic2.wav",511, 75 )
 				if( self.ContigiousFiringLoop ) then
@@ -1329,11 +1329,21 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 			end
 			
 		end
-			
+		
+		self.FiringTimerOld = self.FiringTimer 
+		
 		self.FiringTimer = math.Approach( self.FiringTimer, 0, 1 )
-			
+		
+		-- print( self.FiringTimerOld, self.FiringTimer )
+		if( self.FiringTimer != self.FiringTimerOld ) then
+		
+			self:SetNetworkedInt("FiringTimer", self.FiringTimer )
+	
+		end
+
 	end
 
+	
 	-- print( "???")
 	-- Firemode 
 	if ( !self.NoSecondaryWeapons && self.Pilot:KeyDown( IN_RELOAD ) && self.LastFireModeChange + 0.5 <= CurTime() ) then
@@ -2030,6 +2040,9 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		
 	end
 	-- print( AddPos )
+	
+	self:SetNWFloat("LastSecondaryAttack", CurTime() )
+	
 	local r = ents.Create( wep.Class )
 	r:SetPos( pos )
 	r:SetOwner( self )
@@ -2049,7 +2062,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		r:GetPhysicsObject():SetMass( 1 )
 		r.MinDamage = self.MinDamage or 20
 		r.MaxDamage = self.MaxDamage or 35
-		-- r:Fire("kill","",3)
+		r:Fire("kill","",3)
 		local muzzlepos = wep 
 		
 		if( wep.FlipVal == true ) then	
@@ -2153,8 +2166,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		
 		
 		if( trace.Hit ) then
-			
-			local pos
+
 			-- Auto lock-on
 			local dist = 1024
 			local tempd = tempd or 0
