@@ -935,7 +935,7 @@ function JetFighter.HUDhealth()
 	
 	if IsValid( JetFighter.Pilot ) && IsValid( JetFighter.Plane ) && JetFighter.Pilot && JetFighter.Pilot.PlaneParts && JetFighter.Plane.Category == "NeuroTec Micro" then
 
-		JetFighter.FadeValue = math.Approach(  JetFighter.FadeValue, 155, 0.5 )
+		JetFighter.FadeValue = math.Approach(  JetFighter.FadeValue, 55, 0.5 )
 		local hp = math.floor( JetFighter.Plane:GetNetworkedInt( "Health", 0 ) )
 		local maxhp = math.floor( JetFighter.Plane:GetNetworkedInt( "MaxHealth", 0 ) )
 		local h = hp / maxhp
@@ -946,7 +946,7 @@ function JetFighter.HUDhealth()
 		local engines_hp = {}
 		local parts_color={}
 		local engines_color={}
-		local normal,critical,destroyed = Color(255, 255, 255, JetFighter.FadeValue ), Color(255, 0, 0, JetFighter.FadeValue ), Color(0, 0, 0, 255)
+		local normal,damaged,critical,destroyed = Color(255, 255, 255, JetFighter.FadeValue ),Color(255, 150, 0, JetFighter.FadeValue ), Color(255, 0, 0, JetFighter.FadeValue ), Color(0, 0, 0, 255)
 /*		
 : local parts = { 
 plane, 					1
@@ -967,7 +967,8 @@ plane.Rudder 			10
 				parts_hp[i] = JetFighter.Pilot.PlaneParts[i]:GetNetworkedInt("Health")/JetFighter.Pilot.PlaneParts[i]:GetNetworkedInt("MaxHealth")
 
 				if (parts_hp[i] <= 0.1) then parts_color[i] = destroyed
-				elseif (parts_hp[i] > 0.1) and (parts_hp[i] < 0.8) then parts_color[i] = critical
+				elseif (parts_hp[i] > 0.5) and (parts_hp[i] <= 0.9) then parts_color[i] = damaged
+				elseif (parts_hp[i] > 0.1) and (parts_hp[i] <= 0.5) then parts_color[i] = critical
 				else parts_color[i] = normal		
 				end				
 				if( IsValid(JetFighter.Pilot.PlaneParts[1] ) ) then 				
