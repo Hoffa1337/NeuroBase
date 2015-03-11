@@ -874,24 +874,33 @@ function JetFighter.OldSchoolCrosshair()
 	local shots = JetFighter.Plane:GetNetworkedInt("FiringTimer")
 	local maxshots = JetFighter.Plane.PrimaryMaxShots or 25
 	local ratio = shots/maxshots
-	if (shots != nil) then
-		surface.DrawOutlinedRect( tpos.x -36, tpos.y-size, 4, size*2)		
-		surface.SetDrawColor( 255, 50, 0, 200)
-		surface.DrawRect( tpos.x -36, tpos.y-size*(2*ratio-1), 4, size*2*ratio ) 
-	end
+	local cd1 = JetFighter.Plane.PrimaryCooldown
+	local lpa = JetFighter.Plane:GetNetworkedFloat("LastPrimaryAttack") -CurTime() + cd1	
 
-	//Secondary cooldown indicator
-	local index = JetFighter.Plane:GetNetworkedInt("FireMode")
-	local cd = JetFighter.Plane.Armament[index+1].Cooldown
-	local lsa = JetFighter.Plane:GetNetworkedFloat("LastSecondaryAttack") -CurTime() + cd	
-	if (lsa != nil) then
-		if lsa <0 then lsa = 0 end
-		surface.SetDrawColor(255,200,50,255)		
-		surface.DrawOutlinedRect( tpos.x +32, tpos.y-size, 4, size*2)		
+	surface.DrawOutlinedRect( tpos.x -36, tpos.y-size, 4, size*2)		
+	if (lpa != nil) and (shots ==0) then
+		if lpa <0 then lpa = 0 end
 		surface.SetDrawColor( 255, 50, 0, 200)
-		surface.DrawRect( tpos.x +32, tpos.y-size*(2*lsa/cd-1), 4, size*2*lsa/cd ) 
+		surface.DrawRect( tpos.x -36, tpos.y-size*(2*lpa/cd1-1), 4, size*2*lpa/cd1 )		
+	else
+		surface.SetDrawColor( 255, 50, 0, 200)
+		surface.DrawRect( tpos.x -36, tpos.y-size*(2*ratio-1), 4, size*2*ratio )
 	end
-		
+	//Secondary cooldown indicator
+	if !(JetFighter.Plane.NoSecondaryWeapons)	then
+	
+		local index = JetFighter.Plane:GetNetworkedInt("FireMode")
+		local cd2 = JetFighter.Plane.Armament[index+1].Cooldown
+
+		local lsa = JetFighter.Plane:GetNetworkedFloat("LastSecondaryAttack") -CurTime() + cd2	
+		if (lsa != nil) then
+			if lsa <0 then lsa = 0 end
+			surface.SetDrawColor(255,200,50,255)		
+			surface.DrawOutlinedRect( tpos.x +32, tpos.y-size, 4, size*2)		
+			surface.SetDrawColor( 255, 50, 0, 200)
+			surface.DrawRect( tpos.x +32, tpos.y-size*(2*lsa/cd2-1), 4, size*2*lsa/cd2 ) 
+		end
+	end	
 end
 
 function JetFighter.HUDinstruments(dangerzone)
@@ -952,19 +961,19 @@ end
 
 function JetFighter.HUDhealth()
 
+	local hp = math.floor( JetFighter.Plane:GetNetworkedInt( "Health", 0 ) )
+	local maxhp = math.floor( JetFighter.Plane:GetNetworkedInt( "MaxHealth", 0 ) )
+	local h = hp / maxhp
+	local posX,posY,size = ScrW()*0.85, ScrH()*0.4, 128
+
+	//Health value indicator
+	draw.SimpleText( ""..math.floor(100*h).."%", "TargetID", posX+90,posY+64, Color(255*(1-h),255*h,0,255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_LEFT )		
+
 	if( !JetFighter.FadeValue ) then JetFighter.FadeValue = 0 end 
-	
 	
 	if IsValid( JetFighter.Pilot ) && IsValid( JetFighter.Plane ) && JetFighter.Pilot && JetFighter.Pilot.PlaneParts && JetFighter.Plane.Category == "NeuroTec Micro" then
 
 		JetFighter.FadeValue = math.Approach(  JetFighter.FadeValue, 55, 0.5 )
-		local hp = math.floor( JetFighter.Plane:GetNetworkedInt( "Health", 0 ) )
-		local maxhp = math.floor( JetFighter.Plane:GetNetworkedInt( "MaxHealth", 0 ) )
-		local h = hp / maxhp
-
-		local posX,posY,size = ScrW()*0.85, ScrH()*0.4, 128
-
-		draw.SimpleText( ""..math.floor(100*h).."%", "TargetID", posX+90,posY+64, Color(255*(1-h),255*h,0,255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_LEFT )		
 
 		local parts_hp = {}
 		local engines_hp = {}
@@ -1081,7 +1090,8 @@ plane.Rudder 			10
 					surface.SetMaterial( planeicon_materials["planeicon_"..k.."engine_engine"..j..""])		surface.DrawTexturedRect( posX, posY, size, size )
 			end
 		end	
-		
+	else
+	draw.SimpleText( "Armor","TargetID", posX+90,posY+48, Color(255*(1-h),255*h,0,255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_LEFT )			
 	end
 end
 
@@ -1182,10 +1192,7 @@ function JetFighter.ModernHUD(lockwarning)
 		surface.DrawLine( ScrW()*3/4+2, ScrH()/2+250, ScrW()*3/4-8, ScrH()/2+250 )
 		surface.DrawRect( ScrW()*3/4+2, ScrH()/2-250 + 500*(1-h), 5, h*500 )
 	end
-	
-	//Health indicator
-	draw.SimpleText( "Armor: "..math.floor(100*h).."%", "TargetID", ScrW()*5/6-48, ScrH()*4/5-40, Color(255*(1-h),255*h,0,255), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )		
-	
+		
 	//Equipment
 	draw.SimpleText("Countermeasures:"..flares, "TargetID", ScrW()*5/6-48, ScrH()*4/5+25, Color( flarestatus, 255-flarestatus, 0, 200 ), TEXT_ALIGN_LEFT, TEXT_ALIGN_LEFT )
 	if ( wep != "NONE_AVAILABLE" ) then
