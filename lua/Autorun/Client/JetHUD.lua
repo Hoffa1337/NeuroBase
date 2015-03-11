@@ -887,7 +887,7 @@ function JetFighter.OldSchoolCrosshair()
 		surface.DrawRect( tpos.x -36, tpos.y-size*(2*ratio-1), 4, size*2*ratio )
 	end
 	//Secondary cooldown indicator
-	if !(JetFighter.Plane.NoSecondaryWeapons)	then
+	if !(JetFighter.Plane.NoSecondaryWeapons &&  JetFighter.Plane.Armament)	then
 	
 		local index = JetFighter.Plane:GetNetworkedInt("FireMode")
 		local cd2 = JetFighter.Plane.Armament[index+1].Cooldown
