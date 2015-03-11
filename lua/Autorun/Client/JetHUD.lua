@@ -870,6 +870,17 @@ function JetFighter.OldSchoolCrosshair()
 	surface.DrawLine( tpos.x, tpos.y-size, tpos.x, tpos.y-l )
 	surface.DrawLine( tpos.x, tpos.y+size, tpos.x, tpos.y+l )
 	
+	local shots = JetFighter.Plane:GetNetworkedInt("FiringTimer")
+	local maxshots = JetFighter.Plane.PrimaryMaxShots or 25
+	local ratio = shots/maxshots
+	
+	if (shots != nil) then
+		surface.DrawOutlinedRect( tpos.x +32, tpos.y-size, 4, size*2)
+		surface.DrawOutlinedRect( tpos.x +32-1, tpos.y-size-1, 6, size*2+2)
+		
+		surface.SetDrawColor( 255, 50, 0, 200)
+		surface.DrawRect( tpos.x +32, tpos.y-size*(2*ratio-1), 4, size*2*ratio ) 
+	end
 end
 
 function JetFighter.HUDinstruments(dangerzone)
@@ -941,6 +952,8 @@ function JetFighter.HUDhealth()
 		local h = hp / maxhp
 
 		local posX,posY,size = ScrW()*0.85, ScrH()*0.4, 128
+
+		draw.SimpleText( ""..math.floor(100*h).."%", "TargetID", posX+90,posY+64, Color(255*(1-h),255*h,0,255), TEXT_ALIGN_RIGHT, TEXT_ALIGN_LEFT )		
 
 		local parts_hp = {}
 		local engines_hp = {}
