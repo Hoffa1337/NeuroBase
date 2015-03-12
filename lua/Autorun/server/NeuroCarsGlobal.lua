@@ -643,7 +643,7 @@ function Meta:NA_RPG_damagehook(dmginfo)
 		fx:SetScale( 1 )
 		util.Effect( "RPGShotDown", fx )
 		
-		local inertjunk = ents.Create("prop_physics")
+		local inertjunk = ents.Create("prop_physics_multiplayer")
 		inertjunk:SetPos( self:GetPos() )
 		inertjunk:SetAngles( self:GetAngles() )
 		inertjunk:SetModel( self:GetModel() )
@@ -1583,7 +1583,7 @@ function Meta:NeuroPlanes_EjectPlayer( ply )
 			
 			if( IsValid( ejectionseat ) ) then	
 				
-				local chute = ents.Create( "prop_physics" )
+				local chute = ents.Create( "prop_physics_multiplayer" )
 				chute:SetModel( "models/hawx/misc/parachute.mdl" )
 				chute:SetPos( ejectionseat:GetPos() )
 				chute:SetAngles( ejectionseat:GetAngles() )
@@ -1673,7 +1673,7 @@ function Meta:NeuroPlanes_EjectionSeat()
 			
 			if( IsValid( ejectionseat ) ) then	
 				
-				local chute = ents.Create( "prop_physics" )
+				local chute = ents.Create( "prop_physics_multiplayer" )
 				chute:SetModel( "models/hawx/misc/parachute.mdl" )
 				chute:SetPos( ejectionseat:GetPos() )
 				chute:SetAngles( ejectionseat:GetAngles() )
@@ -3260,7 +3260,7 @@ function Meta:DeathFX()
 	
 		local shade = math.random(45,110)
 		
-		local cdeb = ents.Create("prop_physics")
+		local cdeb = ents.Create("prop_physics_multiplayer")
 		cdeb:SetModel(tostring(v[1]))
 		cdeb:SetPos(self:GetPos()+Vector(math.random(-64,64),math.random(-64,64),math.random(128,256)))
 		cdeb:SetSolid(6)
@@ -3921,7 +3921,7 @@ function implode( pos, offset, radius, amplitude )
 		
 		for k,v in pairs( ents ) do
 		
-			if ( IsValid( v ) &&( v:GetClass() == "prop_physics" || v:IsVehicle() ) ) then
+			if ( IsValid( v ) &&( v:GetClass() == "prop_physics_multiplayer" || v:IsVehicle() ) ) then
 				
 				local vPos = v:GetPos()
 				
@@ -3958,7 +3958,7 @@ function Suck( pos, offset, radius, amplitude )
 		
 		for k,v in pairs( ents ) do
 		
-			if ( IsValid( v ) && v:GetClass() == "prop_physics" || v:GetClass() == "npc_cscanner" || v:GetClass() == "npc_rollermine" || v:GetClass() == "gib" ) then
+			if ( IsValid( v ) && v:GetClass() == "prop_physics_multiplayer" || v:GetClass() == "npc_cscanner" || v:GetClass() == "npc_rollermine" || v:GetClass() == "gib" ) then
 			
 				local vPos = v:GetPos()
 				
