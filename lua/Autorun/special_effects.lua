@@ -29,6 +29,19 @@ game.AddParticles("particles/neuro_inferno.pcf") 		-- fireplume -  fireplume_sma
 game.AddParticles("particles/gbe_trinity_explo.pcf") --trinity_main and trinity_air
 game.AddParticles("particles/gb5_napalm.pcf") --napalm_explosion and napalm_air
 game.AddParticles("particles/neuro_scud.pcf") --scud_explosion 
+
+
+game.AddParticles("particles/neuro_micro.pcf") 
+--[[
+Microplane muzzleflash: "microplane_MG_muzzleflash"
+Microplane crash explosion: "microplane_explosion"
+Microbomber crash explosion: "microplane_bomber_explosion"
+Mid-air explosion: "microplane_midair_explosion"
+Microplane structual dismemberment: "microplane_damage"
+Microplane fuel leak: "microplane_fuel_leak"
+Microplane fuel leak fire: "microplane_fuel_leak_fire"
+Microplane engine fire: "microplane_jet_flame"
+ ]]--
  
 -- rocketrail/s
 print( "NeuroTec Special Effects loaded" )

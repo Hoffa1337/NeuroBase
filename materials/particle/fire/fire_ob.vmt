@@ -1,0 +1,7 @@
+"SpriteCard"
+{
+	$basetexture "particle/fire/fire"
+	$additive "1"
+	$depthblend "0"
+	$overbrightfactor 5.0 
+}

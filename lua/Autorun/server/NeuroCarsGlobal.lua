@@ -2070,7 +2070,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	
 		end
 	
-		ParticleEffectAttach( "mg_muzzleflash", PATTACH_ABSORIGIN_FOLLOW, muzzlepos, 0 )
+		ParticleEffectAttach( "microplane_MG_muzzleflash", PATTACH_ABSORIGIN_FOLLOW, muzzlepos, 0 )
 		timer.Simple( 0.75, 
 			function()  	
 				if (IsValid( muzzlepos ) ) then 
