@@ -955,14 +955,24 @@ function Meta:Micro_FireCannons()
 		bullet:GetPhysicsObject():SetDamping( 0,0 )
 		bullet:SetNoDraw( true )
 		
+		
+		if( self.PCFMuzzle ) then
+		
+				ParticleEffect( self.Muzzle or "microplane_MG_muzzleflash", self.Miniguns[i]:GetPos() + self.Miniguns[i]:GetForward() * 55,  self:GetAngles(), self )		
+				---lahmeharam
+		else
+		
 
-		local sm = EffectData()
-		sm:SetStart( g:GetPos() + g:GetForward() * self.MuzzleOffset or 105)
-		sm:SetOrigin( g:GetPos() + g:GetForward() * self.MuzzleOffset or 105)
-		sm:SetEntity( g )		
-		sm:SetAttachment(1)
-		sm:SetScale( 0.5 )
-		util.Effect( self.Muzzle or "ChopperMuzzleFlash", sm )
+			local sm = EffectData()
+			sm:SetStart( g:GetPos() + g:GetForward() * self.MuzzleOffset or 105)
+			sm:SetOrigin( g:GetPos() + g:GetForward() * self.MuzzleOffset or 105)
+			sm:SetEntity( g )		
+			sm:SetAttachment(1)
+			sm:SetScale( 0.5 )
+			util.Effect( self.Muzzle or "ChopperMuzzleFlash", sm )
+			
+		end
+
 		bullet:GetPhysicsObject():SetVelocity( self:GetForward() * 500000 )
 		
 	end
@@ -1095,11 +1105,11 @@ function Meta:Jet_FireMultiBarrel()
 			sm:SetAttachment(1)
 			sm:SetScale( 0.5 )
 			util.Effect( self.Muzzle, sm )
-
+			-- if( )
 		else
 			
 			-- print("nope")
-			ParticleEffect( "mg_muzzleflash", self.Miniguns[i]:GetPos() + self.Miniguns[i]:GetForward() * self.MuzzleOffset or 105,  self:GetAngles(), self )
+			ParticleEffect( "microplane_MG_muzzleflash", self.Miniguns[i]:GetPos() + self.Miniguns[i]:GetForward() * self.MuzzleOffset or 105,  self:GetAngles(), self )
 		
 		end
 		
