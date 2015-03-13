@@ -1288,7 +1288,7 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 					
 					-- self.IsShootSoundPlaying = true
 					
-					self.PrimarySound:PlayEx(100,100)
+					self.PrimarySound:PlayEx( 1, 90)
 					
 				-- end
 				
