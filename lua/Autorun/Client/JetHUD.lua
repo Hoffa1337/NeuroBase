@@ -861,7 +861,7 @@ end
 
 function JetFighter.OldSchoolCrosshair()
 
-	local tpos = ( JetFighter.Plane:GetPos() + LocalPlayer():EyeAngles():Forward() * 3500 + JetFighter.Plane:GetUp() * 512 ):ToScreen()
+	local tpos = ( JetFighter.Plane:GetPos() + LocalPlayer():EyeAngles():Forward() * 3500 + JetFighter.Plane:GetUp() * 300 ):ToScreen()
 	local size,l = 16, 8
 	surface.DrawCircle( tpos.x, tpos.y, 16, Color(255,200,50,100) )
 	surface.SetDrawColor(255,200,50,255)
