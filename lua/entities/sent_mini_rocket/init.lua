@@ -97,6 +97,12 @@ function ENT:PhysicsUpdate()
 		
 		if self.Sauce > 1 then
 			
+			if( IsValid( self.Target ) ) then
+		
+			
+				self:SetAngles( LerpAngle( 0.1, self:GetAngles(), (self.Target:GetPos() - self:GetPos() ):Angle() ) )
+		
+			end 
 			self.Speed = self.Speed + 200
 			self.PhysObj:SetVelocity( self:GetForward() * self.Speed )
 			self.Sauce = self.Sauce - 1
@@ -104,8 +110,8 @@ function ENT:PhysicsUpdate()
 			
 			local a = self.PhysObj:GetAngles()
 			// Alcohol Induced Rockets aka Drunk Fire
-			self.PhysObj:SetAngles( ( AngleRand() * .006 )+ Angle( a.p + math.sin( CurTime() - self.seed ) * .015, 
-										  a.y + math.cos( CurTime() - self.seed ) * .015,
+			self.PhysObj:SetAngles( ( AngleRand() * .00246 )+ Angle( a.p + math.sin( CurTime() - self.seed ) * .00515, 
+										  a.y + math.cos( CurTime() - self.seed ) * .00515,
 										  a.r + .1 ) )
 										  
 		else
@@ -116,6 +122,8 @@ function ENT:PhysicsUpdate()
 			self.PhysObj:SetMass( 1000 )
 			
 		end
+		
+	
 		
 	end
 	
@@ -152,7 +160,8 @@ function ENT:OnRemove()
 	explo1:SetScale( 2.25 )
 	util.Effect( "micro_he_impact_plane", explo1 )
 	-- util.Effect( "Explosion", explo1 )
-	ParticleEffect( "Explosion", self:GetPos()+Vector(0,0,8), Angle(0,0,0), nil )
+	ParticleEffect( "Explosion", self:GetPos()+Vector(0,0,8), self:GetAngles()*-1, nil )
+	ParticleEffect( "microplane_midair_explosion", self:GetPos()+Vector(0,0,8), Angle(0,0,0), nil )
 	util.BlastDamage( self, self.Owner, self:GetPos(), 128, 500 )
 
 end
