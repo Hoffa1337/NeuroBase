@@ -99,7 +99,13 @@ function ENT:PhysicsUpdate()
 			
 			if( IsValid( self.Target ) ) then
 		
-			
+				if( ( self:GetPos() - self.Target:GetPos() ):Length() < 50 ) then
+					
+					self:Remove()
+					
+					return
+					
+				end 
 				self:SetAngles( LerpAngle( 0.1, self:GetAngles(), (self.Target:GetPos() - self:GetPos() ):Angle() ) )
 		
 			end 
@@ -162,6 +168,6 @@ function ENT:OnRemove()
 	-- util.Effect( "Explosion", explo1 )
 	ParticleEffect( "Explosion", self:GetPos()+Vector(0,0,8), self:GetAngles()*-1, nil )
 	ParticleEffect( "microplane_midair_explosion", self:GetPos()+Vector(0,0,8), Angle(0,0,0), nil )
-	util.BlastDamage( self, self.Owner, self:GetPos(), 128, 500 )
+	util.BlastDamage( self, self.Owner, self:GetPos(), 128, math.random(250,500) )
 
 end
