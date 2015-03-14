@@ -28,7 +28,7 @@ function ENT:Initialize()
 		self.PhysObj:Wake()
 	
 	end
-	local TrailDelay = math.Rand( 1.15, 2.20 )/10
+	local TrailDelay = math.Rand( .25, .5 ) / 10
 	local TraceScale1 = self.TracerScale1 or 0.1
 	local TraceScale2 = self.TracerScale2 or 0.1
 	local GlowProxy = self.TracerGlowProxy or 1
@@ -38,17 +38,42 @@ function ENT:Initialize()
 		-- self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(245,255), math.random(245,255), math.random(245,255), math.random(25,45) ), false, 4,0, TrailDelay + 0.85, 1/(1)*0.55, "trails/smoke.vmt");  
 		-- self.SpriteTrail2 = util.SpriteTrail( self, 0, Color( 255, 255, 100, 255 ), false, 4, 4, TrailDelay + 0.05, 1/(0+4)*0.55, "sprites/smokez");  
 		
-		self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(245,255), math.random(245,255), math.random(244,255), math.random(21,22) ), false, 2, 0, TrailDelay + 1.85, 1/(0+4)*0.5, "trails/smoke.vmt");  
-
+		self.SpriteTrail = util.SpriteTrail( 
+							self, 
+							0, 
+							Color( 255, 
+							130, 
+							100, 
+							255 ), 
+							true,
+							6, 
+							0, 
+							TrailDelay, 
+							 1 / ( 0 + 6) * 0.5, 
+							"trails/smoke.vmt" );
+							
+		self.SpriteTrail2 = util.SpriteTrail( 
+							self, 
+							0, 
+							Color( 255, 
+							255, 
+							255, 
+							5 ), 
+							true,
+							4, 
+							0, 
+							TrailDelay*10, 
+							 1 / ( 0 + 48 ) * 0.5, 
+							"trails/smoke.vmt" );
 		local Glow = ents.Create("env_sprite")				
-		Glow:SetKeyValue("model","orangecore2.vmt")
+		Glow:SetKeyValue("model","sprites/orangeflare1.vmt")
 		Glow:SetKeyValue("rendercolor","255 150 100")
 		Glow:SetKeyValue("scale",tostring(TraceScale1))
 		Glow:SetPos(self:GetPos())
 		Glow:SetParent(self)
 		Glow:Spawn()
 		Glow:Activate()
-
+	
 		local Shine = ents.Create("env_sprite")
 		Shine:SetPos(self:GetPos())
 		Shine:SetKeyValue("renderfx", "0")
@@ -62,6 +87,13 @@ function ENT:Initialize()
 		Shine:SetParent(self)
 		Shine:Spawn()
 		Shine:Activate()
+		
+		-- local Shell = EffectData()
+		-- Shell:SetStart( self:GetPos() + self:GetForward() * -1)
+		-- Shell:SetOrigin( self:GetPos() + self:GetForward() * -1)
+		-- Shell:SetNormal( self:GetRight() * -1 )
+		-- Shell:SetEntity( self )
+		-- util.Effect( "SMOKE", Shell )  
 		
 	else
 	
@@ -89,9 +121,12 @@ function ENT:Initialize()
 		Shell:SetOrigin( self:GetPos() + self:GetForward() * -100)
 		Shell:SetNormal( self:GetRight() * -1 )
 		util.Effect( "RifleShellEject", Shell )  
+
 		
 	end
 	
+	self:DeleteOnRemove( self.SpriteTrail )
+		
 	-- local e = EffectData()
 	-- e:SetStart( self:GetPos() )
 	-- e:SetOrigin( self:GetPos() )
@@ -182,6 +217,10 @@ function ENT:OnRemove()
 		self.Owner = self
 		
 	end
+	-- self.SpriteTrail:SetParent(game.GetWorld())
+	-- self.SpriteTrail:SetPos( self:GetPos() ) 
+	-- self.SpriteTrail:Fire("kill","",4 )
+	
 	
 	self:EmitSound( "IL-2/air_can_03.mp3", 511, math.random( 100, 110 ) )
 	

@@ -47,7 +47,6 @@ resource.AddFile("particles/")
 CreateConVar("neurotec_disablemenu", 0, FCVAR_ARCHIVE )
 CreateConVar("warthunder_controls", 1, FCVAR_ARCHIVE )
 
-
 concommand.Add( "neurotec_swapseat", function( ply, cmd, args )
 	
 	local tank = ply:GetScriptedVehicle()
