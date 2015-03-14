@@ -892,9 +892,9 @@ function JetFighter.OldSchoolCrosshair()
 	if ( !JetFighter.Plane.NoSecondaryWeapons && JetFighter.Plane.Armament && #JetFighter.Plane.Armament > 0 )  then
 	
 		
+		local index = JetFighter.Plane:GetNetworkedInt("FireMode")
 		local idx = index+1 
 		if( #JetFighter.Plane.Armament < idx ) then idx = index end 
-		local index = JetFighter.Plane:GetNetworkedInt("FireMode")
 		local cd2 = JetFighter.Plane.Armament[idx].Cooldown
 
 		local lsa = JetFighter.Plane:GetNetworkedFloat("LastSecondaryAttack") -CurTime() + cd2	
