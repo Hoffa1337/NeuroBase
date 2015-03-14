@@ -1825,6 +1825,7 @@ function Meta:NeuroPlanes_CycleThroughHeliKeyBinds()
 		self.LastFireModeChange = CurTime()
 		self.FireMode = self:IncrementFireVar( self.FireMode, self.NumRockets, 1 )
 		self:SetNetworkedInt( "FireMode", self.FireMode)
+	
 		-- self.Pilot:PrintMessage( HUD_PRINTCENTER, "Selected Equipment: "..self.EquipmentNames[ self.FireMode ].Name )
 
 	end
@@ -1998,14 +1999,33 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		return
 		
 	end
+	local pos = wep:GetPos()
+	local AddPos = 0 
+	if ( wep.isFirst == true ) then
+	
+		wep.FlipVal = !wep.FlipVal 
+		AddPos = wep.FlipVal && 1 or 0
+		-- print( AddPos )
+		pos = self.RocketVisuals[ id + AddPos ]:GetPos()
+		wep = self.RocketVisuals[ id + AddPos ]
+	end
 	
 	-- Make the newly fired weapon invisible so it looks like we're actually dropping something.
-	if( wep.Cooldown >= 2 ) then
+	if( wep.Cooldown >= 1 ) then
 		
 		if( ( wep.Color && wep.Color.a != 0 ) || !wep.Color ) then
+			
+			local inviswep = wep 
+			
+			-- if( AddPos == 1 ) then
+				
+				-- inviswep = self.RocketVisuals[ id + 1 ]
 		
-			wep:SetRenderMode( RENDERMODE_TRANSALPHA )
-			wep:SetColor( Color( 0,0,0,0 ) )
+			-- end
+			
+			inviswep:SetRenderMode( RENDERMODE_TRANSALPHA )
+			inviswep:SetColor( Color( 0,0,0,0 ) )
+			
 			self:SetNetworkedInt( "IdCoolingDown", wep.Identity)
 			self:SetNetworkedBool( "IsCoolingDown", true)
 			self:SetNetworkedInt( "CoolDown", wep.Cooldown-0.5)
@@ -2013,14 +2033,14 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 			timer.Simple( wep.Cooldown-0.5, 
 				function() -- Make the missile re-appear when the cooldown is off.
 				
-					if( IsValid( wep ) ) then 
+					if( IsValid( inviswep ) ) then 
 					
-						wep:SetColor( Color( 255,255,255,255) ) 
+						inviswep:SetColor( Color( 255,255,255,255) ) 
 						-- self:SetNetworkedInt( "IdCoolingDown", 0 )
 						self:SetNetworkedBool( "IsCoolingDown", 0 )
 						local effectdata = EffectData()
-						effectdata:SetOrigin( wep:GetPos()  )
-						effectdata:SetEntity( wep )
+						effectdata:SetOrigin( inviswep:GetPos()  )
+						effectdata:SetEntity( inviswep )
 						util.Effect( "propspawn", effectdata )
 						
 						if( IsValid( self.Pilot ) ) then
@@ -2038,16 +2058,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	end
 	
 	if( wep.Class == nil ) then error("NeuroTec: Tried to call NeuroPlanes_FireRobot with"..tostring(wep).." as argument!" ) return end
-	local pos = wep:GetPos()
-	local AddPos = 0 
-	if ( wep.isFirst == true ) then
-	
-		wep.FlipVal = !wep.FlipVal 
-		AddPos = wep.FlipVal && 1 or 0
-		-- print( AddPos )
-		pos = self.RocketVisuals[ id + AddPos ]:GetPos()
-		
-	end
+
 	-- print( AddPos )
 	
 	self:SetNWFloat("LastSecondaryAttack", CurTime() )
@@ -3001,6 +3012,7 @@ function Meta:IncrementFireVar( var, _max, def )
 		
 	end
 	
+
 	return var
 
 end
