@@ -310,8 +310,14 @@ function ENT:OnRemove()
 		dmg = math.random( self.MinDamage, self.MaxDamage )
 		
 	end
-	-- print("Radius:", radius, dmg  )
-	util.BlastDamage( self.Owner, self.Owner, self:GetPos() + Vector( 0,0,2 ), radius, dmg )
+	
+	if( IsValid( self.Owner ) && IsValid( self.Owner.Pilot ) ) then -- how the fuck is this happening?
+		
+		self.Owner = self.Owner.Pilot
+	
+	end
+	
+	util.BlastDamage( self, self.Owner, self:GetPos() + Vector( 0,0,2 ), radius, dmg )
 	
 	if( self:WaterLevel() == 0 ) then
 	
