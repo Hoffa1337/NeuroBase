@@ -163,11 +163,18 @@ function ENT:OnRemove()
 	explo1:SetOrigin( self:GetPos() + Vector( 0,0,8 ) )
 	explo1:SetNormal( self:GetUp() )
 	explo1:SetEntity( self )
-	explo1:SetScale( 2.25 )
+	explo1:SetScale( 3.25 )
 	util.Effect( "micro_he_impact_plane", explo1 )
 	-- util.Effect( "Explosion", explo1 )
 	ParticleEffect( "Explosion", self:GetPos()+Vector(0,0,8), self:GetAngles()*-1, nil )
 	ParticleEffect( "microplane_midair_explosion", self:GetPos()+Vector(0,0,8), Angle(0,0,0), nil )
+		
+	if( IsValid( self.Owner ) && IsValid( self.Owner.Pilot ) ) then -- how the fuck is this happening?
+		
+		self.Owner = self.Owner.Pilot
+	
+	end
+	
 	util.BlastDamage( self, self.Owner, self:GetPos(), 128, math.random(250,500) )
 
 end

@@ -2082,7 +2082,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	self:SetNWFloat("LastSecondaryAttack", CurTime() )
 	
 	local r = ents.Create( wep.Class )
-	r:SetPos( pos )
+	r:SetPos( pos + ( self:GetVelocity() * FrameTime() ) )
 	r:SetOwner( self )
 	r:SetPhysicsAttacker( pilot, 999999999999 )
 	r.Target = self.Target
@@ -2128,7 +2128,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	r:SetPhysicsAttacker( pilot, 99999999 )
 	r:SetCollisionGroup( COLLISION_GROUP_WORLD )
 	-- r:SetPos( pos )
-	r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity() * .5)
+	r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity() * .4 )
 	r:GetPhysicsObject():EnableDrag( true )
 	r:GetPhysicsObject():EnableGravity( true )	
 	if( wep.SubType && wep.SubType == "Cluster" ) then
@@ -2154,7 +2154,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		
 	-- end )
 	
-	timer.Simple( .15, function() 
+	timer.Simple( .9, function() 
 		
 		if( IsValid( r ) ) then
 			
