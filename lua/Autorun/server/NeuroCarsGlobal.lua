@@ -926,7 +926,7 @@ function Meta:Micro_FireCannons()
 		
 		local bullet = ents.Create( self.AmmoType )
 		bullet:SetPos( g:GetPos() + g:GetForward() * self.MuzzleOffset or 90 )
-		bullet:SetAngles( self:GetAngles() )
+		bullet:SetAngles( self:GetAngles() + AngleRand() * .0015 )
 		bullet.TinyTrail = true
 		
 		if( self.TracerScale1 && self.TracerScale2 && self.ImpactScale ) then
@@ -971,8 +971,21 @@ function Meta:Micro_FireCannons()
 			util.Effect( self.Muzzle or "ChopperMuzzleFlash", sm )
 			
 		end
-
-		bullet:GetPhysicsObject():SetVelocity( self:GetForward() * 500000 )
+		if( self.MegaMuzzle ) then	
+			
+			for i=1,3 do 
+			
+				local sm = EffectData()
+				sm:SetStart( g:GetPos() + VectorRand() )
+				sm:SetOrigin( g:GetPos() + VectorRand()  )
+				sm:SetScale(2.25)
+				util.Effect( "A10_muzzlesmoke", sm )
+				
+			end 
+			
+		end
+	
+		bullet:GetPhysicsObject():SetVelocity( bullet:GetForward() * 500000 )
 		
 	end
 		
@@ -1133,7 +1146,7 @@ end
 function Meta:SonicBoomTicker()
 	--High Speed Sound FX System 
 		
-	if ( math.floor( self:GetVelocity():Length() ) > ( 1.8 * 1224 * 0.80 ) ) then
+	if ( math.floor( self:GetVelocity():Length() ) > ( 1.8 * 1224 ) ) then
 		
 		self.PCfx = self.PCfx + 0.001
 		
@@ -1164,7 +1177,12 @@ function Meta:SonicBoomTicker()
 			( math.floor(self:GetVelocity():Length() ) <= (1.8*1224+16)) ) then
 		
 		self.FXMux[2]:PlayEx( 500 , 100 )
-		
+	
+	else
+	
+		self.FXMux[2]:FadeOut(2)
+	
+	
 	end
 
 	if ( ( math.floor( self:GetVelocity():Length() ) >= ( 1.8 * 1224 ) ) && 
@@ -1287,7 +1305,7 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 					
 					-- self.IsShootSoundPlaying = true
 					
-					self.PrimarySound:PlayEx( 1, 90)
+					self.PrimarySound:PlayEx( 511, 90)
 					
 				-- end
 				
