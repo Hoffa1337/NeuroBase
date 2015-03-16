@@ -17,11 +17,8 @@ end
 function ENT:Think()
 	if( self.CollidedAndStuck ) then
 		if( IsValid( self:GetPhysicsObject() ) ) then	
-			
 			self:PhysicsDestroy()
-			
 		end 
-		
 		for k,v in pairs( ents.FindInSphere( self:GetPos(), 100 ) ) do
 			if( IsValid( v ) ) then
 				v:Ignite( 3, 100 )
