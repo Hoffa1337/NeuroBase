@@ -716,14 +716,14 @@ function Meta:PlayWorldSound(snd)
 
 	for k, v in pairs( player.GetAll() ) do
 		
-		local tr,trace = {}, {}
-		tr.start = self:GetPos() + self:GetUp() * -512
-		tr.endpos = v:GetPos()
-		tr.mask = MASK_SOLID
-		tr.filter = self
-		trace = util.TraceLine( tr )
-	
-		if ( trace.HitNonWorld ) then
+		-- local tr,trace = {}, {}
+		-- tr.start = self:GetPos()
+		-- tr.endpos = v:GetPos()
+		-- tr.mask = MASK_SOLID
+		-- tr.filter = self
+		-- trace = util.TraceLine( tr )
+		-- self:DrawLaserTracer( tr.start, trace.HitPos  )
+		-- if ( !trace.HitWorld ) then
 		
 			local norm = ( self:GetPos() - v:GetPos() ):GetNormalized()
 			local d = self:GetPos():Distance( v:GetPos() )
@@ -733,11 +733,11 @@ function Meta:PlayWorldSound(snd)
 				debugoverlay.Cross( v:GetPos() + norm * ( d / 10 ), 32, 0.1, Color( 255,255,255,255 ), false )
 			
 			end
-			
-			if( d > 4500 ) then
+			-- print( d )
+			if( d > 3500 ) then
 				
 --Gmod12		-- WorldSound( snd, v:GetPos() + norm * ( d / 10 ), 211, 100   )
-				sound.Play( snd, v:GetPos() + norm * ( d / 10 ), 211, 100   ) -- Crappy Sauce Engine can't handle a couple of hundred meters of sound. Hackfix for doppler effect.
+				sound.Play( snd, v:GetPos() + norm * ( d / 20 ), 511, 100+math.sin(CurTime()*.01)*10   ) -- Crappy Sauce Engine can't handle a couple of hundred meters of sound. Hackfix for doppler effect.
 			
 			else
 			
@@ -745,7 +745,7 @@ function Meta:PlayWorldSound(snd)
 			
 			end
 			
-		end
+		-- end
 		
 	
 	end
@@ -999,7 +999,12 @@ function Meta:Micro_FireCannons()
 	-- end
 	
 	-- self.LastPrimaryAttack = CurTime()
+	if( self.MeanFuckingCannon ) then 
+		
+		self:PlayWorldSound( self.MeanCannonSonicSound )
 
+	end 
+	
 end
 
 function Meta:UpdateMultigunAmmoType()
@@ -1333,6 +1338,12 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 	
 				end
 				
+				if( self.MeanFuckingCannon ) then 
+	
+					self:PlayWorldSound( self.MeanCannonSonicSoundEnd )
+
+				end 
+				
 			end
 
 		end
@@ -1348,9 +1359,16 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 					if( IsValid( self.Miniguns[1] ) ) then
 					
 						self.Miniguns[1]:EmitSound( self.PrimaryStopSound, 511, math.random(99,101) )
-				
+						
 					end
-				
+			
+				if( self.MeanFuckingCannon ) then 
+					
+					-- timer.Simple( .1, function()
+					self:PlayWorldSound( self.MeanCannonSonicSoundEnd )
+					-- end ) 
+					
+				end 
 				-- end )
 				
 			end
@@ -2174,7 +2192,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		-- end
 		
 	-- end )
-	/*
+	
 	r:SetCollisionGroup( COLLISION_GROUP_WORLD )
 	
 	timer.Simple( .9, function() 
@@ -2187,7 +2205,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		end
 		
 	end )
-		*/
+	
 		
 	
 	if( !self._2ndContigiousFiringLoop ) then
@@ -2373,7 +2391,7 @@ function Meta:NeuroPlanes_MissileStorm( wep )
 	s:GetPhysicsObject():SetVelocity( wep:GetVelocity() )
 	s:EmitSound( "weapons/rpg/rocketfire1.wav", 511, 80 )
 	s:SetModel( wep:GetModel() )
-	
+
 end
 
 function Meta:NeuroPlanes_DrawLaser( wep )
