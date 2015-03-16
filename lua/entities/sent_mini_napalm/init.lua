@@ -55,7 +55,7 @@ function ENT:Think()
 			
 		end 
 		
-		if( self.BurnTicker + 30 <= CurTime() ) then
+		if( self.BurnTicker + 15 <= CurTime() ) then
 			
 			self:Remove()
 			
@@ -76,7 +76,7 @@ function ENT:PhysicsCollide( data, physobj )
 		if( IsValid( self.Owner )  && IsValid( self.Owner.Pilot ) ) then self.Owner = self.Owner.Pilot end 
 		
 		
-		for i=1,10 do 
+		for i=1,5 do 
 			local pos = VectorRand() * 128 
 			pos.z = 0
 			ParticleEffect( "neuro_gascan_explo", self:GetPos() + pos , Angle( 0,0,0 ), nil )
