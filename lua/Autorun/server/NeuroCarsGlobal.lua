@@ -2109,9 +2109,9 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	r.Target = self.Target
 	r.Pointer = pilot
 	r:SetModel( wep:GetModel() )
-	r:PhysicsInit( SOLID_VPHYSICS )
-	r:SetMoveType( MOVETYPE_VPHYSICS )
-	r:SetSolid( SOLID_VPHYSICS )
+	-- r:PhysicsInit( SOLID_VPHYSICS )
+	-- r:SetMoveType( MOVETYPE_VPHYSICS )
+	-- r:SetSolid( SOLID_VPHYSICS )
 	if( wep.Type == "Shell" ) then
 		
 		r.TinyTrail = true
@@ -2147,9 +2147,9 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	r.Owner = pilot
 	
 	r:SetPhysicsAttacker( pilot, 99999999 )
-	r:SetCollisionGroup( COLLISION_GROUP_WORLD )
+
 	-- r:SetPos( pos )
-	r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity() * .4 )
+	r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity() * .5 )
 	r:GetPhysicsObject():EnableDrag( true )
 	r:GetPhysicsObject():EnableGravity( true )	
 	if( wep.SubType && wep.SubType == "Cluster" ) then
@@ -2174,6 +2174,8 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		-- end
 		
 	-- end )
+	/*
+	r:SetCollisionGroup( COLLISION_GROUP_WORLD )
 	
 	timer.Simple( .9, function() 
 		
@@ -2185,6 +2187,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		end
 		
 	end )
+		*/
 		
 	
 	if( !self._2ndContigiousFiringLoop ) then
@@ -2284,8 +2287,12 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	
 	if ( wep.Type == "Homing" || wep.Type == "Swarm" ) then
 		
-		self:ClearTarget()
+		if( !self.ControlSurface ) then 
+		
+			self:ClearTarget()
 	
+		end
+		
 	end
 	
 	if( wep.Type == "Fragment" ) then
