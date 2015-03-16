@@ -2109,9 +2109,9 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	r.Target = self.Target
 	r.Pointer = pilot
 	r:SetModel( wep:GetModel() )
-	-- r:PhysicsInit( SOLID_VPHYSICS )
-	-- r:SetMoveType( MOVETYPE_VPHYSICS )
-	-- r:SetSolid( SOLID_VPHYSICS )
+	r:PhysicsInit( SOLID_VPHYSICS )
+	r:SetMoveType( MOVETYPE_VPHYSICS )
+	r:SetSolid( SOLID_VPHYSICS )
 	if( wep.Type == "Shell" ) then
 		
 		r.TinyTrail = true
@@ -2149,7 +2149,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	r:SetPhysicsAttacker( pilot, 99999999 )
 
 	-- r:SetPos( pos )
-	r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity() * .5 )
+	r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity() * .4 )
 	r:GetPhysicsObject():EnableDrag( true )
 	r:GetPhysicsObject():EnableGravity( true )	
 	if( wep.SubType && wep.SubType == "Cluster" ) then
@@ -2292,7 +2292,6 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 			self:ClearTarget()
 	
 		end
-		
 	end
 	
 	if( wep.Type == "Fragment" ) then
