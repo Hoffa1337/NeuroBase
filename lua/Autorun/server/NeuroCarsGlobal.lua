@@ -2192,7 +2192,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		-- end
 		
 	-- end )
-	
+	/*
 	r:SetCollisionGroup( COLLISION_GROUP_WORLD )
 	
 	timer.Simple( .9, function() 
@@ -2204,7 +2204,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 			-- r:SetPos( wep:GetPos() )
 		end
 		
-	end )
+	end ) */
 	
 		
 	
