@@ -1305,7 +1305,7 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 					
 					-- self.IsShootSoundPlaying = true
 					
-					self.PrimarySound:PlayEx( 511, 90)
+					self.PrimarySound:PlayEx( 511, 100)
 					
 				-- end
 				
@@ -1496,44 +1496,65 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		
 	end
 	
-	if ( #self.EquipmentNames > 0 && self.Pilot:KeyDown( IN_ATTACK2 ) && self.LastAttackKeyDown + ( self._2ndCD or 0.5 ) < CurTime() ) then
-		
-		if( self.Destroyed ) then return end
-			
-		local id = self.EquipmentNames[ self.FireMode ].Identity
-		local wep = self.RocketVisuals[ id ]
-		
-		self.LastAttackKeyDown = CurTime()
-						
-		if( !IsValid( wep ) ) then
-				
-			self.Pilot:PrintMessage( HUD_PRINTCENTER, "NO AMMO" )
-			
-			-- print( wep )
-			
-			return 
-			
-		end
-		
-		if ( wep.LastAttack + wep.Cooldown <= CurTime() ) then
+	if( self.Pilot:KeyDown( IN_ATTACK2 ) ) then
+	
+		if ( #self.EquipmentNames > 0  && self.LastAttackKeyDown + ( self._2ndCD or 0.5 ) < CurTime() ) then
 			
 		
-			self:NeuroPlanes_FireRobot( wep, id )
+			if( self._2ndContigiousFiringLoop ) then
 			
-			
-		else
-		
-
-			local cd = math.ceil( ( wep.LastAttack + wep.Cooldown ) - CurTime() ) 
-			
-			if ( cd > 2 ) then
-			
-				self.Pilot:PrintMessage( HUD_PRINTTALK, self.PrintName..": "..wep.PrintName.." ready in "..tostring( cd ).. " seconds." )	
+				self.SecondarySound:Play()
 			
 			end
 			
-		end
+			if( self.Destroyed ) then return end
+				
+			local id = self.EquipmentNames[ self.FireMode ].Identity
+			local wep = self.RocketVisuals[ id ]
+			
+			self.LastAttackKeyDown = CurTime()
+							
+			if( !IsValid( wep ) ) then
+					
+				self.Pilot:PrintMessage( HUD_PRINTCENTER, "NO AMMO" )
+				
+				-- print( wep )
+				
+				return 
+				
+			end
+			
+			if ( wep.LastAttack + wep.Cooldown <= CurTime() ) then
+				
+			
+				self:NeuroPlanes_FireRobot( wep, id )
+				
+				
+			else
+			
 
+				local cd = math.ceil( ( wep.LastAttack + wep.Cooldown ) - CurTime() ) 
+				
+				if ( cd > 2 ) then
+				
+					self.Pilot:PrintMessage( HUD_PRINTTALK, self.PrintName..": "..wep.PrintName.." ready in "..tostring( cd ).. " seconds." )	
+				
+				end
+				
+			end
+		
+		
+		end
+	
+	else
+	
+		if( self._2ndContigiousFiringLoop ) then
+	
+			self.SecondarySound:Stop()
+			
+		
+		end
+	
 	end
 	
 end
@@ -2166,16 +2187,19 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	end )
 		
 	
-	if( wep.LaunchSound ) then
+	if( !self._2ndContigiousFiringLoop ) then
 		
-		r:EmitSound( wep.LaunchSound, 511, math.random( 90, 110 ) )
-	
-	else
+		if( wep.LaunchSound ) then
+			
+			r:EmitSound( wep.LaunchSound, 511, math.random( 90, 110 ) )
 		
-		r:EmitSound( self.BombSound or "weapons/rpg/rocketfire1.wav", 511, 80 )
-	
+		else
+			
+			r:EmitSound( self.BombSound or "weapons/rpg/rocketfire1.wav", 511, 80 )
+		
+		end
+		
 	end
-	
 	
 	if ( wep.Type == "Laser" ) then
 		
