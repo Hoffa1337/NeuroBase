@@ -124,9 +124,7 @@ function ENT:DispatchCluster()
 end
 
 function ENT:PhysicsUpdate()
-		
-	self.PhysObj:SetVelocity( self:GetForward() * self.Speed )
-	
+
 	if( self:WaterLevel() > 1 ) then
 		
 		self:NeuroPlanes_SurfaceExplosion()
@@ -194,11 +192,13 @@ function ENT:PhysicsUpdate()
 	end
 	
 	local dir = ( pos - mp ):Angle()
-	local a =  LerpAngle( 0.05, self:GetAngles(), dir )
+	local a =  LerpAngle( 0.09, self:GetAngles(), dir )
 	//a.p, a.r, a.y = apr( a.p, dir.p, 4.5 ),apr( a.r, dir.r, 4.5 ),apr( a.y, dir.y, 4.5 )
 	
 	self:SetAngles( a )
-
+		
+	self.PhysObj:SetVelocity( self:GetForward() * self.Speed )
+	
 end
 
 function ENT:Think()

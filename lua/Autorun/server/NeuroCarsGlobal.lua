@@ -1939,13 +1939,14 @@ end
 
 function Meta:NeuroPlanes_FireRobot( wep, id )
 	
-	if ( !wep || !id ) then
+	if ( !IsValid( wep ) || !id ) then
 		
 		return
 		
 	end
 	
-
+	if( wep.IsArmedWeapon && !IsValid( wep.Weld ) ) then return end 
+	
 	local pilot = self.Pilot
 	
 	if( IsValid( self.PassengerSeat ) && IsValid( self.PassengerSeat:GetDriver() ) && self.PassengerSeat.IsHelicopterCoPilotSeat ) then -- Dayum
