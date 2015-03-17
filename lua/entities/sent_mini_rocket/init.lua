@@ -153,8 +153,12 @@ function ENT:Think()
 end 
 
 function ENT:OnRemove()
+	if( IsValid( self.SpriteTrail ) ) then 
 	
-	self.SpriteTrail:Remove()
+		self.SpriteTrail:Remove()
+	
+	end 
+	
 	self:EmitSound("BF2/Weapons/Type85_fire.mp3",511,30)
 	
 	self:StopSound( "Missile.Accelerate" )
