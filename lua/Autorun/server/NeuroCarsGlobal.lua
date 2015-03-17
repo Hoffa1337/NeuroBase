@@ -2168,7 +2168,7 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	r:SetPhysicsAttacker( pilot, 99999999 )
 
 	-- r:SetPos( pos )
-	r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity() * .4 )
+	r:GetPhysicsObject():SetVelocity( self:GetPhysicsObject():GetVelocity() * .54 )
 	r:GetPhysicsObject():EnableDrag( true )
 	r:GetPhysicsObject():EnableGravity( true )	
 	if( wep.SubType && wep.SubType == "Cluster" ) then
