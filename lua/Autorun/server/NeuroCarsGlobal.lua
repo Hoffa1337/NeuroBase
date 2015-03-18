@@ -727,26 +727,53 @@ function Meta:PlayWorldSound(snd)
 		
 			local norm = ( self:GetPos() - v:GetPos() ):GetNormalized()
 			local d = self:GetPos():Distance( v:GetPos() )
-			
+			local sonic =  13044 -- 1.8 * 1224 -- sound of speed according to micro 13044 acc. to valve 
+			local timeDelay = d / sonic 
 			if ( DEBUG ) then
 			
-				debugoverlay.Cross( v:GetPos() + norm * ( d / 10 ), 32, 0.1, Color( 255,255,255,255 ), false )
+				debugoverlay.Cross( v:GetPos() + norm * ( d / 20 ), 32, 0.1, Color( 255,255,255,255 ), false )
 			
 			end
 			-- print( d )
-			if( d > 3500 ) then
-				
+		if( d > 1500 ) then
+			local ent = v 
 --Gmod12		-- WorldSound( snd, v:GetPos() + norm * ( d / 10 ), 211, 100   )
-				sound.Play( snd, v:GetPos() + norm * ( d / 20 ), 511, 100+math.sin(CurTime()*.01)*10   ) -- Crappy Sauce Engine can't handle a couple of hundred meters of sound. Hackfix for doppler effect.
+	
+			timer.Simple( timeDelay, 
+			function()
+					if( IsValid( ent ) ) then 
+						-- local worldSound = sound.PlayFile( snd, "3d", 
+						
+						-- function( hookerBalls )
+						
+						-- if( IsValid( hookerBalls ) ) then 
+							
+							-- local mvel = self:GetVelocity():Length()
+							-- local tvel = ent:GetVelocity():Length()
+							
+							-- local relativeVelocityR = ( mvel + ( mvel / tvel  ) / mvel + ( tvel / mvel ) )
+							-- print("dopppler", relativeVelocityR )
+						
+							-- worldSound:SetPlaybackRate( 1.0 - ( d / 44000 ) ) -- doppler effect 
+							-- worldSound:SetPos( ent:GetPos() + norm * ( d / 20 ) )
+							-- worldSound:SetVolume( 1.0 - ( d / 36000 ) ) -- scale the volume based on distance from entity emitting the sound. f*** you valve 	
+							sound.Play( snd, ent:GetPos() + norm * ( d / 20 ), 511, 100  ) -- Crappy Sauce Engine can't handle a couple of hundred meters of sound. Hackfix for doppler effect.
+				
+						-- end 
+						 
+					-- end )
+					
+					-- sound.Play( snd, ent:GetPos() + norm * ( d / 20 ), 511, 100  ) -- Crappy Sauce Engine can't handle a couple of hundred meters of sound. Hackfix for doppler effect.
+				
+				end
 			
-			else
+			end )
 			
-				self:EmitSound( snd, 211, 100 )
-			
-			end
-			
-		-- end
+		else
 		
+			self:EmitSound( snd, 211, 100 )
+		
+		end
 	
 	end
 
@@ -1338,12 +1365,7 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 	
 				end
 				
-				if( self.MeanFuckingCannon ) then 
-	
-					self:PlayWorldSound( self.MeanCannonSonicSoundEnd )
-
-				end 
-				
+			
 			end
 
 		end
@@ -1353,8 +1375,9 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		if( self.ContigiousFiringLoop ) then
 			
 			self.PrimarySound:Stop()
-			if( self.PrimaryStopSound && self.LastPrimaryAttack + self.PrimaryCooldown >= CurTime() ) then
+			if( self.PrimaryStopSound && self.LastPrimaryAttack + self.PrimaryCooldown*2 >= CurTime() ) then
 				-- timer.Simple(0, function() 
+					
 				
 					if( IsValid( self.Miniguns[1] ) ) then
 					
@@ -1364,8 +1387,9 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 			
 				if( self.MeanFuckingCannon ) then 
 					
-					-- timer.Simple( .1, function()
+					-- timer.Simple( 1.1, function()
 					self:PlayWorldSound( self.MeanCannonSonicSoundEnd )
+					-- print("akbar?")
 					-- end ) 
 					
 				end 
@@ -2162,7 +2186,9 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 	r:Spawn()
 	r:Activate()
 	r:Fire( "Kill", "", 30 )
+
 	r:SetAngles( wep:GetAngles() )
+
 	r.Owner = pilot
 	
 	r:SetPhysicsAttacker( pilot, 99999999 )

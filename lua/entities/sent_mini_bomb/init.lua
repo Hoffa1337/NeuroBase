@@ -31,8 +31,30 @@ function ENT:Initialize()
 	
 	self.SpawnTime = CurTime()
 	-- self:EmitSound("weapons/mortar/mortar_shell_incomming1.wav",25,110)
-	self:EmitSound("WT/Misc/bomb_whistle.wav")
+	local count = 0
+	local tr,trace = {},{}
+	for i=1,10 do
+		tr.start = self:GetPos() 
+		tr.endpos = tr.start + VectorRand() * 1500 
+		tr.filter = self
+		tr.mask = MASK_SOLID
+		trace = util.TraceLine( tr )
+		
+		if( trace.Hit ) then 
+			
+			count = count + 1 
+			
+		end 
+		
+	end 
+	
+	if( count < 4 ) then 	
+	
+		self:EmitSound("WT/Misc/bomb_whistle.wav")
 
+		
+	end 
+	
 	util.SpriteTrail(self, 0, Color(255,255,255,math.random(11,12)), false, 3, math.random(0.5,1.1), 1, math.random(1,3), "trails/smoke.vmt");  
 end
 
@@ -75,7 +97,7 @@ function ENT:PhysicsCollide( data, physobj )
 
 		ParticleEffect( "rocket_impact_dirt", self:GetPos(), Angle( 0,0,0 ), nil )
 		-- 
-		self:EmitSound(  "WT/Misc/bomb_explosion_"..math.random(1,6)..".wav", 511, 100 )
+		self:PlayWorldSound(  "WT/Misc/bomb_explosion_"..math.random(1,6)..".wav" )
 		
 		util.BlastDamage( self, self.Owner, data.HitPos, 270, math.random( 1500,2500 ) )
 		
