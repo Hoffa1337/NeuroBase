@@ -210,8 +210,7 @@ end
 function ENT:OnRemove()
 	
 	self.SpriteTrail:Remove()
-	self:EmitSound("BF2/Weapons/Type85_fire.mp3",511,30)
-	
+	self:PlayWorldSound("WT/Misc/bomb_explosion_"..math.random(1,2)..".wav" )
 	self:StopSound( "Missile.Accelerate" )
 	
 	self.Sound:Stop()
