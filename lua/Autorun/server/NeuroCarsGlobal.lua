@@ -1805,6 +1805,7 @@ function Meta:NeuroPlanes_EjectionSeat()
 	f2:SetOrigin(pilot:GetPos())
 	util.Effect("Explosion",f2)
 	
+	ejectionseat:EmitSound("LockOn/Voices/Ejecting.mp3", 511, 100 )
 
 	self:NeuroJets_Eject()
 	pilot:EnterVehicle( ejectionseat )
@@ -2088,8 +2089,17 @@ function Meta:NeuroPlanes_FireRobot( wep, id )
 		wep.FlipVal = !wep.FlipVal 
 		AddPos = wep.FlipVal && 1 or 0
 		-- print( AddPos )
-		pos = self.RocketVisuals[ id + AddPos ]:GetPos()
-		wep = self.RocketVisuals[ id + AddPos ]
+		if( IsValid( self.RocketVisuals[ id + AddPos ] ) ) then 
+		
+			pos = self.RocketVisuals[ id + AddPos ]:GetPos()
+			wep = self.RocketVisuals[ id + AddPos ]
+		
+		else
+			
+			return 
+			
+		end 
+		
 	end
 	
 	-- Make the newly fired weapon invisible so it looks like we're actually dropping something.
