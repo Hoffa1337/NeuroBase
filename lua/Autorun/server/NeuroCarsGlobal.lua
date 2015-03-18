@@ -737,11 +737,16 @@ function Meta:PlayWorldSound(snd)
 			-- print( d )
 		if( d > 1500 ) then
 			local ent = v 
+			local spos = self:GetPos()
+			local pos = v:GetPos()
+			local mvel = self:GetVelocity()
+			local tvel = v:GetVelocity()
+			
 --Gmod12		-- WorldSound( snd, v:GetPos() + norm * ( d / 10 ), 211, 100   )
 	
 			timer.Simple( timeDelay, 
 			function()
-					if( IsValid( ent ) && IsValid( self ) ) then 
+					if( IsValid( ent ) ) then 
 						-- local worldSound = sound.PlayFile( snd, "3d", 
 						
 						-- function( hookerBalls )
@@ -757,9 +762,8 @@ function Meta:PlayWorldSound(snd)
 							-- worldSound:SetPlaybackRate( 1.0 - ( d / 44000 ) ) -- doppler effect 
 							-- worldSound:SetPos( ent:GetPos() + norm * ( d / 20 ) )
 							-- worldSound:SetVolume( 1.0 - ( d / 36000 ) ) -- scale the volume based on distance from entity emitting the sound. f*** you valve 	
-							local pos = v:GetPos()
-							local spos = self:GetPos()
-							local doppler = math.Clamp( (pos:Distance(spos+v:GetVelocity())-pos:Distance(spos+self:GetVelocity()))/200, -40, 40 )
+						
+							local doppler = math.Clamp( (pos:Distance(spos+tvel)-pos:Distance(spos+mvel))/200, -40, 40 )
 							-- print( doppler )
 							
 							sound.Play( snd, ent:GetPos() + norm * ( d / 20 ), 511, 100+doppler  ) -- Crappy Sauce Engine can't handle a couple of hundred meters of sound. Hackfix for doppler effect.
