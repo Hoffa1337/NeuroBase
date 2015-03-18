@@ -437,6 +437,42 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 									
 					};
 					{
+						Var = "!view",
+						Callback =  function( ply, txt, team )
+						
+										-- if( !ply:IsAdmin() ) then return end
+										local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
+										
+										if( IsValid( Target ) ) then
+											
+											local veh = Target:GetScriptedVehicle()
+											if( IsValid( veh ) ) then
+												
+												ply:Spectate( OBS_MODE_CHASE )
+												ply:SpectateEntity( veh )
+												ply:StripWeapons()
+ 
+												
+											end
+										
+										end
+											
+									end
+									
+					};
+										{
+						Var = "!unview",
+						Callback =  function( ply, txt, team )
+						
+										ply:UnSpectate()
+										ply:Spawn()
+										
+											
+									end
+									
+					};
+					
+					{
 					Var = "!crashtodesktop",
 					Callback =  function( ply, txt, team )
 					
