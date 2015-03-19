@@ -221,8 +221,15 @@ function ENT:OnRemove()
 	-- self.SpriteTrail:SetPos( self:GetPos() ) 
 	-- self.SpriteTrail:Fire("kill","",4 )
 	
+	local ImpactSound = "IL-2/air_can_03.mp3"
+	if( IsValid( self.Owner ) && IsValid( self.Owner:GetScriptedVehicle() ) && self.Owner:GetScriptedVehicle().MinigunWorldImpactSound ) then 
 	
-	self:EmitSound( "IL-2/air_can_03.mp3", 511, math.random( 100, 110 ) )
+		ImpactSound = self.Owner.MinigunWorldImpactSound
+		
+	end 
+	-- print( self.Owner )
+	
+	self:PlayWorldSound( ImpactSound )
 	
 	if( self.ImpactScale && self.ImpactScale >= 2 ) then
 		

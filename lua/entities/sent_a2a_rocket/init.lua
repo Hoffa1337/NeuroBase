@@ -2,7 +2,7 @@ AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
 include( 'shared.lua' )
 
-ENT.Sauce = 3500
+ENT.Sauce = 3000
 ENT.Delay = 2
 ENT.Speed = 5000
 ENT.BlastRadius = 256
@@ -109,9 +109,9 @@ function ENT:PhysicsUpdate()
 		local dir = ( self.Target:GetPos() - self:GetPos() ):Angle()
 		local d = self:GetPos():Distance( self.Target:GetPos() )
 		local a = self:GetAngles()
-		a.p, a.r, a.y = apr( a.p, dir.p, 2.4 ),apr( a.r, dir.r, 4 ),apr( a.y, dir.y, 4.0 )
+		
 
-		self:SetAngles( a )
+		self:SetAngles( LerpAngle( 0.125, a, dir ) )
 	
 	end
 
