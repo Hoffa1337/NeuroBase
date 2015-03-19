@@ -763,7 +763,7 @@ function Meta:PlayWorldSound(snd)
 							-- worldSound:SetPos( ent:GetPos() + norm * ( d / 20 ) )
 							-- worldSound:SetVolume( 1.0 - ( d / 36000 ) ) -- scale the volume based on distance from entity emitting the sound. f*** you valve 	
 						
-							local doppler = math.Clamp( (pos:Distance(spos+tvel)-pos:Distance(spos+mvel))/200, -40, 40 )
+							local doppler = math.Clamp( (pos:Distance(spos+tvel)-pos:Distance(spos+mvel))/200, -55, 55 )
 							-- print( doppler )
 							
 							sound.Play( snd, ent:GetPos() + norm * ( d / 20 ), 511, 100+doppler  ) -- Crappy Sauce Engine can't handle a couple of hundred meters of sound. Hackfix for doppler effect.
@@ -1397,7 +1397,16 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 				if( self.MeanFuckingCannon ) then 
 					
 					-- timer.Simple( 1.1, function()
-					self:PlayWorldSound( self.MeanCannonSonicSoundEnd )
+					
+					if( type( self.MeanCannonSonicSoundEnd ) == "table" ) then 
+						
+						self:PlayWorldSound( self.MeanCannonSonicSoundEnd[math.random(1,#self.MeanCannonSonicSoundEnd)] )
+					
+					else
+					
+						self:PlayWorldSound( self.MeanCannonSonicSoundEnd )
+					
+					end 
 					-- print("akbar?")
 					-- end ) 
 					

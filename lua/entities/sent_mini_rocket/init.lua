@@ -3,7 +3,7 @@ AddCSLuaFile( "shared.lua" )
 include( 'shared.lua' )
 
 ENT.Sauce = 50
-ENT.Delay = 0
+ENT.Delay = 1
 ENT.Speed = 1250
 function ENT:OnTakeDamage(dmginfo)
  self:NA_RPG_damagehook(dmginfo)
@@ -99,15 +99,16 @@ function ENT:PhysicsUpdate()
 			
 			if( IsValid( self.Target ) ) then
 		
-				if( ( self:GetPos() - self.Target:GetPos() ):Length() < 50 ) then
+				if( ( self:GetPos() - self.Target:GetPos() ):Length() < 100 ) then
 					
 					self:Remove()
 					
 					return
 					
 				end 
+				
 				self:SetAngles( LerpAngle( 0.1, self:GetAngles(), (self.Target:GetPos() - self:GetPos() ):Angle() ) )
-		
+				
 			end 
 			self.Speed = self.Speed + 200
 			self.PhysObj:SetVelocity( self:GetForward() * self.Speed )
