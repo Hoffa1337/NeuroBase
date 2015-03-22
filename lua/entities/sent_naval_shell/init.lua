@@ -87,8 +87,8 @@ function ENT:Initialize()
 
 	self:DeleteOnRemove( self.SpriteTrail )
 		
-	self:SetAngles( self:GetAngles() + Angle( math.Rand(-.05,.05 ), math.Rand(-.05,.05 ), math.Rand(-.05,.05 ) ) )
-	self:GetPhysicsObject():SetVelocity( self:GetForward() * 2000 )
+	-- self:SetAngles( self:GetAngles() + Angle( math.Rand(-.05,.05 ), math.Rand(-.05,.05 ), math.Rand(-.05,.05 ) ) )
+	-- self:GetPhysicsObject():SetVelocityInstantaneous( self:GetForward() * 4000 )
 	-- self.StartTime = CurTime()
 	
 end
@@ -127,7 +127,7 @@ end
 
 function ENT:Think()
 	
-	if( IsValid( self ) && self:WaterLevel() > 0 ) then
+	if( self:WaterLevel() > 0 ) then
 		
 		self:Remove()
 		
@@ -192,6 +192,7 @@ function ENT:OnRemove()
 		-- impact:SetScale( self.ImpactScale*1.5 or 2 )
 		-- impact:SetNormal( self.HitNormal or self:GetForward()*-1 )
 		-- util.Effect("micro_he_impact", impact)
+		local norm = self.HitNormal && self.HitNormal:Angle() or self:GetAngles() * -1
 		if( self:WaterLevel() > 0 ) then
 			
 			-- util.Effect("WaterSurfaceExplosion", impact)
