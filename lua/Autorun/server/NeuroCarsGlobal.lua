@@ -265,6 +265,26 @@ end
 
 CreateConVar("jet_funstuff", 0,  FCVAR_NOTIFY )
 CreateConVar("jet_coloredtrails", 0, FCVAR_NOTIFY )
+function Neuro_inLOS( a, b )
+
+	if( !IsValid( a ) || !IsValid( b ) ) then
+		
+		return false
+	
+	end
+	
+	if( a:GetPos():Distance( b:GetPos() ) > 15500 ) then return false end
+	
+	local trace = util.TraceLine( { start = a:GetPos() + a:GetUp() * 72, endpos = b:GetPos() + Vector(0,0,32), filter = a, mask = MASK_BLOCKLOS + MASK_WATER } )
+	if  ( ( trace.Hit && trace.Entity == b ) || !trace.Hit ) then
+		
+		a.LastLOS = CurTime()
+		
+	end
+	
+	return ( ( trace.Hit && trace.Entity == b ) || !trace.Hit )
+	
+end
 
 local t = CurTime()
 local function FixHealth() -- Hackfix
@@ -711,82 +731,28 @@ function Meta:RotorTrash()
 	end
 
 end
-
-function Meta:PlayWorldSound(snd)
-
-	for k, v in pairs( player.GetAll() ) do
-		
-		-- local tr,trace = {}, {}
-		-- tr.start = self:GetPos()
-		-- tr.endpos = v:GetPos()
-		-- tr.mask = MASK_SOLID
-		-- tr.filter = self
-		-- trace = util.TraceLine( tr )
-		-- self:DrawLaserTracer( tr.start, trace.HitPos  )
-		-- if ( !trace.HitWorld ) then
-		
-			local norm = ( self:GetPos() - v:GetPos() ):GetNormalized()
-			local d = self:GetPos():Distance( v:GetPos() )
-			local sonic =  13044 -- 1.8 * 1224 -- sound of speed according to micro 13044 acc. to valve 
-			local timeDelay = d / sonic 
-			if ( DEBUG ) then
-			
-				debugoverlay.Cross( v:GetPos() + norm * ( d / 20 ), 32, 0.1, Color( 255,255,255,255 ), false )
-			
-			end
-			-- print( d )
-		if( d > 1500 ) then
-			local ent = v 
-			local spos = self:GetPos()
-			local pos = v:GetPos()
-			local mvel = self:GetVelocity()
-			local tvel = v:GetVelocity()
-			
---Gmod12		-- WorldSound( snd, v:GetPos() + norm * ( d / 10 ), 211, 100   )
+local _NeurotecWorldSounds = {}
+local _NeuroTecLastWorldSoundCheck = 0 
+hook.Add("Think","_NeuroTec_SoundSystemThink", function()
 	
-			timer.Simple( timeDelay, 
-			function()
-					if( IsValid( ent ) ) then 
-						-- local worldSound = sound.PlayFile( snd, "3d", 
-						
-						-- function( hookerBalls )
-						
-						-- if( IsValid( hookerBalls ) ) then 
-							
-							-- local mvel = self:GetVelocity():Length()
-							-- local tvel = ent:GetVelocity():Length()
-							
-							-- local relativeVelocityR = ( mvel + ( mvel / tvel  ) / mvel + ( tvel / mvel ) )
-							-- print("dopppler", relativeVelocityR )
-						
-							-- worldSound:SetPlaybackRate( 1.0 - ( d / 44000 ) ) -- doppler effect 
-							-- worldSound:SetPos( ent:GetPos() + norm * ( d / 20 ) )
-							-- worldSound:SetVolume( 1.0 - ( d / 36000 ) ) -- scale the volume based on distance from entity emitting the sound. f*** you valve 	
-						
-							local doppler = math.Clamp( (pos:Distance(spos+tvel)-pos:Distance(spos+mvel))/200, -55, 55 )
-							-- print( doppler )
-							
-							sound.Play( snd, ent:GetPos() + norm * ( d / 20 ), 511, 100+doppler  ) -- Crappy Sauce Engine can't handle a couple of hundred meters of sound. Hackfix for doppler effect.
-				
-						-- end 
-						 
-					-- end )
-					
-					-- sound.Play( snd, ent:GetPos() + norm * ( d / 20 ), 511, 100  ) -- Crappy Sauce Engine can't handle a couple of hundred meters of sound. Hackfix for doppler effect.
-				
-				end
-			
-			end )
-			
-		else
+	if( _NeuroTecLastWorldSoundCheck + 1.0 <= CurTime() ) then 
 		
-			self:EmitSound( snd, 211, 100 )
+		for k,v in ipairs( _NeurotecWorldSounds ) do
+			
+			
 		
-		end
+		end 
 	
-	end
+	end 
 
-end
+end )
+
+-- local function SortPlys( group )
+	
+	
+
+-- end 
+
 
 function Meta:SpawnPilotModel( pos, ang )
 	
@@ -2687,6 +2653,7 @@ hook.Add("PlayerSpawn", "NeuroPlanes_ViewhackFix",function( ply )
 	ply:SendLua("RunConsoleCommand([[cl_pitchdown]], [[89]])") --bypassing FVAR_SERVER_CAN_EXECUTE like a boss
 	ply:SendLua("RunConsoleCommand([[cl_pitchup]], [[89]])")
 	ply:SetNetworkedBool("PilotKilled", false )
+	ply:StopSound("ambient/fire/fire_small_loop2.wav")
 	
 end )
 

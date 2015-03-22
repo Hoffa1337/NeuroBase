@@ -124,15 +124,19 @@ function ENT:PhysicsCollide( data, physobj )
 	-- end
 	
 end
-
 function ENT:Think()
+	
+	if( !IsValid( self ) ) then return end 
+	self:GetPhysicsObject():Wake()
+	
+end 
+
+function ENT:PhysicsUpdate()
 	
 	if( self:WaterLevel() > 0 ) then
 		
 		self:Remove()
-		
-		return
-		
+	
 	end
 		
 	
@@ -192,7 +196,7 @@ function ENT:OnRemove()
 		-- impact:SetScale( self.ImpactScale*1.5 or 2 )
 		-- impact:SetNormal( self.HitNormal or self:GetForward()*-1 )
 		-- util.Effect("micro_he_impact", impact)
-		local norm = self.HitNormal && self.HitNormal:Angle() or self:GetAngles() * -1
+		local norm = self.HitNormal && self.HitNormal:Angle() or self:GetAngles()
 		if( self:WaterLevel() > 0 ) then
 			
 			-- util.Effect("WaterSurfaceExplosion", impact)
@@ -201,7 +205,7 @@ function ENT:OnRemove()
 			
 		else
 			
-			ParticleEffect( "rt_impact", self:GetPos() + Vector( 0,0,2), Angle( 0,0,0 ), nil )
+			ParticleEffect( "rt_impact", self:GetPos() + Vector( 0,0,2),norm, nil )
 
 		
 		end

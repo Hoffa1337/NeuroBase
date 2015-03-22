@@ -19,8 +19,8 @@ function ENT:Think()
 		if( IsValid( self:GetPhysicsObject() ) ) then	
 			self:PhysicsDestroy()
 		end 
-		for k,v in pairs( ents.FindInSphere( self:GetPos(), 100 ) ) do
-			if( IsValid( v ) ) then
+		for k,v in pairs( ents.FindInSphere( self:GetPos(), 800 ) ) do
+			if( IsValid( v ) && v:GetPos().z < self:GetPos().z+150 && Neuro_inLOS( self, v ) ) then
 				v:Ignite( 3, 100 )
 			end 
 		end 
@@ -42,9 +42,14 @@ function ENT:PhysicsCollide( data, physobj )
 		for i=1,5 do 
 			local pos = VectorRand() * 128 
 			pos.z = 0
+		
 			ParticleEffect( "neuro_gascan_explo", self:GetPos() + pos , Angle( 0,0,0 ), nil )
 		end 
-
+		
+		ParticleEffect( "napalm_explosion", self:GetPos() , Angle( 0,0,0 ), nil )
+		
+		self:Ignite( 750, 750 )
+	
 		self:PlayWorldSound(  "WT/Misc/bomb_explosion_"..math.random(1,6)..".wav" )
 		util.Decal("Scorch", data.HitPos + data.HitNormal * 32, data.HitPos - data.HitNormal * 32 )
 		ParticleEffectAttach( "fireplume_small", PATTACH_ABSORIGIN_FOLLOW, self, 0 )
