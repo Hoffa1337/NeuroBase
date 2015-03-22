@@ -18,7 +18,7 @@ function ENT:Initialize()
 	self:SetMoveType( MOVETYPE_VPHYSICS )	
 	self:SetSolid( SOLID_VPHYSICS )
 	
-	self.Owner = self:GetOwner().Owner or self // lolol
+	-- self.Owner = self:GetOwner().Owner or self // lolol
 	
 	self.PhysObj = self:GetPhysicsObject()
 	
@@ -70,6 +70,7 @@ end
 
 function ENT:PhysicsUpdate()
 	
+	if( !IsValid( self.PhysObj ) ) then self:Remove() return end 
 	
 	if( self:WaterLevel() > 0 ) then
 		
