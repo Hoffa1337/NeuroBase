@@ -87,6 +87,12 @@ function Meta:BallisticCalculation(TargetPos) //Use a vector as argument.
 			end			
 			
 		end
+		if( self.IPPShellVelocity ) then 
+		
+			R = self.IPPShellVelocity
+			
+		end 
+		
 		local v0 = speed
 		-- local v0 = AMMO_VELOCITY_ARTILLERY_SHELL								//Uncomment this line to test the R/C SU-8 artillery.
 	
@@ -120,12 +126,17 @@ function Meta:BallisticCalculation(TargetPos) //Use a vector as argument.
 		
 	end
 	
-	self.Owner:SetNetworkedFloat( "LaunchVelocity", v0 )
-	self.Owner:SetNetworkedFloat( "LaunchAngle", LaunchAngle )
-	
 	local R =CalculateTrajectoryRange(v0,LaunchAngle,h)
-	self.Owner:SetNetworkedFloat( "Range", R )
+
+	if( IsValid( self.Owner ) && self.Owner:IsPlayer() ) then 
 	
+		self.Owner:SetNetworkedFloat( "LaunchVelocity", v0 )
+		self.Owner:SetNetworkedFloat( "LaunchAngle", LaunchAngle )
+		self.Owner:SetNetworkedFloat( "Range", R )
+	
+	end 
+	
+
 	-- print( LaunchAngle )
 -- print("R="..R..", Height= "..h..", v0="..v0..", Angle="..LaunchAngle.."\n")		
 
