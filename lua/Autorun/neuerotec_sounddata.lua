@@ -100,7 +100,7 @@ function Meta:PlayWorldSound(snd)
 							
 							end 
 							
-							sound.Play( snd, soundpos, 100, 100+doppler  ) -- Crappy Sauce Engine can't handle a couple of hundred meters of sound. Hackfix for doppler effect.
+							sound.Play( snd, soundpos, 511, 100+doppler  ) -- Crappy Sauce Engine can't handle a couple of hundred meters of sound. Hackfix for doppler effect.
 				
 						-- end 
 						 
