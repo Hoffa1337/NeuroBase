@@ -32,7 +32,7 @@ end
 
 function ENT:PhysicsCollide( data, physobj )
 	
-	if( data.HitEntity == game.GetWorld() && !self.CollidedAndStuck ) then
+	if( data.DeltaTime > .2 && data.Speed > 500 && !self.CollidedAndStuck ) then
 		
 		self.CollidedAndStuck = true 
 		

@@ -22,7 +22,7 @@ function ENT:Initialize()
 	
 	if ( self.PhysObj:IsValid() ) then
 	
-		self.PhysObj:SetMass( 5 )
+		self.PhysObj:SetMass( 1000 )
 		self.PhysObj:EnableGravity( true )
 		self.PhysObj:EnableDrag( true )
 		self.PhysObj:Wake()
@@ -56,9 +56,9 @@ function ENT:Initialize()
 						255, 
 						5 ), 
 						true,
-						8, 
+						58, 
 						0, 
-						TrailDelay*20, 
+						TrailDelay*15, 
 						 1 / ( 0 + 48 ) * 0.5, 
 						"trails/smoke.vmt" );
 	local Glow = ents.Create("env_sprite")				
@@ -99,11 +99,11 @@ function ENT:PhysicsCollide( data, physobj )
 	-- if( self.StartTime + 0.0125 >= CurTime() ) then return end
 	self.HitNormal =  data.HitNormal*-1
 	
-	if ( IsValid( data.HitEntity ) && data.HitEntity:GetOwner() == self:GetOwner() ) then --// Plox gief support for SetOwner ( table )
+	-- if ( IsValid( data.HitEntity ) && data.HitEntity:GetOwner() == self:GetOwner() ) then --// Plox gief support for SetOwner ( table )
 		
-		return
+		-- return
 		
-	end
+	-- end
 	
 	-- if ( data.Speed > 1 && data.DeltaTime > 0.1 ) then 
 	
@@ -126,6 +126,7 @@ function ENT:PhysicsCollide( data, physobj )
 end
 function ENT:Think()
 	
+	-- print( math.floor( self:GetVelocity():Length() ) )
 	if( !IsValid( self ) ) then return end 
 	self:GetPhysicsObject():Wake()
 	
@@ -197,6 +198,7 @@ function ENT:OnRemove()
 		-- impact:SetNormal( self.HitNormal or self:GetForward()*-1 )
 		-- util.Effect("micro_he_impact", impact)
 		local norm = self.HitNormal && self.HitNormal:Angle() or self:GetAngles()
+		-- print( norm )
 		if( self:WaterLevel() > 0 ) then
 			
 			-- util.Effect("WaterSurfaceExplosion", impact)
@@ -205,7 +207,7 @@ function ENT:OnRemove()
 			
 		else
 			
-			ParticleEffect( "rt_impact", self:GetPos() + Vector( 0,0,2),norm, nil )
+			ParticleEffect( "fireboom_explosion", self:GetPos() + Vector( 0,0,2), norm, nil )
 
 		
 		end
@@ -265,8 +267,8 @@ function ENT:OnRemove()
 	-- ParticleEffect( "30cal_impact", self:GetPos(), Angle( 0,0,0 ), nil )
 	-- ParticleEffect( "Explosion", self:GetPos(), Angle( 0,0,0 ), nil )
 	
-	local dmg = 2500
-	local radius = self.Radius or 1500
+	local dmg = 5500
+	local radius = self.Radius or 650
 	if( self.MinDamage && self.MaxDamage ) then
 		
 		dmg = math.random( self.MinDamage, self.MaxDamage )
