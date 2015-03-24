@@ -49,12 +49,14 @@ function Meta:BallisticCalculation(TargetPos) //Use a vector as argument.
 		if( IsValid( self.Barrel ) && self.BarrelLength ) then
 			
 			pos = self.Barrel:GetPos() + self.Barrel:GetForward() * self.BarrelLength
-		
+			-- print("has barrel")
 		end
 		
 		local R = (TargetPos - pos):Length2D()
 		local h = (TargetPos.z - pos.z)
-				
+			
+		-- print( R )
+		-- print( self.MinRange, self.MaxRange )
 		if self.MinRange==nil then self.MinRange = DefaultMinRange end
 		if self.MaxRange==nil then self.MaxRange = DefaultMaxRange end
 			
@@ -89,8 +91,8 @@ function Meta:BallisticCalculation(TargetPos) //Use a vector as argument.
 		end
 		if( self.IPPShellVelocity ) then 
 		
-			R = self.IPPShellVelocity
-			
+			-- R = self.MaxRange
+			speed = self.IPPShellVelocity
 		end 
 		
 		local v0 = speed
@@ -136,7 +138,7 @@ function Meta:BallisticCalculation(TargetPos) //Use a vector as argument.
 	
 	end 
 	
-
+	-- self:DrawLaserTracer(self.Barrel:GetPos() + self.Barrel:GetForward() * self.BarrelLength, TargetPos )
 	-- print( LaunchAngle )
 -- print("R="..R..", Height= "..h..", v0="..v0..", Angle="..LaunchAngle.."\n")		
 
