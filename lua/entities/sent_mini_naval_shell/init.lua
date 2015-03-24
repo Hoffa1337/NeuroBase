@@ -25,12 +25,12 @@ function ENT:Initialize()
 		self.PhysObj:SetMass( 500 )
 		
 	end
-	local TrailDelay = math.Rand( .25, .5 ) / 10
-	local TraceScale1 = 1
-	local TraceScale2 = 1
-	local GlowProxy = 1.1
+	local TrailDelay = math.Rand( .25, .5 ) / 11
+	local TraceScale1 = .25
+	local TraceScale2 = .15
+	local GlowProxy = .26
 	-- print( "GlowProxy: ", GlowProxy, self.TracerGlowProxy )
-	if( self.TinyTrail ) then
+	-- if( self.TinyTrail ) then
 		
 		-- self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(245,255), math.random(245,255), math.random(245,255), math.random(25,45) ), false, 4,0, TrailDelay + 0.85, 1/(1)*0.55, "trails/smoke.vmt");  
 		-- self.SpriteTrail2 = util.SpriteTrail( self, 0, Color( 255, 255, 100, 255 ), false, 4, 4, TrailDelay + 0.05, 1/(0+4)*0.55, "sprites/smokez");  
@@ -41,10 +41,10 @@ function ENT:Initialize()
 							Color( 255, 
 							130, 
 							100, 
-							255 ), 
-							true,
-							6, 
-							0, 
+							225 ), 
+							false,
+							12, 
+							12, 
 							TrailDelay, 
 							 1 / ( 0 + 6) * 0.5, 
 							"trails/smoke.vmt" );
@@ -59,9 +59,10 @@ function ENT:Initialize()
 							true,
 							12, 
 							0, 
-							TrailDelay*20, 
+							TrailDelay*60, 
 							 1 / ( 0 + 48 ) * 0.5, 
 							"trails/smoke.vmt" );
+							
 		local Glow = ents.Create("env_sprite")				
 		Glow:SetKeyValue("model","sprites/orangeflare1.vmt")
 		Glow:SetKeyValue("rendercolor","255 150 100")
@@ -92,35 +93,35 @@ function ENT:Initialize()
 		-- Shell:SetEntity( self )
 		-- util.Effect( "SMOKE", Shell )  
 		
-	else
+	-- else
 	
 		-- //Flyby sound	util.PrecacheSound("")
 		
-		self.SmokeTrail = ents.Create( "env_spritetrail" )
-		self.SmokeTrail:SetParent( self )	
-		self.SmokeTrail:SetPos( self:GetPos() + self:GetForward() * -3 + self:GetRight() * 4 )
-		self.SmokeTrail:SetAngles( self:GetAngles() )
-		self.SmokeTrail:SetKeyValue( "lifetime", TrailDelay )
-		self.SmokeTrail:SetKeyValue( "startwidth", 4 )
-		self.SmokeTrail:SetKeyValue( "endwidth", math.random(2,3) )
-		self.SmokeTrail:SetKeyValue( "spritename", "trails/smoke.vmt" )
-		self.SmokeTrail:SetKeyValue( "renderamt", 235 )
-		self.SmokeTrail:SetKeyValue( "rendercolor", "255 255 255" )
-		self.SmokeTrail:SetKeyValue( "rendermode", 5 )
-		self.SmokeTrail:SetKeyValue( "HDRColorScale", .75 )
-		self.SmokeTrail:Spawn()
+		-- self.SmokeTrail = ents.Create( "env_spritetrail" )
+		-- self.SmokeTrail:SetParent( self )	
+		-- self.SmokeTrail:SetPos( self:GetPos() + self:GetForward() * -3 + self:GetRight() * 4 )
+		-- self.SmokeTrail:SetAngles( self:GetAngles() )
+		-- self.SmokeTrail:SetKeyValue( "lifetime", TrailDelay )
+		-- self.SmokeTrail:SetKeyValue( "startwidth", 4 )
+		-- self.SmokeTrail:SetKeyValue( "endwidth", math.random(2,3) )
+		-- self.SmokeTrail:SetKeyValue( "spritename", "trails/smoke.vmt" )
+		-- self.SmokeTrail:SetKeyValue( "renderamt", 235 )
+		-- self.SmokeTrail:SetKeyValue( "rendercolor", "255 255 255" )
+		-- self.SmokeTrail:SetKeyValue( "rendermode", 5 )
+		-- self.SmokeTrail:SetKeyValue( "HDRColorScale", .75 )
+		-- self.SmokeTrail:Spawn()
 		
 		
-		self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(245,255), math.random(245,255), math.random(244,255), math.random(21,22) ), false, math.random(3,5), math.random(2,3), TrailDelay + 0.85, 1/(0+4)*0.5, "trails/smoke.vmt");  
+		-- self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(245,255), math.random(245,255), math.random(244,255), math.random(21,22) ), false, math.random(3,5), math.random(2,3), TrailDelay + 0.85, 1/(0+4)*0.5, "trails/smoke.vmt");  
 
-		local Shell = EffectData()
-		Shell:SetStart( self:GetPos() + self:GetForward() * -100)
-		Shell:SetOrigin( self:GetPos() + self:GetForward() * -100)
-		Shell:SetNormal( self:GetRight() * -1 )
-		util.Effect( "RifleShellEject", Shell )  
+		-- local Shell = EffectData()
+		-- Shell:SetStart( self:GetPos() + self:GetForward() * -100)
+		-- Shell:SetOrigin( self:GetPos() + self:GetForward() * -100)
+		-- Shell:SetNormal( self:GetRight() * -1 )
+		-- util.Effect( "RifleShellEject", Shell )  
 
 		
-	end
+	-- end
 	
 	self:DeleteOnRemove( self.SpriteTrail )
 		
