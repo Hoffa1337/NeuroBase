@@ -175,8 +175,15 @@ function ENT:PhysicsCollide( data, physobj )
 	
 end
 
-function ENT:Think()
-	
+function ENT:Think( )
+	self:NextThink(CurTime())
+	if( IsValid( self ) ) then 
+		self:GetPhysicsObject():Wake()
+	end 
+end 
+
+function ENT:PhysicsUpdate()
+
 	if(  self:WaterLevel() > 0 ) then
 		
 		self:Remove()
@@ -185,7 +192,7 @@ function ENT:Think()
 		
 	end
 		
-	
+	-- return true 
 end
 
 -- function ENT:PhysicsUpdate()
@@ -221,76 +228,30 @@ function ENT:OnRemove()
 	
 	local ImpactSound = "WT/Sounds/shell_explosion_"..math.random(1,2)..".wav"
 	self:PlayWorldSound( ImpactSound )
-	
-	if( self.ImpactScale && self.ImpactScale >= 2 ) then
-		
-		local impact = EffectData()
-		impact:SetOrigin( self:GetPos() + Vector( 0,0,2) )
-		impact:SetStart( self:GetPos()  + Vector( 0,0,2))
-		impact:SetScale( 1.0 )
-		impact:SetNormal( self.HitNormal or self:GetForward()*-1 )
-		util.Effect("Explosion", impact)
-		
-		-- ParticleEffect( "30cal_impact", self:GetPos(),self.HitNormal:Angle() or Angle( 0,0,0 ), nil )
-		-- ParticleEffect( "Explosion", self:GetPos() + Vector( 0,0,2), Angle( 0,0,0 ), nil )
 
-		local impact = EffectData()
-		impact:SetOrigin( self:GetPos() + Vector( 0,0,2))
-		impact:SetStart( self:GetPos()  + Vector( 0,0,2))
-		impact:SetScale( self.ImpactScale*1.5 or 2 )
-		impact:SetNormal( self.HitNormal or self:GetForward()*-1 )
-		util.Effect("micro_he_impact", impact)
-		if( self:WaterLevel() > 0 ) then
-			
-			util.Effect("WaterSurfaceExplosion", impact)
-			
-		end
-		
-	else
-	
-		local impact = EffectData()
-		impact:SetOrigin( self:GetPos() )
-		impact:SetStart( self:GetPos() )
-		impact:SetScale( self.ImpactScale or 1.5 )
-		impact:SetNormal( self.HitNormal or self:GetForward()*-1 )
-		
 		if( self:WaterLevel() == 0 ) then
 		
+			ParticleEffect( "rt_impact_tank", self:GetPos(), Angle( 0,0,0 ), nil )
+	
 			if( self.HitSquishy ) then
 				
 				util.Effect("micro_he_blood", impact)
 				self:EmitSound( "Bullet.Flesh", 511, 100 )
-				
-			else
-			
-				if( self.HitObject ) then
-				
-					util.Effect("micro_he_impact_plane", impact)
-				
-				else
-					
-					util.Effect("micro_he_impact", impact)
-				
-				end
+		
 				
 			end 
 			
 		else
 			
-			if( self.ImpactScale && self.ImpactScale < 1 ) then
-				
-				util.Effect("watersplash", impact)
-			
-				
-			else
-			
-				util.Effect("WaterSurfaceExplosion", impact)
-			
-			end
+			local impact = EffectData()
+			impact:SetOrigin( self:GetPos() + Vector( 0,0,2))
+			impact:SetStart( self:GetPos()  + Vector( 0,0,2))
+			impact:SetScale( 2 )
+			impact:SetNormal( self.HitNormal or self:GetForward()*-1 )
+			util.Effect("WaterSurfaceExplosion", impact)
+
 			
 		end
-		
-	end
 	
 	-- local impact = EffectData()
 	-- impact:SetOrigin( self:GetPos() )
@@ -299,8 +260,7 @@ function ENT:OnRemove()
 	-- impact:SetNormal( self:GetForward()*-1 )
 	-- util.Effect("Explosion", impact)
 	-- ParticleEffect( "30cal_impact", self:GetPos(), Angle( 0,0,0 ), nil )
-	ParticleEffect( "rt_impact_tank", self:GetPos(), Angle( 0,0,0 ), nil )
-	
+
 	local dmg = 400
 	local radius = self.Radius or 50
 	if( self.MinDamage && self.MaxDamage ) then
