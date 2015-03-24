@@ -21,12 +21,9 @@ function ENT:Initialize()
 	self.PhysObj = self:GetPhysicsObject()
 	
 	if ( self.PhysObj:IsValid() ) then
-	
-		self.PhysObj:SetMass( 5 )
-		self.PhysObj:EnableGravity( true )
-		self.PhysObj:EnableDrag( true )
 		self.PhysObj:Wake()
-	
+		self.PhysObj:SetMass( 500 )
+		
 	end
 	local TrailDelay = math.Rand( .25, .5 ) / 10
 	local TraceScale1 = 1
@@ -139,8 +136,8 @@ function ENT:Initialize()
 	
 	-- )
 	
-	self:SetAngles( self:GetAngles() + Angle( math.Rand(-.05,.05 ), math.Rand(-.05,.05 ), math.Rand(-.05,.05 ) ) )
-	self:GetPhysicsObject():SetVelocity( self:GetForward() * 2000 )
+	-- self:SetAngles( self:GetAngles() + Angle( math.Rand(-.05,.05 ), math.Rand(-.05,.05 ), math.Rand(-.05,.05 ) ) )
+	-- self:GetPhysicsObject():SetVelocity( self:GetForward() * 2000 )
 	-- self.StartTime = CurTime()
 	
 end
