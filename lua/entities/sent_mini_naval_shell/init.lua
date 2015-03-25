@@ -22,7 +22,7 @@ function ENT:Initialize()
 	
 	if ( self.PhysObj:IsValid() ) then
 		self.PhysObj:Wake()
-		self.PhysObj:SetMass( 500 )
+		self.PhysObj:SetMass( 50 )
 		
 	end
 	local TrailDelay = math.Rand( .25, .5 ) / 11
@@ -148,15 +148,7 @@ function ENT:PhysicsCollide( data, physobj )
 	-- print( physobj:GetMass() )
 	-- if( self.StartTime + 0.0125 >= CurTime() ) then return end
 	self.HitNormal =  data.HitNormal*-1
-	
-	if ( IsValid( data.HitEntity ) && data.HitEntity:GetOwner() == self:GetOwner() ) then --// Plox gief support for SetOwner ( table )
-		
-		return
-		
-	end
-	
-	-- if ( data.Speed > 1 && data.DeltaTime > 0.1 ) then 
-	
+
 	if( IsValid( data.HitEntity ) && data.HitEntity.HealthVal != nil ) then
 		
 		self.HitObject = true
@@ -170,7 +162,7 @@ function ENT:PhysicsCollide( data, physobj )
 	
 	self:Remove()
 	
-	return
+	-- return
 	-- end
 	
 end
@@ -180,6 +172,9 @@ function ENT:Think( )
 	if( IsValid( self ) ) then 
 		self:GetPhysicsObject():Wake()
 	end 
+			
+	return true 
+	
 end 
 
 function ENT:PhysicsUpdate()
@@ -191,8 +186,7 @@ function ENT:PhysicsUpdate()
 		return
 		
 	end
-		
-	-- return true 
+
 end
 
 -- function ENT:PhysicsUpdate()
@@ -217,28 +211,25 @@ end
 
 function ENT:OnRemove()
 	
+	-- print( self.Owner )
 	if ( !IsValid( self.Owner ) ) then
 	
 		self.Owner = self
 		
 	end
-	-- self.SpriteTrail:SetParent(game.GetWorld())
-	-- self.SpriteTrail:SetPos( self:GetPos() ) 
-	-- self.SpriteTrail:Fire("kill","",4 )
-	
+
 	local ImpactSound = "WT/Sounds/shell_explosion_"..math.random(1,2)..".wav"
 	self:PlayWorldSound( ImpactSound )
 
 		if( self:WaterLevel() == 0 ) then
 		
-			ParticleEffect( "rt_impact_tank", self:GetPos(), Angle( 0,0,0 ), nil )
+			ParticleEffect( "microplane_midair_explosion", self:GetPos(), Angle( 0,0,0 ), nil )
 	
 			if( self.HitSquishy ) then
 				
 				util.Effect("micro_he_blood", impact)
-				self:EmitSound( "Bullet.Flesh", 511, 100 )
-		
-				
+				self:EmitSound( "Bullet.Flesh", 511, 80 )
+						
 			end 
 			
 		else
@@ -250,7 +241,6 @@ function ENT:OnRemove()
 			impact:SetNormal( self.HitNormal or self:GetForward()*-1 )
 			util.Effect("WaterSurfaceExplosion", impact)
 
-			
 		end
 	
 	-- local impact = EffectData()
@@ -274,21 +264,21 @@ function ENT:OnRemove()
 		self.Owner = self.Owner.Pilot
 	
 	end
-	
-	util.BlastDamage( self, self.Owner, self:GetPos() + Vector( 0,0,2 ), radius, dmg )
+	-- print(radius, dmg)
+	util.BlastDamage( self, self.Owner, self:GetPos()+Vector(0,0,8), radius, dmg )
 	
 	if( self:WaterLevel() == 0 ) then
 	
-		if( self.TracerScale1 && self.TracerScale1 >= 1 ) then
+		-- if( self.TracerScale1 && self.TracerScale1 >= 1 ) then
 		
-			util.Decal( "scorch", self:GetPos(), self.HitNormal && self.HitNormal * -32 or self:GetPos() + self:GetForward() *16 )
+			-- util.Decal( "scorch", self:GetPos(), self.HitNormal && self.HitNormal * -32 or self:GetPos() + self:GetForward() *16 )
 
-		else
+		-- else
 		
-			util.Decal( "SmallScorch", self:GetPos(), self.HitNormal && self:GetPos() + self.HitNormal * -32 or self:GetPos() + self:GetForward() * 16 )
+		util.Decal( "SmallScorch", self:GetPos(), self.HitNormal && self:GetPos() + self.HitNormal * -32 or self:GetPos() + self:GetForward() * 16 )
 
 		
-		end
+		-- end
 		
 	end
 	
