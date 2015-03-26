@@ -26,9 +26,9 @@ function ENT:Initialize()
 		
 	end
 	local TrailDelay = math.Rand( .25, .5 ) / 11
-	local TraceScale1 = .25
-	local TraceScale2 = .15
-	local GlowProxy = .26
+	local TraceScale1 = .5
+	local TraceScale2 = .5
+	local GlowProxy = 1
 	-- print( "GlowProxy: ", GlowProxy, self.TracerGlowProxy )
 	-- if( self.TinyTrail ) then
 		
