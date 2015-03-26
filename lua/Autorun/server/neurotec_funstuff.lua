@@ -448,10 +448,12 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 											local veh = Target:GetScriptedVehicle()
 											if( IsValid( veh ) ) then
 												
+												ply._isSpectating = true 
+												ply._lastViewPos = ply:GetPos() 
 												ply:Spectate( OBS_MODE_CHASE )
 												ply:SpectateEntity( veh )
 												ply:StripWeapons()
- 
+												
 												
 											end
 										
@@ -463,11 +465,22 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 										{
 						Var = "!unview",
 						Callback =  function( ply, txt, team )
-						
-										ply:UnSpectate()
-										ply:Spawn()
 										
+										
+										if( ply._isSpectating ) then 
 											
+											ply._isSpectating = false 
+												
+											ply:UnSpectate()
+											ply:Spawn()
+											if( ply._lastViewPos ) then	
+												
+												ply:SetPos( ply._lastViewPos )
+											
+											end 
+											
+										end 
+										
 									end
 									
 					};
