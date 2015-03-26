@@ -148,7 +148,7 @@ function ENT:PhysicsCollide( data, physobj )
 	-- print( physobj:GetMass() )
 	-- if( self.StartTime + 0.0125 >= CurTime() ) then return end
 	self.HitNormal =  data.HitNormal*-1
-
+	self.CollideObject = data.HitEntity
 	if( IsValid( data.HitEntity ) && data.HitEntity.HealthVal != nil ) then
 		
 		self.HitObject = true
@@ -263,11 +263,11 @@ function ENT:OnRemove()
 	if( IsValid( self.Owner ) && IsValid( self.Owner.Pilot ) ) then -- how the fuck is this happening?
 		
 		self.Owner = self.Owner.Pilot
-	
+		
 	end
 	-- print(radius, dmg)
 	util.BlastDamage( self, self.Owner, self:GetPos()+Vector(0,0,8), radius, dmg )
-	
+	-- print( self.Owner, radius, dmg, self.CollideObject )
 	if( self:WaterLevel() == 0 ) then
 	
 		-- if( self.TracerScale1 && self.TracerScale1 >= 1 ) then
