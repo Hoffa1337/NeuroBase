@@ -160,6 +160,7 @@ function ENT:PhysicsCollide( data, physobj )
 		
 	end
 	
+	-- print( data.HitEntity.OnTakeDamage )
 	self:Remove()
 	
 	-- return
