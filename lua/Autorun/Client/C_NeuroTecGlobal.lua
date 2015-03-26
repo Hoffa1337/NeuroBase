@@ -22,9 +22,9 @@ hook.Add("SetupMove", "NeuroTec_KeybindCallback", function( ply, mv, cmd )
 	
 	if( !ply.LastKeyPress ) then ply.LastKeyPress = CurTime() end
 	
-	if( ply.LastKeyPress + 0.5 <= CurTime() ) then
+	if( ply.LastKeyPress + 0.5 <= CurTime()  && !vgui.CursorVisible() ) then
 		
-		if( input.WasKeyTyped( KEY_F ) ) then
+		if( input.WasKeyTyped( KEY_F )  ) then
 			
 			ply.LastKeyPress = CurTime()
 			ply.doFLIR = !ply.doFLIR

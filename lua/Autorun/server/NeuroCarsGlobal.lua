@@ -146,6 +146,7 @@ end )
 
 hook.Add("EntityTakeDamage", "FixPropKillDamage", function( ply, damage  ) 
 	
+	-- print("wat?")
 	-- local ply = damage:GetVictim()
 	local prop = damage:GetAttacker()
 	local dType = damage:GetDamageType()
@@ -167,6 +168,8 @@ hook.Add("EntityTakeDamage", "FixPropKillDamage", function( ply, damage  )
 	
 	-- end
 		-- print( dType, damage:GetDamage(), damage:GetDamageForce():Length(), ply:GetClass(), prop:GetClass() )
+	
+	-- return false 
 	
 end )
 
@@ -731,21 +734,21 @@ function Meta:RotorTrash()
 	end
 
 end
-local _NeurotecWorldSounds = {}
-local _NeuroTecLastWorldSoundCheck = 0 
-hook.Add("Think","_NeuroTec_SoundSystemThink", function()
+-- local _NeurotecWorldSounds = {}
+-- local _NeuroTecLastWorldSoundCheck = 0 
+-- hook.Add("Think","_NeuroTec_SoundSystemThink", function()
 	
-	if( _NeuroTecLastWorldSoundCheck + 1.0 <= CurTime() ) then 
+	-- if( _NeuroTecLastWorldSoundCheck + 1.0 <= CurTime() ) then 
 		
-		for k,v in ipairs( _NeurotecWorldSounds ) do
+		-- for k,v in ipairs( _NeurotecWorldSounds ) do
 			
 			
 		
-		end 
+		-- end 
 	
-	end 
+	-- end 
 
-end )
+-- end )
 
 -- local function SortPlys( group )
 	
