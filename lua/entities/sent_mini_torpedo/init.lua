@@ -3,7 +3,7 @@ AddCSLuaFile( "shared.lua" )
 include( 'shared.lua' )
 
 ENT.Delay = 3
-ENT.Speed = 850
+ENT.Speed = 400
 
 function ENT:Initialize()
 	
