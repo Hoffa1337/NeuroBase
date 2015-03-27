@@ -50,6 +50,18 @@ CreateConVar("warthunder_controls", 1, FCVAR_ARCHIVE )
 concommand.Add( "neurotec_swapseat", function( ply, cmd, args )
 	
 	local tank = ply:GetScriptedVehicle()
+	
+	if( IsValid( tank ) && tank.IsMicroCruiser && tank.NumberOfWeaponGroups ) then 
+	
+		local num = math.Clamp( tonumber( args[1] ), 0, tank.NumberOfWeaponGroups ) 
+		ply.SelectedWeapon = num 
+		ply:SetNWInt("Selected_Weapon", num )
+		
+		-- print ( num )
+		return
+		
+	end 
+	
 	local seat = ply:GetVehicle() or tank
 	local seatparent = NULL
 	if( IsValid( seat ) ) then
