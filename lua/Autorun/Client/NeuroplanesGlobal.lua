@@ -224,7 +224,7 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 	local view = {
 		origin = Origin,
 		angles = Angles,
-		znear = 0
+		-- znear = 1
 		}
 	if( !ply.LinearFOV ) then
 		
