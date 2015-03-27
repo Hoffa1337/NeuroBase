@@ -84,12 +84,12 @@ function Meta:PlayWorldSound(snd)
 							-- worldSound:SetPlaybackRate( 1.0 - ( d / 44000 ) ) -- doppler effect 
 							-- worldSound:SetPos( ent:GetPos() + norm * ( d / 20 ) )
 							-- worldSound:SetVolume( 1.0 - ( d / 36000 ) ) -- scale the volume based on distance from entity emitting the sound. f*** you valve 	
-							local soundpos =  ent:GetPos() + norm * ( d / 40 )
-							if ( true ) then
+							local soundpos =  ent:GetPos() + norm * ( d / 35 )
+							-- if ( true ) then
 							
-								debugoverlay.Cross( soundpos, 32, 10.1, Color( 255,255,255,255 ), false )
+								-- debugoverlay.Cross( soundpos, 32, 10.1, Color( 255,255,255,255 ), false )
 							
-							end
+							-- end
 							local doppler = math.Clamp( (pos:Distance(spos+tvel)-pos:Distance(spos+mvel))/200, -55, 55 )
 							-- print( doppler )
 							local properties = sound.GetProperties(  snd )
@@ -100,7 +100,7 @@ function Meta:PlayWorldSound(snd)
 							
 							end 
 							
-							sound.Play( snd, soundpos, 511, 100+doppler  ) -- Crappy Sauce Engine can't handle a couple of hundred meters of sound. Hackfix for doppler effect.
+							sound.Play( snd, soundpos, 500, 100+doppler  ) -- Crappy Sauce Engine can't handle a couple of hundred meters of sound. Hackfix for doppler effect.
 				
 						-- end 
 						 
