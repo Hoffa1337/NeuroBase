@@ -13,12 +13,12 @@ local inlovingmemory = "In loving memory of Dragoneel1000. Rest In Peace as you 
 -- MinFrictionMass	=	10
 -- MaxFrictionMass	=	2500
 -- LookAheadTimeObjectsVsWorld	=	1
-function GM:PlayerFootstep( ply, pos, foot, sound, volume, filter )
+hook.Add("PlayerFootstep", function( ply, pos, foot, sound, volume, filter )
 
 	
 	return IsValid( ply:GetScriptedVehicle() )
 	
-end 
+end  )
 
 function AddDir(dir) -- recursively adds everything in a directory to be downloaded by client
 	
