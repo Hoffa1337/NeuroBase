@@ -48,6 +48,7 @@ function ENT:PhysicsCollide( data, physobj )
 	-- print( physobj:GetMass() )
 	-- if( self.StartTime + 0.0125 >= CurTime() ) then return end
 	self.HitNormal =  data.HitNormal*-1
+	self.HitPos = data.HitPos 
 	self.CollideObject = data.HitEntity
 	if( IsValid( data.HitEntity ) && data.HitEntity.HealthVal != nil ) then
 		
@@ -162,10 +163,10 @@ function ENT:OnRemove()
 	dmgnfo:SetInflictor( self )
 	dmgnfo:SetDamage( dmg )
 	dmgnfo:SetDamageForce( self:GetVelocity() )
-	dmgnfo:SetDamagePosition( self:GetPos() + self:GetForward() * 65 )
+	dmgnfo:SetDamagePosition( self.HitPos )
 	dmgnfo:SetDamageType( DMG_BULLET )
 	
-	util.BlastDamageInfo( dmgnfo, self:GetPos() + self:GetForward() * 65 , radius )
+	util.BlastDamageInfo( dmgnfo, self.HitPos or self:GetPos(), radius )
 	-- print(radius, dmg)
 	-- util.BlastDamage( self, self.Owner, self:GetPos()+Vector(0,0,8), radius, dmg )
 	-- print( self.Owner, radius, dmg, self.CollideObject )
