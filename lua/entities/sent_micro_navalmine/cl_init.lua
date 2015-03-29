@@ -37,14 +37,14 @@ function ENT:Draw()
 	end 
 	local dist = ( LocalPlayer():GetPos() - self:GetPos() ):Length()
 		
-	print( dist )
+	-- print( dist )
 	-- print( math.Clamp(math.floor( 255 * dist/2000  ) ,0,255  ) )
 	if( dist < 1020 ) then 
 		
 		self:SetRenderMode( RENDERMODE_TRANSALPHA )
 
 		self:SetColor( Color( 255,255,255, 255 - ( math.floor(dist/4) ) ) )
-		print( self:GetColor() )
+		-- print( self:GetColor() )
 	end 
 	
 	self:DrawModel()
