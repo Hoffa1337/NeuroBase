@@ -12,6 +12,7 @@ function ENT:Initialize()
 
 --//Need a better bullet model! Using the hl2 AR2 grenade until the new model...	
 --	self:SetModel( "models/Shells/shell_large.mdl" )
+
 	self:SetModel( "models/Items/AR2_Grenade.mdl" )
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )	
@@ -140,7 +141,7 @@ function ENT:Initialize()
 	-- self:SetAngles( self:GetAngles() + Angle( math.Rand(-.05,.05 ), math.Rand(-.05,.05 ), math.Rand(-.05,.05 ) ) )
 	-- self:GetPhysicsObject():SetVelocity( self:GetForward() * 2000 )
 	-- self.StartTime = CurTime()
-	
+
 end
 
 function ENT:PhysicsCollide( data, physobj )
@@ -148,6 +149,7 @@ function ENT:PhysicsCollide( data, physobj )
 	-- print( physobj:GetMass() )
 	-- if( self.StartTime + 0.0125 >= CurTime() ) then return end
 	self.HitNormal =  data.HitNormal*-1
+	self.HitPos = data.HitPos 
 	self.CollideObject = data.HitEntity
 	if( IsValid( data.HitEntity ) && data.HitEntity.HealthVal != nil ) then
 		
@@ -266,7 +268,7 @@ function ENT:OnRemove()
 		
 	end
 	-- print(radius, dmg)
-	util.BlastDamage( self, self.Owner, self:GetPos()+Vector(0,0,8), radius, dmg )
+	util.BlastDamage( self, self.Owner, self.HitPos or self:GetPos(), radius, dmg )
 	-- print( self.Owner, radius, dmg, self.CollideObject )
 	if( self:WaterLevel() == 0 ) then
 	
