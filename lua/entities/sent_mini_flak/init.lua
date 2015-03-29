@@ -172,7 +172,7 @@ function ENT:OnRemove()
 		
 	end
 
-	local ImpactSound = "WT/Sounds/shell_explosion_"..math.random(1,2)..".wav"
+	local ImpactSound = "Explosions/aa_explosion_"..math.random(1,5)..".wav"
 	self:PlayWorldSound( ImpactSound )
 
 		if( self:WaterLevel() == 0 ) then
