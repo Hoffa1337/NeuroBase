@@ -156,8 +156,18 @@ function ENT:OnRemove()
 		self.Owner = self.Owner.Pilot
 		
 	end
+	
+	local dmgnfo = DamageInfo()
+	dmgnfo:SetAttacker( self.Owner )
+	dmgnfo:SetInflictor( self )
+	dmgnfo:SetDamage( dmg )
+	dmgnfo:SetDamageForce( self:GetVelocity() )
+	dmgnfo:SetDamagePosition( self:GetPos() + self:GetForward() * 65 )
+	dmgnfo:SetDamageType( DMG_BULLET )
+	
+	util.BlastDamageInfo( dmgnfo, self:GetPos() + self:GetForward() * 65 , radius )
 	-- print(radius, dmg)
-	util.BlastDamage( self, self.Owner, self:GetPos()+Vector(0,0,8), radius, dmg )
+	-- util.BlastDamage( self, self.Owner, self:GetPos()+Vector(0,0,8), radius, dmg )
 	-- print( self.Owner, radius, dmg, self.CollideObject )
 	if( self:WaterLevel() == 0 ) then
 	

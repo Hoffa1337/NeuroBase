@@ -50,8 +50,8 @@ function ENT:Initialize()
 	
 	if( count < 4 ) then 	
 	
-		self:EmitSound("WT/Misc/bomb_whistle.wav")
-
+		self.Whistle = CreateSound( self, "WT/Misc/bomb_whistle.wav")
+		self.Whistle:Play()
 		
 	end 
 	
@@ -110,4 +110,11 @@ function ENT:PhysicsCollide( data, physobj )
 end
 
 function ENT:OnRemove()
+	
+	if( self.Whistle ) then 
+	
+		self.Whistle:FadeOut( 0.5 )
+	
+	end 
+	
 end
