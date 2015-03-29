@@ -10,7 +10,30 @@ function ENT:Initialize()
 	if ( self.PhysObj ) then
 		self.PhysObj:Wake()
 	end
-	self:EmitSound("WT/Misc/bomb_whistle.wav")
+	local count = 0
+	local tr,trace = {},{}
+	for i=1,10 do
+		tr.start = self:GetPos() 
+		tr.endpos = tr.start + VectorRand() * 1500 
+		tr.filter = self
+		tr.mask = MASK_SOLID
+		trace = util.TraceLine( tr )
+		
+		if( trace.Hit ) then 
+			
+			count = count + 1 
+			
+		end 
+		
+	end 
+	
+	if( count < 4 ) then 	
+	
+		self.Whistle = CreateSound( self, "WT/Misc/bomb_whistle.wav")
+		self.Whistle:Play()
+		
+	end 
+	
 	util.SpriteTrail(self, 0, Color(255,255,255,math.random(11,12)), false, 3, math.random(0.5,1.1), 1, math.random(1,3), "trails/smoke.vmt");  
 end
 
@@ -67,4 +90,10 @@ function ENT:PhysicsCollide( data, physobj )
 end
 
 function ENT:OnRemove()
+	if( self.Whistle ) then 
+	
+		self.Whistle:FadeOut( 0.5 )
+	
+	end 
+	
 end

@@ -34,7 +34,24 @@ function AddDir(dir) -- recursively adds everything in a directory to be downloa
 		-- resource.AddFile(dir.."/"..v)
 	-- end
 end
+
+
+
+function neuro_inLOS( a, b )
+
+	if( !IsValid( a ) || !IsValid( b ) ) then
+		
+		return false
 	
+	end
+	
+	if( ( a:GetPos() - b:GetPos()):Length() > 16000 ) then return false end
+	
+	local trace = util.TraceLine( { start = a:GetPos() + a:GetUp() * 73, endpos = b:GetPos() + Vector(0,0,73), filter = { a, b }, mask = MASK_BLOCKLOS } )
+	
+	return !trace.Hit
+	
+end
 AddCSLuaFile("autorun/client/JetHUD.lua")
 AddCSLuaFile("autorun/client/C_NeuroTecGlobal.lua")
 AddCSLuaFile("autorun/client/NeuroplanesGlobal.lua")
