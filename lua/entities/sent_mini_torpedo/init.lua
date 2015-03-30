@@ -17,7 +17,7 @@ function ENT:Initialize()
 	
 	self.PhysObj = self:GetPhysicsObject()
 	self:SetRenderMode( RENDERMODE_TRANSALPHA )
-	self:SetColor( Color( 255,255,255,0) )
+	self:SetColor( Color( 255,255,255,255) )
 	-- self:SetLegacyTransform( true )
 
 	if ( self.PhysObj:IsValid() ) then
