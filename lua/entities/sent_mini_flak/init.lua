@@ -32,37 +32,37 @@ function ENT:Initialize()
 	-- print( "GlowProxy: ", GlowProxy, self.TracerGlowProxy )
 	-- if( self.TinyTrail ) then
 		
-		-- self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(245,255), math.random(245,255), math.random(245,255), math.random(25,45) ), false, 4,0, TrailDelay + 0.85, 1/(1)*0.55, "trails/smoke.vmt");  
-		-- self.SpriteTrail2 = util.SpriteTrail( self, 0, Color( 255, 255, 100, 255 ), false, 4, 4, TrailDelay + 0.05, 1/(0+4)*0.55, "sprites/smokez");  
-		
-		self.SpriteTrail = util.SpriteTrail( 
-							self, 
-							0, 
-							Color( 255, 
-							205, 
-							100, 
-							225 ), 
-							false,
-							6, 
-							6, 
-							TrailDelay, 
-							 1 / ( 0 + 6) * 0.5, 
-							"trails/smoke.vmt" );
-							
-		self.SpriteTrail2 = util.SpriteTrail( 
-							self, 
-							0, 
-							Color( 255, 
-							255, 
-							255, 
-							15 ), 
-							true,
-							12, 
-							0, 
-							TrailDelay*60, 
-							 1 / ( 0 + 48 ) * 0.5, 
-							"trails/smoke.vmt" );
-							
+	-- self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(245,255), math.random(245,255), math.random(245,255), math.random(25,45) ), false, 4,0, TrailDelay + 0.85, 1/(1)*0.55, "trails/smoke.vmt");  
+	-- self.SpriteTrail2 = util.SpriteTrail( self, 0, Color( 255, 255, 100, 255 ), false, 4, 4, TrailDelay + 0.05, 1/(0+4)*0.55, "sprites/smokez");  
+	
+	self.SpriteTrail = util.SpriteTrail( 
+						self, 
+						0, 
+						Color( 255, 
+						205, 
+						100, 
+						55 ), 
+						false,
+						6, 
+						6, 
+						TrailDelay, 
+						 1 / ( 0 + 6) * 0.5, 
+						"trails/smoke.vmt" );
+						
+	self.SpriteTrail2 = util.SpriteTrail( 
+						self, 
+						0, 
+						Color( 255, 
+						255, 
+						255, 
+						15 ), 
+						true,
+						8, 
+						0, 
+						TrailDelay*60, 
+						 1 / ( 0 + 48 ) * 0.5, 
+						"trails/smoke.vmt" );
+						
 		local Glow = ents.Create("env_sprite")				
 		Glow:SetKeyValue("model","sprites/orangeflare1.vmt")
 		Glow:SetKeyValue("rendercolor","255 150 100")
@@ -76,7 +76,7 @@ function ENT:Initialize()
 		Shine:SetPos(self:GetPos())
 		Shine:SetKeyValue("renderfx", "0")
 		Shine:SetKeyValue("rendermode", "5")
-		Shine:SetKeyValue("renderamt", "255")
+		Shine:SetKeyValue("renderamt", "100")
 		Shine:SetKeyValue("rendercolor", "255 130 100")
 		Shine:SetKeyValue("framerate12", "20")
 		Shine:SetKeyValue("model", "light_glow01.spr")
@@ -87,9 +87,9 @@ function ENT:Initialize()
 		Shine:Activate()
 
 	self:DeleteOnRemove( self.SpriteTrail )
-	self:SetAngles( self:GetAngles() + AngleRand() * .025 )
+	self:SetAngles( self:GetAngles() + AngleRand() * .035 )
 	self.Started = CurTime() 
-	self.DetonationTime  = math.Rand( 0.45, 0.95 )
+	self.DetonationTime  = math.Rand( 0.65, 1.25 )
 	
 end
 
