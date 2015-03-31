@@ -11,7 +11,7 @@ end
 if ( CLIENT ) then
 
 	SWEP.DrawAmmo			= true
-	SWEP.DrawCrosshair		= false
+	SWEP.DrawCrosshair		= true
 	SWEP.ViewModelFOV		= 62
 	SWEP.ViewModelFlip		= false
 	SWEP.CSMuzzleFlashes	= false
@@ -32,6 +32,7 @@ SWEP.HoldType = "rpg"
 SWEP.Category = "NeuroTec Weapons"
 SWEP.Spawnable			= true
 SWEP.AdminSpawnable		= true
+SWEP.AdminOnly = true 
 
 SWEP.Primary.Sound			= Sound( "sounds/lockon/missilelaunch.mp3" )
 SWEP.Primary.Recoil			= 1.5
