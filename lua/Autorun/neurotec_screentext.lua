@@ -32,6 +32,11 @@ end )
 local _hitmarkers = 0 
 
 local function removeHitMarkerHook( id )
+	if( _hitmarkers > 0 ) then 
+	
+		_hitmarkers = _hitmarkers - 1
+	
+	end 
 	
 	hook.Remove("HUDPaint", id )
 	-- print( "removed hitindicator", _hitmarkers  )
@@ -39,9 +44,9 @@ local function removeHitMarkerHook( id )
 end 
 function HitMarker( damage )
 	_hitmarkers = _hitmarkers + 1
-	if( _hitmarkers > 33 ) then 
-		_hitmarkers = 0 
-	end 
+	-- if( _hitmarkers > 33 ) then 
+		-- _hitmarkers = 0 
+	-- end 
 	
 	local ply = LocalPlayer()
 	local startpos = ply:GetEyeTrace().HitPos
