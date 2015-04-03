@@ -49,6 +49,63 @@ hook.Add("SetupMove", "NeuroTec_KeybindCallback", function( ply, mv, cmd )
 	end
 	
 end ) 
+
+local G_ForceCounter = 0 
+local _KeyDownDuration = 0 
+local LastVelo = Vector(0,0,0)
+local blur = 0 
+local addalpha = 0
+local delay = 0 
+local darkness = 0 
+
+function GAMEMODE:RenderScreenspaceEffects()
+	local ply = LocalPlayer()
+	local plane = ply:GetScriptedVehicle() 
+	if( IsValid( plane ) && plane:GetVelocity():Length() > 450 * 1.8 ) then 
+			
+		-- print("walla")
+		local cv = plane:GetVelocity()
+		
+		if( ply:KeyDown( IN_FORWARD ) || ply:KeyDown( IN_MOVELEFT ) || ply:KeyDown( IN_MOVERIGHT ) || ply:KeyDown( IN_BACK ) ) then
+		
+			G_ForceCounter = math.Approach( G_ForceCounter, 600, 1 )
+		
+		else
+			
+				
+			G_ForceCounter = math.Approach( G_ForceCounter, 0, 2 )
+		
+		
+		end 
+	else 
+		
+				
+		G_ForceCounter = math.Approach( G_ForceCounter, 0, 2 )
+		
+		
+	end 
+							
+	
+	if( G_ForceCounter > 185 ) then 
+		
+		blur = math.Approach( blur, 0.3, 0.01 )
+		addalpha = math.Approach( addalpha, 0.25, 0.025 )
+		darkness = math.Approach( darkness, 255, 0.5 )
+		NetworkedScreenRumble( blur, blur )
+		
+	else
+		darkness  = math.Approach( darkness, 0, 1.75 )
+		blur = math.Approach( blur, 0, 0.01 )
+		addalpha = math.Approach( addalpha, 0, 0.01 )
+		
+	end 
+	
+	surface.SetDrawColor(Color( 0,0,0,darkness) )
+	surface.DrawRect( 0, 0,ScrW(),ScrH() ) 
+	
+	DrawMotionBlur( addalpha, blur, blur )
+end 
+
 local Meta = FindMetaTable("Entity")
 
 function Meta:DefaultDrawInfo()
