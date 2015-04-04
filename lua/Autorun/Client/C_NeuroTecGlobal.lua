@@ -63,7 +63,7 @@ hook.Add("Initialize", "AddNeuroScreenspace", function()
 	function GAMEMODE:RenderScreenspaceEffects()
 		local ply = LocalPlayer()
 		local plane = ply:GetScriptedVehicle() 
-		if( IsValid( plane ) && plane:GetVelocity():Length() > 570 * 1.8 ) then 
+		if( IsValid( plane ) && plane:GetVelocity():Length() > 570 * 1.8 && plane.WingModels ) then 
 				
 			-- print("walla")
 			local cv = plane:GetVelocity()
