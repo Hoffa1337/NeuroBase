@@ -58,7 +58,7 @@ local addalpha = 0
 local delay = 0 
 local darkness = 0 
 
-function GAMEMODE:RenderScreenspaceEffects()
+hook.Add("RenderScreenspaceEffects",function()
 	local ply = LocalPlayer()
 	local plane = ply:GetScriptedVehicle() 
 	if( IsValid( plane ) && plane:GetVelocity():Length() > 450 * 1.8 ) then 
@@ -104,7 +104,8 @@ function GAMEMODE:RenderScreenspaceEffects()
 	surface.DrawRect( 0, 0,ScrW(),ScrH() ) 
 	
 	DrawMotionBlur( addalpha, blur, blur )
-end 
+
+end ) 
 
 local Meta = FindMetaTable("Entity")
 
