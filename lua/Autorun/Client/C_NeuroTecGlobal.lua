@@ -58,52 +58,59 @@ local addalpha = 0
 local delay = 0 
 local darkness = 0 
 
-hook.Add("RenderScreenspaceEffects",function()
-	local ply = LocalPlayer()
-	local plane = ply:GetScriptedVehicle() 
-	if( IsValid( plane ) && plane:GetVelocity():Length() > 450 * 1.8 ) then 
-			
-		-- print("walla")
-		local cv = plane:GetVelocity()
-		
-		if( ply:KeyDown( IN_FORWARD ) || ply:KeyDown( IN_MOVELEFT ) || ply:KeyDown( IN_MOVERIGHT ) || ply:KeyDown( IN_BACK ) ) then
-		
-			G_ForceCounter = math.Approach( G_ForceCounter, 600, 1 )
-		
-		else
-			
+hook.Add("Initialize", "AddNeuroScreenspace", function() 
+
+	function GAMEMODE:RenderScreenspaceEffects()
+		local ply = LocalPlayer()
+		local plane = ply:GetScriptedVehicle() 
+		if( IsValid( plane ) && plane:GetVelocity():Length() > 570 * 1.8 ) then 
 				
+			-- print("walla")
+			local cv = plane:GetVelocity()
+			
+			if( ply:KeyDown( IN_FORWARD ) || ply:KeyDown( IN_MOVELEFT ) || ply:KeyDown( IN_MOVERIGHT ) || ply:KeyDown( IN_BACK ) ) then
+			
+				G_ForceCounter = math.Approach( G_ForceCounter, 600, 1 )
+			
+			else
+				
+					
+				G_ForceCounter = math.Approach( G_ForceCounter, 0, 2 )
+			
+			
+			end 
+		else 
+			
+					
 			G_ForceCounter = math.Approach( G_ForceCounter, 0, 2 )
-		
-		
+			
+			
 		end 
-	else 
+								
 		
-				
-		G_ForceCounter = math.Approach( G_ForceCounter, 0, 2 )
+		if( G_ForceCounter > 350 ) then 
+			
+			blur = math.Approach( blur, 0.1, 0.01 )
+			addalpha = math.Approach( addalpha, 0.25, 0.025 )
+			darkness = math.Approach( darkness, 255, 0.5 )
+			NetworkedScreenRumble( blur, blur )
+			-- ply:SetFOV( 55, 5.5 )
+			
+		else
 		
+			darkness  = math.Approach( darkness, 0, 1.75 )
+			blur = math.Approach( blur, 0, 0.01 )
+			addalpha = math.Approach( addalpha, 0, 0.01 )
+			-- ply:SetFOV( 90, 5.5 )
+			
+		end 
 		
-	end 
-							
-	
-	if( G_ForceCounter > 185 ) then 
+		surface.SetDrawColor(Color( 0,0,0,darkness) )
+		surface.DrawRect( 0, 0,ScrW(),ScrH() ) 
 		
-		blur = math.Approach( blur, 0.3, 0.01 )
-		addalpha = math.Approach( addalpha, 0.25, 0.025 )
-		darkness = math.Approach( darkness, 255, 0.5 )
-		NetworkedScreenRumble( blur, blur )
-		
-	else
-		darkness  = math.Approach( darkness, 0, 1.75 )
-		blur = math.Approach( blur, 0, 0.01 )
-		addalpha = math.Approach( addalpha, 0, 0.01 )
-		
-	end 
-	
-	surface.SetDrawColor(Color( 0,0,0,darkness) )
-	surface.DrawRect( 0, 0,ScrW(),ScrH() ) 
-	
-	DrawMotionBlur( addalpha, blur, blur )
+		DrawMotionBlur( addalpha, blur, blur)
+
+	end
 
 end ) 
 
