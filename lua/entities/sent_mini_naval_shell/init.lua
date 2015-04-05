@@ -146,6 +146,7 @@ end
 
 function ENT:PhysicsCollide( data, physobj )
 	
+	if( data.HitEntity.Owner == self.Owner ) then return end 
 	-- print( physobj:GetMass() )
 	-- if( self.StartTime + 0.0125 >= CurTime() ) then return end
 	self.HitNormal =  data.HitNormal*-1
@@ -220,40 +221,7 @@ function ENT:OnRemove()
 		self.Owner = self
 		
 	end
-
-	local ImpactSound = "WT/Sounds/shell_explosion_"..math.random(1,2)..".wav"
-	self:PlayWorldSound( ImpactSound )
-
-		if( self:WaterLevel() == 0 ) then
-		
-			ParticleEffect( "microplane_midair_explosion", self:GetPos(), Angle( 0,0,0 ), nil )
 	
-			if( self.HitSquishy ) then
-				
-				util.Effect("micro_he_blood", impact)
-				self:EmitSound( "Bullet.Flesh", 511, 80 )
-						
-			end 
-			
-		else
-			
-			local impact = EffectData()
-			impact:SetOrigin( self:GetPos() + Vector( 0,0,2))
-			impact:SetStart( self:GetPos()  + Vector( 0,0,2))
-			impact:SetScale( 2 )
-			impact:SetNormal( self.HitNormal or self:GetForward()*-1 )
-			util.Effect("WaterSurfaceExplosion", impact)
-
-		end
-	
-	-- local impact = EffectData()
-	-- impact:SetOrigin( self:GetPos() )
-	-- impact:SetStart( self:GetPos() )
-	-- impact:SetScale( 1.0 )
-	-- impact:SetNormal( self:GetForward()*-1 )
-	-- util.Effect("Explosion", impact)
-	-- ParticleEffect( "30cal_impact", self:GetPos(), Angle( 0,0,0 ), nil )
-
 	local dmg = 400
 	local radius = self.Radius or 50
 	if( self.MinDamage && self.MaxDamage ) then
@@ -262,6 +230,57 @@ function ENT:OnRemove()
 		
 	end
 	
+	local fx_air = "microplane_midair_explosion"
+	local fx_water = "WaterSurfaceExplosion"
+	local ImpactSound = "WT/Sounds/shell_explosion_"..math.random(1,2)..".wav"
+	if( dmg > 3000 ) then 
+		
+		fx_air = "rt_impact_tank"
+		fx_water = "water_impact_big"
+	
+	end
+	-- print( dmg )
+	if( self:WaterLevel() == 0 ) then
+	
+		ParticleEffect( fx_air, self:GetPos(), Angle( 0,0,0 ), nil )
+
+		if( self.HitSquishy ) then
+			
+			util.Effect("micro_he_blood", impact)
+			self:EmitSound( "Bullet.Flesh", 511, 80 )
+					
+		end 
+		
+	else
+
+		if( dmg > 3000 ) then 
+			
+			ParticleEffect( fx_water, self:GetPos(), Angle( 0,0,0 ), nil )
+
+		else 
+			
+			local impact = EffectData()
+			impact:SetOrigin( self:GetPos() + Vector( 0,0,2))
+			impact:SetStart( self:GetPos()  + Vector( 0,0,2))
+			impact:SetScale( 2 )
+			impact:SetNormal( self.HitNormal or self:GetForward()*-1 )
+			util.Effect( fx_water, impact)
+			
+		end 
+		
+		ImpactSound = "misc/shel_hit_water_"..math.random(1,3)..".wav"
+		
+	end
+		self:PlayWorldSound( ImpactSound )
+
+	-- local impact = EffectData()
+	-- impact:SetOrigin( self:GetPos() )
+	-- impact:SetStart( self:GetPos() )
+	-- impact:SetScale( 1.0 )
+	-- impact:SetNormal( self:GetForward()*-1 )
+	-- util.Effect("Explosion", impact)
+	-- ParticleEffect( "30cal_impact", self:GetPos(), Angle( 0,0,0 ), nil )
+
 	if( IsValid( self.Owner ) && IsValid( self.Owner.Pilot ) ) then -- how the fuck is this happening?
 		
 		self.Owner = self.Owner.Pilot
