@@ -1,0 +1,9 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/surgeon/metalgrate002a"
+	"$surfaceprop" "metalgrate"
+	"$alphatest" 1
+	"$model" 1
+	"$nocull" 1
+
+}
