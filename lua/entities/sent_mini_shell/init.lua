@@ -32,6 +32,7 @@ function ENT:Initialize()
 	local TraceScale1 = self.TracerScale1 or 0.1
 	local TraceScale2 = self.TracerScale2 or 0.1
 	local GlowProxy = self.TracerGlowProxy or 1
+
 	-- print( "GlowProxy: ", GlowProxy, self.TracerGlowProxy )
 	if( self.TinyTrail ) then
 		
