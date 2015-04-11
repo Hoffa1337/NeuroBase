@@ -48,7 +48,7 @@ function ENT:PhysicsCollide( data, physobj )
 	if( data.DeltaTime < 0.2 ) then return end
 
 	self:NeuroPlanes_BlowWelds( self:GetPos(), 256 )
-	self:EmitSound( "explosion2.wav", 511, math.random( 70, 100 ) )
+	self:EmitSound( "explosion4.wav", 511, math.random( 70, 100 ) )
 	self:NeuroTec_Explosion( self:GetPos(), 512, 1500, 2500, "HE_impact_dirt" )
 	self:Remove()
 		
@@ -122,7 +122,7 @@ function ENT:PhysicsUpdate()
 			
 			-- util.BlastDamage( self.Pointer, self.Pointer, self:GetPos(), self.Radius, self.Damage )
 			self:NeuroPlanes_BlowWelds( self:GetPos(), self.Radius )
-			self:EmitSound( "explosion2.wav", 511, math.random( 70, 100 ) )
+			self:EmitSound( "explosion4.wav", 511, math.random( 70, 100 ) )
 			self:NeuroTec_Explosion( self:GetPos(), 512, 1500, 2500, "HE_impact_dirt" )
 			self:Remove()
 			
