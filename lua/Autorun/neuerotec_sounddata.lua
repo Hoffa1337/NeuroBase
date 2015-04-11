@@ -57,7 +57,7 @@ function Meta:PlayWorldSound(snd)
 			local timeDelay = d / sonic 
 	
 			-- print( d )
-		if( d > 1500 ) then
+		if( d > 3500 ) then
 			local ent = v 
 			local spos = self:GetPos()
 			local pos = v:GetPos()
@@ -84,7 +84,7 @@ function Meta:PlayWorldSound(snd)
 							-- worldSound:SetPlaybackRate( 1.0 - ( d / 44000 ) ) -- doppler effect 
 							-- worldSound:SetPos( ent:GetPos() + norm * ( d / 20 ) )
 							-- worldSound:SetVolume( 1.0 - ( d / 36000 ) ) -- scale the volume based on distance from entity emitting the sound. f*** you valve 	
-							local soundpos =  ent:GetPos() + norm * ( d / 35 )
+							local soundpos =  ent:GetPos() + norm * ( d / 30 )
 							-- if ( true ) then
 							
 								-- debugoverlay.Cross( soundpos, 32, 10.1, Color( 255,255,255,255 ), false )
