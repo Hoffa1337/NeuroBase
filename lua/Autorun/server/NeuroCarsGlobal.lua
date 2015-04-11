@@ -1436,7 +1436,7 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 	
 	-- print( "???")
 	-- Firemode 
-	if ( !self.NoSecondaryWeapons && self.Pilot:KeyDown( IN_RELOAD ) && self.LastFireModeChange + 0.5 <= CurTime() ) then
+	if ( !self.NoSecondaryWeapons && self.Pilot:KeyDown( IN_RELOAD ) && self.LastFireModeChange && self.LastFireModeChange + 0.5 <= CurTime() ) then
 		
 		-- if(  ) then
 		
