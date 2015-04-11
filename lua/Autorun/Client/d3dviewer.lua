@@ -320,3 +320,5 @@ function PANEL:PaintOver()
 end     
 
 derma.DefineControl("D3DViewer","A 3D viewer",PANEL,"DPanel")
+
+print( "[NeuroBase] d3dviewer.lua loaded!" )

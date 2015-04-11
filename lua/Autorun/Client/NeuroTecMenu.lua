@@ -840,3 +840,5 @@ PropertySheet:AddSheet( "Weapons", SheetFourPanel, "gui/silkicons/bomb", false, 
 end	
 
 concommand.Add("Neuro_SpawnMenu", PlaneMenu)
+
+print( "[NeuroBase] NeuroTecMenu.lua loaded!" )

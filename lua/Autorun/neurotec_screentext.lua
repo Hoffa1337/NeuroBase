@@ -111,4 +111,4 @@ end
 
 end -- END OF CLIENTSIDE
 
-print("Loaded NeuroTec Network Messages :)")
+print( "[NeuroBase] neurotec_screentext.lua loaded!" )

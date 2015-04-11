@@ -6,16 +6,12 @@ if (!meta) then return end
 // You can even override already existing functions.
 
 function meta:GetScriptedVehicle()
-
 	return self:GetNetworkedEntity( "ScriptedVehicle", NULL )
-
 end
 
 function meta:SetScriptedVehicle( veh )
-
 	self:SetNetworkedEntity( "ScriptedVehicle", veh )
 	-- self:SetViewEntity( veh )
-
 end
 
--- print ("floppy boobs")
+print( "[NeuroBase] ScriptedVehicles.lua loaded!" )

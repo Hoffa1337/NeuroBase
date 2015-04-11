@@ -172,3 +172,5 @@ function DrawHUDOutlineRect( startpos, width, height, color )
 	surface.SetDrawColor( color )
 	surface.DrawOutlinedRect( startpos.x, startpos.y, width, height )
 end
+
+print( "[NeuroBase] neurotec_helperFunctions.lua loaded!" )

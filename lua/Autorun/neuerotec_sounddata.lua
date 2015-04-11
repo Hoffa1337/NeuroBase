@@ -123,4 +123,5 @@ function Meta:PlayWorldSound(snd)
 	end
 
 end
-print("neurotec sound data loaded!")
+
+print( "[NeuroBase] neuerotec_sounddata.lua loaded!" )

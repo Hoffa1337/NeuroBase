@@ -16,3 +16,5 @@ STATIC_GUN = 23
 WEAPON_TURRET = 23
 WEAPON_TORPEDO = 20
 WEAPON_MINE = 25
+
+print( "[NeuroBase] np_enum.lua loaded!" )

@@ -39,4 +39,4 @@ TANK_AMMO_SPEEDS["sent_tank_scud_missile"]	 = 50
 
 
 
-print("LoadedImpact Point Prediction Data")
+print( "[NeuroBase] neureotec_tankloadout.lua loaded!" )

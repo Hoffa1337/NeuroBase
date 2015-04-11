@@ -205,4 +205,4 @@ function Meta:BombingImpact(v0,pitch)
 	
 end
 
-print( "NeuroTec Ballistics Loaded") 
+print( "[NeuroBase] neuro_ballistic.lua loaded!" )

@@ -1757,4 +1757,4 @@ end
 
 -- Maps["rp_salvation_2_stalker"] = { }
 
-print( "NeuroTec Fun Stuff Loaded :) Commands: neurotec_funstuff 1 / 0" )
+print( "[NeuroBase] neurotec_funstuff.lua loaded!" )

@@ -44,4 +44,4 @@ Microplane engine fire: "microplane_jet_flame"
  ]]--
  
 -- rocketrail/s
-print( "NeuroTec Special Effects loaded" )
+print( "[NeuroBase] special_effects.lua loaded!" )
