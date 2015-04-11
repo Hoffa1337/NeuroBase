@@ -535,3 +535,5 @@ function SimpleLabel(text,parent,x,y,color,font)
 	if color then Slabel:SetTextColor(color) end
 	return Slabel
 end
+
+print( "[NeuroBase] neurotec_spawntab.lua loaded!" )

@@ -634,4 +634,5 @@ if( table.HasValue( hook.GetTable(), "Neuroplanes_Weapons_HeadsUpDisplay" ) ) th
 	print("Deleting Neuroplanes_Weapons_HeadsUpDisplay")
 end
 hook.Add( "HUDPaint", "Neuroplanes_Weapons_HeadsUpDisplay", DrawWeaponHUD )
-print("NeuroPlanes Client Loaded")
+
+print( "[NeuroBase] NeuroplanesGlobal.lua loaded!" )

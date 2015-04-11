@@ -172,3 +172,5 @@ function Meta:DefaultDrawInfo()
 	end
 
 end
+
+print( "[NeuroBase] C_NeuroTecGlobal.lua loaded!" )

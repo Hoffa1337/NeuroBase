@@ -2142,5 +2142,4 @@ hook.Add( "HUDPaint", "Neuroplanes__HeadsUpDisplay", DrawPlaneHUD )
 //hook.Add("HUDPaint", "Neuroplanes_EnnemiesHP", JetFighter.HP ) 
 //hook.Add("HUDPaint", "Neuroplanes_Panels", JetFighter.Panels ) 
 
-print("Neuro Planes Heads Up Display Loaded.")
-
+print( "[NeuroBase] JetHUD.lua loaded!" )

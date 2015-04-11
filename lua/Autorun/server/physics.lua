@@ -118,3 +118,5 @@ local function InitPostEntity( )
 end
 hook.Add( "InitPostEntity", "LoadPhysicsModule", InitPostEntity );
 ]]--
+
+print( "[NeuroBase] physics.lua loaded!" )

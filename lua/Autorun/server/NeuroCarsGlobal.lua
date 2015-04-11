@@ -4157,3 +4157,5 @@ print( SpecialThanks )
 print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 MsgN( inlovingmemory )
 print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+
+print( "[NeuroBase] NeuroCarsGlobal.lua loaded!" )

@@ -244,3 +244,5 @@ function PANEL:Think( )
 end
 
 derma.DefineControl("DNeuroSpawnRC","Neuro Menu is cool",PANEL,"DFrame")
+
+print( "[NeuroBase] DNeuroTecSpawnRC.lua loaded!" )

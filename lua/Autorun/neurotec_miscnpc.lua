@@ -29,3 +29,5 @@ local Pilot_Jet_hostile =
 }
 
 list.Set( "NPC", "neurotec_usaf_pilot_hostile", Pilot_Jet_hostile )
+
+print( "[NeuroBase] neurotec_miscnpc.lua loaded!" )
