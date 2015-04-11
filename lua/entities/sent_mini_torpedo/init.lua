@@ -163,7 +163,7 @@ function ENT:OnRemove()
 	dmgnfo:SetInflictor( self )
 	dmgnfo:SetDamage( dmg )
 	dmgnfo:SetDamageForce( self:GetVelocity() )
-	dmgnfo:SetDamagePosition( self.HitPos )
+	dmgnfo:SetDamagePosition( self.HitPos or self:GetPos() + self:GetForward() * 32 )
 	dmgnfo:SetDamageType( DMG_BULLET )
 	
 	util.BlastDamageInfo( dmgnfo, self.HitPos or self:GetPos(), radius )
