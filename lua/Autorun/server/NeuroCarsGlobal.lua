@@ -1,6 +1,6 @@
 local NeuroPlanesVersion = Revision()
 local Authors = "Hoffa, StarChick971, Aftokinito, Sillirion"
-local Contributors = "Fireking552, Flyboi, Inaki, Sakarias88, Beat the Zombie, Braxen, Professor Heavy, The Vman, Killstr3aKs, Smithy"
+local Contributors = "Fireking552, Flyboi, Inaki, Sakarias88, Beat the Zombie, Braxen, Professor Heavy, The Vman, Killstr3aKs, Smithy285"
 local Testers = "Virus, Elenion, Flubbadoo, xXAcePilotXx, (WEED)Kamikaze, Pimmie, Rifleman"
 local SpecialThanks = "Cosmos(workshop administration), Handsome Matt (Hosting)"
 local inlovingmemory = "In loving memory of Dragoneel1000. Rest In Peace as you will be forever missed."
@@ -4141,28 +4141,6 @@ function Charge(Obj,Obj2)
 	
 end
 
-print("	                 ?MMMI                  ")
-print("	            MMMMMMMNNNNNNNN             ")
-print("	         OMMMMNNN.  . ONNNNNNN          ")
-print("	        MMMMN.            .DDDD+        ")
-print("	      NMMNN                  DDD8       ")
-print("	     NMNN      DDDDDD         D888      ")
-print("	    MNNN         8888.         ,OOO     ")
-print("	   .NNN           8OOO          OZOO    ")
-print("	   NNNO           OOZZ.          $ZZ    ")
-print("	   NNN           ZZZ$$$          777    ")
-print("	  .NDD          Z$$$7777         :II=   ")
-print("	   DDD         $$77 III?         ,??~   ")
-print("	   DD8        $77I.  ??++        =++   " )
-print("	   D888      77II.    ===.       ~~~  "  )
-print("	   =88O     7II?      ~~~~~::   :::: "   )
-print("	    8OOZ   7I??.       ::::,.. ,,,, "    )
-print("	     OZ$$              .      ,,,, "     )
-print("	      $$7I?                  .... "      )
-print("	       :I?++=             ...... "       )
-print("	         +==~~::,,    ........  "        )
-print("	            ::,,............   "         )
-print("	                ........      "			 )
 print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 print("~~~~~~~~~~~~~~~~NeuroTec Vehicles~~~~~~~~~~~~~~~")
 print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
@@ -4176,10 +4154,6 @@ MsgN( "Tested and Approved by:" )
 print( Testers )
 MsgN( "With a special thanks to: " )
 print( SpecialThanks )
-print(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
-print(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
-print(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
+print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
 MsgN( inlovingmemory )
-print(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
-print(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
-print(":::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::")
+print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
