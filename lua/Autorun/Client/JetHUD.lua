@@ -831,9 +831,11 @@ function JetFighter.DrawCrosshair( )
 	
 		local X,Y = x,y
 		if( GetConVarNumber("jet_cockpitview",0) == 0 ) then
-			surface.SetDrawColor( 200, 200, 200, 100 )
-			surface.DrawCircle( X, Y, 8, Color( 200, 200, 200, 100) ) --grey horizon circle
-			surface.DrawCircle( X, Y, 1, Color( 200, 200, 200, 100) ) --aiming dot
+			surface.SetDrawColor( 0, 255, 0, 255 )
+			surface.DrawCircle( X, Y, 10, Color( 5, 235, 5, 255) ) --grey horizon circle
+			surface.DrawCircle( X, Y, 9, Color( 5, 205, 5, 55) ) --grey horizon circle
+			surface.DrawCircle( X, Y, 11, Color( 5, 205, 5, 55) ) --grey horizon circle
+			surface.DrawCircle( X, Y, 1, Color( 5, 235, 5, 255) ) --aiming dot
 		else
 			surface.SetDrawColor( 0, 255, 0, 100 )
 			surface.DrawCircle( X, Y, 8, Color( 0, 255, 0, 100) ) --horizon circle
@@ -1951,8 +1953,8 @@ function JetFighter.MissileAlert()
 	if ( JetFighter.DrawWarning ) then
 	
 		JetFighter.Pilot.LockonSound:PlayEx( 1.0, 100 )
-		local pos = JetFighter.Plane:GetPos() + JetFighter.Plane:GetForward() * -805
-		local ang = JetFighter.Plane:GetAngles()
+		-- local pos = JetFighter.Plane:GetPos() + JetFighter.Plane:GetForward() * -805
+		-- local ang = JetFighter.Plane:GetAngles()
 		
 		draw.SimpleText("LOCK-ON ALERT", "LockonAlert", ScrW() / 2, ScrH() - 45, Color( 255, 35, 35, 200 + (math.sin(CurTime())*50) ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 
