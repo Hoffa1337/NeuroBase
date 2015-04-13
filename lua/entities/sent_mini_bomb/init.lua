@@ -71,7 +71,7 @@ function ENT:PhysicsUpdate()
 		if( self:WaterLevel() > 0 ) then
 			
 			ParticleEffect( "water_impact_big", self:GetPos(), Angle( 0,0,0 ), nil )
-			util.BlastDamage( self, self.Owner, self:GetPos() + Vector(0,0,32), 270, math.random( 1500,2500 ) )
+			util.BlastDamage( self,(self.Owner or self), self:GetPos() + Vector(0,0,32), 270, math.random( 1500,2500 ) )
 			self:PlayWorldSound( "Misc/shel_hit_water_"..math.random(1,3)..".wav" )
 			-- self:EmitSound(  "WT/Misc/bomb_explosion_"..math.random(1,6)..".wav", 511, 100 )
 		
