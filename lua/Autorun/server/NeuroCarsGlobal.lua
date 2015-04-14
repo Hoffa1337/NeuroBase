@@ -87,7 +87,7 @@ concommand.Add( "neurotec_swapseat", function( ply, cmd, args )
 	local seat = ply:GetVehicle() or tank
 	local seatparent = NULL
 	if( IsValid( seat ) ) then
-		
+		 
 		seatparent = seat:GetParent()
 		
 		if( IsValid( seatparent ) && IsValid( seatparent:GetParent() ) && seatparent:GetParent().ValidSeats ) then
@@ -1489,20 +1489,20 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 	
 	
 	
-	-- if( self.NoBoost ) then
+	if( self.NoBoost ) then
 		
-		-- return
+		return
 		
-	-- end
-	
-	if( self.Speed > 1000 ) then
+	end
+	/*
+	if( self.Speed > 1200 * 1.8 ) then
 		
 		if( self.NoAirbrake ) then return end
 		
 		--Post Combustion (Boost) and Airbrake
 		local SpeedVar
 		local AirbrakeVar = 0
-		self.AfterburnerSound = CreateSound( self, "LockOn/PlaneAfterburner.mp3" )
+		self.AfterburnerSound = CreateSound( self, "LockOn/PlaneAfterburner.mp3" ) -- < Nice Garbage Collector rape, we sure need 100 sounds every second /Hoffa
 		if (self.VehicleType == VEHICLE_PLANE ) then --Only jets can use extra boost
 			if ( self.Pilot:KeyDown( IN_SPEED ) ) then
 			self.AfterburnerSound:Stop()
@@ -1558,6 +1558,7 @@ function Meta:NeuroPlanes_CycleThroughJetKeyBinds()
 		end
 		
 	end
+	*/
 	
 	if( self.Pilot:KeyDown( IN_ATTACK2 ) ) then
 	
