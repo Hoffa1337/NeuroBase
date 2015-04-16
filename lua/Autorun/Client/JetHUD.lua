@@ -36,7 +36,7 @@ function FixCalcView( ply, Origin, Angles, Fov, NearZ, FarZ )
 		
 	end
 	
-	if( ply:GetNWBool("NeuroMiniMe") ) then 
+	if( ply:GetNWBool("NeuroMiniMe")  && false ) then 
 		-- Origin.z = 9
 		-- return { origin = LerpVector( 1, Origin, ply:GetPos() + ply:GetUp() * 9 ) }
 		local view = {}
