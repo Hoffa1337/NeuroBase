@@ -39,10 +39,30 @@ function FixCalcView( ply, Origin, Angles, Fov, NearZ, FarZ )
 	if( ply:GetNWBool("NeuroMiniMe") ) then 
 		-- Origin.z = 9
 		-- return { origin = LerpVector( 1, Origin, ply:GetPos() + ply:GetUp() * 9 ) }
-	
+		local view = {}
+		Origin.z = Lerp( 0.99, Origin.z, ply:GetPos().z + 12  )
+		view.origin =  Origin 
+		view.fov = 90 
+		view.angles = Angles
+		
+		return view 
+		
 	end 
 	
 end
+hook.Add("CalcViewModelView", "NeuroTecMinify", function( wep, vm, oldPos, oldAng, pos, ang ) 
+	
+	local ply = LocalPlayer()
+	if( ply:GetNWBool("NeuroMiniMe") ) then 
+			
+			pos.z = Lerp( 0.99, oldPos.z, ply:GetPos().z + 12  )
+			 
+		return pos, ang   
+	
+	end 
+	
+end ) 
+
 hook.Add("CalcView", "HackFixSentView", FixCalcView )
 hook.Add("InitPostEntity", "NeuroPlanes_DetectGroundLevelAverage", function()
 	

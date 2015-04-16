@@ -287,7 +287,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 						Var = "!minify", 
 						Callback = function( ply, txt, team )	
 										
-										if true then return end 
+										-- if true then return end 
 										if( !ply:IsAdmin() ) then return end
 										local Target = FindPlayerByPartialName( ply,  string.Explode( " ", txt )[2] )
 											
@@ -296,15 +296,15 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 											local mins,maxs =  Vector( -16, -16, 0 ), Vector( 16, 16, 72 )
 											local dmins, dmaxs = Vector( -16, -16, 0 ), Vector( 16, 16, 36 )
 											-- local mi,ma = Target:GetRotatedAABB( mins, maxs )
-											mins = mins * .125 
-											maxs = maxs * .125 
+											mins = mins * .25 
+											maxs = maxs * .25
 											Target:ResetHull()
 											Target:SetHull( mins, maxs )
 											-- Target:SetDuckHull( dmins * .125, dmaxs * .125 )
 											Target:SetNWBool("NeuroMiniMe",true)
-											Target:SetModelScale( .125, 1 )
-											Target:SetRunSpeed( 400 * .125 ) 
-											Target:SetWalkSpeed( 200 * .125 )
+											Target:SetModelScale( .135, 1 )
+											Target:SetRunSpeed( 400 * .5 ) 
+											Target:SetWalkSpeed( 200 * .5 )
 											-- Target:SetStepSize( 10 )
 											-- Target:Spectate( OBS_MODE_CHASE )
 											
@@ -319,7 +319,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 					{ 
 						Var = "!bigify", 
 						Callback = function( ply, txt, team )	
-										if true then return end 
+										-- if true then return end 
 										if( !ply:IsAdmin() ) then return end
 										local Target = FindPlayerByPartialName( ply,  string.Explode( " ", txt )[2] )
 											
