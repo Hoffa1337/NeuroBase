@@ -291,7 +291,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 										if( !ply:IsAdmin() ) then return end
 										local Target = FindPlayerByPartialName( ply,  string.Explode( " ", txt )[2] )
 										
-										if( txt[2] == "*" ) then 
+										if( string.Explode( " ", txt )[2] == "*" ) then 
 											
 											for k,v in pairs( player.GetAll() ) do 
 												
@@ -317,7 +317,7 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 										if( !ply:IsAdmin() ) then return end
 										local Target = FindPlayerByPartialName( ply,  string.Explode( " ", txt )[2] )
 										
-										if( txt[2] == "*" ) then 
+										if( string.Explode( " ", txt )[2] == "*" ) then 
 											
 											for k,v in pairs( player.GetAll() ) do 
 												
