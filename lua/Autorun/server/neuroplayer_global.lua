@@ -25,10 +25,10 @@ hook.Add("PlayerSpawn", "Neuro_MinifyPlayerSpawnStuff", function( ply )
 	
 	if( ply:GetNWBool("NeuroMiniMe") ) then 
 	
-		self:SetRunSpeed( 400 * .5 ) 
-		self:SetWalkSpeed( 200 * .5 )
-		self:SetJumpPower( 200 * .75 )
-		self:SetStepSize( 8 )
+		ply:SetRunSpeed( 400 * .5 ) 
+		ply:SetWalkSpeed( 200 * .5 )
+		ply:SetJumpPower( 200 * .75 )
+		ply:SetStepSize( 8 )
 
 	end 
 	
