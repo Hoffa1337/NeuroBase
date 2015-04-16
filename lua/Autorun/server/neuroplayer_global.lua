@@ -1,24 +1,38 @@
 local Meta = FindMetaTable( "Player" )
 
 function Meta:Neuro_PlayerMakeSmall( )	
-
-	local mins,maxs =  Vector( -8, -8, 0 ), Vector( 8, 8, 72 )
-	local dmins, dmaxs = Vector( -8, -8, 0 ), Vector( 8, 8, 36 )
+	
+	local hull_width = 10 
+	local mins,maxs =  Vector( -hull_width, -hull_width, 0 ), Vector( hull_width, hull_width, 72 )
+	local dmins, dmaxs = Vector( -hull_width, -hull_width, 0 ), Vector( hull_width, hull_width, 36 )
 	mins.z = mins.z * .125
 	maxs.z = maxs.z * .125
 	self:ResetHull()
 	self:SetHull( mins, maxs )
 	self:SetViewOffset( Vector(0,0,12 ) )
-	self:SetJumpPower( 200 * .75 )
+
 	self:SetViewOffsetDucked( Vector(0,0,7 ) )
 	self:SetNWBool("NeuroMiniMe",true)
 	self:SetModelScale( .135, 1 )
 	self:SetRunSpeed( 400 * .5 ) 
 	self:SetWalkSpeed( 200 * .5 )
+	self:SetJumpPower( 200 * .75 )
 	self:SetStepSize( 8 )
 
 end 
 
+hook.Add("PlayerSpawn", "Neuro_MinifyPlayerSpawnStuff", function( ply ) 
+	
+	if( ply:GetNWBool("NeuroMiniMe") ) then 
+	
+		self:SetRunSpeed( 400 * .5 ) 
+		self:SetWalkSpeed( 200 * .5 )
+		self:SetJumpPower( 200 * .75 )
+		self:SetStepSize( 8 )
+
+	end 
+	
+end )
 
 function Meta:Neuro_PlayerMakeBig()
 
