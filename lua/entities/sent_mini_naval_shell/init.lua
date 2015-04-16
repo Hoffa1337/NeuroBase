@@ -287,7 +287,7 @@ function ENT:OnRemove()
 		
 	end
 	-- print(radius, dmg)
-	util.BlastDamage( self, self.Owner, self.HitPos or self:GetPos(), radius, dmg )
+	util.BlastDamage( self, self.Owner, self:GetPos() + self:GetForward() * ( self.PenetrationDepth or 12 ), radius, dmg )
 	-- print( self.Owner, radius, dmg, self.CollideObject )
 	if( self:WaterLevel() == 0 ) then
 	

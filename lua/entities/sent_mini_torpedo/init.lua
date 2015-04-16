@@ -166,7 +166,7 @@ function ENT:OnRemove()
 	dmgnfo:SetDamagePosition( self.HitPos or self:GetPos() + self:GetForward() * 32 )
 	dmgnfo:SetDamageType( DMG_BULLET )
 	
-	util.BlastDamageInfo( dmgnfo, self.HitPos or self:GetPos(), radius )
+	util.BlastDamageInfo( dmgnfo,self:GetPos() + self:GetForward() * ( self.PenetrationDepth or 8 ), radius )
 	-- print(radius, dmg)
 	-- util.BlastDamage( self, self.Owner, self:GetPos()+Vector(0,0,8), radius, dmg )
 	-- print( self.Owner, radius, dmg, self.CollideObject )
