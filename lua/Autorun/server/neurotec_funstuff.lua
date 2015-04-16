@@ -420,6 +420,28 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 					 
 					};
 					{
+					Var = "!nopropeller",
+					Callback = function( ply, txt, team ) 
+						
+						if( !ply:IsAdmin() ) then return end
+						local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
+						
+						if( IsValid( Target ) ) then
+							
+							local Ride = Target:GetScriptedVehicle()
+							
+							if( IsValid( Ride ) && IsValid( Ride.Propeller ) ) then
+								
+								Ride.Propeller:Remove()
+							
+							end 
+							
+						end
+					
+					end
+					 
+					};
+					{
 						Var = "!minefield",
 						Callback =  function( ply, txt, team )
 						
