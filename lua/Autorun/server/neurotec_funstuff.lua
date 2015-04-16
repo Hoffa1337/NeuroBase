@@ -290,29 +290,19 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 										-- if true then return end 
 										if( !ply:IsAdmin() ) then return end
 										local Target = FindPlayerByPartialName( ply,  string.Explode( " ", txt )[2] )
+										
+										if( txt[2] == "*" ) then 
 											
+											for k,v in pairs( player.GetAll() ) do 
+												
+												v:Neuro_PlayerMakeSmall()
+											
+											end 
+											
+										end 
 										if( IsValid( Target ) ) then
 											
-											local mins,maxs =  Vector( -16, -16, 0 ), Vector( 16, 16, 72 )
-											local dmins, dmaxs = Vector( -16, -16, 0 ), Vector( 16, 16, 36 )
-											-- local mi,ma = Target:GetRotatedAABB( mins, maxs )
-											mins.z = mins.z * .125
-											maxs.z = maxs.z * .125
-											Target:ResetHull()
-											Target:SetHull( mins, maxs )
-											-- Target.tViewOffset = Target:GetViewOffset()
-											Target:SetViewOffset( Vector(0,0,12 ) )
-											Target:SetJumpPower( 200 * .75 )
-											Target:SetViewOffsetDucked( Vector(0,0,8 ) )
-											-- Target:SetDuckHull( dmins * .125, dmaxs * .125 )
-											Target:SetNWBool("NeuroMiniMe",true)
-											Target:SetModelScale( .135, 1 )
-											Target:SetRunSpeed( 400 * .5 ) 
-											Target:SetWalkSpeed( 200 * .5 )
-											-- Target:SetStepSize( 10 )
-											-- Target:Spectate( OBS_MODE_CHASE )
-											
-											
+											Target:Neuro_PlayerMakeSmall()
 											
 										end
 										
@@ -326,26 +316,20 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 										-- if true then return end 
 										if( !ply:IsAdmin() ) then return end
 										local Target = FindPlayerByPartialName( ply,  string.Explode( " ", txt )[2] )
+										
+										if( txt[2] == "*" ) then 
 											
+											for k,v in pairs( player.GetAll() ) do 
+												
+												v:Neuro_PlayerMakeBig()
+											
+											end 
+											
+										end 
+										
 										if( IsValid( Target ) ) then
 											
-											local mins,maxs =  Vector( -16, -16, 0 ), Vector( 16, 16, 72 )
-											local dmins, dmaxs = Vector( -16, -16, 0 ), Vector( 16, 16, 36 )
-											-- local mi,ma = Target:GetRotatedAABB( mins, maxs )
-											-- mins = mins * .125 
-											-- maxs = maxs * .125 
-											Target:ResetHull()
-											Target:SetHull( mins, maxs )
-											Target:SetViewOffset( Vector(0,0,72) )
-											Target:SetViewOffsetDucked( Vector(0,0,36) )
-											Target:SetJumpPower( 200 )
-											-- Target:SetDuckHull( dmins, dmaxs )
-											Target:SetNWBool("NeuroMiniMe",false )
-											Target:SetModelScale( 1, 1 )
-											Target:SetRunSpeed( 400 ) 
-											Target:SetWalkSpeed( 200 )
-											Target:SetStepSize( 18 )
-											
+											Target:Neuro_PlayerMakeBig()
 											
 										end
 										
