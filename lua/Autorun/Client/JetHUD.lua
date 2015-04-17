@@ -55,7 +55,7 @@ hook.Add("CalcViewModelView", "NeuroTecMinify", function( wep, vm, oldPos, oldAn
 	local ply = LocalPlayer()
 	if( ply:GetNWBool("NeuroMiniMe") ) then 
 			
-			pos.z = Lerp( 0.99, oldPos.z, ply:GetPos().z + 12  )
+			pos.z = Lerp( 0.99, oldPos.z, ply:GetPos().z + 10  )
 			 
 		return pos, ang   
 	

@@ -67,8 +67,8 @@ function HitMarker( damage )
 		
 		if( endTime > 1 ) then 
 			
-			tits1 = math.Approach( tits1, 255, 5 )
-			tits2 = math.Approach( tits2, 200, 5 )
+			tits1 = math.Approach( tits1, 255, 1 )
+			tits2 = math.Approach( tits2, 200, 1 )
 			
 		end 
 		
