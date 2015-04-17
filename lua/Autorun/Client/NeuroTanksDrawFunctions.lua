@@ -534,11 +534,11 @@ function TankDefaultCalcView( ply, Origin, Angles, Fov, ent )
 				
 				local newZ = Lerp( 0.3, ply.TankCamPos.z, ply.TankCamPos.z + (-wheeldirection*2000) )
 				ply.TankCamPos.z = newZ
-				if( util.IsInWorld( targetpos ) ) then 
+				-- if( util.IsInWorld( targetpos ) ) then 
 				
 					targetpos = LerpVector( 0.5, Origin, tank:GetPos() + ply.TankCamPos + Vector( 0, 0, 700 ) )
 				
-				end 
+				-- end 
 				
 				local vec = ScreenToVector(x, y, ScrW(), ScrH(), Angle( 65, 0, 0 ), 89.54) -- I hate myself for doing that.
 				local realVec = targetpos + (vec*999999)
