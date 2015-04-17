@@ -9,11 +9,11 @@ function Meta:Neuro_PlayerMakeSmall( )
 	maxs.z = maxs.z * .125
 	self:ResetHull()
 	self:SetHull( mins, maxs )
-	self:SetViewOffset( Vector(0,0,12 ) )
+	self:SetViewOffset( Vector(0,0,10 ) )
 
 	self:SetViewOffsetDucked( Vector(0,0,7 ) )
 	self:SetNWBool("NeuroMiniMe",true)
-	self:SetModelScale( .135, 1 )
+	self:SetModelScale( .145, 1 )
 	self:SetRunSpeed( 400 * .5 ) 
 	self:SetWalkSpeed( 200 * .5 )
 	self:SetJumpPower( 200 * .75 )
