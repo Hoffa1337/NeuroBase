@@ -162,7 +162,7 @@ function ENT:PhysicsCollide( data, physobj )
 		end
 		
 	end
-	
+	self.HitEnt = data.HitEntity
 	-- print( data.HitEntity.OnTakeDamage )
 	self:Remove()
 	
@@ -235,14 +235,14 @@ function ENT:OnRemove()
 	local ImpactSound = "WT/Sounds/shell_explosion_"..math.random(1,2)..".wav"
 	if( dmg > 3000 ) then 
 		
-		fx_air = "rt_impact_tank"
+		fx_air = "microplane_bomber_explosion"
 		fx_water = "water_impact_big"
 	
 	end
 	-- print( dmg )
 	if( self:WaterLevel() == 0 ) then
 	
-		ParticleEffect( fx_air, self:GetPos(), Angle( 0,0,0 ), nil )
+		ParticleEffect( fx_air, self:GetPos(), Angle( 0,0,0 ), self.HitEnt or self )
 
 		if( self.HitSquishy ) then
 			
@@ -255,7 +255,7 @@ function ENT:OnRemove()
 
 		if( dmg > 3000 ) then 
 			
-			ParticleEffect( fx_water, self:GetPos(), Angle( 0,0,0 ), nil )
+			ParticleEffect( fx_water, self:GetPos(), Angle( 0,0,0 ), self.HitEnt or self )
 
 		else 
 			

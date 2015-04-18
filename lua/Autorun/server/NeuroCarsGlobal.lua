@@ -822,6 +822,8 @@ end
 
 function Meta:Jet_LockOnMethod()
 	
+	if( !IsValid( self.Pilot ) ) then return end 
+	
 	local filter =  { self.Pilot, self, self.Weapon }
 	
 	if( IsValid( self.CoPilot ) ) then
@@ -832,15 +834,15 @@ function Meta:Jet_LockOnMethod()
 	-- print("lock me up" )
 	-- -- Lock On method
 	local trace,tr = {},{}
-	tr.start = self:GetPos() + self:GetForward() * 1000
-	tr.endpos = tr.start + self:GetForward() * 15500
+	tr.start = self:GetPos() + self:GetForward() * 450
+	tr.endpos = tr.start + self:GetForward() * 15000 + VectorRand() * 200 
 	tr.filter = filter
 	tr.mask = MASK_SOLID
 	trace = util.TraceEntity( tr, self )
 	-- self:DrawLaserTracer( tr.start, trace.HitPos )
 	local e = trace.Entity
 	
-	local logic = ( IsValid( e ) && ( e.PrintName || e:IsNPC() || e:IsPlayer() || e:IsVehicle() || e.HealthVal != nil ) )
+	local logic = ( IsValid( e ) && ( e.HealthVal || e.PrintName || e:IsNPC() || e:IsPlayer() || e:IsVehicle() ) )
 	local logic2 = ( e != self.Pilot )
 	
 	local NeuroTeam = self:GetNetworkedInt( "NeuroTeam", 0 )

@@ -26,7 +26,7 @@ function EFFECT:Init( data )
 				
 					particle:SetVelocity( Vector(math.random(-15,15),math.random(-15,15),math.random( 5,290 ) ) * scale )
 					particle:SetDieTime( math.Rand( 0.5, 0.9 ) * scale/4 )
-					particle:SetStartAlpha( math.random( 233, 255 ) * scale )
+					particle:SetStartAlpha( math.random( 145, 155 ) * scale )
 					particle:SetStartSize( math.random(  10, 15 ) * scale )
 					particle:SetEndSize( math.random( 1, 2 ) * scale)
 					particle:SetRoll( math.random( 360, 480 ) * scale)

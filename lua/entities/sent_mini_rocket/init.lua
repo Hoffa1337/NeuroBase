@@ -2,7 +2,6 @@ AddCSLuaFile( "cl_init.lua" )
 AddCSLuaFile( "shared.lua" )
 include( 'shared.lua' )
 
-ENT.Sauce = 50
 ENT.Delay = 1
 ENT.Speed = 1250
 function ENT:OnTakeDamage(dmginfo)
@@ -53,6 +52,8 @@ function ENT:Initialize()
 	Shine:Activate()
 	self.SpriteTrail = util.SpriteTrail( self, 0, Color( math.random(5,15), math.random(5,15), math.random(5,15), math.random(200,255) ), false, 0, 32, math.Rand( 0.3, 0.5 ), 1/(0+128)*0.5, "trails/smoke.vmt");  
 	
+	self.Sauce = math.random(65,85) 
+	
 end
 
 function ENT:PhysicsCollide( data, physobj )
@@ -100,7 +101,7 @@ function ENT:PhysicsUpdate()
 			
 			if( IsValid( self.Target ) ) then
 		
-				if( ( self:GetPos() - self.Target:GetPos() ):Length() < 100 ) then
+				if( ( self:GetPos() - self.Target:GetPos() ):Length() < 150 ) then
 					
 					self:Remove()
 					
@@ -108,7 +109,7 @@ function ENT:PhysicsUpdate()
 					
 				end 
 				
-				self:SetAngles( LerpAngle( 0.1, self:GetAngles(), (self.Target:GetPos() - self:GetPos() ):Angle() ) )
+				self:SetAngles( LerpAngle( 0.145, self:GetAngles(), (self.Target:GetPos() - self:GetPos() ):Angle() ) )
 				
 			end 
 			self.Speed = self.Speed + 200
@@ -123,11 +124,12 @@ function ENT:PhysicsUpdate()
 										  a.r + .1 ) )
 										  
 		else
-		
-			self.PhysObj:Wake()
-			self.PhysObj:EnableGravity( true )
-			self.PhysObj:EnableDrag( true )
-			self.PhysObj:SetMass( 1000 )
+			
+			self:Remove()
+			-- self.PhysObj:Wake()
+			-- self.PhysObj:EnableGravity( true )
+			-- self.PhysObj:EnableDrag( true )
+			-- self.PhysObj:SetMass( 1000 )
 			
 		end
 		
