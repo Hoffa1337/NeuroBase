@@ -440,7 +440,53 @@ hook.Add( "PlayerSay", "NeuroPlanes_ChatCommands", function( ply, txt, team )
 					
 					end
 					 
+					};					{
+					Var = "!nowing",
+					Callback = function( ply, txt, team ) 
+						
+						if( !ply:IsAdmin() ) then return end
+						local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
+						
+						if( IsValid( Target ) ) then
+							
+							local Ride = Target:GetScriptedVehicle().Wings[math.random(1,2)]
+							
+							-- if( IsValid( Ride ) && IsValid( Ride.Propeller ) ) then
+								
+								Ride:Remove()
+							 
+							-- end 
+							
+						end
+					
+					end
+					 
 					};
+										{
+					Var = "!notail",
+					Callback = function( ply, txt, team ) 
+						
+						if( !ply:IsAdmin() ) then return end
+						local Target = FindPlayerByPartialName( ply, string.Explode( " ", txt )[2] )
+						
+						if( IsValid( Target ) ) then
+							
+							local Ride = Target:GetScriptedVehicle().Tail
+							
+							-- if( IsValid( Ride ) && IsValid( Ride.Propeller ) ) then
+								
+								Ride:Remove()
+							 
+							-- end 
+							
+						end
+					
+					end
+					 
+					};
+					
+					
+					
 					{
 						Var = "!minefield",
 						Callback =  function( ply, txt, team )
