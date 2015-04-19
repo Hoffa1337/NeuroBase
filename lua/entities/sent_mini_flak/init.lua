@@ -87,7 +87,7 @@ function ENT:Initialize()
 		Shine:Activate()
 
 	self:DeleteOnRemove( self.SpriteTrail )
-	self:SetAngles( self:GetAngles() + AngleRand() * .035 )
+	self:SetAngles( self:GetAngles() + AngleRand() * .0135 )
 	self.Started = CurTime() 
 	self.DetonationTime  = math.Rand( 0.65, 1.25 )
 	
