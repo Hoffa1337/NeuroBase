@@ -321,7 +321,7 @@ function Meta:NeuroNaval_DefaultCruiserThink()
 					
 				end
 				
-				self.HealthVal = self.HealthVal - math.random(1,2) 
+				self.HealthVal = self.HealthVal - math.random(1,4) 
 				
 				util.Effect( "immolate", effectdata )
 
@@ -330,6 +330,23 @@ function Meta:NeuroNaval_DefaultCruiserThink()
 		end
 		
 	end
+	
+	if( self.Deck && IsValid( self.Deck ) ) then 
+		
+		if( self.HealthVal > self.Deck.HealthVal ) then 
+		
+			self.Deck.HealthVal = self.HealthVal 
+			
+			
+		elseif( self.HealthVal < self.Deck.HealthVal ) then 
+		
+			self.HealthVal = self.Deck.HealthVal 
+			self:SetNWInt("health", math.floor(self.HealthVal) ) 
+			
+		end 
+	
+	end 
+	
 	local myang = self:GetAngles() 
 	
 	if( myang.r > 45 || myang.r < -45 ) then 
@@ -544,11 +561,11 @@ function Meta:NeuroNaval_DefaultCruiserThink()
 		
 	end
 	
-	if ( self.NeuroNaval_HasMissileJammer ) then
+	-- if ( self.NeuroNaval_HasMissileJammer ) then
 	
-		self:NeurNaval_MissileJammer()
+		-- self:NeurNaval_MissileJammer()
 	
-	end
+	-- end
 	if ( self.Cannons != nil ) then
 		
 		for k,v in pairs( self.Cannons ) do
@@ -1143,19 +1160,45 @@ function Meta:NeuroNaval_DefaultDamage( dmginfo )
 	-- self:TakePhysicsDamage( dmginfo )
 	self.HealthVal = self.HealthVal - dmg
 	self:SetNWInt( "health" , self.HealthVal )
+	local dpos = dmginfo:GetDamagePosition()
+	local inflictor = dmginfo:GetInflictor()
+	-- print( inflictor,"INFLICTOR")
+	if( IsValid( self.Pilot ) && IsValid( inflictor ) && inflictor:GetClass() == "sent_mini_torpedo" ) then 
+		
+		local pos = self:GetPos()
+		local side = "port"
+		local _amt
+		if( dmg <= 500 ) then
+			_amt = "Minor"
+		elseif( dmg > 500 ) then 
+			_amt = "Medium" 
+		elseif( dmg > 2500 ) then 
+			_amt = "Major" 
+		elseif( dmg > 5000 ) then
+			_amt = "Critical"
+		end 
+		
+		if( self:WorldToLocal( dpos ).y < 0 ) then 
+			side = "starboard"
+		end 
+		
+		self.Pilot:SendLua("HitMarker([[WARNING! ".._amt.." torpedo damage on "..side.." side]])")
+				
+	end 
+	
 	if( self.AmmoRacks && #self.AmmoRacks > 0 ) then 
 		
 		for k,v in pairs( self.AmmoRacks ) do 
 			
 			if( v.Destroyed ) then continue end 
 			local vpos =  self:LocalToWorld( v.Pos )
-			local dpos = dmginfo:GetDamagePosition()
+			
 			local dist = ( dpos - vpos ):Length() 
 			
-			if( dist < 72 ) then 
+			if( dist < 79 ) then 
 				
 				v.Health = v.Health - dmg 
-				print("ouch")
+				-- print("ouch")
 			end
 			
 			if( v.Health <= 0 ) then 

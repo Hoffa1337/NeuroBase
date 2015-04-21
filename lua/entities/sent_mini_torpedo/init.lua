@@ -9,7 +9,7 @@ function ENT:Initialize()
 	
 	self.seed = math.random( 0, 1000 )
 
-	self:SetModel( "models/torpedo_float.mdl" )
+	self:SetModel( "models/neuronaval/killstr3aks/mini_torpedo_naval.mdl" )
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_VPHYSICS )	
 	self:SetSolid( SOLID_VPHYSICS )
@@ -23,20 +23,20 @@ function ENT:Initialize()
 	if ( self.PhysObj:IsValid() ) then
 		self.PhysObj:Wake()
 		self.PhysObj:SetMass( 500 )
-		self.PhysObj:SetBuoyancyRatio( .1 )
+		self.PhysObj:SetBuoyancyRatio( 175.1 )
 		
 	end
 	
-	timer.Simple( 0, function() 
+	-- timer.Simple( 0, function() 
 		
-		if( IsValid( self ) ) then 
+		-- if( IsValid( self ) ) then 
 		
-			self.keepUp = constraint.Keepupright( self, Angle( 0,0,0 ), 0, 999999 )
-			self:SetModelScale( .15, .1 )
+			-- self.keepUp = constraint.Keepupright( self, Angle( 0,0,0 ), 0, 999999 )
+			-- self:SetModelScale( .15, .1 )
 			self:Activate() 
-		end 
+		-- end 
 	
-	end )
+	-- end )
 	
 
 end
@@ -71,18 +71,23 @@ end
 
 function ENT:Think( )
 	
-
+	self.PhysObj:SetBuoyancyRatio( 155.1 )
+	
+	-- if( self:WaterLevel() == 0 ) then return end 
 	self.Delay = self.Delay - 1 
 	if( self.Delay > 0 ) then return end 
 	self:NextThink(CurTime())
+	if( !self.DeployAngle ) then 
+		self.DeployAngle = Angle( -1,self:GetAngles().y, 0 )
+	end 
 	
-	if( self.DeployAngle ) then 
+	if( self.DeployAngle && self:WaterLevel() > 0 ) then 
 		
 		self:SetAngles( LerpAngle( FrameTime()*5, self:GetAngles(), self.DeployAngle ) )
 	
-	end 
+		self:GetPhysicsObject():SetVelocity( self:GetForward() * self.Speed )
 	
-	self:GetPhysicsObject():SetVelocity( self:GetForward() * self.Speed )
+	end 
 	
 	
 	local fx = EffectData()
@@ -144,7 +149,7 @@ function ENT:OnRemove()
 	util.Effect("Explosion", impact)
 	ParticleEffect( "30cal_impact", self:GetPos(), Angle( 0,0,0 ), nil )
 
-	local dmg = 400
+	local dmg = self.Damage or 3500
 	local radius = self.Radius or 50
 	if( self.MinDamage && self.MaxDamage ) then
 		
@@ -170,7 +175,7 @@ function ENT:OnRemove()
 	-- print(radius, dmg)
 	-- util.BlastDamage( self, self.Owner, self:GetPos()+Vector(0,0,8), radius, dmg )
 	-- print( self.Owner, radius, dmg, self.CollideObject )
-	if( self:WaterLevel() == 0 ) then
+	-- if( self:WaterLevel() == 0 ) then
 	
 		-- if( self.TracerScale1 && self.TracerScale1 >= 1 ) then
 		
@@ -183,7 +188,7 @@ function ENT:OnRemove()
 		
 		-- end
 		
-	end
+	-- end
 	
 	-- self:Remove()
 	
