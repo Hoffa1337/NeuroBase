@@ -335,13 +335,13 @@ function Meta:NeuroNaval_DefaultCruiserThink()
 		
 		if( self.HealthVal > self.Deck.HealthVal ) then 
 		
-			self.Deck.HealthVal = self.HealthVal 
-			
+			self.HealthVal = self.HealthVal 
+			self:SetNWInt("health", math.floor(self.HealthVal) ) 
 			
 		elseif( self.HealthVal < self.Deck.HealthVal ) then 
 		
-			self.HealthVal = self.Deck.HealthVal 
-			self:SetNWInt("health", math.floor(self.HealthVal) ) 
+			self.Deck.HealthVal = self.Deck.HealthVal 
+		
 			
 		end 
 	
