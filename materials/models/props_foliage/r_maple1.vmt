@@ -1,0 +1,10 @@
+"vertexlitgeneric"
+{
+	"$baseTexture" "models/props_foliage/r_maple1"
+	"$nocull" 1
+	"$alphatest" 1
+	"$model" 1
+	"$surfaceprop" "foliage"
+	"$nodecal" 1
+	"%keywords" "rnl"
+}

@@ -1,0 +1,8 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "models/props_foliage/ah_foliage_sheet001"
+	"$alphatest" 1
+	"$surfaceprop" "foliage"
+	"$nocull" 1
+	"model" 1
+}

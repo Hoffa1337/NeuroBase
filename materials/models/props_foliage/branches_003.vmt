@@ -1,0 +1,6 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/props_foliage/branches_003"
+	"$alphatest" 1
+	"$nocull" 1
+}

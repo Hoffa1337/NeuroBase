@@ -29,6 +29,7 @@ game.AddParticles("particles/neuro_inferno.pcf") 		-- fireplume -  fireplume_sma
 game.AddParticles("particles/gbe_trinity_explo.pcf") --trinity_main and trinity_air
 game.AddParticles("particles/gb5_napalm.pcf") --napalm_explosion and napalm_air
 game.AddParticles("particles/neuro_scud.pcf") --scud_explosion 
+game.AddParticles("particles/neuro_naval.pcf") --  navalgun_muzzleflash
 
 
 game.AddParticles("particles/neuro_micro.pcf") 

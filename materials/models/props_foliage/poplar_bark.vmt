@@ -1,0 +1,7 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models/props_foliage/poplar_bark"
+	"$model" "1"
+	"$surfaceprop" "wood"
+	"%keywords" "rnl"
+}

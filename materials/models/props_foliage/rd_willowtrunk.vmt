@@ -1,0 +1,7 @@
+"vertexlitgeneric"
+{
+	"$basetexture" "models/props_foliage/rd_willowtrunk"
+	"$bumpmap" "models/props_foliage/rd_willowtrunk_normal"
+	"$model" 1
+	"$surfaceprop" "wood"
+}

@@ -1,0 +1,9 @@
+"vertexlitgeneric"
+{
+	"$baseTexture" "models/props_foliage/r_cornleaf1"
+	"$alphatest" 1
+	"$nocull" 1
+	"$model" 1
+	"$surfaceprop" "foliage"
+	"%keywords" "rnl"
+}
