@@ -44,6 +44,10 @@ end
 function Meta:NeuroNaval_DefaultPhysSimulate( phys, deltatime )
 		-- print("lahme?")
 	phys:Wake()
+	if( !self.LastTickUpdate ) then self.LastTickUpdate = 0 end 
+	if( self.LastTickUpdate + .1 >= CurTime() ) then return end 
+	self.LastTickUpdate = CurTime() 
+	
 	-- phys:AddAngleVelocity(Vector( math.cos(CurTime())*.1, math.sin(CurTime())*.1,  0) )
 	if( IsValid( self.Deck ) ) then 
 		
@@ -53,7 +57,7 @@ function Meta:NeuroNaval_DefaultPhysSimulate( phys, deltatime )
 	
 	if( self.ShipAngleForceCurrentValue && self.ShipAngleForceTargetValue ) then 
 	
-		self.ShipAngleForceCurrentValue = math.Approach( self.ShipAngleForceCurrentValue, self.ShipAngleForceTargetValue, 0.0151 )
+		self.ShipAngleForceCurrentValue = math.Approach( self.ShipAngleForceCurrentValue, self.ShipAngleForceTargetValue, 0.00951 )
 		--self.ShipAngleForceCurrentValue*50
 		local dir = -1 
 		if( self.ActualSpeed < 0 ) then 
@@ -73,7 +77,7 @@ function Meta:NeuroNaval_DefaultPhysSimulate( phys, deltatime )
 		end 
 		local myang = self:GetAngles() 
 		
-		self.SAFApproachVal = Lerp( 0.01225, self.SAFApproachVal, self.ShipAngleForceCurrentValue * ( self.TurnAngleValue or 5 ) )
+		self.SAFApproachVal = Lerp( 0.05225, self.SAFApproachVal, self.ShipAngleForceCurrentValue * ( self.TurnAngleValue or 5 ) )
 		if( myang.r < 45 && myang.r > -45 && self.PropellerPos && !self.RudderIsFucked  ) then 
 			-- print("what")
 			self.PhysObj:ApplyForceOffset( self:GetRight() * ( self.ShipAngleForceCurrentValue * ( self.TurnForceValue or 54000 ) ), self:LocalToWorld( self.PropellerPos )  )
@@ -364,6 +368,8 @@ function Meta:NeuroNaval_DefaultCruiserThink()
 			
 			for k,v in ipairs( player.GetAll() ) do 
 				
+				-- if( !v.HealthVal ) then continue end 
+				
 				local distdiff = ( self:GetPos() - v:GetPos() ):Length() 
 				local cl = v:GetClass()
 				if( distdiff < dist  && v:GetVelocity():Length() > 700 && v != self.Owner.Pilot ) then
@@ -587,8 +593,6 @@ function Meta:NeuroNaval_DefaultCruiserThink()
 		self:SetNWFloat("BoostPercentage",  self.ActualSpeed / self.MaxVelocity )
 		self.EngineSound:ChangeVolume( math.abs( 1.0 * self.ActualSpeed / self.MaxVelocity )) 
 		self.WaterSound:ChangeVolume( math.abs(1.0 * self.ActualSpeed / self.MaxVelocity )) 
-		
-		
 		
 		if( self.Pilot == NULL ) then return end
 		
@@ -1181,7 +1185,7 @@ function Meta:NeuroNaval_DefaultDamage( dmginfo )
 			side = "starboard"
 		end 
 		
-		self.Pilot:SendLua("HitMarker([[WARNING! ".._amt.." torpedo damage on "..side.." side]])")
+		self.Pilot:PrintMessage(HUD_PRINTTALK, "WARNING! ".._amt.." torpedo damage on "..side.." side")
 				
 	end 
 	
