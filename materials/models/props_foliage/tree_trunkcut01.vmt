@@ -1,0 +1,7 @@
+"vertexlitGeneric"
+{
+	"$basetexture" "models/props_foliage/tree_trunkcut01"
+	"$model" 1
+	"$surfaceprop" "wood"
+	"$nodecal" 1
+}

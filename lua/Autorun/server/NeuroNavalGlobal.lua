@@ -73,7 +73,7 @@ function Meta:NeuroNaval_DefaultPhysSimulate( phys, deltatime )
 		end 
 		local myang = self:GetAngles() 
 		
-		self.SAFApproachVal = Lerp( 0.1225, self.SAFApproachVal, self.ShipAngleForceCurrentValue * ( self.TurnAngleValue or 5 ) )
+		self.SAFApproachVal = Lerp( 0.01225, self.SAFApproachVal, self.ShipAngleForceCurrentValue * ( self.TurnAngleValue or 5 ) )
 		if( myang.r < 45 && myang.r > -45 && self.PropellerPos && !self.RudderIsFucked  ) then 
 			-- print("what")
 			self.PhysObj:ApplyForceOffset( self:GetRight() * ( self.ShipAngleForceCurrentValue * ( self.TurnForceValue or 54000 ) ), self:LocalToWorld( self.PropellerPos )  )

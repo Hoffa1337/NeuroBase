@@ -1,0 +1,6 @@
+"Unlitgeneric"
+{
+	"$basetexture" "models/props_foliage/r_detailprops1"
+	"$surfaceprop" "rock"
+	"$model" 1
+}

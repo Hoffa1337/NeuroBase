@@ -1,0 +1,9 @@
+"VertexlitGeneric"
+{
+	"$basetexture" "models/props_foliage/shrub01a_spi"
+	"$nocull" 1
+	"$model" 1
+	"$alphatest" 1
+	"$surfaceprop" "foliage"
+	"%keyword" "rnl"
+}
