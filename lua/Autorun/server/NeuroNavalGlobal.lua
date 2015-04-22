@@ -44,9 +44,9 @@ end
 function Meta:NeuroNaval_DefaultPhysSimulate( phys, deltatime )
 		-- print("lahme?")
 	phys:Wake()
-	if( !self.LastTickUpdate ) then self.LastTickUpdate = 0 end 
-	if( self.LastTickUpdate + .1 >= CurTime() ) then return end 
-	self.LastTickUpdate = CurTime() 
+	-- if( !self.LastTickUpdate ) then self.LastTickUpdate = 0 end 
+	-- if( self.LastTickUpdate + .1 >= CurTime() ) then return end 
+	-- self.LastTickUpdate = CurTime() 
 	
 	-- phys:AddAngleVelocity(Vector( math.cos(CurTime())*.1, math.sin(CurTime())*.1,  0) )
 	if( IsValid( self.Deck ) ) then 

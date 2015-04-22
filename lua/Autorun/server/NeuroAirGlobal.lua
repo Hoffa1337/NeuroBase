@@ -254,30 +254,63 @@ end
 
 function Meta:Micro_GunnerThink()
 	
+	if( self.LastTargetCheck && self.LastTargetCheck + 5.0 <= CurTime() && !IsValid( self.Target ) && self:GetClass() != "plane_apart" ) then 
+		self.LastTargetCheck = CurTime()
+		
+		for k,v in ipairs( player.GetAll() ) do 
+			
+			if( v != self.Pilot && ( v:GetPos() - self:GetPos() ):Length() < 3000 ) then 
+				
+				local ride = v:GetScriptedVehicle()
+				if( IsValid( ride ) && ride:GetClass() == self:GetClass() ) then 
+					
+					continue
+					
+				end 
+				
+				self.Target = v
+				
+				break 
+			
+			end 
+			
+		end 
+		
+	end 
+	
+	if( IsValid( self.Target ) && self.Target:GetPos():Distance( self:GetPos() ) >= 3000 ) then self.Target = NULL end 
+	
+	
 	if( self.TurretBones && !self.Destroyed && !self.IsBurning && ( IsValid( self.Pilot ) || ( IsValid( self.Owner ) && IsValid( self.Owner.Pilot ) ) ) ) then
 		
 		-- print("true?")
 		local pilot =  self.Pilot
 		local plane = self
+		local v2 = self.Target
 		if( self:GetClass() == "plane_part" ) then 
 			
 			plane = self.Owner
 			pilot = self.Owner.Pilot 
+			v2 = self.Owner.Target 
 			
 		end
+		-- self.Target = self.Owner.Target 
+		
 			-- print( self:GetClass() )
-		for k,v in pairs( self.TurretBones ) do
+		for k,v in ipairs( self.TurretBones ) do
 			
 			if( !v.Destroyed ) then 
 			
 				local bpos = self:LocalToWorld( v.Pos )
 				local bang = self:GetAngles() + v.Ang
+				-- if( !IsValid( self.Target ) ) then 
 				
-				for _,v2 in pairs( player.GetAll() ) do
+				-- for _,v2 in ipairs( player.GetAll() ) do
+				if( IsValid( v2 ) ) then 
 				
 					local dist = (bpos-v2:GetPos()):Length()
 					
-					if( v2 != pilot && dist < 3000 ) then -- && ( IsValid( v2:GetVehicle() ) || IsValid( v2:GetVehicle() ) )
+					if( dist < 3000 ) then -- && ( IsValid( v2:GetVehicle() ) || IsValid( v2:GetVehicle() ) )
 						
 						local veh = v2:GetScriptedVehicle()
 						local tpos = v2:GetShootPos()
@@ -294,9 +327,8 @@ function Meta:Micro_GunnerThink()
 						local targetpos = ( tpos - bpos ):Angle()
 						local ydiff,pdiff = math.floor(math.AngleDifference( bang.y-90, targetpos.y  )), math.floor(math.AngleDifference( bang.p, targetpos.p ))
 						v.GunEntity:SetAngles(  targetpos ) 
-						
 					
-						if( v2:GetClass() != plane:GetClass()  && v2:Alive() && ( ydiff > -45 || ydiff < 45 ) && pdiff > -45 && pdiff < 45  ) then
+						if( v2:Alive() && ( ydiff > -45 || ydiff < 45 ) && pdiff > -45 && pdiff < 45  ) then
 									
 							local tr,trace={},{}
 							tr.start = bpos+targetpos:Forward()*20
@@ -315,7 +347,7 @@ function Meta:Micro_GunnerThink()
 								bullet.Num 		= 1
 								bullet.Src 		= tr.start
 								bullet.Dir 		= v.GunEntity:GetAngles():Forward()
-								bullet.Spread 	= VectorRand() * 0.175 --Vector( .1, .1, .1 )*math.Rand(-1,1)
+								bullet.Spread 	= VectorRand() * math.Rand( -.175, .175 ) --Vector( .1, .1, .1 )*math.Rand(-1,1)
 								bullet.Tracer	= 1
 								bullet.Force	= 45
 								bullet.filter = { self, plane, pilot }
@@ -362,9 +394,10 @@ function Meta:Micro_GunnerThink()
 
 					end				
 				
-				end
-			
+				end 
 				
+				-- end
+	
 			end
 			
 		end
