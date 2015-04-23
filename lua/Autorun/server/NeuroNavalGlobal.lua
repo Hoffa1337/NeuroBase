@@ -57,7 +57,7 @@ function Meta:NeuroNaval_DefaultPhysSimulate( phys, deltatime )
 	
 	if( self.ShipAngleForceCurrentValue && self.ShipAngleForceTargetValue ) then 
 	
-		self.ShipAngleForceCurrentValue = math.Approach( self.ShipAngleForceCurrentValue, self.ShipAngleForceTargetValue, 0.00951 )
+		self.ShipAngleForceCurrentValue = math.Approach( self.ShipAngleForceCurrentValue, self.ShipAngleForceTargetValue, 0.012951 )
 		--self.ShipAngleForceCurrentValue*50
 		local dir = -1 
 		if( self.ActualSpeed < 0 ) then 
@@ -77,7 +77,7 @@ function Meta:NeuroNaval_DefaultPhysSimulate( phys, deltatime )
 		end 
 		local myang = self:GetAngles() 
 		
-		self.SAFApproachVal = Lerp( 0.05225, self.SAFApproachVal, self.ShipAngleForceCurrentValue * ( self.TurnAngleValue or 5 ) )
+		self.SAFApproachVal = Lerp( 0.015225, self.SAFApproachVal, self.ShipAngleForceCurrentValue * ( self.TurnAngleValue or 5 ) )
 		if( myang.r < 45 && myang.r > -45 && self.PropellerPos && !self.RudderIsFucked  ) then 
 			-- print("what")
 			self.PhysObj:ApplyForceOffset( self:GetRight() * ( self.ShipAngleForceCurrentValue * ( self.TurnForceValue or 54000 ) ), self:LocalToWorld( self.PropellerPos )  )
@@ -854,7 +854,7 @@ function Meta:CaptainHasGunsThink()
 			
 		end 
 		
-		if( self.LastAttackKeyDown && self.LastAttackKeyDown + .1 <= CurTime() ) then  
+		if( self.LastAttackKeyDown && self.LastAttackKeyDown + .25 <= CurTime() ) then  
 			
 			self.LastAttackKeyDown 	= CurTime()
 			
@@ -1051,7 +1051,8 @@ function Meta:YamatoFire( wep, idx, lastidx, targetpos  )
 	shell:SetModel( wep.AmmoModel )
 	shell:SetAngles( wep.Barrel:GetAngles()  )
 	shell.Owner = self.Pilot
-	shell.DeployAngle = wep.Turret:GetAngles() 
+	shell.DeployAngle = wep.Turret:GetAngles()
+	shell.ShipFired = true 
 	shell:Spawn()
 	shell.MinDamage = wep.Damage*.7
 	shell.MaxDamage = wep.Damage
@@ -1080,11 +1081,11 @@ function Meta:YamatoFire( wep, idx, lastidx, targetpos  )
 			
 	if( wep.ShellVelocity ) then 
 			
-		shell:GetPhysicsObject():SetVelocity( self:GetVelocity() + shell:GetForward() * wep.ShellVelocity )	
+		shell:GetPhysicsObject():SetVelocity(  shell:GetForward() * wep.ShellVelocity )	
 		
 	else 
 	
-		shell:GetPhysicsObject():SetVelocity( self:GetVelocity() + self:GetVelocity() +  shell:GetForward() * self.IPPShellVelocity )
+		shell:GetPhysicsObject():SetVelocity(  self:GetVelocity() +  shell:GetForward() * self.IPPShellVelocity )
 	
 	end 
 	

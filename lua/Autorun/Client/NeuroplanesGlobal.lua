@@ -384,7 +384,9 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 						-- ang = plane:GetAngles() + Angle( pa.p, pa.y, plane:GetAngles().r )
 					
 					-- end
-				
+							-- ang.r = Angles.r + plane:GetAngles().r
+							-- ang.y = Angles.y + ply:EyeAngles().y 
+							-- ang.p = Angles.p + ply:EyeAngles().p
 				else
 					
 					ang.r = 0
@@ -464,7 +466,7 @@ function DefaultPropPlaneCView( ply, Origin, Angles, Fov )
 			-- ang = plane:GetAngles()
 			
 		-- end
-		
+
 		view = {
 			origin = pos, --,
 			angles = ang,-- / 2.2 ),

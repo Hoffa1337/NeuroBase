@@ -297,7 +297,7 @@ function ENT:OnRemove()
 
 		-- else
 		
-		util.Decal( "SmallScorch", self:GetPos(), self.HitNormal && self:GetPos() + self.HitNormal * -32 or self:GetPos() + self:GetForward() * 16 )
+		util.Decal( "NeuroShipImpact", self:GetPos(), self.HitNormal && self:GetPos() + self.HitNormal * -32 or self:GetPos() + self:GetForward() * 16 )
 
 		
 		-- end

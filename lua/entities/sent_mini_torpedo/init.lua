@@ -23,7 +23,7 @@ function ENT:Initialize()
 	if ( self.PhysObj:IsValid() ) then
 		self.PhysObj:Wake()
 		self.PhysObj:SetMass( 500 )
-		self.PhysObj:SetBuoyancyRatio( 175.1 )
+		self.PhysObj:SetBuoyancyRatio( 195.1 )
 		
 	end
 	
@@ -71,7 +71,15 @@ end
 
 function ENT:Think( )
 	
-	self.PhysObj:SetBuoyancyRatio( 155.1 )
+	if( !self.ShipFired ) then 
+	
+		self.PhysObj:SetBuoyancyRatio( 195.1 )
+	
+	else
+	
+		self.PhysObj:SetBuoyancyRatio( 55.1 )
+	
+	end 
 	
 	-- if( self:WaterLevel() == 0 ) then return end 
 	self.Delay = self.Delay - 1 
@@ -83,7 +91,7 @@ function ENT:Think( )
 	
 	if( self.DeployAngle && self:WaterLevel() > 0 ) then 
 		
-		self:SetAngles( LerpAngle( FrameTime()*5, self:GetAngles(), self.DeployAngle ) )
+		self:SetAngles( LerpAngle( FrameTime()*5, self:GetAngles(), self.DeployAngle + Angle(-1,0,0)) )
 	
 		self:GetPhysicsObject():SetVelocity( self:GetForward() * self.Speed )
 	
@@ -91,11 +99,12 @@ function ENT:Think( )
 	
 	
 	local fx = EffectData()
-	fx:SetOrigin( self:GetPos() + Vector(0,0,32))
+	fx:SetOrigin( self:GetPos() + Vector(0,0,16))
 	fx:SetScale( 3.0 )
 	util.Effect("waterripple", fx )
+	util.Effect("watersplash", fx )
 	if( IsValid( self ) ) then 
-		self:GetPhysicsObject():Wake()
+		-- self:GetPhysicsObject():Wake()
 	end 
 			
 	return true 
@@ -183,7 +192,7 @@ function ENT:OnRemove()
 
 		-- else
 		
-		util.Decal( "SmallScorch", self:GetPos(), self.HitNormal && self:GetPos() + self.HitNormal * -32 or self:GetPos() + self:GetForward() * 16 )
+		util.Decal( "NeuroShipImpact", self:GetPos(), self.HitNormal && self:GetPos() + self.HitNormal * -32 or self:GetPos() + self:GetForward() * 16 )
 
 		
 		-- end
