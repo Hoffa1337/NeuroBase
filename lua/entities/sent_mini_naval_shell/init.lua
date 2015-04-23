@@ -256,7 +256,7 @@ function ENT:OnRemove()
 		if( dmg > 3000 ) then 
 			
 			ParticleEffect( fx_water, self:GetPos(), Angle( 0,0,0 ), self.HitEnt or self )
-
+		
 		else 
 			
 			local impact = EffectData()
@@ -271,7 +271,14 @@ function ENT:OnRemove()
 		ImpactSound = "misc/shel_hit_water_"..math.random(1,3)..".wav"
 		
 	end
-		self:PlayWorldSound( ImpactSound )
+	
+	if( IsValid( self.HitEnt ) ) then 
+		
+		ImpactSound = "WT/Misc/tank_hit_big_"..math.random(1,4)..".wav"
+		-- print("wtf?")
+	end 
+	
+	self:PlayWorldSound( ImpactSound )
 
 	-- local impact = EffectData()
 	-- impact:SetOrigin( self:GetPos() )

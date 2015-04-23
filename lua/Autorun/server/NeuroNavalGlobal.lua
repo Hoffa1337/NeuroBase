@@ -57,17 +57,19 @@ function Meta:NeuroNaval_DefaultPhysSimulate( phys, deltatime )
 	
 	if( self.ShipAngleForceCurrentValue && self.ShipAngleForceTargetValue ) then 
 	
-		self.ShipAngleForceCurrentValue = math.Approach( self.ShipAngleForceCurrentValue, self.ShipAngleForceTargetValue, 0.012951 )
+		self.ShipAngleForceCurrentValue = math.Approach( self.ShipAngleForceCurrentValue, self.ShipAngleForceTargetValue, ( self.TurnIncrement or  0.0182951  ) )
 		--self.ShipAngleForceCurrentValue*50
 		local dir = -1 
 		if( self.ActualSpeed < 0 ) then 
 			 dir = 1
 		end 
-		local sforce = math.cos(CurTime()+self:EntIndex())*.01
+		local sforce = math.cos(CurTime()+self:EntIndex())*( self.WaterMovementForce or .01 )
 		local sforce2 =  0 --dir*.00021+math.sin(CurTime()*.1)*(math.Clamp(self:GetVelocity():Length(),0,100 )/100)
-		if( !self.IsMicroCruiser ) then 
+		local sforce3 = -self.ActualSpeed*( self.PitchForce or .001 ) + math.sin(CurTime())/(self.PitchSineValue or 2)
+		if( !self.IsMicroCruiser || self:WaterLevel() == 3 ) then 
 			sforce = 0
 			sforce2 = 0 
+			sforce3 = 0 
 			
 		end
 		if( !self.SAFApproachVal ) then 
@@ -81,14 +83,19 @@ function Meta:NeuroNaval_DefaultPhysSimulate( phys, deltatime )
 		if( myang.r < 45 && myang.r > -45 && self.PropellerPos && !self.RudderIsFucked  ) then 
 			-- print("what")
 			self.PhysObj:ApplyForceOffset( self:GetRight() * ( self.ShipAngleForceCurrentValue * ( self.TurnForceValue or 54000 ) ), self:LocalToWorld( self.PropellerPos )  )
-			self.PhysObj:AddAngleVelocity( Vector( sforce, -self.ActualSpeed*( self.PitchForce or .001 ) + math.sin(CurTime())/(self.PitchSineValue or 2), 0 ) )
-		
+			self.PhysObj:AddAngleVelocity( Vector( sforce, sforce3, 0 ) )
+			 
+			if( self.IsMicroSubmarine ) then 
+				
+				self.PhysObj:AddAngleVelocity( Vector( 0,0, self.ShipAngleForceCurrentValue ) )
+			
+			end 
+			
 		else 
-		
 		
 			self.ShipAngleForce = Vector(sforce, sforce2, self.ShipAngleForceCurrentValue )
 			self.PhysObj:AddAngleVelocity( self.ShipAngleForce )  
-		
+		-- print( self.ShipAngleForceTargetValue )
 		end 
 		
 		self.PhysObj:AddAngleVelocity( Vector( self.SAFApproachVal, 0,0 ) )
@@ -309,8 +316,133 @@ function Meta:NavalSendWeaponEntities( ply )
 
 end 
 
+function Meta:SonarPing()
+	
+	-- print( self.LastEchoPing - CurTime() )
+	if ( self.LastEchoPing + 3.0 <= CurTime() ) then
+			
+			self.LastEchoPing = CurTime()
+		
+			-- print("lahme")
+			local ptr, ptrace = {},{}
+	
+			ptr.start = self:GetPos() + self:GetForward() * 1000 --it's a long boat
+			ptr.endpos = self:GetPos() + self:GetForward() * 11000 + self:GetRight() * math.sin(CurTime() * self:EntIndex() * 100 ) * 64
+			ptr.filter = self
+			ptr.mask = MASK_SOLID
+			
+			ptrace = util.TraceEntity( ptr, self  )
+			
+			-- //print( self.LastEchoPing + 3, CurTime(), self:WaterLevel() )
+			
+			if( ptrace.HitNonWorld ) then
+				
+				self.LastEchoPing = self.LastEchoPing - ( 3.0 * ptrace.Fraction   )
+				local d = ( self:GetPos() - ptrace.HitPos ):Length()
+						
+				self.PingPitch = 100 + ( 20 - ( d / 500 ) )
+			else
+			
+				self.PingPitch = 100
+			
+			end
+			
+		
+		-- if( self:WaterLevel() > 2 ) then
+		
+			self:EmitSound("sonar_ping.wav", 511, self.PingPitch )
+		
+		-- end
+		
+		-- print( self:GetClass(), "Sonar Ping", CurTime() )
+		
+	
+	end
+
+end 
+
 function Meta:NeuroNaval_DefaultCruiserThink()
 	-- print(self:GetClass(), self:WaterLevel() )
+	
+	
+	if( IsValid( self.PhysObj ) && self:WaterLevel()>0 && IsValid( self.Pilot ) && self.IsMicroSubmarine ) then 
+		
+		if( self:WaterLevel() == 3) then 	
+			self:SonarPing()
+		end 
+		
+		if( !self.SubmarineInit ) then 
+		
+			self.SubmarineInit = true 
+			self.MaxBuoyancyRatio = self.BuoyancyRatio
+			
+		end 
+		
+		local waterlevel = self:WaterLevel()
+		local tr,trace ={},{}
+		tr.start = self:GetPos() + Vector( 0,0,12500 )
+		tr.endpos = tr.start + Vector(0,0,-33000 )
+		tr.filter = { self, self.Pilot }
+		tr.mask = MASK_WATER 
+		trace = util.TraceLine( tr ) 
+			
+		if( trace.Hit ) then 
+			
+			local surfacepos = trace.HitPos 
+			local mp = self:GetPos()
+			local depth = math.floor( surfacepos.z - mp.z )
+			local depthCap = depth / self.MaxDivingDepth
+			local crushCap = ( self.BuoyancyRatioSink / self.BuoyancyRatio  + self.BuoyancyRatio / self.MaxBuoyancyRatio ) - self.BuoyancyRatioSink / self.BuoyancyRatio 
+			
+			-- print( DepthCap, depth )
+			-- self:DrawLaserTracer( tr.start, trace.HitPos )
+			self:SetNWFloat("CurrentDepth", depthCap )
+			self:SetNWFloat("CurrentBallastSize", crushCap )
+			
+			if( crushCap > 1.0 ) then 
+			
+				-- print("uh oh")
+			
+			end 
+			
+			
+		end 
+		
+		local velo = self:GetVelocity()
+		local rate = ( self.DiveSpeed or .00345 )
+		local wl = self:WaterLevel() 
+		if( wl<3) then 
+			rate = .015
+		end 
+		if( self.Pilot:KeyDown( IN_WALK ) && velo.z > -self.MaxDiveSpeed ) then 
+			
+			self.BuoyancyRatio = math.Approach( self.BuoyancyRatio, self.BuoyancyRatioSink, self.MaxBuoyancyRatio * rate )
+			if( wl == 3 ) then 
+			
+				self.PhysObj:AddAngleVelocity( Vector( 0, 1.5,0 ) )
+			
+			end 
+			
+		elseif( self.Pilot:KeyDown( IN_JUMP ) && velo.z < self.MaxDiveSpeed ) then 
+		
+			self.BuoyancyRatio = math.Approach( self.BuoyancyRatio, self.MaxBuoyancyRatio, self.MaxBuoyancyRatio * rate)
+			if( wl == 3 ) then 
+			
+				self.PhysObj:AddAngleVelocity( Vector( 0, -1.5,0 ) )
+			
+			end 
+			
+		end 
+
+		
+		if( IsValid( self.KeepUp ) ) then 
+			
+			self.KeepUp:GetPhysicsObject():SetBuoyancyRatio( self.BuoyancyRatio )
+			
+		end 
+	
+	end 
+	
 	if( self:WaterLevel() < 3 ) then
 	
 		if( self.DamagedPoints && #self.DamagedPoints > 0 ) then
@@ -1635,7 +1767,7 @@ end
 
 function Meta:NeuroNaval_DefaultCruiserInit()
 	
-	
+	self.LastEchoPing = CurTime()
 	self.FuckedUpAngle = AngleRand() * 180 
 	self.DamagedPoints = {}
 	self.ActualSpeed = 0
