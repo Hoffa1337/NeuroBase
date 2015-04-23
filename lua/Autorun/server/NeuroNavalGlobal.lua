@@ -2134,6 +2134,12 @@ function Meta:NeuroNaval_DefaultCruiserInit()
 		self.Deck:PhysicsInit( MOVETYPE_VPHYSICS )
 		self.Deck:SetSolid( SOLID_VPHYSICS )	
 		self.Deck:Activate()
+		if( self.DeckMass ) then 
+			
+			self.Deck:GetPhysicsObject():SetMass( self.DeckMass )
+			
+		end 
+		
 		
 		self.Deck.InitialHealth = self.InitialHealth
 		self.Deck.HealthVal = self.InitialHealth
