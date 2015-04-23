@@ -25,6 +25,20 @@ function amath.Circle( Pos, Width )
 	return Pos
 end
 
+local pi_over_2 = math.pi / 2.0
+
+function EaseInSine( amt, _end )
+	
+	return -1.0 * math.cos( amt  * pi_over_2 ) + 1.0
+
+end 
+
+function Tween( amt, start, _end )
+	
+	return start * ( amt * ( _end - start ) )
+
+end 
+
 
 --[[---------------------------------------------------------------------------
 funcDerivate - math_derivative.lua
