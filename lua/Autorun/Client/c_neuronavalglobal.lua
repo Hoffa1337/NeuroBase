@@ -4,7 +4,10 @@ local pairs = pairs
 local ipairs = ipairs 
 local table = table 
 local math = math 
-
+local Telegraph = Material("VGUI/ui/naval-throttlet-telegraph.png" )
+local TelegraphStick = Material("VGUI/ui/telegraph-stick.png" )
+local TelegraphPole = Material("VGUI/ui/telegraph-pole.png" )
+local ThrottlePos = 0 
 
 function Meta:DefaultMicroShitExhaust( )
 	
@@ -68,12 +71,12 @@ function Meta:DefaultMicroShitExhaust( )
 	
 	local partText = "particle/snowflake01"
 
-	if( ( scale > .15 || scale < -.15 ) && self:GetVelocity():Length()> 30 ) then 
+	if( ( scale > .15 || scale < -.15 ) && self:GetVelocity():Length()> 30 && !self.IsMicroSubmarine ) then 
 		
 		-- print(self:GetVelocity():Length()  )
 		local pos = self.WaterBreakPosition or Vector(465,0, -25 ) 
-		local particle = self.Emitter:Add( "particle/water/waterdrop_001a", self:LocalToWorld( pos ) )
-		if ( particle ) then
+		local particle = self.Emitter:Add( "particle/water/waterdrop_001a", self:LocalToWorld( pos )  )
+		if ( particle  && self:WaterLevel() < 3 ) then
 		-- print("?=?=")
 			particle:SetVelocity( Vector(0,0,125 + scale * 55 ) )
 			particle:SetDieTime( math.Rand( 1, 2 ) )
@@ -777,7 +780,7 @@ function DrawNavalHUD()
 		if( v.IsMicroCruiser && v != Naval.Ship ) then  --r 
 			local distance = ( v:GetPos() - Naval.Ship:GetPos() ):Length() 
 			local ShipName = v:GetNWString("ShipName") or "" 
-			if( distance < 6000  ) then 
+			if( distance < 6000  && v:WaterLevel() < 3 ) then 
 				
 				local textAlpha = 255 
 				if( distance > 6000-255 ) then 
@@ -834,18 +837,128 @@ function DrawNavalHUD()
 		Naval.DrawArmor()
 		Naval.DrawCrosshair()
 		if( !Naval.Ship.IsMicroCruiser ) then 
-		
 			Naval.DrawArmamentStatus()
-		
+			Naval.DrawSubsystemsInfo()
 		end 
-		
-		Naval.DrawSubsystemsInfo() 
 		Naval.DrawCompass()
 		Naval.DrawRadar()
 		Naval.DrawTarget()
+		if( Naval.Ship.IsMicroSubmarine ) then 
+		
+			Naval.DrawWW2SubInstruments()
+		
+		end 
+			
 	end
 	
 end
+
+local gauge = Material("vgui/ui/submarine-depth-gauge-dial.png" )
+local gneedle = Material( "vgui/ui/submarine-depth-gauge-needle.png" )
+local bfront = Material( "vgui/ui/ballast-front.png" )
+local bback = Material( "vgui/ui/ballast-back.png" )
+local depthGaugeLerpVal = 0 
+/*
+ENT.HUDConfig = {
+	-- Depth Gauge and Ballast Meter
+	GaugeSize = 128,
+	GaugeNeedleStartAngle = 145,
+	GaugeNeedleStopAngle = 190,
+	GaugeFont = "DebugFixed",
+	GaugeFontSmall = "DebugFixedSmall",
+	GaugeDial = Material("vgui/ui/submarine-depth-gauge-dial.png" ),
+	GaugeNeedle = Material( "vgui/ui/submarine-depth-gauge-needle.png" ),
+	BallastGaugeSize = 192,
+	BallastFrontPanel = Material( "vgui/ui/ballast-front.png" ),
+	BallastBackPanel = Material( "vgui/ui/ballast-back.png" )
+}
+*/
+function Naval.DrawWW2SubInstruments()
+	
+
+	local gaugeSize = 128+64
+	local gaugeSize2 = 128
+	local gaugeStartAngle = 145.0
+	local gaugeStopAngle = 190
+	local gaugeFont =  "DebugFixed"
+	local gaugeFontSmall =  "DebugFixedSmall"
+	if( Naval.Ship.HUDConfig ) then 
+		
+		local cfg = Naval.Ship.HUDConfig 
+		
+		gauge = cfg.GaugeDial
+		gneedle = cfg.GaugeNeedle
+		gaugeSize = cfg.BallastGaugeSize
+		gaugeSize2 = cfg.GaugeSize
+		gaugeStartAngle = cfg.GaugeNeedleStartAngle 
+		gaugeStopAngle = cfg.GaugeNeedleStopAngle 
+		gaugeFont = cfg.GaugeFont 
+		gaugeFontSmall = cfg.GaugeFontSmall 
+			
+		bfront = cfg.BallastFrontPanel
+		bback = cfg.BallastBackPanel
+		
+	end 
+	
+	local rotationalValue = Naval.Ship:GetNWFloat("CurrentDepth")
+	local depthGaugeValue = Naval.Ship:GetNWFloat("CurrentBallastSize")
+	local throttle = Naval.Ship:GetNWFloat("Throttle")
+	local speed = Naval.Ship:GetNWFloat("ActualSpeed")
+	
+	depthGaugeLerpVal = Lerp( 0.5, depthGaugeLerpVal, (gaugeSize*.8)* (depthGaugeValue ) )
+	-- print( depthGaugeValue )
+	surface.SetDrawColor( 255, 255,255, 255 )
+	surface.SetMaterial( bback )
+	surface.DrawTexturedRect( ScrW() - gaugeSize*.85, ScrH() /2.7  , gaugeSize,gaugeSize )
+	surface.SetDrawColor( Color( 255,45,25,255 ) )
+	surface.DrawRect( ScrW() - gaugeSize/2.15, ScrH()/2.55+depthGaugeLerpVal, gaugeSize*.25,  6 )
+	surface.SetDrawColor( Color( 255,255,255,255 ) )
+	surface.SetMaterial( bfront )
+	surface.DrawTexturedRect( ScrW() - gaugeSize*.85, ScrH() /2.7, gaugeSize,gaugeSize )
+	surface.SetFont( gaugeFontSmall )
+	surface.SetTextColor( 25, 255, 25, 255  )
+	surface.SetTextPos( ScrW() - gaugeSize/2.1, ScrH() /2.62 ) 
+	surface.DrawText( "BALLAST" )
+
+	local gaugeY = 340
+	gaugeSize2 = 128 
+
+	surface.SetDrawColor( 255, 255,255, 255 )
+	surface.SetMaterial( gauge )
+	surface.DrawTexturedRect( ScrW() - gaugeSize2, ScrH() - gaugeY , gaugeSize2,gaugeSize2 )
+	
+		-- draw.RoundedBox( 4, x-12, y-12,  24, 24, Color(55,55,55,255) )
+	surface.SetFont( gaugeFont )
+	surface.SetTextColor( 45, 25, 25, 255  )
+	surface.SetTextPos( ScrW() - gaugeSize2/1.55, ScrH() - gaugeY+gaugeSize2/1.4 ) 
+	surface.DrawText( "DEPTH" )
+
+	surface.SetMaterial( gneedle )
+	surface.DrawTexturedRectRotated( ScrW() - gaugeSize2/2, ScrH() - gaugeY+gaugeSize2/2, gaugeSize2 ,gaugeSize2, gaugeStartAngle - ( gaugeStopAngle * rotationalValue ) )
+
+	if( speed > 0 ) then 
+	
+		ThrottlePos = Lerp( .125, ThrottlePos, throttle ) 
+	
+	else
+		
+		ThrottlePos = Lerp( .125, ThrottlePos, -throttle ) 
+	
+	
+	end 
+	
+	-- print( throttle, ThrottlePos  )
+	local telY = 70
+	surface.SetDrawColor( Color( 255,255,255,255 ))
+	surface.SetMaterial( TelegraphPole )
+	surface.DrawTexturedRectRotated( ScrW() - telY, ScrH()-55, 128, 128, 0 )
+	surface.SetMaterial( Telegraph )
+	surface.DrawTexturedRectRotated( ScrW() - telY, ScrH()-128, 128, 128, 0 )
+	surface.SetMaterial( TelegraphStick )
+	
+	surface.DrawTexturedRectRotated( ScrW() - telY, ScrH()-128, 266, 266, 180 + (120  * ThrottlePos ) )
+
+end 
 
 function Naval.DrawCrosshair()
 
@@ -985,44 +1098,9 @@ function Naval.DrawCrosshair()
 	end
 	
 end
-local Telegraph = Material("VGUI/ui/naval-throttlet-telegraph.png" )
-local TelegraphStick = Material("VGUI/ui/telegraph-stick.png" )
-local TelegraphPole = Material("VGUI/ui/telegraph-pole.png" )
-local ThrottlePos = 0 
+
 function Naval.DrawSubsystemsInfo()
 
-	if( Naval.Ship.IsMicroCruiser ) then 
-		
-			local throttle = Naval.Ship:GetNWFloat("Throttle")
-			local speed = Naval.Ship:GetNWFloat("ActualSpeed")
-			
-			if( speed > 0 ) then 
-			
-				ThrottlePos = Lerp( .125, ThrottlePos, throttle ) 
-			
-			else
-				
-				ThrottlePos = Lerp( .125, ThrottlePos, -throttle ) 
-			
-			
-			end 
-			
-			-- print( throttle, ThrottlePos  )
-			surface.SetDrawColor( Color( 255,255,255,255 ))
-			surface.SetMaterial( TelegraphPole )
-			surface.DrawTexturedRectRotated( ScrW() - 128, ScrH()-55, 128, 128, 0 )
-			surface.SetMaterial( Telegraph )
-			surface.DrawTexturedRectRotated( ScrW() - 128, ScrH()-128, 128, 128, 0 )
-			surface.SetMaterial( TelegraphStick )
-			
-			surface.DrawTexturedRectRotated( ScrW() - 128, ScrH()-128, 266, 266, 180 + (120  * ThrottlePos ) )
-			
-		
-		
-		return 
-		
-	end 
-	
 	
 	local color,white,red,grey = plyHUDcolor, Color(255,255,255),Color(255,0,0),Color(150,150,150)
 	local x,y = W-H/4,H-H/4
@@ -1107,7 +1185,7 @@ function Naval.DrawArmor()
 		extra = Naval.Ship:GetNWString("ShipName").. " - "
 	end 
 	
-	
+
 	draw.SimpleText(extra..Naval.Ship.PrintName, "Electrolize", x, y-height, plyHUDcolor, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 	draw.SimpleText(math.floor(100*h).." %", "TargetID", x+width/2.5, y+height/2.35, white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
 

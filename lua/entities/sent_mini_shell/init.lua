@@ -162,6 +162,7 @@ function ENT:PhysicsCollide( data, physobj )
 	
 	if( IsValid( data.HitEntity ) && data.HitEntity.HealthVal != nil ) then
 		
+		-- self.HitEnt = data.HitEntity 
 		self.HitObject = true
 		if( data.HitEntity:IsNPC() || data.HitEntity:IsPlayer() ) then
 			

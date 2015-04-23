@@ -85,7 +85,7 @@ function ENT:Think( )
 	self.Delay = self.Delay - 1 
 	if( self.Delay > 0 ) then return end 
 	self:NextThink(CurTime())
-	if( !self.DeployAngle ) then 
+	if( !self.DeployAngle && !self.ShipFired ) then 
 		self.DeployAngle = Angle( -1,self:GetAngles().y, 0 )
 	end 
 	
@@ -102,7 +102,7 @@ function ENT:Think( )
 	fx:SetOrigin( self:GetPos() + Vector(0,0,16))
 	fx:SetScale( 3.0 )
 	util.Effect("waterripple", fx )
-	util.Effect("watersplash", fx )
+	-- util.Effect("watersplash", fx )
 	if( IsValid( self ) ) then 
 		-- self:GetPhysicsObject():Wake()
 	end 
@@ -126,30 +126,41 @@ function ENT:OnRemove()
 	end
 
 	local ImpactSound = "WT/Sounds/shell_explosion_"..math.random(1,2)..".wav"
+
+	if( self:WaterLevel() == 0 ) then
+	
+		ParticleEffect( "microplane_midair_explosion", self:GetPos(), Angle( 0,0,0 ), nil )
+
+		if( self.HitSquishy ) then
+			
+			util.Effect("micro_he_blood", impact)
+			self:EmitSound( "Bullet.Flesh", 511, 80 )
+					
+		end 
+		
+	else
+		
+		-- local impact = EffectData()
+		-- impact:SetOrigin( self:GetPos() + Vector( 0,0,2))
+		-- impact:SetStart( self:GetPos()  + Vector( 0,0,2))
+		-- impact:SetScale( 5 )
+		-- impact:SetNormal( self.HitNormal or self:GetForward()*-1 )
+		-- util.Effect("WaterSplash", impact)
+		ParticleEffect( "water_impact_big", self:GetPos(), Angle( 0,0,0 ), self.CollideObject or self )
+
+		ImpactSound = "misc/shel_hit_water_"..math.random(1,3)..".wav"
+		
+	end
+
+		
+	if( IsValid( self.CollideObject ) ) then 
+		
+		ImpactSound = "WT/Misc/tank_hit_big_"..math.random(1,4)..".wav"
+		
+	end 
+	
 	self:PlayWorldSound( ImpactSound )
 
-		if( self:WaterLevel() == 0 ) then
-		
-			ParticleEffect( "microplane_midair_explosion", self:GetPos(), Angle( 0,0,0 ), nil )
-	
-			if( self.HitSquishy ) then
-				
-				util.Effect("micro_he_blood", impact)
-				self:EmitSound( "Bullet.Flesh", 511, 80 )
-						
-			end 
-			
-		else
-			
-			local impact = EffectData()
-			impact:SetOrigin( self:GetPos() + Vector( 0,0,2))
-			impact:SetStart( self:GetPos()  + Vector( 0,0,2))
-			impact:SetScale( 2 )
-			impact:SetNormal( self.HitNormal or self:GetForward()*-1 )
-			util.Effect("WaterSurfaceExplosion", impact)
-
-		end
-	
 	local impact = EffectData()
 	impact:SetOrigin( self:GetPos() )
 	impact:SetStart( self:GetPos() )
