@@ -863,7 +863,7 @@ function DrawNavalHUD()
 		Naval.DrawCompass()
 		Naval.DrawRadar()
 		Naval.DrawTarget()
-		if( Naval.Ship.IsMicroSubmarine ) then 
+		if( Naval.Ship.IsMicroCruiser ) then 
 		
 			Naval.DrawWW2SubInstruments()
 		
@@ -895,67 +895,72 @@ ENT.HUDConfig = {
 */
 function Naval.DrawWW2SubInstruments()
 	
-
+	
 	local gaugeSize = 128+64
 	local gaugeSize2 = 128
 	local gaugeStartAngle = 145.0
 	local gaugeStopAngle = 190
 	local gaugeFont =  "DebugFixed"
 	local gaugeFontSmall =  "DebugFixedSmall"
-	if( Naval.Ship.HUDConfig ) then 
 		
-		local cfg = Naval.Ship.HUDConfig 
-		
-		gauge = cfg.GaugeDial
-		gneedle = cfg.GaugeNeedle
-		gaugeSize = cfg.BallastGaugeSize
-		gaugeSize2 = cfg.GaugeSize
-		gaugeStartAngle = cfg.GaugeNeedleStartAngle 
-		gaugeStopAngle = cfg.GaugeNeedleStopAngle 
-		gaugeFont = cfg.GaugeFont 
-		gaugeFontSmall = cfg.GaugeFontSmall 
-			
-		bfront = cfg.BallastFrontPanel
-		bback = cfg.BallastBackPanel
-		
-	end 
-	
 	local rotationalValue = Naval.Ship:GetNWFloat("CurrentDepth")
 	local depthGaugeValue = Naval.Ship:GetNWFloat("CurrentBallastSize")
 	local throttle = Naval.Ship:GetNWFloat("Throttle")
 	local speed = Naval.Ship:GetNWFloat("ActualSpeed")
 	
-	depthGaugeLerpVal = Lerp( 0.5, depthGaugeLerpVal, (gaugeSize*.8)* (depthGaugeValue ) )
-	-- print( depthGaugeValue )
-	surface.SetDrawColor( 255, 255,255, 255 )
-	surface.SetMaterial( bback )
-	surface.DrawTexturedRect( ScrW() - gaugeSize*.85, ScrH() /2.7  , gaugeSize,gaugeSize )
-	surface.SetDrawColor( Color( 255,45,25,255 ) )
-	surface.DrawRect( ScrW() - gaugeSize/2.15, ScrH()/2.55+depthGaugeLerpVal, gaugeSize*.25,  6 )
-	surface.SetDrawColor( Color( 255,255,255,255 ) )
-	surface.SetMaterial( bfront )
-	surface.DrawTexturedRect( ScrW() - gaugeSize*.85, ScrH() /2.7, gaugeSize,gaugeSize )
-	surface.SetFont( gaugeFontSmall )
-	surface.SetTextColor( 25, 255, 25, 255  )
-	surface.SetTextPos( ScrW() - gaugeSize/2.1, ScrH() /2.62 ) 
-	surface.DrawText( "BALLAST" )
-
-	local gaugeY = 340
-	gaugeSize2 = 128 
-
-	surface.SetDrawColor( 255, 255,255, 255 )
-	surface.SetMaterial( gauge )
-	surface.DrawTexturedRect( ScrW() - gaugeSize2, ScrH() - gaugeY , gaugeSize2,gaugeSize2 )
+	if( Naval.Ship.IsMicroSubmarine ) then 
 	
-		-- draw.RoundedBox( 4, x-12, y-12,  24, 24, Color(55,55,55,255) )
-	surface.SetFont( gaugeFont )
-	surface.SetTextColor( 45, 25, 25, 255  )
-	surface.SetTextPos( ScrW() - gaugeSize2/1.55, ScrH() - gaugeY+gaugeSize2/1.4 ) 
-	surface.DrawText( "DEPTH" )
+		if( Naval.Ship.HUDConfig ) then 
+			
+			local cfg = Naval.Ship.HUDConfig 
+			
+			gauge = cfg.GaugeDial
+			gneedle = cfg.GaugeNeedle
+			gaugeSize = cfg.BallastGaugeSize
+			gaugeSize2 = cfg.GaugeSize
+			gaugeStartAngle = cfg.GaugeNeedleStartAngle 
+			gaugeStopAngle = cfg.GaugeNeedleStopAngle 
+			gaugeFont = cfg.GaugeFont 
+			gaugeFontSmall = cfg.GaugeFontSmall 
+				
+			bfront = cfg.BallastFrontPanel
+			bback = cfg.BallastBackPanel
+			
+		end 
+	
+		depthGaugeLerpVal = Lerp( 0.5, depthGaugeLerpVal, (gaugeSize*.8)* (depthGaugeValue ) )
+		-- print( depthGaugeValue )
+		surface.SetDrawColor( 255, 255,255, 255 )
+		surface.SetMaterial( bback )
+		surface.DrawTexturedRect( ScrW() - gaugeSize*.85, ScrH() /2.7  , gaugeSize,gaugeSize )
+		surface.SetDrawColor( Color( 255,45,25,255 ) )
+		surface.DrawRect( ScrW() - gaugeSize/2.15, ScrH()/2.55+depthGaugeLerpVal, gaugeSize*.25,  6 )
+		surface.SetDrawColor( Color( 255,255,255,255 ) )
+		surface.SetMaterial( bfront )
+		surface.DrawTexturedRect( ScrW() - gaugeSize*.85, ScrH() /2.7, gaugeSize,gaugeSize )
+		surface.SetFont( gaugeFontSmall )
+		surface.SetTextColor( 25, 255, 25, 255  )
+		surface.SetTextPos( ScrW() - gaugeSize/2.1, ScrH() /2.62 ) 
+		surface.DrawText( "BALLAST" )
 
-	surface.SetMaterial( gneedle )
-	surface.DrawTexturedRectRotated( ScrW() - gaugeSize2/2, ScrH() - gaugeY+gaugeSize2/2, gaugeSize2 ,gaugeSize2, gaugeStartAngle - ( gaugeStopAngle * rotationalValue ) )
+		local gaugeY = 340
+		gaugeSize2 = 128 
 
+		surface.SetDrawColor( 255, 255,255, 255 )
+		surface.SetMaterial( gauge )
+		surface.DrawTexturedRect( ScrW() - gaugeSize2, ScrH() - gaugeY , gaugeSize2,gaugeSize2 )
+		
+			-- draw.RoundedBox( 4, x-12, y-12,  24, 24, Color(55,55,55,255) )
+		surface.SetFont( gaugeFont )
+		surface.SetTextColor( 45, 25, 25, 255  )
+		surface.SetTextPos( ScrW() - gaugeSize2/1.55, ScrH() - gaugeY+gaugeSize2/1.4 ) 
+		surface.DrawText( "DEPTH" )
+
+		surface.SetMaterial( gneedle )
+		surface.DrawTexturedRectRotated( ScrW() - gaugeSize2/2, ScrH() - gaugeY+gaugeSize2/2, gaugeSize2 ,gaugeSize2, gaugeStartAngle - ( gaugeStopAngle * rotationalValue ) )
+		
+	end 
+	
 	if( speed > 0 ) then 
 	
 		ThrottlePos = Lerp( .125, ThrottlePos, throttle ) 
