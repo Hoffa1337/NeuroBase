@@ -12,10 +12,29 @@ local ThrottlePos = 0
 function Meta:DefaultMicroShitExhaust( )
 	
 	self:DrawModel() 
-	-- local ang = self:GetAngles()
-	-- ang:RotateAroundAxis( self:GetRight(), math.sin(CurTime())*.5 )
-	-- ang:RotateAroundAxis( self:GetForward(), math.sin(CurTime())*.5 )
-	-- self:SetAngles( ang )
+		
+	if( self.PropellerPos && self:WaterLevel()>0 && self:GetNWFloat("Throttle") != 0 ) then 
+	
+		local pos = self.PropellerPos or Vector(-200,0, -25 ) 
+		local particle = self.Emitter:Add( "particle/water/waterdrop_001a", self:LocalToWorld( pos )  )
+		if ( particle ) then
+		-- print("?=?=")
+			particle:SetVelocity( self:GetVelocity()*-1  )
+			particle:SetDieTime( math.Rand( 2, 3 ) )
+			particle:SetStartAlpha( math.Rand( 5, 11 ) )
+			particle:SetEndAlpha( 0 )
+			particle:SetStartSize( math.Rand( 5, 12 ) )
+			particle:SetEndSize( math.Rand( 1, 2 ) ) 
+			particle:SetRoll( math.Rand(-11.1, 11.1) )
+			particle:SetRollDelta( math.Rand(-1, 1) )
+			particle:SetColor( 255,255,255 ) 
+			particle:SetAirResistance( 150 ) 
+			particle:SetGravity( Vector(0,0,25) )
+			
+		end 
+	
+	end 
+	
 	if( self:WaterLevel() == 0 ) then return end 
 	
 	if(  self:GetNWFloat("Throttle") != 0 && self.ExhaustPosition ) then 
@@ -94,6 +113,7 @@ function Meta:DefaultMicroShitExhaust( )
 		
 		
 	end 
+
 	
 	if( self.PartLength && self.PartStart && self:GetVelocity():Length() > 10 ) then 
 		local fxscale1 = self.WaterRippleScale or  1.2
@@ -120,7 +140,7 @@ function Meta:DefaultMicroShitExhaust( )
 	
 	
 	end 
-	
+
 end 
 function Meta:DefaultNavalClientInit()
 		
