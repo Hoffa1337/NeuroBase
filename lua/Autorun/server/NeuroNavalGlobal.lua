@@ -400,7 +400,8 @@ function Meta:NeuroNaval_DefaultCruiserThink()
 			self:SetNWFloat("CurrentBallastSize", crushCap )
 			
 			if( crushCap > 1.0 ) then 
-			
+				
+				
 				-- print("uh oh")
 			
 			end 
@@ -411,12 +412,12 @@ function Meta:NeuroNaval_DefaultCruiserThink()
 		local velo = self:GetVelocity()
 		local rate = ( self.DiveSpeed or .00345 )
 		local wl = self:WaterLevel() 
-		if( wl<3) then 
-			rate = .015
-		end 
+		-- if( wl<3) then 
+			-- rate = .015
+		-- end 
 		if( self.Pilot:KeyDown( IN_WALK ) && velo.z > -self.MaxDiveSpeed ) then 
 			
-			self.BuoyancyRatio = math.Approach( self.BuoyancyRatio, self.BuoyancyRatioSink, self.MaxBuoyancyRatio * rate )
+			self.BuoyancyRatio = Lerp( self.MaxBuoyancyRatio * rate , self.BuoyancyRatio, self.BuoyancyRatioSink )
 			if( wl == 3 ) then 
 			
 				self.PhysObj:AddAngleVelocity( Vector( 0, 1.5,0 ) )
@@ -425,7 +426,7 @@ function Meta:NeuroNaval_DefaultCruiserThink()
 			
 		elseif( self.Pilot:KeyDown( IN_JUMP ) && velo.z < self.MaxDiveSpeed ) then 
 		
-			self.BuoyancyRatio = math.Approach( self.BuoyancyRatio, self.MaxBuoyancyRatio, self.MaxBuoyancyRatio * rate)
+			self.BuoyancyRatio = Lerp( self.MaxBuoyancyRatio * rate, self.BuoyancyRatio, self.MaxBuoyancyRatio )
 			if( wl == 3 ) then 
 			
 				self.PhysObj:AddAngleVelocity( Vector( 0, -1.5,0 ) )
@@ -1111,7 +1112,7 @@ function Meta:MicroShipGunFire( wep, idx, lastidx, targetpos  )
 	bullet.Src 		= pos
 	bullet.Dir 		= wep.Barrel:GetAngles():Forward()
 	bullet.Spread 	= math.Rand(-1,1) * Vector( .01531, .01531, .015  )
-	bullet.Tracer	= 1
+	bullet.Tracer	= math.random(1,3)
 	bullet.Force	= 5
 	bullet.Damage	= math.random(wep.Damage*.7,wep.Damage)
 	bullet.AmmoType = "Ar2" 
