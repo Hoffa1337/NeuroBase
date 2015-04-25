@@ -13,7 +13,7 @@ function Meta:DefaultMicroShitExhaust( )
 	
 	self:DrawModel() 
 		
-	if( self.PropellerPos && self:WaterLevel()>1 && self:GetNWFloat("Throttle") != 0 ) then 
+	if( self.PropellerPos && self:WaterLevel()>0 && self:GetNWFloat("Throttle") != 0 ) then 
 		local count=1
 		local scale = self.PropellerSplashScale or 1.0 
 		local pos = self.PropellerPos or Vector(-200,0, -25 ) 
@@ -28,7 +28,7 @@ function Meta:DefaultMicroShitExhaust( )
 				p = pos[i]
 			end 
 			
-			local particle = self.Emitter:Add( "particle/water/waterdrop_001a", self:LocalToWorld( p )  )
+			local particle = self.Emitter:Add( "particle/water/waterdrop_001a", self:LocalToWorld( p ) + self:GetForward()*-18 )
 			if ( particle ) then
 			-- print("?=?=")
 				particle:SetVelocity( self:GetVelocity()*-1 + self:GetRight() * math.random(-16,16)*scale )
