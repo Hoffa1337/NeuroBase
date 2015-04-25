@@ -279,7 +279,7 @@ function Meta:Micro_GunnerThink()
 		
 	end 
 	
-	if( IsValid( self.Target ) && self.Target:GetPos():Distance( self:GetPos() ) >= 4000 ) then self.Target = NULL end 
+	if( IsValid( self.Target ) && self.Target:GetPos():Distance( self:GetPos() ) >= 2500 ) then self.Target = NULL end 
 	
 	
 	if( self.TurretBones && !self.Destroyed && !self.IsBurning && ( IsValid( self.Pilot ) || ( IsValid( self.Owner ) && IsValid( self.Owner.Pilot ) ) ) ) then
@@ -311,13 +311,13 @@ function Meta:Micro_GunnerThink()
 				
 					local dist = (bpos-v2:GetPos()):Length()
 					
-					if( dist < 3000 ) then -- && ( IsValid( v2:GetVehicle() ) || IsValid( v2:GetVehicle() ) )
+					if( dist < 2250 ) then -- && ( IsValid( v2:GetVehicle() ) || IsValid( v2:GetVehicle() ) )
 						
 						local veh = v2:GetScriptedVehicle()
 						local tpos = v2:GetShootPos()
 						if( IsValid( veh ) ) then	
 							
-							tpos = veh:GetPos() + veh:GetVelocity() * ( veh:GetVelocity():Length()*FrameTime() )
+							tpos = veh:GetPos()
 							
 						else
 							
@@ -326,13 +326,16 @@ function Meta:Micro_GunnerThink()
 						end
 
 						local targetpos = ( tpos - bpos ):Angle()
+						-- if( self:GetClass() == "plane_part" ) then 
+							-- targetpos = ( bpos - tpos ):Angle() 
+						-- end 
 						local ydiff,pdiff = math.floor(math.AngleDifference( bang.y-90, targetpos.y  )), math.floor(math.AngleDifference( bang.p, targetpos.p ))
 						v.GunEntity:SetAngles(  targetpos ) 
 					
 						if( v2:Alive() && ( ydiff > -45 || ydiff < 45 ) && pdiff > -45 && pdiff < 45  ) then
 									
 							local tr,trace={},{}
-							tr.start = bpos+targetpos:Forward()*20
+							tr.start = bpos+targetpos:Forward()*50
 							tr.endpos = bpos+targetpos:Forward()*(.87*dist)
 							tr.mask = MASK_SHOT_HULL
 							tr.filter = { v2, tpos, veh.Owner, v.GunEntity }
@@ -343,18 +346,24 @@ function Meta:Micro_GunnerThink()
 							if( v.LastShot + v.CoolDown <= CurTime() && !trace.Hit ) then	
 							
 								v.LastShot = CurTime()
-						
-								for i=1,math.random(5,10) do 
+								local count = math.random(5,6) 
+								if( self:GetClass() == "plane_part" ) then 
+									
+									count = math.random(1,2)
+									
+								end 
+								
+								for i=1,count do 
 								
 									timer.Simple( i/10, function()
 										
 										if( !IsValid( pilot ) || !IsValid( plane ) ) then return end 
 										local bullet = {} 
 										bullet.Num 		= 1
-										bullet.Src 		= tr.start
+										bullet.Src 		= v.GunEntity:GetPos() + v.GunEntity:GetForward() * 150
 										bullet.Dir 		= v.GunEntity:GetAngles():Forward()
-										bullet.Spread 	= VectorRand() * math.Rand( -.022, .022 ) --Vector( .1, .1, .1 )*math.Rand(-1,1)
-										bullet.Tracer	= 1
+										bullet.Spread 	= VectorRand() * math.Rand( -.1, .1 ) --Vector( .1, .1, .1 )*math.Rand(-1,1)
+										bullet.Tracer	= math.random(1,3)
 										bullet.Force	= 45
 										bullet.filter = { self, plane, pilot }
 										bullet.Attacker = pilot
@@ -501,6 +510,16 @@ function Meta:JetAir_Think()
 		
 	end
 	
+	if( self.CurVelocity > 500 && self:WaterLevel() > 1 ) then 
+	
+		ParticleEffect("water_impact_big", self:GetPos() + self:GetUp() * 1,self:GetAngles()+Angle(0,0,0), nil )
+		self.HealthVal = 0 
+		self.Destroyed = true 
+		self:Remove()
+		
+		return 
+	
+	end 
 	-- if( !seqlf.Burning && IsValid( self.Tail ) && !IsValid( self.TailWeld ) ) then
 		
 		-- self.Burning = true
@@ -2142,6 +2161,39 @@ function Meta:CivAir_DefaultInit()
 		-- self.PrimarySound:ChangeVolume( 1.0, 0 )
 	end
 	
+	self.Pontoons = {}
+		
+	if( self.PontoonPos ) then 
+		
+		for i=1,#self.PontoonPos do 
+			
+			self.Pontoons[i] = ents.Create("plane_part")
+			self.Pontoons[i]:SetPos( self:LocalToWorld( self.PontoonPos[i] ) ) 
+			self.Pontoons[i]:SetAngles( self:GetAngles() + self.PontoonAngles[i] )
+			self.Pontoons[i].Owner = self
+			self.Pontoons[i]:SetModel( self.PontoonModels[i] )
+			-- self.Pontoons[i]:PhysicsInit( SOLID_VPHYSICS )
+			-- self.Pontoons[i]:SetSolid( SOLID_VPHYSICS )
+			-- self.Pontoons[i]:SetMoveType( MOVETYPE_VPHYSICS )
+			self.Pontoons[i]:Spawn()
+			self.Pontoons[i]:GetPhysicsObject():SetDamping( 0,0 )
+			-- self.Pontoons[i]:Activate( )
+			construct.SetPhysProp( self.Pontoons[i], self.Pontoons[i], 0, nil,  { GravityToggle = true, Material = "water" } ) 
+			self.Pontoons[i].HealthVal = self.InitialHealth * .25 
+			self.Pontoons[i].InitialHealth = self.InitialHealth * .25 
+			self:DeleteOnRemove( self.Pontoons[i] )
+			
+			timer.Simple( 0.0, function()
+				
+				self.Pontoons[i].Weld = constraint.Weld( self, self.Pontoons[i], 0,0,90000, true )
+				self.Pontoons[i]:GetPhysicsObject():SetMass( self.PontoonMass )
+				self.Pontoons[i]:GetPhysicsObject():SetBuoyancyRatio( self.PontoonBuoyancy )
+				
+			end )
+		
+		end 
+	
+	end 
 	if( self.HasPilotSeat ) then
 		
 		self.PilotSeat = ents.Create( "prop_vehicle_prisoner_pod" )
@@ -3595,8 +3647,37 @@ function Meta:MicroPhysics( phys, deltatime )
 	
 	
 	-- print( self.CurVelocity )
+	local nt,ntrace ={},{}
+	nt.start = self:GetPos()
+	nt.endpos = nt.start + Vector(0,0,-100)
+	nt.filter = self
+	nt.mask = MASK_SOLID_BRUSHONLY  + MASK_WATER 
+	ntrace = util.TraceEntity( nt, self )
 	
-	local Stalling = ( ( ma.p < -30 || ( ma.r < -35 || ma.r > 35 ) ) && self.CurVelocity < 400+math.abs(ma.r) ) || ( self.LastStarted && self.LastStarted + 15 <= CurTime() && self.CurVelocity < 250 && !self:IsPlaneOnGround() )
+	if( ntrace.Hit ) then 
+		
+		self.ExtraBoost = 0 
+		
+		if( self.Pontoons && #self.Pontoons > 0 ) then 
+			
+			for i=1,#self.Pontoons do 
+				
+				if( IsValid( self.Pontoons[i] ) && !IsValid( self.Pontoons[i].Weld ) )then 
+					
+					self.Pontoons[i]:GetPhysicsObject():SetBuoyancyRatio( 1.0 )
+				
+				
+				end 
+				
+			end 
+		
+		end 
+		
+	end 
+	
+	-- print( ntrace.Hit, "walla" )
+	-- print( "WHAT?")
+	local Stalling =  !ntrace.Hit && ( ( ( ma.p < -30 || ( ma.r < -35 || ma.r > 35 ) ) && self.CurVelocity < 400+math.abs(ma.r) ) || ( self.LastStarted && self.LastStarted + 15 <= CurTime() && self.CurVelocity < 250 && !self:IsPlaneOnGround() ) )
 	-- print( Stalling ) 
 	local AnimRudder, AnimAileron, AnimFlaps, AnimElevator = 0,0,0,0
 	local throttle = self.ThrottleIncrementSize
