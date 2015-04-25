@@ -254,9 +254,10 @@ end
 
 function Meta:Micro_GunnerThink()
 	
-	if( self.LastTargetCheck && self.LastTargetCheck + 5.0 <= CurTime() && !IsValid( self.Target ) && self:GetClass() != "plane_apart" ) then 
+	-- print( self.LastTargetCheck ) 
+	if( self.LastTargetCheck && self.LastTargetCheck + 2.0 <= CurTime() && !IsValid( self.Target ) && self:GetClass() != "plane_apart" ) then 
 		self.LastTargetCheck = CurTime()
-		
+		-- print("walla")
 		for k,v in ipairs( player.GetAll() ) do 
 			
 			if( v != self.Pilot && ( v:GetPos() - self:GetPos() ):Length() < 3000 ) then 
@@ -278,7 +279,7 @@ function Meta:Micro_GunnerThink()
 		
 	end 
 	
-	if( IsValid( self.Target ) && self.Target:GetPos():Distance( self:GetPos() ) >= 3000 ) then self.Target = NULL end 
+	if( IsValid( self.Target ) && self.Target:GetPos():Distance( self:GetPos() ) >= 4000 ) then self.Target = NULL end 
 	
 	
 	if( self.TurretBones && !self.Destroyed && !self.IsBurning && ( IsValid( self.Pilot ) || ( IsValid( self.Owner ) && IsValid( self.Owner.Pilot ) ) ) ) then
@@ -316,7 +317,7 @@ function Meta:Micro_GunnerThink()
 						local tpos = v2:GetShootPos()
 						if( IsValid( veh ) ) then	
 							
-							tpos = veh:GetPos()
+							tpos = veh:GetPos() + veh:GetVelocity() * ( veh:GetVelocity():Length()*FrameTime() )
 							
 						else
 							
@@ -342,55 +343,65 @@ function Meta:Micro_GunnerThink()
 							if( v.LastShot + v.CoolDown <= CurTime() && !trace.Hit ) then	
 							
 								v.LastShot = CurTime()
-				
-								local bullet = {} 
-								bullet.Num 		= 1
-								bullet.Src 		= tr.start
-								bullet.Dir 		= v.GunEntity:GetAngles():Forward()
-								bullet.Spread 	= VectorRand() * math.Rand( -.175, .175 ) --Vector( .1, .1, .1 )*math.Rand(-1,1)
-								bullet.Tracer	= 1
-								bullet.Force	= 45
-								bullet.filter = { self, plane, pilot }
-								bullet.Attacker = pilot
-								bullet.Inflictor = plane
-								bullet.Damage	= math.random( 2, 4 )
-								bullet.AmmoType = "Ar2" 
-								bullet.TracerName 	= "Tracer"
-								bullet.Callback    = function ( a, b, c )
-														
-														local effectdata = EffectData()
-															effectdata:SetOrigin( b.HitPos )
-															effectdata:SetStart( b.HitNormal )
-															effectdata:SetNormal( b.HitNormal )
-															effectdata:SetMagnitude( 1 )
-															effectdata:SetScale( 0.75 )
-															effectdata:SetRadius( 1 )
-														util.Effect( "micro_he_impact_plane", effectdata )
-														
-														return { damage = true, effects = DoDefaultEffect } 
-														
-												end 
-					
-								local sm = EffectData()
-								sm:SetStart( bpos + targetpos:Forward()*4 )
-								sm:SetOrigin( bpos + targetpos:Forward()*4  )
-								sm:SetEntity( v.GunEntity )		
-								sm:SetAttachment( 1 )
-								sm:SetNormal( targetpos:Forward()*-1 )
-								sm:SetScale( 0.5 )
-								util.Effect( self.MicroTurretMuzzle or "MuzzleEffect", sm )
-					
-								self:EmitSound( v.ShootSound, 511, 100 )
-								pilot:FireBullets( bullet )
+						
+								for i=1,math.random(5,10) do 
+								
+									timer.Simple( i/10, function()
 										
+										if( !IsValid( pilot ) || !IsValid( plane ) ) then return end 
+										local bullet = {} 
+										bullet.Num 		= 1
+										bullet.Src 		= tr.start
+										bullet.Dir 		= v.GunEntity:GetAngles():Forward()
+										bullet.Spread 	= VectorRand() * math.Rand( -.022, .022 ) --Vector( .1, .1, .1 )*math.Rand(-1,1)
+										bullet.Tracer	= 1
+										bullet.Force	= 45
+										bullet.filter = { self, plane, pilot }
+										bullet.Attacker = pilot
+										bullet.Inflictor = plane
+										bullet.Damage	= math.random( 2, 4 )
+										bullet.AmmoType = "Ar2" 
+										bullet.TracerName 	= "Tracer"
+										bullet.Callback    = function ( a, b, c )
+																
+																local effectdata = EffectData()
+																	effectdata:SetOrigin( b.HitPos )
+																	effectdata:SetStart( b.HitNormal )
+																	effectdata:SetNormal( b.HitNormal )
+																	effectdata:SetMagnitude( 1 )
+																	effectdata:SetScale( 0.75 )
+																	effectdata:SetRadius( 1 )
+																util.Effect( "micro_he_impact_plane", effectdata )
+																
+																return { damage = true, effects = DoDefaultEffect } 
+																
+														end 
+							
+										local sm = EffectData()
+										sm:SetStart( bpos + targetpos:Forward()*4 )
+										sm:SetOrigin( bpos + targetpos:Forward()*4  )
+										sm:SetEntity( v.GunEntity )		
+										sm:SetAttachment( 1 )
+										sm:SetNormal( targetpos:Forward()*-1 )
+										sm:SetScale( 0.5 )
+										util.Effect( self.MicroTurretMuzzle or "MuzzleEffect", sm )
+							
+										self:EmitSound( v.ShootSound, 511, 100 )
+										v.GunEntity:FireBullets( bullet )
 										
+									end )
+									
+										 
 									-- end )
 									
-								end
+								end 
 								
+								end
+							
+							end  
 							
 						
-							end
+						 -- end
 
 					end				
 				
@@ -778,7 +789,7 @@ function Meta:JetAir_Init()
 	self:SetNetworkedInt( "HudOffset", self.CrosshairOffset )
 	self:SetNetworkedInt( "MaxHealth",self.InitialHealth)
 	self:SetNetworkedInt( "MaxSpeed",self.MaxVelocity)
-
+	self.LastTargetCheck = CurTime()
 	self.LastPrimaryAttack = CurTime()
 	self.LastFireModeChange = CurTime()
 	self.LastRadarScan = CurTime()
@@ -1311,7 +1322,7 @@ function Meta:CivAir_DefaultInit()
 	self:SetNetworkedInt( "MaxSpeed",self.MaxVelocity)
 	
 	self.LastAutoPSwap = CurTime()
-	
+	self.LastTargetCheck = CurTime()
 	self.MaxPropellerVal = 1600
 	self.PropellerMult = self.MaxPropellerVal / 2000
 
