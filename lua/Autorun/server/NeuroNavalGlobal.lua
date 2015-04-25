@@ -73,7 +73,7 @@ function Meta:NeuroNaval_DefaultPhysSimulate( phys, deltatime )
 					if( self.PropSpinValue >= 359 ) then self.PropSpinValue = self.PropSpinValue - 359 end 
 					
 					local a = self:GetAngles()
-					a:RotateAroundAxis( self:GetForward(), self.PropSpinValue )
+					a:RotateAroundAxis( self:GetForward(), -self.PropSpinValue )
 					prop:SetAngles( LerpAngle( .9235, prop:GetAngles(), a ) )
 				
 				end 
@@ -449,7 +449,7 @@ function Meta:NeuroNaval_DefaultCruiserThink()
 		tr.mask = MASK_WATER 
 		trace = util.TraceLine( tr ) 
 			
-		if( trace.Hit ) then 
+		if( trace.Hit && !self.Destroyed ) then 
 			
 			local surfacepos = trace.HitPos 
 			local mp = self:GetPos()
@@ -461,10 +461,28 @@ function Meta:NeuroNaval_DefaultCruiserThink()
 			-- self:DrawLaserTracer( tr.start, trace.HitPos )
 			self:SetNWFloat("CurrentDepth", depthCap )
 			self:SetNWFloat("CurrentBallastSize", crushCap )
-			
-			if( crushCap > 1.0 ) then 
+			-- print( depthCap )
+			if( depthCap > 1.0 ) then 
 				
+				-- self:EmitSound( "doors/heavy_metal_move1.wav", 511, math.random(80,120) )
+				if( math.random(1,13) == 7 ) then 
+				
+					self:EmitSound( "ambient/materials/metal_stress"..math.random(1,5)..".wav", 511, 100 )
+			
+				end 
+				
+				self.HealthVal = self.HealthVal - math.random(5,55)*depthCap
+				
+				if(  self.HealthVal < 0 ) then 
 					
+					self.Destroyed = true 
+					ParticleEffect("water_impact_big", self:GetPos() + self:GetUp() * 1,self:GetAngles()+Angle(0,0,90), nil )
+					ParticleEffect("water_impact_big", self:GetPos() + self:GetUp() * 1,self:GetAngles()+Angle(0,0,-90), nil )
+					
+					util.BlastDamage( self, ( self.Pilot or self ), self:GetPos()+Vector(0,0,6), 64, math.random(1,15) )
+			
+			end 
+				
 				-- print("uh oh")
 			
 			end 
@@ -607,14 +625,14 @@ function Meta:NeuroNaval_DefaultCruiserThink()
 	end 
 	
 	
-	if( self.PropellerPosition && self:WaterLevel() > 0 && self.Speed > 15 ) then 
+	-- if( self.PropellerPosition && self:WaterLevel() > 0 && self.Speed > 15 ) then 
 		
-		local fx = EffectData()
-		fx:SetOrigin( self:LocalToWorld( self.PropellerPosition) )
-		fx:SetScale(  self.PropellerSplashSize  )
-		util.Effect("waterripple", fx )
+		-- local fx = EffectData()
+		-- fx:SetOrigin( self:LocalToWorld( self.PropellerPosition) )
+		-- fx:SetScale(  self.PropellerSplashSize  )
+		-- util.Effect("waterripple", fx )
 		
-	end 
+	-- end 
 
 	if ( self.Destroyed ) then 
 		

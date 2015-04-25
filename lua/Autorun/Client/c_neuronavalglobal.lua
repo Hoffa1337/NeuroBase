@@ -28,7 +28,7 @@ function Meta:DefaultMicroShitExhaust( )
 				p = pos[i]
 			end 
 			
-			local particle = self.Emitter:Add( "particle/water/waterdrop_001a", self:LocalToWorld( p ) + self:GetForward()*-18 )
+			local particle = self.Emitter:Add( "particle/water/waterdrop_001a", self:LocalToWorld( p ) + self:GetForward()*-10 )
 			if ( particle ) then
 			-- print("?=?=")
 				particle:SetVelocity( self:GetVelocity()*-1 + self:GetRight() * math.random(-16,16)*scale )
