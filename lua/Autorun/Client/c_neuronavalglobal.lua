@@ -13,26 +13,40 @@ function Meta:DefaultMicroShitExhaust( )
 	
 	self:DrawModel() 
 		
-	if( self.PropellerPos && self:WaterLevel()>0 && self:GetNWFloat("Throttle") != 0 ) then 
-	
+	if( self.PropellerPos && self:WaterLevel()>1 && self:GetNWFloat("Throttle") != 0 ) then 
+		local count=1
+		local scale = self.PropellerSplashScale or 1.0 
 		local pos = self.PropellerPos or Vector(-200,0, -25 ) 
-		local particle = self.Emitter:Add( "particle/water/waterdrop_001a", self:LocalToWorld( pos )  )
-		if ( particle ) then
-		-- print("?=?=")
-			particle:SetVelocity( self:GetVelocity()*-1  )
-			particle:SetDieTime( math.Rand( 2, 3 ) )
-			particle:SetStartAlpha( math.Rand( 5, 11 ) )
-			particle:SetEndAlpha( 0 )
-			particle:SetStartSize( math.Rand( 5, 12 ) )
-			particle:SetEndSize( math.Rand( 1, 2 ) ) 
-			particle:SetRoll( math.Rand(-11.1, 11.1) )
-			particle:SetRollDelta( math.Rand(-1, 1) )
-			particle:SetColor( 255,255,255 ) 
-			particle:SetAirResistance( 150 ) 
-			particle:SetGravity( Vector(0,0,25) )
+		local p = pos  
+		if( type(pos) == "table" ) then 
+			count = #pos 
 			
 		end 
-	
+		
+		for i=1,count do 
+			if( count > 1 ) then 
+				p = pos[i]
+			end 
+			
+			local particle = self.Emitter:Add( "particle/water/waterdrop_001a", self:LocalToWorld( p )  )
+			if ( particle ) then
+			-- print("?=?=")
+				particle:SetVelocity( self:GetVelocity()*-1 + self:GetRight() * math.random(-16,16)*scale )
+				particle:SetDieTime( math.Rand( 1, 3 ) )
+				particle:SetStartAlpha( math.Rand( 5, 11 ) )
+				particle:SetEndAlpha( 0 )
+				particle:SetStartSize( math.Rand( 5, 12 ) * scale )
+				particle:SetEndSize( math.Rand( 21, 32 ) ) 
+				particle:SetRoll( math.Rand(-11.1, 11.1) * scale )
+				particle:SetRollDelta( math.Rand(-1, 1) )
+				particle:SetColor( 255,255,255 ) 
+				particle:SetAirResistance( 150 ) 
+				particle:SetGravity( Vector(math.random(-35,35),math.random(-35,35),15) )
+				
+			end 
+			
+		end 
+		
 	end 
 	
 	if( self:WaterLevel() == 0 ) then return end 
