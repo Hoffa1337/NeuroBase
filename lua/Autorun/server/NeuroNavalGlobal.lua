@@ -491,7 +491,7 @@ function Meta:NeuroNaval_DefaultCruiserThink()
 			
 			if(  velo.z < self.MaxDiveSpeed ) then 
 			
-				self.BuoyancyRatio = Lerp( self.MaxBuoyancyRatio * rate*.25, self.BuoyancyRatio, self.MaxBuoyancyRatio )
+				self.BuoyancyRatio = Lerp( self.MaxBuoyancyRatio * rate*.125, self.BuoyancyRatio, self.MaxBuoyancyRatio )
 			
 			end 
 			
