@@ -82,7 +82,25 @@ function Meta:NeuroNaval_DefaultPhysSimulate( phys, deltatime )
 		self.SAFApproachVal = Lerp( 0.015225, self.SAFApproachVal, self.ShipAngleForceCurrentValue * ( self.TurnAngleValue or 5 ) )
 		if( myang.r < 45 && myang.r > -45 && self.PropellerPos && !self.RudderIsFucked  ) then 
 			-- print("what")
-			self.PhysObj:ApplyForceOffset( self:GetRight() * ( self.ShipAngleForceCurrentValue * ( self.TurnForceValue or 54000 ) ), self:LocalToWorld( self.PropellerPos )  )
+			if( type( self.PropellerPos ) == "table" ) then 
+				local prop = NULL 
+				local count = #self.Propellers
+				for i=1,count do 
+					prop = self.Propellers[i]
+					if( IsValid( prop ) ) then 
+					
+						self.PhysObj:ApplyForceOffset( self:GetRight() * ( self.ShipAngleForceCurrentValue * ( self.TurnForceValue or 54000 ) )/count, prop:GetPos() ) 
+					
+					end 
+					
+				end 
+				
+			else
+			
+				self.PhysObj:ApplyForceOffset( self:GetRight() * ( self.ShipAngleForceCurrentValue * ( self.TurnForceValue or 54000 ) ), self:LocalToWorld( self.PropellerPos )  )
+			
+			end 
+			
 			self.PhysObj:AddAngleVelocity( Vector( sforce, sforce3, 0 ) )
 			 
 			if( self.IsMicroSubmarine ) then 
@@ -125,9 +143,26 @@ function Meta:NeuroNaval_DefaultPhysSimulate( phys, deltatime )
 		-- print( self.ActualSpeed )
 		
 		if( self.PropellerPos  ) then 
+			
+			if( #self.Propellers > 0 ) then 
+				local prop = NULL 
+				local count = #self.Propellers
+				for i=1,count do 
+					prop = self.Propellers[i]
+					if( IsValid( prop ) ) then 
+					
+						self.PhysObj:ApplyForceOffset( self:GetForward() * ( self.ActualSpeed * 120 )/count, prop:GetPos() )
 		
-			self.PhysObj:ApplyForceOffset( self:GetForward() * ( self.ActualSpeed * 120 ), self:LocalToWorld( self.PropellerPos ) )
+					end 
+					
+				end 
+			
+			else 
+			
+				self.PhysObj:ApplyForceOffset( self:GetForward() * ( self.ActualSpeed * 120 ), self:LocalToWorld( self.PropellerPos ) )
 		
+			end 
+			
 		else
 		
 			self:GetPhysicsObject():ApplyForceCenter( self:GetForward() * ( self.ActualSpeed * 120 ) )
@@ -364,7 +399,35 @@ end
 function Meta:NeuroNaval_DefaultCruiserThink()
 	-- print(self:GetClass(), self:WaterLevel() )
 	
-	
+	if( self.Propellers && #self.Propellers > 0 ) then 
+		-- print("=")
+		local throttle = self:GetNWFloat("Throttle")
+		
+		-- if( throttle != 0 ) then 
+			local prop = NULL
+			-- print("kebab")
+			for i=1,#self.Propellers do 
+				
+				prop = self.Propellers[i]
+				if( IsValid( prop ) ) then 
+					
+					if( !self.PropSpinValue ) then self.PropSpinValue = 1 end 
+					self.PropSpinValue = self.PropSpinValue + 2*3.6*throttle
+					
+					if( self.PropSpinValue > 359 ) then self.PropSpinValue = self.PropSpinValue - 359 end 
+					
+					local a = self:GetAngles()
+					a:RotateAroundAxis( self:GetForward(), self.PropSpinValue )
+					prop:SetAngles( LerpAngle( .235, prop:GetAngles(), a ) )
+				
+				end 
+			
+			-- end 
+		
+		end 
+		
+	end 
+		
 	if( IsValid( self.PhysObj ) && self:WaterLevel()>0 && IsValid( self.Pilot ) && self.IsMicroSubmarine ) then 
 		
 		if( self:WaterLevel() == 3) then 	
@@ -424,12 +487,17 @@ function Meta:NeuroNaval_DefaultCruiserThink()
 			
 			end 
 			
-		elseif( self.Pilot:KeyDown( IN_JUMP ) && velo.z < self.MaxDiveSpeed ) then 
-		
-			self.BuoyancyRatio = Lerp( self.MaxBuoyancyRatio * rate, self.BuoyancyRatio, self.MaxBuoyancyRatio )
-			if( wl == 3 ) then 
+		elseif( self.Pilot:KeyDown( IN_JUMP ) ) then 
 			
-				self.PhysObj:AddAngleVelocity( Vector( 0, -1.5,0 ) )
+			if(  velo.z < self.MaxDiveSpeed ) then 
+			
+				self.BuoyancyRatio = Lerp( self.MaxBuoyancyRatio * rate*.25, self.BuoyancyRatio, self.MaxBuoyancyRatio )
+			
+			end 
+			
+			if( wl > 1 ) then 
+			
+				self.PhysObj:AddAngleVelocity( Vector( 0, -2.5,0 ) )
 			
 			end 
 			
@@ -2121,7 +2189,33 @@ function Meta:NeuroNaval_DefaultCruiserInit()
 
 		
 	end 
+	self.Propellers = {}
+	if( self.PropellerPos && self.PropellerModel ) then 
 		
+		self.HasPropeller = true 
+		
+		for i=1,#self.PropellerPos do 
+		
+			self.Propellers[i] = ents.Create("boat_part")
+			self.Propellers[i]:SetPos( self:LocalToWorld( self.PropellerPos[i] ) )
+			self.Propellers[i]:SetAngles( self:GetAngles() )
+			self.Propellers[i]:Spawn()
+			self.Propellers[i]:SetParent(self)
+			self.Propellers[i]:SetModel( self.PropellerModel )
+			self.Propellers[i].Owner = self 
+			
+		end 
+		
+		timer.Simple( 0,function()
+		if( IsValid( self ) ) then 
+		
+			self.PropellerAxis = constraint.Axis( self.Propeller, self, 0, 0, Vector(1,0,0) , self.PropellerPos,112000, 0, 0, 0 )
+		end 
+		
+		end ) 
+		
+	end 
+	
 	if( self.DeckModel ) then 
 
 		self.Deck = ents.Create("boat_part")
