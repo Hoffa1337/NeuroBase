@@ -55,6 +55,35 @@ function Meta:NeuroNaval_DefaultPhysSimulate( phys, deltatime )
 		 
 	end 
 	
+	if( self.Propellers && #self.Propellers > 0 ) then 
+		-- print("=")
+		local throttle = self:GetNWFloat("Throttle")
+		
+		-- if( throttle != 0 ) then 
+			local prop = NULL
+			-- print("kebab")
+			for i=1,#self.Propellers do 
+				
+				prop = self.Propellers[i]
+				if( IsValid( prop ) ) then 
+					
+					if( !self.PropSpinValue ) then self.PropSpinValue = 1 end 
+					self.PropSpinValue = self.PropSpinValue + FrameTime() * 1000 * throttle
+					
+					if( self.PropSpinValue >= 359 ) then self.PropSpinValue = self.PropSpinValue - 359 end 
+					
+					local a = self:GetAngles()
+					a:RotateAroundAxis( self:GetForward(), self.PropSpinValue )
+					prop:SetAngles( LerpAngle( .9235, prop:GetAngles(), a ) )
+				
+				end 
+			
+			-- end 
+		
+		end 
+		
+	end 
+	
 	if( self.ShipAngleForceCurrentValue && self.ShipAngleForceTargetValue ) then 
 	
 		self.ShipAngleForceCurrentValue = math.Approach( self.ShipAngleForceCurrentValue, self.ShipAngleForceTargetValue, ( self.TurnIncrement or  0.0182951  ) )
@@ -399,35 +428,6 @@ end
 function Meta:NeuroNaval_DefaultCruiserThink()
 	-- print(self:GetClass(), self:WaterLevel() )
 	
-	if( self.Propellers && #self.Propellers > 0 ) then 
-		-- print("=")
-		local throttle = self:GetNWFloat("Throttle")
-		
-		-- if( throttle != 0 ) then 
-			local prop = NULL
-			-- print("kebab")
-			for i=1,#self.Propellers do 
-				
-				prop = self.Propellers[i]
-				if( IsValid( prop ) ) then 
-					
-					if( !self.PropSpinValue ) then self.PropSpinValue = 1 end 
-					self.PropSpinValue = self.PropSpinValue + 2*3.6*throttle
-					
-					if( self.PropSpinValue > 359 ) then self.PropSpinValue = self.PropSpinValue - 359 end 
-					
-					local a = self:GetAngles()
-					a:RotateAroundAxis( self:GetForward(), self.PropSpinValue )
-					prop:SetAngles( LerpAngle( .235, prop:GetAngles(), a ) )
-				
-				end 
-			
-			-- end 
-		
-		end 
-		
-	end 
-		
 	if( IsValid( self.PhysObj ) && self:WaterLevel()>0 && IsValid( self.Pilot ) && self.IsMicroSubmarine ) then 
 		
 		if( self:WaterLevel() == 3) then 	
@@ -464,7 +464,7 @@ function Meta:NeuroNaval_DefaultCruiserThink()
 			
 			if( crushCap > 1.0 ) then 
 				
-				
+					
 				-- print("uh oh")
 			
 			end 
